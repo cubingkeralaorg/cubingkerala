@@ -153,22 +153,33 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                                     </TooltipContent>
                                                 </Tooltip>
                                             </TooltipProvider>
-
                                         </TableCell>
-                                        <TableCell>{event.ranking.single.country_rank}</TableCell>
-                                        <TableCell>{event.ranking.single.continent_rank}</TableCell>
-                                        <TableCell>{event.ranking.single.world_rank}</TableCell>
-                                        <TableCell className='font-semibold'>{
-                                            !event.ranking.single.best ? null : event.event === '333mbf' ? convertMbldToMinutes(event.ranking.single.best) :
-                                            convertMillisecondsToTime(event.ranking.single.best)
-                                        }</TableCell>
-                                        <TableCell className='font-semibold pl-5'>{
-                                            !event.ranking.average.best ? null : event.event === '333mbf' ? null :
-                                            convertMillisecondsToTime(event.ranking.average.best)
-                                        }</TableCell>
-                                        <TableCell>{event.ranking.average.world_rank}</TableCell>
-                                        <TableCell>{event.ranking.average.continent_rank}</TableCell>
-                                        <TableCell>{event.ranking.average.country_rank}</TableCell>
+
+                                        {/* Single Rankings */}
+                                        <TableCell>{event.ranking?.single?.country_rank ?? null}</TableCell>
+                                        <TableCell>{event.ranking?.single?.continent_rank ?? null}</TableCell>
+                                        <TableCell>{event.ranking?.single?.world_rank ?? null}</TableCell>
+
+                                        {/* Single Best Time */}
+                                        <TableCell className='font-semibold'>
+                                            {event.ranking?.single?.best
+                                                ? event.event === '333mbf'
+                                                    ? convertMbldToMinutes(event.ranking.single.best)
+                                                    : convertMillisecondsToTime(event.ranking.single.best)
+                                                : null}
+                                        </TableCell>
+
+                                        {/* Average Rankings */}
+                                        <TableCell className='font-semibold pl-5'>
+                                            {event.ranking?.average?.best
+                                                ? event.event !== '333mbf'
+                                                    ? convertMillisecondsToTime(event.ranking.average.best)
+                                                    : null
+                                                : null}
+                                        </TableCell>
+                                        <TableCell>{event.ranking?.average?.world_rank ?? null}</TableCell>
+                                        <TableCell>{event.ranking?.average?.continent_rank ?? null}</TableCell>
+                                        <TableCell>{event.ranking?.average?.country_rank ?? null}</TableCell>
                                     </TableRow>
                                 ))
                             }
