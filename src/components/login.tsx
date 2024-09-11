@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import LoadingComponent from "./loading"
+import Image from "next/image"
 
 
 export default function LoginComponent() {
@@ -40,7 +41,7 @@ export default function LoginComponent() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <img src="/WCALogo.svg" className="h-5 w-5" alt="wca-logo" />
+                  <Image width={50} height={50} src="/WCALogo.svg" className="h-5 w-5" alt="wca-logo" />
                   <span>Login</span>
                 </div>
               )}

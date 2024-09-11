@@ -3,6 +3,7 @@ import MembersComponent from '@/components/members'
 import db from '@/lib/db'
 import { RequestInfo } from '@/types/types'
 import React, { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 
 const Members = async () => {
 

@@ -12,6 +12,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Image from 'next/image'
 
 const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, memberResult: CompetitorData }) => {
 
@@ -25,7 +26,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
         if (memberResult) {
             setCurrentMemberResult(memberResult)
         }
-    }, [member])
+    }, [member, memberResult])
 
     const personalRecordsArray = Object.entries(currentMemberResult.personal_records).map(([event, ranking]) => ({
         event,
@@ -111,14 +112,14 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                         <div className='flex justify-center space-x-2'>
                             <div className='flex justify-center items-center'>
                                 <p className='text-sm font-semibold'>{currentMemberResult.medals.gold}</p>
-                                <img src="/gold.png" alt="gold" className='w-6 h-6' />
+                                <Image width={100} height={100} src="/gold.png" alt="gold" className='w-6 h-6' />
                             </div>
                             <div className='flex items-center justify-center'>
                                 <p className='text-sm font-semibold'>{currentMemberResult.medals.silver}</p>
-                                <img src="/silver.png" alt="silver" className='w-6 h-6' />
+                                <Image width={100} height={100} src="/silver.png" alt="silver" className='w-6 h-6' />
                             </div>
                             <div className='flex items-center justify-center'><p className='text-sm font-semibold'>{currentMemberResult.medals.bronze}</p>
-                                <img src="/bronze.png" alt="bronze" className='w-6 h-6' /></div>
+                                <Image width={100} height={100} src="/bronze.png" alt="bronze" className='w-6 h-6' /></div>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ export default function LottieComponent({path} : {
         animationInstance.current = null;
       }
     };
-  }, []);
+  }, [path]);
 
   return <div ref={animationContainer}></div>;
 }

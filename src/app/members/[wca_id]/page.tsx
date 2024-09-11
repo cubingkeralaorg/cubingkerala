@@ -4,6 +4,7 @@ import db from '@/lib/db'
 import { CompetitorData, RequestInfo } from '@/types/types'
 import axios from 'axios'
 import React, { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 
 const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
 
@@ -16,8 +17,8 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
   if(!member){
     return <div className='flex items-center justify-center min-h-[50vh] w-full'>
       <div className='text-center'>
-        <p>404</p>
-        <h1 className='text-3xl font-bold'>Member Not Found</h1>
+        <p className='text-stone-400'>404</p>
+        <h1 className='text-3xl font-bold text-stone-200'>Member Not Found</h1>
       </div>
     </div>
   }

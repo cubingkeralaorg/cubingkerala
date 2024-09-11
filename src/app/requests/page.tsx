@@ -2,6 +2,7 @@ import LoadingComponent from '@/components/loading'
 import RequestsComponent from '@/components/requests'
 import db from '@/lib/db'
 import React, { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 
 const Request = async () => {
 

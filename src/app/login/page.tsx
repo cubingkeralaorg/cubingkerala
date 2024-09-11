@@ -1,6 +1,7 @@
 import LoadingComponent from '@/components/loading'
 import LoginComponent from '@/components/login'
 import React, { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
 
 const Login = () => {
   return (
