@@ -26,7 +26,7 @@ const CubingKeralaNavbar = () => {
           <CuboidIcon className="w-6 h-6" />
           <span className="text-lg font-semibold">Cubing Kerala</span>
         </Link>
-        <nav className="flex items-center justify-between gap-6">
+        <nav className="flex items-center justify-between gap-6 mx-2 md:mx-0">
           <Link href="/competitions" className="text-sm font-medium hover:underline underline-offset-4" prefetch={true}>
             Competitions
           </Link>
@@ -62,8 +62,8 @@ const CubingKeralaNavbar = () => {
 
     if (response.ok) {
       window.localStorage.clear()
-      // router.refresh()
-      window.location.reload()
+      router.refresh()
+      // window.location.reload()
     } else {
       console.error('Logout failed');
     }
