@@ -60,7 +60,7 @@ const CubingKeralaNavbar = () => {
 
     if (response.ok) {
       window.localStorage.clear()
-      window.location.replace('/')
+      window.location.reload()
     } else {
       console.error('Logout failed');
     }
