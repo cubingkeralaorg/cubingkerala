@@ -5,8 +5,10 @@ import React, { useEffect, useState } from 'react'
 import cookie from "cookie"
 import { UserInfo } from '@/types/types'
 import { Profile } from './profile'
+import { useRouter } from 'next/router'
 
 const CubingKeralaNavbar = () => {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const CubingKeralaNavbar = () => {
 
     if (response.ok) {
       window.localStorage.clear()
-      window.location.reload()
+      router.reload()
     } else {
       console.error('Logout failed');
     }
