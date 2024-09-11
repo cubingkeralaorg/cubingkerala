@@ -159,12 +159,12 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                         <TableCell>{event.ranking.single.continent_rank}</TableCell>
                                         <TableCell>{event.ranking.single.world_rank}</TableCell>
                                         <TableCell className='font-semibold'>{
-                                            event.event === '333mbf' ? convertMbldToMinutes(event.ranking.single.best) :
-                                                convertMillisecondsToTime(event.ranking.single.best)
+                                            !event.ranking.single.best ? null : event.event === '333mbf' ? convertMbldToMinutes(event.ranking.single.best) :
+                                            convertMillisecondsToTime(event.ranking.single.best)
                                         }</TableCell>
                                         <TableCell className='font-semibold pl-5'>{
-                                            event.event === '333mbf' ? null :
-                                                convertMillisecondsToTime(event.ranking.average.best)
+                                            !event.ranking.average.best ? null : event.event === '333mbf' ? null :
+                                            convertMillisecondsToTime(event.ranking.average.best)
                                         }</TableCell>
                                         <TableCell>{event.ranking.average.world_rank}</TableCell>
                                         <TableCell>{event.ranking.average.continent_rank}</TableCell>
