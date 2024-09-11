@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import DeletePopover from "./delete-member-popover";
+// import DeletePopover from "./delete-member-popover";
 import ApprovePopover from "./approve-popover";
 import UpdatePopover from "./update-popover";
 import { toast } from "sonner";
 import DeleteMemberPopover from "./delete-member-popover";
 import DeleteRequestPopover from "./delete-request-popover";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 interface Request {
@@ -52,8 +52,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.reload();
-          router.reload()
+          // window.location.refresh();
+          router.refresh()
         }, 2000);
       } else {
         const error = await response.json();
@@ -85,8 +85,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.reload();
-          router.reload()
+          // window.location.refresh();
+          router.refresh()
         }, 2000);
       } else {
         const error = await response.json();
@@ -113,8 +113,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.reload();
-          router.reload()
+          // window.location.refresh();
+          router.refresh()
         }, 2000);
       } else {
         const error = await response.json();
@@ -139,8 +139,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.reload();
-          router.reload()
+          // window.location.refresh();
+          router.refresh()
         }, 2000);
       } else {
         const error = await response.json();
