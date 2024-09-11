@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from "react";
-// import DeletePopover from "./delete-member-popover";
 import ApprovePopover from "./approve-popover";
 import UpdatePopover from "./update-popover";
 import { toast } from "sonner";
@@ -33,7 +32,7 @@ export default function RequestsComponent({ requests, members }: {
   useEffect(() => {
     setRequestsData(requests)
     setMembersData(members)
-  }, [requests])
+  }, [requests, members])
 
   const handleApprove = async (index: number) => {
     const updatedRequest = { ...requestsData[index] };

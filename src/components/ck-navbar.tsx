@@ -62,7 +62,8 @@ const CubingKeralaNavbar = () => {
 
     if (response.ok) {
       window.localStorage.clear()
-      router.refresh()
+      // router.refresh()
+      window.location.reload()
     } else {
       console.error('Logout failed');
     }

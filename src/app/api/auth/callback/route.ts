@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
             client_id: process.env.CLIENT_ID as string,
             client_secret: process.env.CLIENT_SECRET as string,
             redirect_uri: 'https://cubingkeralaorg.vercel.app/api/auth/callback',
+            // redirect_uri: 'http://localhost:3000/api/auth/callback',
             grant_type: 'authorization_code',
             code,
         });
