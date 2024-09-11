@@ -17,7 +17,7 @@ export function CubingKeralaUnravel() {
                             Unraveling the Cube, Connecting the Community
                         </h2>
                         <p className="mx-auto text-stone-400 max-w-[700px] md:text-xl/relaxed">
-                            Cubing Kerala is a vibrant community of Rubik's Cube enthusiasts, founded in 2017 with the goal of
+                            Cubing Kerala is a vibrant community of Rubik&apos;s Cube enthusiasts, founded in 2017 with the goal of
                             promoting the art of cubing in the state. Over the years, we have organized numerous competitions,
                             workshops, and social events, fostering a strong network of cubers and encouraging the growth of the
                             sport.

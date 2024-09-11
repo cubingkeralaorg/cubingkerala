@@ -18,10 +18,10 @@ const CubingKeralaGetStarted = () => {
             </div>
             <CubingKeralaTyping />
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">
-              a community dedicated to Rubik's Cube enthusiasts in Kerala.
+              a community dedicated to Rubik&apos;s Cube enthusiasts in Kerala.
             </h1>
             <p className="text-stone-400 pb-5 md:text-xl max-w-[850px] md:pt-5">
-              We organize events, competitions, and meetups to bring together cubers of all skill levels. <br /> Whether you're a seasoned speedsolver or just starting your journey, our community offers a space where you can learn, grow, and share your passion for cubing. <br /> Together, we can unlock not only the secrets of each puzzle but also the potential within ourselves.
+              We organize events, competitions, and meetups to bring together cubers of all skill levels. <br /> Whether you&apos;re a seasoned speedsolver or just starting your journey, our community offers a space where you can learn, grow, and share your passion for cubing. <br /> Together, we can unlock not only the secrets of each puzzle but also the potential within ourselves.
             </p>
             <Link prefetch={true} href="/login"><Button className="bg-green-400 text-black hover:bg-green-500 rounded-none">Get started</Button></Link>
           </div>
