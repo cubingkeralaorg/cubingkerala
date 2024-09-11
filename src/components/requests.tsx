@@ -7,6 +7,7 @@ import UpdatePopover from "./update-popover";
 import { toast } from "sonner";
 import DeleteMemberPopover from "./delete-member-popover";
 import DeleteRequestPopover from "./delete-request-popover";
+import { useRouter } from "next/router";
 
 
 interface Request {
@@ -27,6 +28,7 @@ export default function RequestsComponent({ requests, members }: {
 
   const [requestsData, setRequestsData] = useState<Request[]>([])
   const [membersData, setMembersData] = useState<Request[]>([])
+  const router = useRouter();
 
   useEffect(() => {
     setRequestsData(requests)
@@ -50,7 +52,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
+          router.reload()
         }, 2000);
       } else {
         const error = await response.json();
@@ -82,7 +85,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
+          router.reload()
         }, 2000);
       } else {
         const error = await response.json();
@@ -109,7 +113,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
+          router.reload()
         }, 2000);
       } else {
         const error = await response.json();
@@ -134,7 +139,8 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
+          router.reload()
         }, 2000);
       } else {
         const error = await response.json();
