@@ -26,7 +26,7 @@ const CubingKeralaNavbar = () => {
           <CuboidIcon className="w-6 h-6" />
           <span className="text-lg font-semibold">Cubing Kerala</span>
         </Link>
-        <nav className="flex items-center justify-between gap-6 mx-2 md:mx-0">
+        <nav className="flex items-center justify-between gap-6">
           <Link href="/competitions" className="text-sm font-medium hover:underline underline-offset-4" prefetch={true}>
             Competitions
           </Link>
@@ -40,7 +40,7 @@ const CubingKeralaNavbar = () => {
             userInfo == null ? (
               <Link
                 href="/login"
-                className="text-sm font-medium hover:underline underline-offset-4"
+                className="text-sm font-medium hover:underline underline-offset-4 mr-1"
                 prefetch={true}
               >
                 Login
