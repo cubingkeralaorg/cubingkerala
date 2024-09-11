@@ -59,11 +59,11 @@ const CubingKeralaNavbar = () => {
       method: 'POST',
       credentials: 'include',
     });
-
+  
     if (response.ok) {
-      window.localStorage.clear()
-      router.refresh()
-      // window.location.reload()
+      window.localStorage.clear();
+      setUserInfo(null); 
+      router.push('/login'); 
     } else {
       console.error('Logout failed');
     }
