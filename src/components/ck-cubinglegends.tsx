@@ -17,7 +17,7 @@ const CubingKeralaCubingLengends = () => {
                             Cubing Legends of Kerala
                         </h2>
                         <p className="max-w-[900px] text-stone-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                            Meet the top-ranked Rubik's Cube solvers in Kerala, who have dedicated their time and effort to
+                            Meet the top-ranked Rubik&apos;s Cube solvers in Kerala, who have dedicated their time and effort to
                             mastering the art of cubing.
                         </p>
                     </div>
