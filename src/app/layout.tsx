@@ -4,6 +4,7 @@ import "./globals.css";
 import CubingKeralaNavbar from "@/components/ck-navbar";
 import CubingKeralaFooter from "@/components/ck-footer";
 import {Toaster} from 'sonner'
+export const dynamic = 'force-dynamic'
 
 const inter = Inter({ subsets: ["latin"] });
 
