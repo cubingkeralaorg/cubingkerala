@@ -39,7 +39,7 @@ export default function HomeComponent() {
     }
   }, []);
 
-  console.log(userInfo);
+  // console.log(userInfo);
   
 
   const handleClick = () => {
@@ -60,7 +60,7 @@ export default function HomeComponent() {
             animate={{ opacity: isVisible1 ? 1 : 0, y: isVisible1 ? 0 : 0 }}
             transition={{ duration: 0.5 }}
           >
-            <CubingKeralaGetStarted />
+            <CubingKeralaGetStarted user = {userInfo} />
           </motion.div>
         </section>
         <section ref={ref2} className="w-full bg-black">

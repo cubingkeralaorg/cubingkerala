@@ -6,8 +6,9 @@ import LottieComponent from "./lottie";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { CubingKeralaTyping } from "./ck-typing";
+import { UserInfo } from "@/types/types";
 
-const CubingKeralaGetStarted = () => {
+const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black text-stone-200">
       <div className="container px-6 flex justify-center items-center py-5 md:py-20">
@@ -23,7 +24,9 @@ const CubingKeralaGetStarted = () => {
             <p className="text-stone-400 pb-5 md:text-xl max-w-[850px] md:pt-5">
               We organize events, competitions, and meetups to bring together cubers of all skill levels. <br /> Whether you&apos;re a seasoned speedsolver or just starting your journey, our community offers a space where you can learn, grow, and share your passion for cubing. <br /> Together, we can unlock not only the secrets of each puzzle but also the potential within ourselves.
             </p>
-            <Link prefetch={true} href="/login"><Button className="bg-green-400 text-black hover:bg-green-500 rounded-none">Get started</Button></Link>
+            {
+              !user && <Link prefetch={true} href="/login"><Button className="bg-green-400 text-black hover:bg-green-500 rounded-none">Get started</Button></Link>
+            }
           </div>
           {/* for smaller screens */}
           <div className=" flex items-center justify-center w-full md:hidden z-50">

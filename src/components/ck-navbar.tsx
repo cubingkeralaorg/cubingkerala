@@ -6,6 +6,7 @@ import cookie from "cookie"
 import { UserInfo } from '@/types/types'
 import { Profile } from './profile'
 import { useRouter } from 'next/navigation'
+import { toast } from "sonner";
 
 const CubingKeralaNavbar = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const CubingKeralaNavbar = () => {
   }, []);
 
   return (
-    <header className="bg-black text-stone-200 shadow-sm py-2">
+    <header style={{ zIndex: '10000' }} className="bg-black text-stone-200 shadow-sm py-2 px-1 md:px-0 sticky top-0">
       <div className="container space-y-3 md:space-y-0 md:flex items-center justify-between h-20 md:h-18 py-2 md:py-6 px-4 md:px-6">
         <Link href="/" className="flex items-center justify-start gap-2" prefetch={true}>
           <CuboidIcon className="w-6 h-6" />
@@ -59,11 +60,15 @@ const CubingKeralaNavbar = () => {
       method: 'POST',
       credentials: 'include',
     });
-  
+
     if (response.ok) {
       window.localStorage.clear();
-      setUserInfo(null); 
-      router.push('/login'); 
+      setUserInfo(null);
+      toast.success('Logged out successfully');
+      setTimeout(() => {
+        window.location.reload();
+        router.refresh();
+      }, 1000);
     } else {
       console.error('Logout failed');
     }

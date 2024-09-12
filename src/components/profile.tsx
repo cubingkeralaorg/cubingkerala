@@ -16,11 +16,11 @@ export function Profile({ profileInfo, handleLogout }: {
 }) {
 
     return (
-        <Menubar className="bg-black shadow-none border-none mr-1">
+        <Menubar className="bg-black shadow-none border-none">
             <MenubarMenu>
                 <MenubarTrigger className="p-0 cursor-pointer hover:underline hover:underline-offset-4 rounded-none text-red-500">Logout</MenubarTrigger>
-                <MenubarContent className="bg-black border-none text-stone-200">
-                    <MenubarItem disabled>{profileInfo?.me.name}</MenubarItem>
+                <MenubarContent style={{zIndex: '10000'}} className="bg-black border-stone-800 rounded-none text-stone-200">
+                    <MenubarItem className="text-stone-400 hover:bg-none cursor-default">{profileInfo?.me.name}</MenubarItem>
                     {
                         profileInfo?.me.wca_id == "2017JOHN14" ? <Link href={"/requests"}><MenubarItem className="hover:bg-neutral-900 cursor-pointer">Requsets</MenubarItem></Link> : null
                     }
