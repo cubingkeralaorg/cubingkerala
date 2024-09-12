@@ -1,9 +1,8 @@
-import LoadingComponent from '@/components/loading'
 import MemberInfoComponent from '@/components/memberInfo'
 import db from '@/lib/db'
 import { CompetitorData, RequestInfo } from '@/types/types'
 import axios from 'axios'
-import React, { Suspense } from 'react'
+import React from 'react'
 export const dynamic = 'force-dynamic'
 
 const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
@@ -14,7 +13,7 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
     }
   })
 
-  if(!member){
+  if (!member) {
     return <div className='flex items-center justify-center min-h-[50vh] w-full'>
       <div className='text-center'>
         <p className='text-stone-400'>404</p>
@@ -25,15 +24,11 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
 
 
   const memberResult = await axios.get(`https://www.worldcubeassociation.org/api/v0/persons/${params.wca_id}`)
-  
+
 
   return (
     <>
-      <Suspense fallback={
-        <div className='flex items-center justify-center min-h-[50vh] w-full'>
-          <LoadingComponent />
-        </div>
-      }><MemberInfoComponent member={member as RequestInfo} memberResult={memberResult.data as CompetitorData} /></Suspense>
+      <MemberInfoComponent member={member as RequestInfo} memberResult={memberResult.data as CompetitorData} />
     </>
 
   )

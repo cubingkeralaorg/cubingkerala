@@ -69,7 +69,7 @@ export interface CompetitionDetails {
   venue: {
     name: string;
     address: string;
-    details?: string; // Optional as it may not always be present
+    details?: string;
     coordinates: {
       latitude: number;
       longitude: number;
@@ -212,5 +212,70 @@ export interface EventType {
     };
   };
 }
+
+// Renamed interface for member competition results
+export interface MemberCompetitionResult {
+  round: string;
+  position: number;
+  best: number;
+  average?: number;
+  format: string;
+  attempts?: number[];
+}
+
+// Renamed interface for event results of a member
+export interface MemberEventResult {
+  [eventId: string]: MemberCompetitionResult[];
+}
+
+// Renamed interface for competition details for a member
+export interface MemberCompetitionDetails {
+  [competitionId: string]: MemberEventResult;
+}
+
+// Renamed interface for rank details
+export interface MemberRankDetails {
+  world: number;
+  continent: number;
+  country: number;
+}
+
+// Renamed interface for records
+export interface MemberRecordDetails {
+  eventId: string;
+  best: number;
+  rank: {
+    country?: number;
+    continent?: number;
+    world?: number;
+  };
+}
+
+// Renamed interface for personal results of a member
+export interface MemberPersonResult {
+  id: string;
+  name: string;
+  country: string;
+  slug: string;
+  numberOfChampionships: number;
+  numberOfCompetitions: number;
+  rank: {
+    singles: MemberRecordDetails[];
+    averages: MemberRecordDetails[];
+  };
+  results: MemberCompetitionDetails;
+  medals: {
+    gold: number;
+    silver: number;
+    bronze: number;
+  };
+  records: {
+    average: any[];
+    single: any[];
+  };
+  championshipIds: string[];
+  competitionIds: string[];
+}
+
 
 

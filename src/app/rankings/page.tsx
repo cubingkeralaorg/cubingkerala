@@ -1,17 +1,15 @@
-import LoadingComponent from '@/components/loading'
 import RankingsComponent from '@/components/rankings'
-import React, { Suspense } from 'react'
+import db from '@/lib/db'
+import { RequestInfo } from '@/types/types'
+import React from 'react'
 
-const Rankings = () => {
+const Rankings = async () => {
+
+  const members = await db.members.findMany()
+
   return (
     <>
-      <Suspense
-      fallback={
-        <div className='flex items-center justify-center min-h-[50vh] w-full'>
-          <LoadingComponent />
-        </div>
-      }
-      ><RankingsComponent /></Suspense>
+      <RankingsComponent members={members as RequestInfo[]} />
     </>
   )
 }

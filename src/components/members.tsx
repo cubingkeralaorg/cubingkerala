@@ -9,12 +9,14 @@ import cookie from "cookie";
 import { toast } from "sonner";
 import Link from "next/link";
 import axios from "axios";
+import LoadingComponent from "./loading";
 
 export default function MembersComponent({ membersfromdb }: { membersfromdb: RequestInfo[] }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [membersList, setMembersList] = useState<RequestInfo[]>([]);
   const [filteredMembersList, setFilteredMembersList] = useState<RequestInfo[]>([]);
   const [membersDetails, setMembersDetails] = useState<CompetitorData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const cookies = cookie.parse(document.cookie);
@@ -27,6 +29,9 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
       setFilteredMembersList(membersfromdb);
       getMembersDetails(membersfromdb.map((member) => member.wcaid));
     }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }, [membersfromdb]);
 
   const getMembersDetails = async (wcaids: string[]) => {
@@ -81,68 +86,76 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
 
   return (
     <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 bg-black text-stone-200">
-      <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Members</h1>
-      <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
-        <SearchComponent handleSearch={handleSearch} />
-        <Button onClick={handleJoinCK} className="bg-green-400 hover:bg-green-500 rounded-none text-black" size="sm">
-          Join Cubing Kerala
-        </Button>
-      </div>
-      <div className="overflow-auto rounded-none border-none h-[400px]">
-        <Table className="w-full">
-          <TableHeader>
-            <TableRow className="hover:bg-neutral-900 border-none">
-              <TableHead className="text-neutral-500">#</TableHead>
-              <TableHead className="text-neutral-500">Name</TableHead>
-              <TableHead className="text-neutral-500">WCA ID</TableHead>
-              <TableHead className="text-neutral-500">Role</TableHead>
-              <TableHead className="hidden md:table-cell text-neutral-500">Competitions</TableHead>
-              <TableHead className="hidden md:table-cell text-neutral-500">Medals</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredMembersList.length > 0 ? (
-              filteredMembersList.map((member, index) => {
-                const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
-                return (
-                  <TableRow className="border-none hover:bg-neutral-900" key={index}>
-                    <TableCell className="cursor-default">{index + 1}</TableCell>
-                    <TableCell className="text-nowrap">
-                      <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                        <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
-                          {member.name}
-                        </span>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                        <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
-                          {member.wcaid}
-                        </span>
-                      </Link>
-                    </TableCell>
-                    <TableCell className="cursor-default text-nowrap">
-                      {(member.role).split('')[0].toUpperCase() + (member.role).slice(1)}
-                    </TableCell>
-                    <TableCell className="cursor-default hidden md:table-cell">
-                      {memberDetails?.competition_count || 0}
-                    </TableCell>
-                    <TableCell className="cursor-default hidden md:table-cell">
-                      {memberDetails?.medals.total || 0}
-                    </TableCell>
+      {
+        isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+          <LoadingComponent />
+        </div>) : (
+          <>
+            <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Members</h1>
+            <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
+              <SearchComponent handleSearch={handleSearch} />
+              <Button onClick={handleJoinCK} className="bg-green-400 hover:bg-green-500 rounded-none text-black" size="sm">
+                Join Cubing Kerala
+              </Button>
+            </div>
+            <div className="overflow-auto rounded-none border-none h-[400px]">
+              <Table className="w-full">
+                <TableHeader>
+                  <TableRow className="hover:bg-neutral-900 border-none">
+                    <TableHead className="text-neutral-500">#</TableHead>
+                    <TableHead className="text-neutral-500">Name</TableHead>
+                    <TableHead className="text-neutral-500">WCA ID</TableHead>
+                    <TableHead className="text-neutral-500">Role</TableHead>
+                    <TableHead className="hidden md:table-cell text-neutral-500">Competitions</TableHead>
+                    <TableHead className="hidden md:table-cell text-neutral-500">Medals</TableHead>
                   </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell className="text-stone-600 px-4 hover:bg-neutral-900 py-4" colSpan={6}>
-                  Loading...
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredMembersList.length > 0 ? (
+                    filteredMembersList.map((member, index) => {
+                      const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
+                      return (
+                        <TableRow className="border-none hover:bg-neutral-900" key={index}>
+                          <TableCell className="cursor-default">{index + 1}</TableCell>
+                          <TableCell className="text-nowrap">
+                            <Link prefetch={true} href={`/members/${member.wcaid}`}>
+                              <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
+                                {member.name.split('(')[0]}
+                              </span>
+                            </Link>
+                          </TableCell>
+                          <TableCell>
+                            <Link prefetch={true} href={`/members/${member.wcaid}`}>
+                              <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
+                                {member.wcaid}
+                              </span>
+                            </Link>
+                          </TableCell>
+                          <TableCell className="cursor-default text-nowrap">
+                            {(member.role).split('')[0].toUpperCase() + (member.role).slice(1)}
+                          </TableCell>
+                          <TableCell className="cursor-default hidden md:table-cell">
+                            {memberDetails?.competition_count || 0}
+                          </TableCell>
+                          <TableCell className="cursor-default hidden md:table-cell">
+                            {memberDetails?.medals.total || 0}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell className="text-stone-600 px-4 hover:bg-neutral-900 py-4" colSpan={6}>
+                        Loading...
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </>
+        )
+      }
     </div>
   );
 }

@@ -1,92 +1,180 @@
-import { FilterComponent } from "@/components/filter"
-import SearchComponent from "@/components/search"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+'use client';
 
-export default async function RankingsComponent() {
+import { FilterComponent } from "@/components/filter";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { MemberPersonResult, RequestInfo } from "@/types/types";
+import axios from "axios";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import LoadingComponent from "./loading";
+
+export default function RankingsComponent({ members }: { members: RequestInfo[] }) {
+  const [membersList, setMembersList] = useState<RequestInfo[]>([]);
+  const [memberResults, setMemberResults] = useState<MemberPersonResult[]>([]);
+  const [sortedResults, setSortedResults] = useState<MemberPersonResult[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<{ event: string; round: string }>({ event: "333", round: "single" });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (members) {
+      setMembersList(members);
+    }
+  }, [members]);
+
+  useEffect(() => {
+    if (membersList.length > 0) {
+      fetchMemberResults();
+    }
+  }, [membersList]);
+
+  const fetchMemberResults = async () => {
+    try {
+      const results = await Promise.all(
+        membersList.map(member =>
+          axios.get(`https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/${member.wcaid}.json`)
+        )
+      );
+
+      const data: MemberPersonResult[] = results.map(res => res.data);
+      setMemberResults(data);
+      // Automatically sort on initial load for event "333" and round "single"
+      sortMembers(data);
+    } catch (error) {
+      console.error("Error fetching member results:", error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
+  const sortMembers = (results: MemberPersonResult[]) => {
+    const { event, round } = selectedFilter;
+    const roundType = round === "average" ? "averages" : "singles";
+
+    const sorted = results.slice().sort((a, b) => {
+      const aEvent = a.rank[roundType]?.find(r => r.eventId === event);
+      const bEvent = b.rank[roundType]?.find(r => r.eventId === event);
+      const aBest = aEvent ? aEvent.best : Infinity;
+      const bBest = bEvent ? bEvent.best : Infinity;
+      return aBest - bBest;
+    });
+
+    setSortedResults(sorted);
+  };
+
+  function convertMillisecondsToTime(milliseconds: number) {
+    if (milliseconds === Infinity) { return '' }
+    if (milliseconds < 0) {
+      return 'DNF';
+    }
+
+    let totalSeconds = milliseconds / 100;
+
+    if (totalSeconds < 60) {
+      return totalSeconds.toFixed(2);
+    } else {
+      let minutes = Math.floor(totalSeconds / 60);
+      let seconds = (totalSeconds % 60).toFixed(2);
+      if (Number(seconds) < 10) {
+        return `${minutes}.0${seconds}`;
+      }
+      return `${minutes}.${seconds}`;
+    }
+  }
+
+
+  function convertMbldToMinutes(number: number): string {
+    if(number === Infinity) { return '' }
+    const numStr = `0${number.toString()}`;
+
+    const DD = parseInt(numStr.substring(1, 3), 10);
+    const TTTTT = parseInt(numStr.substring(3, 8), 10);
+    const MM = parseInt(numStr.substring(8, 10), 10);
+
+    const difference = 99 - DD;
+    const missed = MM;
+    const solved = difference + missed;
+    const attempted = solved + missed;
+
+    const totalSeconds = TTTTT;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    const timeFormatted = `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}`;
+
+    const finalOutput = `${solved}/${attempted} ${timeFormatted}`;
+    return finalOutput;
+  }
+
+
+  // Effect to sort members whenever selectedFilter changes
+  useEffect(() => {
+    if (memberResults.length > 0) {
+      sortMembers(memberResults);
+    }
+  }, [selectedFilter, memberResults]);
 
   return (
     <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
-      <h1 className="text-3xl font-bold text-center mb-5">Rankings</h1>
-      {/* <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
-        <SearchComponent />
-        <div>
-          <FilterComponent/>
+      {isLoading ? (
+        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+          <LoadingComponent />
         </div>
-      </div>
-      <div className="overflow-auto rounded-none border h-[400px]">
-        <Table className="w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Joined</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">John Doe</TableCell>
-              <TableCell>john.doe@example.com</TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>2023-04-15</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Jane Smith</TableCell>
-              <TableCell>jane.smith@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2023-03-01</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Bob Johnson</TableCell>
-              <TableCell>bob.johnson@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2022-11-20</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Alice Williams</TableCell>
-              <TableCell>alice.williams@example.com</TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>2022-08-01</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Tom Davis</TableCell>
-              <TableCell>tom.davis@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2021-12-10</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Sarah Lee</TableCell>
-              <TableCell>sarah.lee@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2021-09-05</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Michael Brown</TableCell>
-              <TableCell>michael.brown@example.com</TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>2020-06-30</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Emily Wilson</TableCell>
-              <TableCell>emily.wilson@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2019-11-15</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">David Taylor</TableCell>
-              <TableCell>david.taylor@example.com</TableCell>
-              <TableCell>Member</TableCell>
-              <TableCell>2018-04-20</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Olivia Anderson</TableCell>
-              <TableCell>olivia.anderson@example.com</TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>2017-09-01</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div> */}
+      ) : (
+        <div>
+          <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Rankings</h1>
+          <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
+            <div className="flex items-start justify-start w-full">
+              <FilterComponent
+                onFilterChange={setSelectedFilter}
+              />
+            </div>
+          </div>
+          <div className="overflow-auto rounded-none max-h-[400px]">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow className="border-none hover:bg-transparent">
+                  <TableHead className="text-neutral-500">#</TableHead>
+                  <TableHead className="text-neutral-500">Name</TableHead>
+                  <TableHead className="text-neutral-500">Best</TableHead>
+                  <TableHead className="text-neutral-500">NR</TableHead>
+                  <TableHead className="text-neutral-500">CR</TableHead>
+                  <TableHead className="text-neutral-500">WR</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {sortedResults.map((member, index) => {
+                  const result = member.rank[selectedFilter.round === 'average' ? 'averages' : 'singles'].find(r => r.eventId === selectedFilter.event);
+                  return (
+                    <TableRow className="border-none hover:bg-neutral-900" key={member.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell className="font-medium text-nowrap">
+                        <Link href={`/members/${member.id}`}><span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>
+                      </TableCell>
+                      <TableCell>
+                        {result?.eventId === '333fm' && selectedFilter.round === 'single'
+                          ? result.best
+                          : result?.eventId === '333mbf'
+                          ? convertMbldToMinutes(result?.best || Infinity)
+                          : convertMillisecondsToTime(result?.best || Infinity)
+                          }
+                      </TableCell>
+                      <TableCell>{result?.rank?.country || ''}</TableCell>
+                      <TableCell>{result?.rank?.continent || ''}</TableCell>
+                      <TableCell>{result?.rank?.world || ''}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
+
+
+
+
