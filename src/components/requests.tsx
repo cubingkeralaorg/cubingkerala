@@ -84,7 +84,6 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.refresh();
           router.refresh()
         }, 2000);
       } else {
@@ -112,7 +111,6 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.refresh();
           router.refresh()
         }, 2000);
       } else {
@@ -138,7 +136,6 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.refresh();
           router.refresh()
         }, 2000);
       } else {
@@ -155,7 +152,7 @@ export default function RequestsComponent({ requests, members }: {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black text-stone-200">
-      <h1 className="text-3xl font-bold mb-5">Requests</h1>
+      <h1 className="text-3xl font-bold mb-5 text-green-500">Requests</h1>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[500px] table-auto">
           <thead>
@@ -170,7 +167,7 @@ export default function RequestsComponent({ requests, members }: {
             {
               requestsData.length > 0 ? requestsData?.map((request, index) => (
                 <tr key={index} className="border-b">
-                  <td className="px-2 py-2">{request.name}</td>
+                  <td className="px-2 py-2 text-nowrap">{request.name}</td>
                   <td className="px-2 py-2">{request.wcaid}</td>
                   <td className="px-2 py-2">
                     <select className="bg-black text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={request.role || "member"}>
@@ -191,7 +188,7 @@ export default function RequestsComponent({ requests, members }: {
           </tbody>
         </table>
       </div>
-      <h1 className="text-3xl font-bold mb-5 mt-10">Members</h1>
+      <h1 className="text-3xl font-bold mb-5 mt-10 text-green-500">Members</h1>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[500px] table-auto">
           <thead>
@@ -206,7 +203,7 @@ export default function RequestsComponent({ requests, members }: {
             {
               membersData.length > 0 ? membersData?.map((member, index) => (
                 <tr key={index}>
-                  <td className="px-2 py-2">{member.name}</td>
+                  <td className="px-2 py-2 text-nowrap">{member.name}</td>
                   <td className="px-2 py-2">{member.wcaid}</td>
                   <td className="px-2 py-2">
                     <select className="bg-black text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={member.role || "member"}>

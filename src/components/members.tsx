@@ -80,8 +80,8 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
   };
 
   return (
-    <div className="w-full py-6 md:py-8 px-4 md:px-6 text-stone-200">
-      <h1 className="text-3xl font-bold text-center mb-5">Members</h1>
+    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 bg-black text-stone-200">
+      <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Members</h1>
       <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
         <SearchComponent handleSearch={handleSearch} />
         <Button onClick={handleJoinCK} className="bg-green-400 hover:bg-green-500 rounded-none text-black" size="sm">
@@ -121,7 +121,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                         </span>
                       </Link>
                     </TableCell>
-                    <TableCell className="cursor-default">
+                    <TableCell className="cursor-default text-nowrap">
                       {(member.role).split('')[0].toUpperCase() + (member.role).slice(1)}
                     </TableCell>
                     <TableCell className="cursor-default hidden md:table-cell">

@@ -41,7 +41,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <CardContent className="p-6 h-[150px]">
                                                 <h3 className="text-xl font-bold mb-2 text-stone-200">{competition.name}</h3>
                                                 <p className="text-wrap">
-                                                    {competition.venue?.address}
+                                                    {competition.venue?.name}
                                                 </p>
                                                 <div className='text-xs'>
                                                     {
@@ -80,7 +80,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                             }
                         </div>
                         <ScrollBar orientation="horizontal" />
-                    </ScrollArea> : <div className='min-h-[200px] flex items-center'><h1 className='text-lg lg:text-2xl font-semibold text-green-500'>New competitions are on the way!</h1></div>
+                    </ScrollArea> : <div className='min-h-[200px] flex items-center'><h1 className='text-lg lg:text-2xl font-semibold'>New competitions are on the way!</h1></div>
                 }
             </section>
             <section>
@@ -95,7 +95,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <CardContent className="p-6 h-[150px]">
                                                 <h3 className="text-xl font-bold mb-2 text-stone-200">{competition.name}</h3>
                                                 <p className="text-wrap">
-                                                    {competition.venue?.address}
+                                                    {competition.venue?.name}
                                                 </p>
                                                 <div className='text-xs'>
                                                     {

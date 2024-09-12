@@ -33,7 +33,11 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
                         <div>
                             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{currentCompetition.name}</h1>
                             <p className="mt-4 text-stone-400">
-                                {`${new Date(currentCompetition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(currentCompetition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })} | ${currentCompetition.venue.name}, ${currentCompetition.city}`}
+                                {
+                                    currentCompetition.date.from === currentCompetition.date.till
+                                        ? new Date(currentCompetition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                                        : `${new Date(currentCompetition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(currentCompetition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
+                                }
                             </p>
                         </div>
                         <div>
@@ -96,10 +100,10 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
                 </div>
                 {
                     new Date(compInfo.date.till) < new Date() ? <div className='w-full my-5 text-center text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-2 cursor-pointer'>
-                    <Link href={`https://www.worldcubeassociation.org/competitions/${compInfo.id}`}>Check out the competition results!</Link>
-                </div> : <div className='w-full my-5 text-center text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-2 cursor-pointer'>
-                    <Link href={`https://www.worldcubeassociation.org/competitions/${compInfo.id}`}>Find out more about this competition!</Link>
-                </div>
+                        <Link href={`https://www.worldcubeassociation.org/competitions/${compInfo.id}`}>Check out the competition results!</Link>
+                    </div> : <div className='w-full my-5 text-center text-blue-500 hover:text-blue-600 hover:underline hover:underline-offset-2 cursor-pointer'>
+                        <Link href={`https://www.worldcubeassociation.org/competitions/${compInfo.id}`}>Find out more about this competition!</Link>
+                    </div>
                 }
             </div>
         </div>

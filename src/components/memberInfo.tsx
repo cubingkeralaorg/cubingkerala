@@ -33,7 +33,9 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
         ranking
     }));
 
-    console.log(personalRecordsArray);
+    // console.log(personalRecordsArray);
+    // console.log(currentMember);
+
 
 
     function convertMillisecondsToTime(milliseconds: number) {
@@ -88,8 +90,8 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                 </div>
                 <div className="w-full max-w-[200px] h-[200px] my-4">
                     <Avatar className="w-full h-full rounded-md">
-                        <AvatarImage src={currentMember.avatarUrl} alt="Profile Picture" />
-                        <AvatarFallback>{currentMember.name}</AvatarFallback>
+                        <AvatarImage className='object-cover' src={currentMember.avatarUrl.includes("missing_avatar_thumb") ? "/user.png" : currentMember.avatarUrl} alt="Profile Picture" />
+                        <AvatarFallback className='rounded-md bg-neutral-900 text-stone-200'>{currentMember.name}</AvatarFallback>
                     </Avatar>
                 </div>
                 <div className="flex justify-center space-x-8 my-4">
@@ -165,7 +167,8 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                             {event.ranking?.single?.best
                                                 ? event.event === '333mbf'
                                                     ? convertMbldToMinutes(event.ranking.single.best)
-                                                    : convertMillisecondsToTime(event.ranking.single.best)
+                                                    : event.event === '333fm' ? (event.ranking.single.best)
+                                                        : convertMillisecondsToTime(event.ranking.single.best)
                                                 : null}
                                         </TableCell>
 
