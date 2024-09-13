@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-// import GridPattern from "@/components/magicui/grid-pattern";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import DotPattern from "./magicui/dot-pattern";

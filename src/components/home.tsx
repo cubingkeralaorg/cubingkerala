@@ -38,8 +38,6 @@ export default function HomeComponent() {
       }
     }
   }, []);
-
-  // console.log(userInfo);
   
 
   const handleClick = () => {
