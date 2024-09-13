@@ -1,4 +1,3 @@
-import Ripple from "@/components/magicui/ripple";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import DotPattern from "./magicui/dot-pattern";
