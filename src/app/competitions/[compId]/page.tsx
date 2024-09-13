@@ -1,7 +1,15 @@
 import CompetitionDetailsComponent from '@/components/compeition-details'
 import LoadingComponent from '@/components/loading'
 import axios from 'axios';
+import { Metadata } from 'next';
 import React, { Suspense } from 'react'
+export const dynamic = 'force-dynamic'
+
+
+export const metadata: Metadata = {
+    title: "Competition Details | Cubing Kerala",
+    description: "Details of a competition in the Rubik's Cube community in Kerala",
+  };
 
 interface CompetitionDetailsProps {
     params: {
@@ -26,5 +34,6 @@ const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
         </>
     )
 }
+
 
 export default CompetitionsDetails

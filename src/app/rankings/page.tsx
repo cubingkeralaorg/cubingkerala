@@ -1,7 +1,13 @@
 import RankingsComponent from '@/components/rankings'
 import db from '@/lib/db'
 import { RequestInfo } from '@/types/types'
+import { Metadata } from 'next';
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "Rankings | Cubing Kerala",
+  description: "The rankings of members within the Rubik's Cube community in Kerala.",
+};
 
 const Rankings = async () => {
 
