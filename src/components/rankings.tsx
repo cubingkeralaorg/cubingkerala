@@ -152,7 +152,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
                       <TableCell className="font-medium text-nowrap">
                         <Link href={`/members/${member.id}`}><span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="font-semibold text-nowrap">
                         {result?.eventId === '333fm' && selectedFilter.round === 'single'
                           ? result.best
                           : result?.eventId === '333mbf'

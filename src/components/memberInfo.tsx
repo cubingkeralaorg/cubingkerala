@@ -168,7 +168,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                                 <TableCell>{event.ranking?.single?.world_rank ?? null}</TableCell>
 
                                                 {/* Single Best Time */}
-                                                <TableCell className='font-semibold'>
+                                                <TableCell className='font-semibold text-nowrap'>
                                                     {event.ranking?.single?.best
                                                         ? event.event === '333mbf'
                                                             ? convertMbldToMinutes(event.ranking.single.best)
@@ -178,7 +178,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                                 </TableCell>
 
                                                 {/* Average Rankings */}
-                                                <TableCell className='font-semibold pl-5'>
+                                                <TableCell className='font-semibold pl-5 text-nowrap'>
                                                     {event.ranking?.average?.best
                                                         ? event.event !== '333mbf'
                                                             ? convertMillisecondsToTime(event.ranking.average.best)
