@@ -56,7 +56,6 @@ export default function RequestsComponent({ requests, members }: {
         const data = await response.json();
         toast.success(`${data.message}`);
         setTimeout(() => {
-          // window.location.refresh();
           router.refresh()
         }, 2000);
       } else {
