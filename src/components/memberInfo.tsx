@@ -14,6 +14,15 @@ import {
 } from "@/components/ui/tooltip"
 import Image from 'next/image'
 import LoadingComponent from './loading'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: "Member Info | Cubing Kerala",
+    description: "Information about a member of the Rubik's Cube community in Kerala",
+    icons: {
+      icon: "logoblack.png",
+    }
+  };
 
 const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, memberResult: CompetitorData }) => {
 
