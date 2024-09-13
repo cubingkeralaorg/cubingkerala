@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Member Info | Cubing Kerala",
   description: "Information about a member of the Rubik's Cube community in Kerala",
   icons: {
-    icon: "logoblack.png",
+    icon: "favicon.ico",
   }
 };
 
