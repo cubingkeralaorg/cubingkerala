@@ -178,7 +178,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                                 </TableCell>
 
                                                 {/* Average Rankings */}
-                                                <TableCell className='font-semibold pl-5 text-nowrap'>
+                                                <TableCell className='font-semibold text-nowrap'>
                                                     {event.ranking?.average?.best
                                                         ? event.event !== '333mbf'
                                                             ? convertMillisecondsToTime(event.ranking.average.best)
