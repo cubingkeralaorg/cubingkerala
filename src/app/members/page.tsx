@@ -8,6 +8,9 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: "Members | Cubing Kerala",
   description: "Members of Rubik's Cube community in Kerala",
+  icons: {
+    icon: "logoblack.png",
+  }
 };
 
 const Members = async () => {
