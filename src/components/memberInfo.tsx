@@ -15,24 +15,27 @@ import {
 import Image from 'next/image'
 import LoadingComponent from './loading'
 import { Metadata } from 'next'
+import axios from 'axios'
 
 export const metadata: Metadata = {
     title: "Member Info | Cubing Kerala",
     description: "Information about a member of the Rubik's Cube community in Kerala",
     icons: {
-      icon: "logoblack.png",
+        icon: "logoblack.png",
     }
-  };
+};
 
 const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, memberResult: CompetitorData }) => {
 
     const [currentMember, setCurrentMember] = useState<RequestInfo>(member)
     const [currentMemberResult, setCurrentMemberResult] = useState<CompetitorData>(memberResult)
+    const [memberDataFromWCA, setMemberDataFromWCA] = useState<CompetitorData | null>(null);
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         if (member) {
             setCurrentMember(member)
+            getMemberDetailsFromWCA();
         }
         if (memberResult) {
             setCurrentMemberResult(memberResult)
@@ -41,6 +44,12 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
             setIsLoading(false)
         }, 1000);
     }, [member, memberResult])
+
+    const getMemberDetailsFromWCA = async () => {
+        const response = await axios.get(`https://www.worldcubeassociation.org/api/v0/persons/${member.wcaid}`);
+        console.log(response);
+        setMemberDataFromWCA(response.data);
+    }
 
     const personalRecordsArray = Object.entries(currentMemberResult.personal_records).map(([event, ranking]) => ({
         event,
@@ -95,7 +104,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
         <div className="min-h-screen bg-black text-stone-200">
             {
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                    <LoadingComponent/>
+                    <LoadingComponent />
                 </div>) : (
                     <main className="flex flex-col items-center p-4 cursor-default">
                         <div className="text-center">
@@ -104,7 +113,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                         </div>
                         <div className="w-full max-w-[200px] h-[200px] my-4">
                             <Avatar className="w-full h-full rounded-md">
-                                <AvatarImage className='object-cover' src={currentMember.avatarUrl.includes("missing_avatar_thumb") ? "/user.png" : currentMember.avatarUrl} alt="Profile Picture" />
+                                <AvatarImage className='object-cover' src={memberDataFromWCA?.person.avatar.url.includes("missing_avatar_thumb") ? "/user.png" : memberDataFromWCA?.person.avatar.url} alt="Profile Picture" />
                                 <AvatarFallback className='rounded-md bg-neutral-900 text-stone-200'>{currentMember.name}</AvatarFallback>
                             </Avatar>
                         </div>
