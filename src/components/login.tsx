@@ -33,12 +33,12 @@ export default function LoginComponent() {
   },[]);
 
   return (
-    <div className="bg-black text-stone-200 relative">
+    <div className="bg-black text-stone-200 relative animate-fade-in">
       {
         isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
           <LoadingComponent />
         </div>) : (
-          <div className="flex flex-col mx-auto max-w-lg w-full py-8 md:py-10 px-4 md:px-5 animate-fade-in">
+          <div className="flex flex-col mx-auto max-w-lg w-full py-6 md:py-10 px-4 md:px-5 animate-fade-in">
             <div className="space-y-1">
               <h1 className="text-3xl font-bold text-center text-green-500">Cubing Kerala Login</h1>
               <p className="text-neutral-500 text-sm text-center">Login with World Cube Association</p>
