@@ -5,7 +5,7 @@ export function CubingKeralaTyping() {
     <div className="flex items-center justify-start md:justify-center">
       <TypingAnimation
         className="font-semibold font-mono text-lg md:text-2xl text-green-500"
-        text="Cubing Kerala,"
+        text="Cubing Kerala"
       />
     </div>
   );

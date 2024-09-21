@@ -19,7 +19,7 @@ export function CubingKeralaUnravel() {
                 <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-green-500 text-sm">About Cubing Kerala</div>
-                        <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
+                        <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
                             Unraveling the Cube, Connecting the Community
                         </h2>
                         <p className="mx-auto text-stone-400 max-w-[700px] md:text-xl/relaxed">
