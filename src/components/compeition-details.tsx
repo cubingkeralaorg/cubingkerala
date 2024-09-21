@@ -36,7 +36,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <LoadingComponent />
                 </div>) : (
-                    <div className="grid gap-6">
+                    <div className="grid animate-fade-in gap-6">
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                             <div className='grid gap-6'>
                                 <div>

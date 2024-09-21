@@ -106,7 +106,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <LoadingComponent />
                 </div>) : (
-                    <main className="flex flex-col items-center p-4 cursor-default">
+                    <main className="flex flex-col items-center p-4 cursor-default animate-fade-in">
                         <div className="text-center">
                             <h2 className="text-3xl font-bold">{currentMember.name}</h2>
                             <Badge className='rounded-none bg-neutral-800 hover:bg-neutral-800 text-stone-200 border-none' variant="secondary">Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)} </Badge>

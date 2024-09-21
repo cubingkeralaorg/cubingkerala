@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import axios from "axios";
 import LoadingComponent from "./loading";
+import ShimmerButton from "./magicui/shimmer-button";
 
 export default function MembersComponent({ membersfromdb }: { membersfromdb: RequestInfo[] }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -90,13 +91,13 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
         isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
           <LoadingComponent />
         </div>) : (
-          <>
+          <div className="animate-fade-in">
             <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Members</h1>
-            <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
+            <div className="flex items-center justify-center gap-2 md:justify-between mb-6">
               <SearchComponent handleSearch={handleSearch} />
-              <Button onClick={handleJoinCK} className="bg-green-400 hover:bg-green-500 rounded-none text-black" size="sm">
-                Join Cubing Kerala
-              </Button>
+              <ShimmerButton onClick={handleJoinCK}>
+                <span className="text-xs md:text-sm px-4 md:px-0 font-semibold text-green-400">Join Cubing Kerala</span>
+              </ShimmerButton>
             </div>
             <div className="overflow-auto rounded-none border-none h-[400px]">
               <Table className="w-full">
@@ -153,7 +154,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </TableBody>
               </Table>
             </div>
-          </>
+          </div>
         )
       }
     </div>
