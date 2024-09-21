@@ -18,7 +18,7 @@ export function CubingKeralaCalendars() {
                 <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-2">
                         <div className="inline-block rounded-lg text-sm text-green-500">Upcoming Competitions</div>
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Mark Your Calendars</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">Mark Your Calendars</h2>
                         <p className="max-w-[900px] text-stone-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                             Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala. Compete against the best cubers and
                             showcase your skills.
