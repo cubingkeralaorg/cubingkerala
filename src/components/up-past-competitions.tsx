@@ -14,6 +14,7 @@ import {
 import { ApiResonse, Competition } from '@/types/types'
 import Link from 'next/link'
 import LoadingComponent from './loading'
+import ShimmerButton from './magicui/shimmer-button'
 
 const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
 
@@ -38,7 +39,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <LoadingComponent/>
                 </div>) : (
-                    <>
+                    <div className='animate-fade-in'>
                         <h1 className="text-3xl font-bold mb-10 text-green-500">Competitions</h1>
                         <section>
                             <h2 className="text-2xl font-bold">Upcoming Competitions</h2>
@@ -80,9 +81,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                 }
                                                             </span>
                                                             <Link href={`https://www.worldcubeassociation.org/competitions/${competition.id}/register`}>
-                                                                <Button className="rounded-none border-none bg-green-400 hover:bg-green-500 text-black" variant="outline" size="sm">
+                                                                <ShimmerButton className='py-1 px-4 text-green-400'>
                                                                     Register
-                                                                </Button>
+                                                                </ShimmerButton>
                                                             </Link>
                                                         </CardFooter>
                                                     </Card>
@@ -106,7 +107,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                         <CardContent className="p-6 h-[150px]">
                                                             <h3 className="text-xl font-bold mb-2 text-stone-200">{competition.name}</h3>
                                                             <p className="text-wrap">
-                                                                {competition.venue?.name}
+                                                                {(competition.venue?.name).split('(')[0]}
                                                             </p>
                                                             <div className='text-xs'>
                                                                 {
@@ -133,9 +134,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                         : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
                                                                 }
                                                             </span>
-                                                            <Button className="rounded-none bg-red-500 hover:bg-red-600 border-none text-black" variant="outline" size="sm">
+                                                            <ShimmerButton className='py-1 px-4'>
                                                                 Completed
-                                                            </Button>
+                                                            </ShimmerButton>
                                                         </CardFooter>
                                                     </Card>
                                                 </Link>
@@ -148,7 +149,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                 </div>
                             }
                         </section>
-                    </>
+                    </div>
 
                 )
             }

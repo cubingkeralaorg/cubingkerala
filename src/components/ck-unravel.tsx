@@ -1,12 +1,18 @@
 "use client";
 
-import RetroGrid from "@/components/magicui/retro-grid";
-import Link from "next/link";
-import { Button } from "./ui/button";
 import DotPattern from "./magicui/dot-pattern";
 import { cn } from "@/lib/utils";
+import ShimmerButton from "./magicui/shimmer-button";
+import { useRouter } from "next/navigation";
 
 export function CubingKeralaUnravel() {
+
+    const router = useRouter();
+
+    const handleRedirectToWhatsapp = () => {
+        router.push('https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS')
+    }
+
     return (
         <div className="relative flex w-full flex-col bg-black text-stone-200 items-center justify-center overflow-hidden rounded-none py-12 md:py-24 lg:py-32">
             <div className="container px-6 z-20">
@@ -30,7 +36,7 @@ export function CubingKeralaUnravel() {
                             provide a platform for cubers to showcase their skills, connect with like- minded individuals, and
                             inspire the next generation of cubing enthusiasts.
                         </p>
-                        <Link href="https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS "><Button className="bg-green-400 text-black hover:bg-green-500 rounded-none">Join our Whatsapp group</Button></Link>
+                        <ShimmerButton onClick={handleRedirectToWhatsapp}><span className="text-green-400 w-full">Join our Whatsapp group</span></ShimmerButton>
                     </div>
                 </div>
             </div>

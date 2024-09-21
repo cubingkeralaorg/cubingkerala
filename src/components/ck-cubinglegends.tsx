@@ -1,15 +1,22 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "./ui/button";
 import DotPattern from "./magicui/dot-pattern";
+import ShimmerButton from "./magicui/shimmer-button";
+import { useRouter } from "next/navigation";
 
 const CubingKeralaCubingLengends = () => {
+
+    const router = useRouter();
+
+    const handleRedirectToRankings = () => {
+        router.push('/rankings')
+    }
+
     return (
         <div className="relative flex h-full w-full py-12 md:py-24 lg:py-32 items-center justify-center overflow-hidden bg-black text-stone-200">
             <div className="container px-6">
-                <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-2">
                         <div className="inline-block rounded-lg px-3 py-1 text-sm text-green-400">Top Ranked Cubers</div>
                         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -20,7 +27,7 @@ const CubingKeralaCubingLengends = () => {
                             mastering the art of cubing.
                         </p>
                     </div>
-                    <Link prefetch={true} href="/rankings"><Button className="bg-green-400 text-black hover:bg-green-500 rounded-none">Rankings</Button></Link>
+                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton onClick={handleRedirectToRankings}><span className="text-green-400 w-full">Rankings</span></ShimmerButton></div>
                 </div>
             </div>
             <DotPattern

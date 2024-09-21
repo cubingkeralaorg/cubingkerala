@@ -16,7 +16,7 @@ export function Profile({ profileInfo, handleLogout }: {
 }) {
 
     return (
-        <Menubar className="bg-black shadow-none border-none">
+        <Menubar className="bg-black shadow-none border-none rounded-none">
             <MenubarMenu>
                 <MenubarTrigger className="p-0 cursor-pointer hover:underline hover:underline-offset-4 rounded-none text-red-500">Logout</MenubarTrigger>
                 <MenubarContent style={{zIndex: '10000'}} className="bg-black border-stone-800 rounded-none text-stone-200">
