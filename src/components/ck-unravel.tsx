@@ -36,7 +36,7 @@ export function CubingKeralaUnravel() {
                             provide a platform for cubers to showcase their skills, connect with like- minded individuals, and
                             inspire the next generation of cubing enthusiasts.
                         </p>
-                        <ShimmerButton onClick={handleRedirectToWhatsapp}><span className="text-green-400 w-full">Join our Whatsapp group</span></ShimmerButton>
+                        <ShimmerButton className="py-2 px-4" onClick={handleRedirectToWhatsapp}><span className="text-green-400 w-full">Join our Whatsapp group</span></ShimmerButton>
                     </div>
                 </div>
             </div>

@@ -27,7 +27,7 @@ const CubingKeralaCubingLengends = () => {
                             mastering the art of cubing.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton onClick={handleRedirectToRankings}><span className="text-green-400 w-full">Rankings</span></ShimmerButton></div>
+                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton className="py-2 px-4" onClick={handleRedirectToRankings}><span className="text-green-400 w-full">Rankings</span></ShimmerButton></div>
                 </div>
             </div>
             <DotPattern

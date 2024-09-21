@@ -30,7 +30,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
             </p>
             <div className="flex items-center justify-start md:justify-center">
               {
-                !user && <ShimmerButton onClick={handleRedirectToLogin}><span className="text-green-400">Get started</span></ShimmerButton>
+                !user && <ShimmerButton className="py-2 px-4" onClick={handleRedirectToLogin}><span className="text-green-400">Get started</span></ShimmerButton>
               }
             </div>
           </div>

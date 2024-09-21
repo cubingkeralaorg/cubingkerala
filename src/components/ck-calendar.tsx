@@ -24,7 +24,7 @@ export function CubingKeralaCalendars() {
                             showcase your skills.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton onClick={handleRedirectToCompetitions}><span className="text-green-400 w-full">Competitions</span></ShimmerButton></div>
+                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton className="py-2 px-4" onClick={handleRedirectToCompetitions}><span className="text-green-400 w-full">Competitions</span></ShimmerButton></div>
                 </div>
             </div>
             <DotPattern
