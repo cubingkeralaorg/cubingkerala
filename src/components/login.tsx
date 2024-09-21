@@ -1,10 +1,8 @@
 'use client'
 
 import { Card, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
-import LoadingComponent from "./loading"
 import Image from "next/image"
 import LoginLotttieComponent from "./login-lottie"
 import ShimmerButton from "./magicui/shimmer-button"
@@ -13,7 +11,6 @@ import LoginLoadingComponent from "./login-loading"
 
 export default function LoginComponent() {
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const handleLogin = () => {
@@ -25,19 +22,8 @@ export default function LoginComponent() {
     return () => setLoading(false);
   }, []);
 
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  },[]);
-
   return (
-    <div className="bg-black text-stone-200 relative animate-fade-in">
-      {
-        isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <LoadingComponent />
-        </div>) : (
+    <div className="bg-black text-stone-200 relative">
           <div className="flex flex-col mx-auto max-w-lg w-full py-6 md:py-10 px-4 md:px-5 animate-fade-in">
             <div className="space-y-1">
               <h1 className="text-3xl font-bold text-center text-green-500">Cubing Kerala Login</h1>
@@ -67,8 +53,6 @@ export default function LoginComponent() {
               </Card>
             </div>
           </div>
-        )
-      }
     </div>
   )
 }
