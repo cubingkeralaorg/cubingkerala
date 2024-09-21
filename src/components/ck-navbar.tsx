@@ -32,8 +32,9 @@ const CubingKeralaNavbar = () => {
       toast.success('Logged out successfully');
       setTimeout(() => {
         window.localStorage.clear();
+        window.location.reload();
       }, 2000);
-      router.replace('/');
+      router.replace('/')
     } else {
       console.error('Logout failed');
       toast.error('Logout failed. Please try again.');
