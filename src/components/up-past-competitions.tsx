@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import "@cubing/icons";
 import {
@@ -23,6 +22,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (response?.items) {
             const KeralComps = response.items.filter((comp) => comp.city.includes("Kerala"));
             setPastCompetitions(KeralComps.filter((comp) => new Date(comp.date.till) < new Date()));

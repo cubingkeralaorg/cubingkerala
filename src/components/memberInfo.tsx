@@ -33,6 +33,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (member) {
             setCurrentMember(member)
             getMemberDetailsFromWCA();

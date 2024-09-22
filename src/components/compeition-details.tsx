@@ -19,6 +19,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         setCurrentCompetition(compInfo);
         setTimeout(() => {
             setIsLoading(false);
