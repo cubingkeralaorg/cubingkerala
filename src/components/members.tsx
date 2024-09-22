@@ -20,6 +20,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const cookies = cookie.parse(document.cookie);
     const userInfoFromCookie = cookies.userInfo;
     if (userInfoFromCookie) {
