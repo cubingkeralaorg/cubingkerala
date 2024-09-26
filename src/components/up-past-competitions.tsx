@@ -26,7 +26,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
         if (response?.items) {
             const KeralComps = response.items.filter((comp) => comp.city.includes("Kerala"));
             setPastCompetitions(KeralComps.filter((comp) => new Date(comp.date.till) < new Date()));
-            setUpcomingCompetitions(KeralComps.filter((comp) => new Date(comp.date.till) > new Date()));
+            setUpcomingCompetitions((KeralComps.filter((comp) => new Date(comp.date.till) > new Date())).reverse());
         }
         setTimeout(() => {
             setIsLoading(false);
