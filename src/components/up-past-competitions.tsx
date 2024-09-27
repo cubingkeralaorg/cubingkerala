@@ -37,7 +37,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
         <div className="gap-6">
             {
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-                    <LoadingComponent/>
+                    <LoadingComponent />
                 </div>) : (
                     <div className='animate-fade-in'>
                         <h1 className="text-3xl font-bold mb-10 text-green-500">Competitions</h1>
@@ -49,11 +49,11 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                         {
                                             upcomingCompetitions.map((competition, index) =>
                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 min-w-[90vw] md:min-w-[400px] border-none cursor-pointer rounded-none">
-                                                        <CardContent className="p-6 h-[150px]">
-                                                            <h3 className="text-xl font-bold mb-2 text-stone-200">{competition.name}</h3>
-                                                            <p className="text-wrap">
-                                                                {competition.venue?.name}
+                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[350px] md:w-[400px] border-none cursor-pointer rounded-none">
+                                                        <CardContent className="p-6 h-[150px] max-w-[90vw] md:max-w-[400px]">
+                                                            <h3 className="text-md font-bold text-stone-200 text-wrap">{competition.name}</h3>
+                                                            <p className="text-wrap text-sm py-2">
+                                                                {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                             </p>
                                                             <div className='text-xs'>
                                                                 {
@@ -73,7 +73,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                             </div>
                                                         </CardContent>
                                                         <CardFooter className="bg-neutral-950 py-3 px-5 flex justify-between items-center">
-                                                            <span className='text-sm flex font-semibold items-center gap-1'>
+                                                            <span className='text-xs flex font-semibold items-center gap-1'>
                                                                 {
                                                                     competition.date.from === competition.date.till
                                                                         ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -81,7 +81,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                 }
                                                             </span>
                                                             <Link href={`https://www.worldcubeassociation.org/competitions/${competition.id}/register`}>
-                                                                <ShimmerButton className='py-1 px-4 text-green-400'>
+                                                                <ShimmerButton className='py-1 px-4 text-green-400 text-xs'>
                                                                     Register
                                                                 </ShimmerButton>
                                                             </Link>
@@ -103,11 +103,11 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                         {
                                             pastCompetitions.map((competition, index) =>
                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 min-w-[90vw] md:min-w-[400px] border-none cursor-pointer rounded-none">
-                                                        <CardContent className="p-6 h-[150px]">
-                                                            <h3 className="text-xl font-bold mb-2 text-stone-200">{competition.name}</h3>
-                                                            <p className="text-wrap">
-                                                                {(competition.venue?.name).split('(')[0]}
+                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[350px] md:w-[400px] border-none cursor-pointer rounded-none">
+                                                        <CardContent className="p-6 h-[150px] max-w-[90vw] md:max-w-[400px]">
+                                                            <h3 className="text-md font-bold text-stone-200">{competition.name}</h3>
+                                                            <p className="text-wrap text-sm py-2">
+                                                                {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                             </p>
                                                             <div className='text-xs'>
                                                                 {
@@ -127,14 +127,14 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                             </div>
                                                         </CardContent>
                                                         <CardFooter className="bg-neutral-950 py-3 px-5 flex justify-between items-center">
-                                                            <span className='text-sm flex font-semibold items-center gap-1'>
+                                                            <span className='text-xs flex font-semibold items-center gap-1'>
                                                                 {
                                                                     competition.date.from === competition.date.till
                                                                         ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
                                                                         : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
                                                                 }
                                                             </span>
-                                                            <ShimmerButton className='py-1 px-4'>
+                                                            <ShimmerButton className='py-1 px-4 text-xs'>
                                                                 Completed
                                                             </ShimmerButton>
                                                         </CardFooter>
