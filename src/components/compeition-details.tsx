@@ -57,7 +57,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
                                             <div>
                                                 <p className="font-medium">Location</p>
                                                 <p className="text-stone-400">
-                                                    {`${currentCompetition.venue.name}, ${currentCompetition.venue.address}`}
+                                                    {`${currentCompetition?.venue.name.includes('[') ? (currentCompetition.venue.name).split('(')[0].slice(1,-1) : currentCompetition?.venue.name}, ${currentCompetition.venue.address}`}
                                                 </p>
                                             </div>
                                         </div>
