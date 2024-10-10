@@ -93,10 +93,15 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
           <LoadingComponent />
         </div>) : (
           <div className="animate-fade-in">
-            <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Members</h1>
-            <div className="flex items-center justify-center gap-2 md:justify-between mb-6">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-start text-green-500">Members</h1>
+              <ShimmerButton className="block md:hidden px-3 py-2" onClick={handleJoinCK}>
+                <span className="text-xs font-semibold text-green-400">Join Cubing Kerala</span>
+              </ShimmerButton>
+            </div>
+            <div className="flex-row md:flex items-center justify-center gap-2 space-y-2 md:justify-between mb-6">
               <SearchComponent handleSearch={handleSearch} />
-              <ShimmerButton onClick={handleJoinCK}>
+              <ShimmerButton className="w-full md:w-auto hidden md:block" onClick={handleJoinCK}>
                 <span className="text-xs md:text-sm px-4 md:px-0 font-semibold text-green-400">Join Cubing Kerala</span>
               </ShimmerButton>
             </div>
@@ -121,14 +126,14 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                           <TableCell className="cursor-default">{index + 1}</TableCell>
                           <TableCell className="text-nowrap">
                             <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                              <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
+                              <span className="cursor-pointer hover:text-blue-500">
                                 {member.name.split('(')[0]}
                               </span>
                             </Link>
                           </TableCell>
                           <TableCell>
                             <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                              <span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">
+                              <span className="cursor-pointer hover:text-blue-500">
                                 {member.wcaid}
                               </span>
                             </Link>
@@ -148,7 +153,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                   ) : (
                     <TableRow>
                       <TableCell className="text-stone-600 px-4 hover:bg-neutral-900 py-4" colSpan={6}>
-                        Loading...
+                        No results found
                       </TableCell>
                     </TableRow>
                   )}

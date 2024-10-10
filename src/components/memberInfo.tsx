@@ -174,7 +174,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                                             <TooltipTrigger>
                                                                 <span className={`cubing-icon event-${event.event}`}></span>
                                                             </TooltipTrigger>
-                                                            <TooltipContent className='bg-green-400 text-black'>
+                                                            <TooltipContent className='bg-green-400 py-1 px-2 rounded-none text-black'>
                                                                 <p>{event.event}</p>
                                                             </TooltipContent>
                                                         </Tooltip>

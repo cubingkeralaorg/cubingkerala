@@ -48,19 +48,19 @@ const CubingKeralaNavbar = () => {
           <Image className='h-12 w-12 md:w-20 md:h-20' width={200} height={200} src="/logoblack.png" alt="Cubing Kerala" />
         </Link>
         <nav className="flex items-center justify-between gap-6">
-          <Link href="/competitions" className="text-sm font-medium hover:underline underline-offset-4" prefetch={true}>
+          <Link href="/competitions" className="text-sm font-medium hover:text-green-400" prefetch={true}>
             Competitions
           </Link>
-          <Link href="/members" className="text-sm font-medium hover:underline underline-offset-4" prefetch={true}>
+          <Link href="/members" className="text-sm font-medium hover:text-green-400" prefetch={true}>
             Members
           </Link>
-          <Link href="/rankings" className="text-sm font-medium hover:underline underline-offset-4" prefetch={true}>
+          <Link href="/rankings" className="text-sm font-medium hover:text-green-400" prefetch={true}>
             Rankings
           </Link>
           {userInfo ? (
             <Profile profileInfo={userInfo} handleLogout={handleLogout} />
           ) : (
-            <Link href="/login" className="text-sm font-medium hover:underline underline-offset-4 mr-1" prefetch={true}>
+            <Link href="/login" className="text-sm font-medium hover:text-green-400 mr-1" prefetch={true}>
               Login
             </Link>
           )}

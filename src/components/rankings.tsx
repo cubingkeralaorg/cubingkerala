@@ -124,7 +124,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
         </div>
       ) : (
         <div className="animate-fade-in">
-          <h1 className="text-3xl font-bold text-start mb-10 text-green-500">Rankings</h1>
+          <h1 className="text-3xl font-bold text-start mb-6 md:mb-10 text-green-500">Rankings</h1>
           <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
             <div className="flex items-start justify-start w-full">
               <FilterComponent
@@ -151,7 +151,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
                     <TableRow className="border-none hover:bg-neutral-900" key={member.id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell className="font-medium text-nowrap">
-                        <Link href={`/members/${member.id}`}><span className="hover:underline hover:underline-offset-2 cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>
+                        <Link href={`/members/${member.id}`}><span className="cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>
                       </TableCell>
                       <TableCell className="font-semibold text-nowrap">
                         {result?.eventId === '333fm' && selectedFilter.round === 'single'

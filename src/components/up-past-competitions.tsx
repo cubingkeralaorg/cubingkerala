@@ -42,20 +42,20 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                     <div className='animate-fade-in'>
                         <h1 className="text-3xl font-bold mb-10 text-green-500">Competitions</h1>
                         <section>
-                            <h2 className="text-2xl font-bold">Upcoming Competitions</h2>
+                            <h2 className="text-xl md:text-2xl font-bold">Upcoming Competitions</h2>
                             {
                                 upcomingCompetitions.length > 0 ? <ScrollArea className="whitespace-nowrap rounded-md mb-5">
                                     <div className="flex space-x-4 py-5">
                                         {
                                             upcomingCompetitions.map((competition, index) =>
                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[350px] md:w-[400px] border-none cursor-pointer rounded-none">
+                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[400px] border-none cursor-pointer rounded-none">
                                                         <CardContent className="p-6 h-[150px] max-w-[90vw] md:max-w-[400px]">
                                                             <h3 className="text-md font-bold text-stone-200 text-wrap">{competition.name}</h3>
                                                             <p className="text-wrap text-sm py-2">
                                                                 {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                             </p>
-                                                            <div className='text-xs'>
+                                                            <div className='text-xs text-wrap'>
                                                                 {
                                                                     competition?.events.map((event, index) => (
                                                                         <TooltipProvider key={index}>
@@ -63,7 +63,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                                 <TooltipTrigger>
                                                                                     <span className={`cubing-icon event-${event} pr-3`}></span>
                                                                                 </TooltipTrigger>
-                                                                                <TooltipContent className='bg-green-400 text-black p-1 rounded-md'>
+                                                                                <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
                                                                                     <p>{event}</p>
                                                                                 </TooltipContent>
                                                                             </Tooltip>
@@ -96,20 +96,20 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                             }
                         </section>
                         <section>
-                            <h2 className="text-2xl font-bold">Past Competitions</h2>
+                            <h2 className="text-xl md:text-2xl font-bold">Past Competitions</h2>
                             {
                                 pastCompetitions.length > 0 ? <ScrollArea className="whitespace-nowrap rounded-md mb-5">
                                     <div className="flex space-x-4 py-5">
                                         {
                                             pastCompetitions.map((competition, index) =>
                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[350px] md:w-[400px] border-none cursor-pointer rounded-none">
+                                                    <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[400px] border-none cursor-pointer rounded-none">
                                                         <CardContent className="p-6 h-[150px] max-w-[90vw] md:max-w-[400px]">
                                                             <h3 className="text-md font-bold text-stone-200">{competition.name}</h3>
                                                             <p className="text-wrap text-sm py-2">
                                                                 {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                             </p>
-                                                            <div className='text-xs'>
+                                                            <div className='text-xs text-wrap'>
                                                                 {
                                                                     competition?.events.map((event, index) => (
                                                                         <TooltipProvider key={index}>
@@ -117,7 +117,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                                 <TooltipTrigger>
                                                                                     <span className={`cubing-icon event-${event} pr-3`}></span>
                                                                                 </TooltipTrigger>
-                                                                                <TooltipContent className='bg-green-400 text-black'>
+                                                                                <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
                                                                                     <p>{event}</p>
                                                                                 </TooltipContent>
                                                                             </Tooltip>

@@ -71,7 +71,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: CompetitionDetail
                                                                 <TooltipTrigger>
                                                                     <span className={`cubing-icon event-${event} pr-3`}></span>
                                                                 </TooltipTrigger>
-                                                                <TooltipContent className='bg-green-400 rounded-md text-xs p-1 text-black'>
+                                                                <TooltipContent className='bg-green-400 rounded-none text-xs py-1 px-2 text-black'>
                                                                     <p>{event}</p>
                                                                 </TooltipContent>
                                                             </Tooltip>
