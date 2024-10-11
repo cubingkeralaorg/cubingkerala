@@ -124,7 +124,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
         </div>
       ) : (
         <div className="animate-fade-in">
-          <h1 className="text-3xl font-bold text-start mb-6 md:mb-10 text-green-500">Rankings</h1>
+          <h1 className="text-3xl font-bold text-start mb-6 text-green-500">Rankings</h1>
           <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
             <div className="flex items-start justify-start w-full">
               <FilterComponent

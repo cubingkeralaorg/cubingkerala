@@ -19,7 +19,8 @@ interface CompetitionDetailsProps {
 
 const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
 
-    const response = await axios.get(`https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/competitions/${params.compId}.json`)
+    // const response = await axios.get(`https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/competitions/${params.compId}.json`)
+    const competitionResponse = await axios.get(`https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}`)
 
     return (
         <>
@@ -29,7 +30,7 @@ const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
                         <LoadingComponent />
                     </div>
                 }
-            ><CompetitionDetailsComponent compInfo={response.data} />
+            ><CompetitionDetailsComponent compInfo={competitionResponse.data} />
             </Suspense>
         </>
     )

@@ -95,15 +95,12 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
           <div className="animate-fade-in">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold text-start text-green-500">Members</h1>
-              <ShimmerButton className="block md:hidden px-3 py-2" onClick={handleJoinCK}>
-                <span className="text-xs font-semibold text-green-400">Join Cubing Kerala</span>
+              <ShimmerButton className="px-2 py-1 md:px-3 md:py-2" onClick={handleJoinCK}>
+                <span className="text-xs md:text-sm font-semibold text-green-400">Join Cubing Kerala</span>
               </ShimmerButton>
             </div>
-            <div className="flex-row md:flex items-center justify-center gap-2 space-y-2 md:justify-between mb-6">
+            <div className="mb-6">
               <SearchComponent handleSearch={handleSearch} />
-              <ShimmerButton className="w-full md:w-auto hidden md:block" onClick={handleJoinCK}>
-                <span className="text-xs md:text-sm px-4 md:px-0 font-semibold text-green-400">Join Cubing Kerala</span>
-              </ShimmerButton>
             </div>
             <div className="overflow-auto rounded-none border-none h-[400px]">
               <Table className="w-full">
