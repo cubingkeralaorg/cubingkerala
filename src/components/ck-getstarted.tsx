@@ -27,7 +27,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
               We organize events, competitions, and meetups to bring together cubers of all skill levels. <br /> Whether you&apos;re a seasoned speedsolver or just starting your journey, our community offers a space where you can learn, grow, and share your passion for cubing. <br /> Together, we can unlock not only the secrets of each puzzle but also the potential within ourselves.
             </p>
             <p className="text-stone-400 pb-5 mx-auto md:text-xl text-start md:text-center max-w-[950px] md:pt-5 hidden md:block">
-              Join us for events, competitions, and meetups that connect cubers of all skill levels. Whether you're an experienced speedsolver or a beginner, our community is here to help you learn and grow. Together, we can explore the puzzles and unlock our potential.
+              Join us for events, competitions, and meetups that connect cubers of all skill levels. Whether you&apos;re an experienced speedsolver or a beginner, our community is here to help you learn and grow. Together, we can explore the puzzles and unlock our potential.
             </p>
             <div className="flex items-center justify-start md:justify-center">
               {
