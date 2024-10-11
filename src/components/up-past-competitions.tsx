@@ -108,7 +108,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                 <h2 className="text-xl md:text-2xl font-bold pb-5">Past Competitions</h2>
                                 {
                                     pastCompetitions.length > 0 ? (
-                                        <ScrollArea className="whitespace-nowrap rounded-md mb-5 h-[340px] overflow-auto">
+                                        <ScrollArea className="whitespace-nowrap rounded-md mb-5 h-[360px] md:h-[350px] overflow-auto">
                                             <div className="flex flex-col space-y-4">
                                                 {
                                                     pastCompetitions.map((competition, index) =>
