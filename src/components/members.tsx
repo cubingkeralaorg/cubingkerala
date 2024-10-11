@@ -95,7 +95,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
           <div className="animate-fade-in">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold text-start text-green-500">Members</h1>
-              <ShimmerButton className="px-2 py-1 md:px-3 md:py-2" onClick={handleJoinCK}>
+              <ShimmerButton className="px-3 md:py-2" onClick={handleJoinCK}>
                 <span className="text-xs md:text-sm font-semibold text-green-400">Join Cubing Kerala</span>
               </ShimmerButton>
             </div>
