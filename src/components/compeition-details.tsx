@@ -201,7 +201,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                             ))}
                                         </div>
                                     </div>
-                                    <div className='flex mt-10 gap-1 text-sm hover:text-green-400 underline underline-offset-4 cursor-pointer'><p>More details on World Cube Association</p>
+                                    <div className='flex mt-10 gap-1 text-sm text-green-400 hover:text-green-500 underline underline-offset-4 cursor-pointer'><p>More details on World Cube Association</p>
                                     <CiLink/>
                                     </div>
                                 </div>
