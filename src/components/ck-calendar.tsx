@@ -1,7 +1,9 @@
 import DotPattern from "./magicui/dot-pattern";
 import { cn } from "@/lib/utils";
-import ShimmerButton from "./magicui/shimmer-button";
 import { useRouter } from "next/navigation";
+import { RainbowButton } from "./ui/rainbow-button";
+import { IoIosArrowForward } from "react-icons/io";
+
 
 export function CubingKeralaCalendars() {
 
@@ -20,11 +22,11 @@ export function CubingKeralaCalendars() {
                         <div className="inline-block rounded-lg text-sm text-green-500">Upcoming Competitions</div>
                         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">Mark Your Calendars</h2>
                         <p className="max-w-[900px] text-stone-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                            Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala. Compete against the best cubers and
-                            showcase your skills.
+                            Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton className="py-2 px-4" onClick={handleRedirectToCompetitions}><span className="text-green-400 w-full">Competitions</span></ShimmerButton></div>
+                    <div className="flex items-center justify-start md:justify-center w-full"><RainbowButton className="text-green-400 hover:text-green-500 gap-1" onClick={handleRedirectToCompetitions}><span>Competitions</span><IoIosArrowForward />
+                    </RainbowButton></div>
                 </div>
             </div>
             <DotPattern

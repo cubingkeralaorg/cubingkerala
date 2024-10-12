@@ -28,7 +28,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cookie": "^0.6.0",
-    "framer-motion": "^11.3.31",
+    "framer-motion": "^11.11.8",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lottie-web": "^5.12.2",
