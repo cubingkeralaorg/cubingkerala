@@ -3,36 +3,49 @@
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/magicui/dot-pattern";
 import { UserInfo } from "@/types/types";
-import ShimmerButton from "./magicui/shimmer-button";
 import { useRouter } from "next/navigation";
+import { RainbowButton } from "./ui/rainbow-button";
+import BlurIn from "./ui/blur-in";
+import { IoIosArrowForward } from "react-icons/io";
+import ShinyButton from "./ui/shiny-button";
+import { AnimatedGradientTextComponent } from "./gradient-text";
+
 
 const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
 
   const router = useRouter();
 
-  const handleRedirectToLogin = () => {
+  const handleRedirectToLogin = (): void => {
     router.push('/login')
+  }
+
+  const handleRedirectToWhatsapp = (): void => {
+    window.open('https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS', '_blank');
   }
 
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-black text-stone-200">
-      <div className="container px-6 flex justify-center items-center py-8 md:py-28">
+      <div className="container px-6 flex justify-center items-center h-[80vh]">
         <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-1">
-          <div className="space-y-2 text-start md:text-center w-full">
-            <h1 className="text-4xl font-bold tracking-tighter md:text-7xl">
-              Welcome to the
-              Rubik&apos;s Cube Community in Kerala.
-            </h1>
-            <p className="text-stone-400 pb-5 mx-auto md:text-xl text-start md:text-center max-w-[850px] md:pt-5 block md:hidden">
-              We organize events, competitions, and meetups to bring together cubers of all skill levels. <br /> Whether you&apos;re a seasoned speedsolver or just starting your journey, our community offers a space where you can learn, grow, and share your passion for cubing. <br /> Together, we can unlock not only the secrets of each puzzle but also the potential within ourselves.
+          <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw]">
+            <div className="w-full flex justify-start md:justify-center"><AnimatedGradientTextComponent/></div>
+            <BlurIn
+              word="Rubik&apos;s Cube Community in Kerala."
+              className="text-4xl text-start md:text-center font-bold tracking-tighter md:text-7xl"
+            />
+            <p className="text-stone-400 pb-5 mx-auto text-md md:text-xl text-start md:text-center md:pt-5">
+              Join us for competitions, and meetups that connect cubers of all skill levels. <br /> <strong className="text-white">Cubing Kerala</strong> is here to help you learn and grow.
             </p>
-            <p className="text-stone-400 pb-5 mx-auto md:text-xl text-start md:text-center max-w-[950px] md:pt-5 hidden md:block">
-              Join us for events, competitions, and meetups that connect cubers of all skill levels. Whether you&apos;re an experienced speedsolver or a beginner, our community is here to help you learn and grow. Together, we can explore the puzzles and unlock our potential.
-            </p>
-            <div className="flex items-center justify-start md:justify-center">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-5">
               {
-                !user && <ShimmerButton className="py-2 px-4" onClick={handleRedirectToLogin}><span className="text-green-400">Get started</span></ShimmerButton>
+                !user &&
+                <div onClick={handleRedirectToLogin} className="w-full md:w-1/3">
+                  <ShinyButton className="w-full rounded-2xl bg-neutral-100 hover:bg-neutral-300 transition-all duration-200 ease-in-out"><div className="flex items-center justify-center gap-1 py-[2px] text-black"><span>Get started</span><IoIosArrowForward /></div>
+                  </ShinyButton>
+                </div>
               }
+              <RainbowButton className="w-full md:w-fit text-green-400 hover:text-green-500 gap-1" onClick={handleRedirectToWhatsapp}><span>Join our Whatsapp group</span><IoIosArrowForward />
+              </RainbowButton>
             </div>
           </div>
         </div>

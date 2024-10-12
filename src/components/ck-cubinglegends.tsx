@@ -2,8 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import DotPattern from "./magicui/dot-pattern";
-import ShimmerButton from "./magicui/shimmer-button";
 import { useRouter } from "next/navigation";
+import { RainbowButton } from "./ui/rainbow-button";
+import { IoIosArrowForward } from "react-icons/io";
+
 
 const CubingKeralaCubingLengends = () => {
 
@@ -23,11 +25,10 @@ const CubingKeralaCubingLengends = () => {
                             Cubing Legends of Kerala
                         </h2>
                         <p className="max-w-[900px] text-stone-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                            Meet the top-ranked Rubik&apos;s Cube solvers in Kerala, who have dedicated their time and effort to
-                            mastering the art of cubing.
+                            Meet the top-ranked Rubik&apos;s Cube solvers in Kerala.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full"><ShimmerButton className="py-2 px-4" onClick={handleRedirectToRankings}><span className="text-green-400 w-full">Rankings</span></ShimmerButton></div>
+                    <div className="flex items-center justify-start md:justify-center w-full"><RainbowButton className="text-green-400 hover:text-green-500 gap-1" onClick={handleRedirectToRankings}><span>Rankings</span><IoIosArrowForward/></RainbowButton></div>
                 </div>
             </div>
             <DotPattern
