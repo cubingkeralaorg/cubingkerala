@@ -42,7 +42,7 @@ const CubingKeralaNavbar = () => {
   }
 
   return (
-    <header style={{ zIndex: '10000' }} className="bg-black text-stone-200 shadow-sm py-2 px-1 md:px-0 sticky top-0">
+    <header style={{ zIndex: '10000' }} className="bg-black text-stone-200 border-b-[1px] border-neutral-800 py-2 px-1 md:px-0 sticky top-0">
       <div className="container md:flex items-center justify-between h-20 md:h-18 py-0 pb-2 md:py-6 px-4 md:px-6">
         <Link href="/" className="flex items-center justify-start" prefetch={true}>
           <Image className='h-12 w-12 md:w-20 md:h-20' width={200} height={200} src="/logoblack.png" alt="Cubing Kerala" />

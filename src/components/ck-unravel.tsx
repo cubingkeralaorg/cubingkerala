@@ -4,8 +4,9 @@ import DotPattern from "./magicui/dot-pattern";
 import { cn } from "@/lib/utils";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import { RainbowButton } from "./ui/rainbow-button";
 import ShinyButton from "./ui/shiny-button";
+import { FaFacebook } from "react-icons/fa";
+
 
 export function CubingKeralaUnravel() {
 
@@ -15,7 +16,11 @@ export function CubingKeralaUnravel() {
 
     const handleRedirectToInstagram = (): void => {
         window.open('https://www.instagram.com/cubingkerala', '_blank');
-      }
+    }
+
+    const handleRedirectToFacebook = (): void => {
+        window.open('https://www.facebook.com/cubingkeralaofficial', '_blank');
+    }
 
     return (
         <div className="relative flex w-full flex-col bg-black text-stone-200 items-center justify-center overflow-hidden rounded-none py-12 md:py-24 lg:py-32">
@@ -41,16 +46,21 @@ export function CubingKeralaUnravel() {
                             inspire the next generation of cubing enthusiasts.
                         </p>
                         <div className="w-full flex flex-col gap-5">
-                            <div className="inline-block rounded-lg text-center md:text-start text-sm mt-5">Join us on socials</div>
-                            <div className="flex gap-2 items-center justify-center md:justify-start text-sm">
+                            <div className="inline-block rounded-lg text-start text-green-500 text-sm mt-5">Join us on socials</div>
+                            <div className="flex gap-2 items-center flex-wrap w-full justify-start text-sm">
                                 <div onClick={handleRedirectToWhatsapp}>
                                     <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
-                                        <div className="flex gap-1 items-center cursor-pointer text-green-400"><FaWhatsapp /> <span>Whatsapp</span></div>
+                                        <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaWhatsapp /> <span className="hidden md:block">Whatsapp</span></div>
                                     </ShinyButton>
                                 </div>
                                 <div onClick={handleRedirectToInstagram}>
                                     <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
-                                        <div className="flex gap-1 items-center cursor-pointer text-green-400"><FaInstagram /> <span>Instagram</span></div>
+                                        <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaInstagram /> <span className="hidden md:block">Instagram</span></div>
+                                    </ShinyButton>
+                                </div>
+                                <div onClick={handleRedirectToFacebook}>
+                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
+                                        <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaFacebook /> <span className="hidden md:block">Facebook</span></div>
                                     </ShinyButton>
                                 </div>
                             </div>
