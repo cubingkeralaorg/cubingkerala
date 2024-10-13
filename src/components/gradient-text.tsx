@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
-export function AnimatedGradientTextComponent() {
+export function AnimatedGradientTextComponent({name}: { name: string }) {
   return (
     <div>
       <AnimatedGradientText className="bg-black">
@@ -12,7 +12,7 @@ export function AnimatedGradientTextComponent() {
             `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
           )}
         >
-          Cubing Kerala
+          {name}
         </span>
       </AnimatedGradientText>
     </div>

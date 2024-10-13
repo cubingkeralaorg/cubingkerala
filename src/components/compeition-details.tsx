@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { LatLngTuple } from "leaflet";
 import LoadingComponent from './loading';
 import { CiLink } from "react-icons/ci";
+import BlurIn from './ui/blur-in';
 
 const LeafletMap = dynamic(() => import("@/components/map"), {
     ssr: false,
@@ -84,8 +85,11 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                 ) : (
                     <div className="grid animate-fade-in gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-green-500">{currentCompetition.name}</h1>
-                            <p className="mt-4 text-stone-400 text-sm md:text-base">
+                            <BlurIn
+                            word={currentCompetition.name}
+                            className="text-4xl text-center font-bold tracking-tighter md:text-6xl"
+                        />
+                            <p className="mt-2 md:mt-4 text-stone-400 text-center text-[15px]">
                                 {
                                     currentCompetition.start_date === currentCompetition.end_date
                                         ? new Date(currentCompetition.end_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -95,16 +99,16 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                         </div>
                         <div className='flex flex-wrap'>
                             <div className='w-full md:w-1/2'>
-                                <div>
-                                    <h2 className="text-lg md:text-2xl font-bold">Event Details</h2>
-                                    <div className="mt-4 grid gap-2">
+                                <div className='space-y-2'>
+                                    <h2 className="text-xl md:text-2xl font-bold">Event Details</h2>
+                                    <div className="grid gap-2">
                                         <div className="flex items-center gap-2">
-                                            <div>
-                                                <p className="font-medium">Location</p>
-                                                <p className="text-stone-400 text-sm md:text-base">
+                                            <div className='space-y-1'>
+                                                <p className="font-medium text-[17px] md:text-[18px]">Location</p>
+                                                <p className="text-stone-400 text-[15px] md:text-[16px]">
                                                     {`${currentCompetition?.venue.includes('[') ? (currentCompetition.venue).split('(')[0].slice(1, -1) : currentCompetition?.venue}, ${currentCompetition.venue_address}`}
                                                 </p>
-                                                <div onClick={() => setShowMap(!showMap)} className="text-green-400 hover:text-green-500 cursor-pointer flex gap-1 mt-2 text-sm md:text-base"><p>Map</p>
+                                                <div onClick={() => setShowMap(!showMap)} className="text-green-400 hover:text-green-500 cursor-pointer flex gap-1 mt-2 text-[15px] md:text-[16px]"><p>Map</p>
                                                     <CiLink />
                                                 </div>
                                             </div>
@@ -114,10 +118,10 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                                 <LeafletMap coordinates={coordinates} address={currentCompetition.venue_address} />
                                             </div>
                                         }
-                                        <div className="flex items-center gap-2">
-                                            <div>
-                                                <p className="font-medium">Events</p>
-                                                <div className='py-2 text-sm md:text-base'>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <div className='space-y-1'>
+                                                <p className="font-medium text-[17px] md:text-[18px]">Events</p>
+                                                <div className='text-sm md:text-[16px] text-stone-400'>
                                                     {currentCompetition.event_ids.map((event) => (
                                                         <TooltipProvider key={event}>
                                                             <Tooltip>
@@ -133,10 +137,10 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <div>
-                                                <p className="font-medium">Main Event</p>
-                                                <div className='py-2 text-sm md:text-base'>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <div className='space-y-1'>
+                                                <p className="font-medium text-[17px] md:text-[18px]">Main Event</p>
+                                                <div className='text-[15px] md:text-[16px] text-stone-400'>
                                                     <TooltipProvider>
                                                         <Tooltip>
                                                             <TooltipTrigger>
@@ -150,34 +154,34 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <div>
-                                                <p className="font-medium">Competitor Limit</p>
-                                                <p className="text-stone-400 text-sm md:text-base">
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <div className='space-y-1'>
+                                                <p className="font-medium text-[17px] md:text-[18px]">Competitor Limit</p>
+                                                <p className="text-stone-400 text-[15px] md:text-[16px]">
                                                     {currentCompetition.competitor_limit}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className='mt-6 hidden md:block'>
-                                            <h2 className="text-lg md:text-2xl font-bold">Information</h2>
-                                            <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className="mt-4 text-stone-400 text-sm md:text-base"></div>
+                                        <div className='hidden md:block space-y-2 mt-4'>
+                                            <h2 className="text-xl md:text-2xl font-bold">Information</h2>
+                                            <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className=" text-stone-400 text-[15px] md:text-[16px]"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className='w-full md:w-1/2 flex justify-start md:justify-end mt-6 md:mt-0'>
-                                <div>
-                                    <h2 className="text-lg md:text-2xl font-bold">Registration Details</h2>
-                                    <div className='mt-4'>
-                                        <p className="font-medium">Registration period</p>
-                                        <p className="text-stone-400 text-sm md:text-base">
+                                <div className='space-y-2'>
+                                    <h2 className="text-xl md:text-2xl font-bold">Registration Details</h2>
+                                    <div>
+                                        <p className="font-medium text-[17px] md:text-[18px]">Registration period</p>
+                                        <p className="text-stone-400 text-[15px] md:text-[16px]">
                                             {`Online registration opened on ${new Date(currentCompetition.registration_open).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                                         </p>
-                                        <p className="text-stone-400 text-sm md:text-base">
+                                        <p className="text-stone-400 text-[15px] md:text-[16px]">
                                             {`Registration will close on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                                         </p>
                                     </div>
-                                    <div className='my-2 text-sm md:text-base'>
+                                    <div className='my-2 text-[15px] md:text-[16px]'>
                                         {
                                             new Date(compInfo.end_date) > new Date() ?
                                                 <div onClick={() => handleRegisterForThisCompetition()} className='text-blue-500 hover:text-blue-600 cursor-pointer flex gap-1'>
@@ -191,21 +195,21 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                                 </div>
                                         }
                                     </div>
-                                    <div className='mt-6 block md:hidden'>
-                                        <h2 className="text-lg md:text-2xl font-bold">Information</h2>
-                                        <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className="mt-4 text-stone-400 text-sm md:text-base"></div>
+                                    <div className='block md:hidden space-y-2'>
+                                        <h2 className="text-xl md:text-2xl font-bold mt-6">Information</h2>
+                                        <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className="mt-4 text-stone-400 text-[15px] md:text-[16px]"></div>
                                     </div>
-                                    <div className='mt-6'>
-                                        <h2 className="text-lg md:text-2xl font-bold">Organizers</h2>
-                                        <div className="mt-4 grid">
+                                    <div className='space-y-2'>
+                                        <h2 className="text-xl md:text-2xl font-bold mt-4">Organizers</h2>
+                                        <div className="grid">
                                             {currentCompetition.organizers.map((organiser) => (
-                                                <div key={organiser.id} className="flex items-center gap-2 text-sm md:text-base">
+                                                <div key={organiser.id} className="flex items-center gap-2 text-[15px] md:text-[16px]">
                                                     <p onClick={()=>handleOrganiserRedirect(organiser.url)} className={`font-medium text-normal text-stone-400 ${organiser.wca_id ? 'hover:text-blue-500 cursor-pointer' : 'cursor-default'}`}>{organiser.name}</p>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div onClick={()=> handleWCARedirect()} className='flex mt-10 gap-1 text-sm md:text-base text-green-400 hover:text-green-500 underline underline-offset-4 cursor-pointer'><p>More details on World Cube Association</p>
+                                    <div onClick={()=> handleWCARedirect()} className='flex mt-10 gap-1 text-[15px] md:text-[16px] text-green-400 hover:text-green-500 cursor-pointer'><p>More details on World Cube Association</p>
                                     <CiLink/>
                                     </div>
                                 </div>

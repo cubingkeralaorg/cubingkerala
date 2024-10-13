@@ -16,6 +16,7 @@ import Image from 'next/image'
 import LoadingComponent from './loading'
 import { Metadata } from 'next'
 import axios from 'axios'
+import BlurIn from './ui/blur-in'
 
 export const metadata: Metadata = {
     title: "Member Info | Cubing Kerala",
@@ -107,10 +108,14 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <LoadingComponent />
                 </div>) : (
-                    <main className="flex flex-col items-center p-4 cursor-default animate-fade-in">
+                    <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
                         <div className="text-center">
-                            <h2 className="text-3xl font-bold">{currentMember.name}</h2>
-                            <Badge className='rounded-none bg-neutral-800 hover:bg-neutral-800 text-stone-200 border-none' variant="secondary">Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)} </Badge>
+                            {/* <h2 className="text-3xl font-bold">{currentMember.name}</h2> */}
+                            <BlurIn
+                                word={currentMember.name}
+                                className="text-2xl text-center font-bold tracking-tighter md:text-4xl"
+                            />
+                            <Badge className='rounded-md bg-neutral-900 hover:bg-neutral-900 text-stone-200 border-none' variant="secondary">Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)} </Badge>
                         </div>
                         <div className="w-full max-w-[200px] h-[200px] my-4">
                             <Avatar className="w-full h-full rounded-md">
@@ -118,23 +123,23 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                 <AvatarFallback className='rounded-md bg-neutral-900 text-stone-200'>{currentMember.name}</AvatarFallback>
                             </Avatar>
                         </div>
-                        <div className="flex justify-center space-x-8 my-4">
+                        <div className="flex w-full max-w-fit py-2 px-4  text-stone-200 justify-center space-x-8 my-4">
                             <div className="text-center">
-                                <p className="text-xs text-neutral-500">COUNTRY</p>
+                                <p className="text-xs text-neutral-500 font-medium">COUNTRY</p>
                                 <p className='text-sm font-semibold'>{(currentMember.country).toUpperCase()}</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-xs text-neutral-500">WCA ID</p>
+                                <p className="text-xs text-neutral-500 font-medium">WCA ID</p>
                                 <p className='text-sm font-semibold'>{currentMember.wcaid}</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-xs text-neutral-500">COMPETITIONS</p>
+                                <p className="text-xs text-neutral-500 font-medium">COMPETITIONS</p>
                                 <p className='text-sm font-semibold'>{currentMemberResult.competition_count}</p>
                             </div>
                         </div>
-                        <div className="flex justify-center space-x-8 my-2">
+                        <div className="flex justify-center space-x-8 mb-6">
                             <div className="text-center">
-                                <p className="text-xs text-neutral-500">MEDALS</p>
+                                <p className="text-xs text-neutral-500 font-medium">MEDALS</p>
                                 <div className='flex justify-center space-x-2'>
                                     <div className='flex justify-center items-center'>
                                         <p className='text-sm font-semibold'>{currentMemberResult.medals.gold}</p>
@@ -150,9 +155,9 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                             </div>
                         </div>
                         <div className="w-full max-w-4xl mt-5">
-                            <Table>
+                            <Table className='text-sm md:text-[15px]'>
                                 <TableHeader>
-                                    <TableRow className='hover:bg-neutral-900 border-none'>
+                                    <TableRow className='hover:bg-transparent border-none'>
                                         <TableHead className='text-neutral-500'>Event</TableHead>
                                         <TableHead className='text-neutral-500'>NR</TableHead>
                                         <TableHead className='text-neutral-500'>CR</TableHead>

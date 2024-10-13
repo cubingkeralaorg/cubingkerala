@@ -29,7 +29,7 @@ export default function LoginComponent() {
     <div className="bg-black text-stone-200 relative flex items-center justify-center">
       <div className="flex flex-col mx-auto max-w-lg w-full py-6 md:py-10 px-4 md:px-5 animate-fade-in">
         <div className="space-y-1">
-          <AnimatedGradientTextComponent />
+          <AnimatedGradientTextComponent name="Cubing Kerala" />
           <p className="text-neutral-500 text-sm text-center">Authenticate with World Cube Association</p>
         </div>
         <div>

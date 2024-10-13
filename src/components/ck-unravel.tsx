@@ -31,7 +31,7 @@ export function CubingKeralaUnravel() {
                         <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
                             Unraveling the Cube, Connecting the Community
                         </h2>
-                        <p className="mx-auto text-stone-400 max-w-[700px] md:text-xl/relaxed">
+                        <p className="mx-auto text-stone-400 max-w-[700px] text-[15px] md:text-xl">
                             Cubing Kerala is a vibrant community of Rubik&apos;s Cube enthusiasts, founded in 2017 with the goal of
                             promoting the art of cubing in the state. Over the years, we have organized numerous competitions,
                             workshops, and social events, fostering a strong network of cubers and encouraging the growth of the
@@ -40,7 +40,7 @@ export function CubingKeralaUnravel() {
                     </div>
                     <div className="flex flex-col items-start space-y-4">
                         <div className="inline-block rounded-lg text-green-500 text-sm">Our Mission</div>
-                        <p className="mx-auto max-w-[700px] text-stone-400 md:text-xl/relaxed">
+                        <p className="mx-auto max-w-[700px] text-stone-400 text-[15px] md:text-xl">
                             At Cubing Kerala, our mission is to cultivate a vibrant cubing community, promote the sport, and
                             provide a platform for cubers to showcase their skills, connect with like- minded individuals, and
                             inspire the next generation of cubing enthusiasts.

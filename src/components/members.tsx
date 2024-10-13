@@ -11,6 +11,10 @@ import Link from "next/link";
 import axios from "axios";
 import LoadingComponent from "./loading";
 import ShimmerButton from "./magicui/shimmer-button";
+import { RainbowButton } from "./ui/rainbow-button";
+import { AnimatedGradientTextComponent } from "./gradient-text";
+import BlurIn from "./ui/blur-in";
+import LoginLoadingComponent from "./login-loading";
 
 export default function MembersComponent({ membersfromdb }: { membersfromdb: RequestInfo[] }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -18,6 +22,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
   const [filteredMembersList, setFilteredMembersList] = useState<RequestInfo[]>([]);
   const [membersDetails, setMembersDetails] = useState<CompetitorData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isJoinCkLoading, setIsJoinCkLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -61,7 +66,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
       toast.error("Please login to join Cubing Kerala");
       return;
     }
-
+    setIsJoinCkLoading(true);
     try {
       const response = await fetch('/api/join-cubingkerala', {
         method: 'POST',
@@ -73,15 +78,18 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
 
       if (response.ok) {
         const data = await response.json();
+        setIsJoinCkLoading(false);
         toast.success(`${data.message}`);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
         const error = await response.json();
+        setIsJoinCkLoading(false);
         toast(`${error.message}`);
       }
     } catch (error) {
+      setIsJoinCkLoading(false);
       toast(`${error}`);
     }
   };
@@ -93,11 +101,24 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
           <LoadingComponent />
         </div>) : (
           <div className="animate-fade-in">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold text-start text-green-500">Members</h1>
-              <ShimmerButton className="px-3 md:py-2" onClick={handleJoinCK}>
-                <span className="text-xs md:text-sm font-semibold text-green-400">Join Cubing Kerala</span>
-              </ShimmerButton>
+            <div className="flex-col justify-center items-center mb-6">
+              <BlurIn
+                word="Members"
+                className="text-4xl text-center md:text-center font-bold tracking-tighter md:text-6xl"
+              />
+              <div className="flex justify-center items-center my-6">
+                <RainbowButton className="text-green-400 hover:text-green-500 w-[200px]" disabled={isJoinCkLoading} onClick={handleJoinCK}>
+                  {
+                    isJoinCkLoading ? (
+                      <div className="flex items-center justify-center h-6">
+                        <LoginLoadingComponent />
+                      </div>
+                    ) : (
+                      <span className="text-sm font-semibold">Join Cubing Kerala</span>
+                    )
+                  }
+                </RainbowButton>
+              </div>
             </div>
             <div className="mb-6">
               <SearchComponent handleSearch={handleSearch} />
@@ -105,7 +126,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
             <div className="overflow-auto rounded-none border-none h-[400px]">
               <Table className="w-full">
                 <TableHeader>
-                  <TableRow className="hover:bg-neutral-900 border-none">
+                  <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
                     <TableHead className="text-neutral-500">#</TableHead>
                     <TableHead className="text-neutral-500">Name</TableHead>
                     <TableHead className="text-neutral-500">WCA ID</TableHead>
@@ -119,7 +140,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                     filteredMembersList.map((member, index) => {
                       const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
                       return (
-                        <TableRow className="border-none hover:bg-neutral-900" key={index}>
+                        <TableRow className="border-none hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
                           <TableCell className="cursor-default">{index + 1}</TableCell>
                           <TableCell className="text-nowrap">
                             <Link prefetch={true} href={`/members/${member.wcaid}`}>

@@ -8,6 +8,7 @@ import DeleteMemberPopover from "./delete-member-popover";
 import DeleteRequestPopover from "./delete-request-popover";
 import { useRouter } from "next/navigation";
 import LoadingComponent from "./loading";
+import BlurIn from "./ui/blur-in";
 
 
 interface Request {
@@ -161,9 +162,12 @@ export default function RequestsComponent({ requests, members }: {
           <LoadingComponent />
         </div>) : (
           <>
-            <h1 className="text-3xl font-bold mb-5 text-green-500">Requests</h1>
+            <BlurIn
+              word="Requests"
+              className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
+            />
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[500px] table-auto">
+              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px]">
                 <thead>
                   <tr className="border-none">
                     <th className="px-4 py-1 text-left">Name</th>
@@ -197,9 +201,12 @@ export default function RequestsComponent({ requests, members }: {
                 </tbody>
               </table>
             </div>
-            <h1 className="text-3xl font-bold mb-5 mt-10 text-green-500">Members</h1>
+            <BlurIn
+              word="Members"
+              className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
+            />
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[500px] table-auto">
+              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px]">
                 <thead>
                   <tr className="border-none">
                     <th className="px-4 py-1 text-left">Name</th>
