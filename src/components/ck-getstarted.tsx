@@ -28,12 +28,12 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
       <div className="container px-6 flex justify-center items-center h-[80vh]">
         <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-1">
           <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw]">
-            <div className="w-full flex justify-start md:justify-center"><AnimatedGradientTextComponent/></div>
+            <div className="w-full flex justify-start md:justify-center"><AnimatedGradientTextComponent name="Cubing Kerala"/></div>
             <BlurIn
               word="Rubik&apos;s Cube Community in Kerala."
               className="text-4xl text-start md:text-center font-bold tracking-tighter md:text-7xl"
             />
-            <p className="text-stone-400 pb-5 mx-auto text-md md:text-xl text-start md:text-center md:pt-5">
+            <p className="text-stone-400 pb-5 mx-auto text-[15px] md:text-xl text-start md:text-center md:pt-5">
               Join us for competitions, and meetups that connect cubers of all skill levels. <br /> <strong className="text-white">Cubing Kerala</strong> is here to help you learn and grow.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-5">

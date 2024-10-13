@@ -36,7 +36,7 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
 
   return (
     <div className="flex items-center justify-center gap-3">
-      <Menubar className="rounded-none bg-neutral-900 border-none">
+      <Menubar className="rounded-md bg-neutral-900 border-none text-sm md:text-[15px]">
         <MenubarMenu>
           <MenubarTrigger className="hover:bg-neutral-800 hover:text-neutral-100 cursor-pointer">
             {selectedFilter.event || "Select Event"}

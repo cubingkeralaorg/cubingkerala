@@ -7,6 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LoadingComponent from "./loading";
+import BlurIn from "./ui/blur-in";
 
 export default function RankingsComponent({ members }: { members: RequestInfo[] }) {
   const [membersList, setMembersList] = useState<RequestInfo[]>([]);
@@ -86,7 +87,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
 
 
   function convertMbldToMinutes(number: number): string {
-    if(number === Infinity) { return '' }
+    if (number === Infinity) { return '' }
     const numStr = `0${number.toString()}`;
 
     const DD = parseInt(numStr.substring(1, 3), 10);
@@ -124,16 +125,19 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
         </div>
       ) : (
         <div className="animate-fade-in">
-          <h1 className="text-3xl font-bold text-start mb-6 text-green-500">Rankings</h1>
+          <BlurIn
+            word="Rankings"
+            className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-6"
+          />
           <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
-            <div className="flex items-start justify-start w-full">
+            <div className="flex justify-center w-full">
               <FilterComponent
                 onFilterChange={setSelectedFilter}
               />
             </div>
           </div>
           <div className="overflow-auto rounded-none max-h-[400px]">
-            <Table className="w-full">
+            <Table className="w-full text-sm md:text-[15px]">
               <TableHeader>
                 <TableRow className="border-none hover:bg-transparent">
                   <TableHead className="text-neutral-500">#</TableHead>
@@ -157,9 +161,9 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
                         {result?.eventId === '333fm' && selectedFilter.round === 'single'
                           ? result.best
                           : result?.eventId === '333mbf'
-                          ? convertMbldToMinutes(result?.best || Infinity)
-                          : convertMillisecondsToTime(result?.best || Infinity)
-                          }
+                            ? convertMbldToMinutes(result?.best || Infinity)
+                            : convertMillisecondsToTime(result?.best || Infinity)
+                        }
                       </TableCell>
                       <TableCell>{result?.rank?.country || ''}</TableCell>
                       <TableCell>{result?.rank?.continent || ''}</TableCell>
