@@ -35,5 +35,5 @@ export default function LoginLotttieComponent({ path }: {
         };
     }, [path]);
 
-    return <div className='w-[300px]' ref={animationContainer}></div>;
+    return <div className='w-[250px] md:w-[300px]' ref={animationContainer}></div>;
 }

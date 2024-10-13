@@ -40,7 +40,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
               {
                 !user &&
                 <div onClick={handleRedirectToLogin} className="w-full md:w-1/3">
-                  <ShinyButton className="w-full rounded-2xl bg-neutral-100 hover:bg-neutral-300 transition-all duration-200 ease-in-out"><div className="flex items-center justify-center gap-1 py-[2px] text-black"><span>Get started</span><IoIosArrowForward /></div>
+                  <ShinyButton className="w-full rounded-2xl bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out"><div className="flex items-center justify-center gap-1 py-[2px] text-black"><span>Get started</span><IoIosArrowForward /></div>
                   </ShinyButton>
                 </div>
               }
