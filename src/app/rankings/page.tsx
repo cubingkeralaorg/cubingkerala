@@ -6,7 +6,7 @@ import React from 'react'
 
 export const metadata: Metadata = {
   title: "Rankings | Cubing Kerala",
-  description: "The rankings of members within the Rubik's Cube community in Kerala.",
+  description: "Fastest Cuber in Kerala. The rankings of members within the Rubik's Cube community in Kerala.",
 };
 
 const Rankings = async () => {
