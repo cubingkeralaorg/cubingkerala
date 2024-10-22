@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CubingKeralaNavbar from "@/components/ck-navbar";
 import CubingKeralaFooter from "@/components/ck-footer";
-import {Toaster} from 'sonner'
+import { Toaster } from 'sonner'
 export const dynamic = 'force-dynamic'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${inter.className} max-w-screen-xl bg-black mx-auto flex flex-col min-h-screen justify-between`}>
         <CubingKeralaNavbar />
         {children}
-        <Toaster richColors/>
+        <Toaster richColors />
         <CubingKeralaFooter />
       </body>
     </html>

@@ -35,7 +35,6 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
         }
     }, [currentCompetition.information]);
 
-    console.log(currentCompetition);
 
     const coordinates: LatLngTuple = [
         compInfo.latitude_degrees,
