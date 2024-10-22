@@ -49,7 +49,6 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
 
     const getMemberDetailsFromWCA = async () => {
         const response = await axios.get(`https://www.worldcubeassociation.org/api/v0/persons/${member.wcaid}`);
-        console.log(response);
         setMemberDataFromWCA(response.data);
     }
 
