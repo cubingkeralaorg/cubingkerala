@@ -23,7 +23,7 @@ const CubingKeralaFooter = () => {
                     <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
                     <div onClick={() => handleGithubRedirect()} className='text-stone-400 hover:text-blue-500 cursor-pointer text-xs hidden md:flex gap-1 items-center'>
                         <FaGithub className='text-xs' />
-                        <span className='pb-1'>github</span>
+                        <span>github</span>
                     </div>
                     <FaGithub className='text-stone-400 hover:text-blue-500 cursor-pointer text-xs md:hidden mr-1' />
                 </div>
