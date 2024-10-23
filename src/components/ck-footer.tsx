@@ -8,7 +8,7 @@ const CubingKeralaFooter = () => {
     return (
         <footer className="py-6 px-4 sm:px-6 text-stone-400 flex justify-between items-center">
             <div className="space-y-1 w-full">
-                <p className="text-xs text-stone-600">Created by <Link href="https://github.com/allenjohn07" className="cursor-pointer hover:text-blue-500">allenjohn</Link></p>
+                <p className="text-xs text-stone-600">Created by <Link href="https://www.allenjohn.online" className="cursor-pointer hover:text-blue-500">allenjohn</Link></p>
                 <div className='flex items-center justify-between'>
                     <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
                     <Link href="https://github.com/cubingkeralaorg/cubingkerala">
