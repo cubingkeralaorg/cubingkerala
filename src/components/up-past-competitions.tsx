@@ -48,12 +48,12 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                             word="Competitions"
                             className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-6"
                         />
-                        <div className='flex flex-wrap justify-evenly gap-10'>
+                        <div className='flex flex-wrap justify-evenly gap-10 '>
                             <section>
-                                <h2 className="text-xl md:text-2xl font-bold text-green-500 pb-5 text-center">Upcoming Competitions</h2>
+                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[95px] bg-black text-center">Upcoming Competitions</h2>
                                 {
                                     upcomingCompetitions.length > 0 ? (
-                                        <ScrollArea className="whitespace-nowrap rounded-md mb-5 max-h-[400px] overflow-auto">
+                                        <ScrollArea className="whitespace-nowrap rounded-md max-h-[450px] overflow-auto">
                                             <div className="flex flex-col space-y-4">
                                                 {
                                                     upcomingCompetitions.map((competition, index) =>
@@ -108,10 +108,10 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
 
                             {/* Similar structure for Past Competitions */}
                             <section>
-                                <h2 className="text-xl md:text-2xl text-center text-red-500 font-bold pb-5">Past Competitions</h2>
+                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl text-center text-red-500 font-bold py-5 sticky top-[95px] bg-black">Past Competitions</h2>
                                 {
                                     pastCompetitions.length > 0 ? (
-                                        <ScrollArea className="whitespace-nowrap rounded-md mb-5 h-[400px] md:h-[360px] overflow-auto">
+                                        <ScrollArea className="whitespace-nowrap rounded-md h-[450px] md:h-[360px] overflow-auto">
                                             <div className="flex flex-col space-y-4">
                                                 {
                                                     pastCompetitions.map((competition, index) =>

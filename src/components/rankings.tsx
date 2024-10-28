@@ -136,7 +136,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
               />
             </div>
           </div>
-          <div className="overflow-auto rounded-none max-h-[400px]">
+          <div className="rounded-none">
             <Table className="w-full text-sm md:text-[15px]">
               <TableHeader>
                 <TableRow className="border-none hover:bg-transparent">
