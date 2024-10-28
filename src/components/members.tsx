@@ -2,7 +2,6 @@
 
 import SearchComponent from "@/components/search";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { CompetitorData, RequestInfo, UserInfo } from "@/types/types";
 import cookie from "cookie";
@@ -10,9 +9,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import axios from "axios";
 import LoadingComponent from "./loading";
-import ShimmerButton from "./magicui/shimmer-button";
 import { RainbowButton } from "./ui/rainbow-button";
-import { AnimatedGradientTextComponent } from "./gradient-text";
 import BlurIn from "./ui/blur-in";
 import LoginLoadingComponent from "./login-loading";
 
@@ -137,7 +134,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </TableHeader>
                 <TableBody>
                   {filteredMembersList.length > 0 ? (
-                    filteredMembersList.map((member, index) => {
+                    filteredMembersList.sort((a,b)=>a.name.localeCompare(b.name)).map((member, index) => {
                       const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
                       return (
                         <TableRow className="border-none hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
