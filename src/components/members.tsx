@@ -120,7 +120,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
             <div className="mb-6">
               <SearchComponent handleSearch={handleSearch} />
             </div>
-            <div className="overflow-auto rounded-none border-none h-[400px]">
+            <div className="rounded-none border-none">
               <Table className="w-full">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">

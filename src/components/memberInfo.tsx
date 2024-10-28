@@ -108,13 +108,13 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                     <LoadingComponent />
                 </div>) : (
                     <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
-                        <div className="text-center">
+                        <div className="text-center space-y-2">
                             {/* <h2 className="text-3xl font-bold">{currentMember.name}</h2> */}
                             <BlurIn
                                 word={currentMember.name}
                                 className="text-2xl text-center font-bold tracking-tighter md:text-4xl"
                             />
-                            <Badge className='rounded-md bg-neutral-900 hover:bg-neutral-900 text-stone-200 border-none' variant="secondary">Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)} </Badge>
+                            <Badge className={`${currentMember.role == 'member' ? 'text-blue-300' : currentMember.role == 'organiser' ? 'text-green-400' : currentMember.role == 'co-founder' ? 'text-red-500' : 'text-white'} rounded-md bg-neutral-900 hover:bg-neutral-900 border-none `} variant="secondary"><span>Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)}</span></Badge>
                         </div>
                         <div className="w-full max-w-[200px] h-[200px] my-4">
                             <Avatar className="w-full h-full rounded-md">
