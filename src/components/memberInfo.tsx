@@ -114,7 +114,14 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                 word={currentMember.name}
                                 className="text-2xl text-center font-bold tracking-tighter md:text-4xl"
                             />
-                            <Badge className={`${currentMember.role == 'member' ? 'text-blue-300' : currentMember.role == 'organiser' ? 'text-green-400' : currentMember.role == 'co-founder' ? 'text-red-500' : 'text-white'} rounded-md bg-neutral-900 hover:bg-neutral-900 border-none `} variant="secondary"><span>Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)}</span></Badge>
+                            <div className='space-x-2'>
+                                <Badge className={`${currentMember.role == 'member' ? 'text-blue-300' : currentMember.role == 'organiser' ? 'text-green-400' : currentMember.role == 'co-founder' ? 'text-red-500' : 'text-white'} rounded-md bg-neutral-900 hover:bg-neutral-900 border-none`} variant="secondary"><span>Cubing Kerala {(currentMember.role).split('')[0].toUpperCase() + (currentMember.role).slice(1)}</span></Badge>
+                                {
+                                    memberDataFromWCA?.person.delegate_status &&
+                                    <Badge className='text-yellow-300 rounded-md bg-neutral-900 hover:bg-neutral-900 border-none'>WCA {(memberDataFromWCA.person.delegate_status).split('')[0].toUpperCase() + (memberDataFromWCA.person.delegate_status).slice(1)}
+                                    </Badge>
+                                }
+                            </div>
                         </div>
                         <div className="w-full max-w-[200px] h-[200px] my-4">
                             <Avatar className="w-full h-full rounded-md">
