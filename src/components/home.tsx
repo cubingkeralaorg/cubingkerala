@@ -52,7 +52,7 @@ export default function HomeComponent() {
         {isAlertShow && (
           <AlertComponent show={isAlertShow} userInfo={userInfo} handleClick={handleClick} />
         )}
-        <section ref={ref1} className="w-full min-h-[90vh] bg-black relative">
+        <section ref={ref1} className="w-full bg-black relative">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible1 ? 1 : 0, y: isVisible1 ? 0 : 0 }}
