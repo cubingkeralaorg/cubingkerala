@@ -15,8 +15,8 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
 
   const router = useRouter();
 
-  const handleRedirectToLogin = (): void => {
-    router.push('/login')
+  const handleRedirectToContactPage = (): void => {
+    router.push('/contact')
   }
 
   const handleRedirectToWhatsapp = (): void => {
@@ -39,13 +39,10 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
               Join us for competitions, and meetups that connect cubers of all skill levels. <br /> <strong className="text-white">Cubing Kerala</strong> is here to help you learn and grow.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-5">
-              {
-                !user &&
-                <div onClick={handleRedirectToLogin} className="w-full md:w-1/3">
-                  <ShinyButton className="w-full rounded-2xl bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out"><div className="flex items-center justify-center gap-1 py-[2px] text-black"><span>Get started</span><IoIosArrowForward /></div>
-                  </ShinyButton>
-                </div>
-              }
+              <div onClick={() => handleRedirectToContactPage()} className="w-full md:w-1/3">
+                <ShinyButton className="w-full rounded-2xl bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out"><div className="flex items-center justify-center gap-1 py-[2px] text-black"><span>Contact Us</span><IoIosArrowForward /></div>
+                </ShinyButton>
+              </div>
               <RainbowButton className="w-full md:w-fit text-green-400 hover:text-green-500 gap-1" onClick={handleRedirectToWhatsapp}><span>Join our Whatsapp group</span><IoIosArrowForward />
               </RainbowButton>
             </div>
