@@ -55,7 +55,7 @@ const CubingKeralaNavbar = () => {
           </Link>
           <div onClick={() => handleContactRedirect()}><ContactAnimatedShinyTextComponent /></div>
         </div>
-        <nav className="flex items-center overflow-y-auto justify-between gap-6">
+        <nav className="flex items-center justify-between gap-6">
           <Link href="/competitions" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
             Competitions
           </Link>

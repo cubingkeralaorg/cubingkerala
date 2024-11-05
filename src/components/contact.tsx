@@ -15,7 +15,7 @@ export default function ContactComponent() {
                     word="Contact Us"
                     className="text-4xl text-stone-200 font-bold tracking-tighter md:text-6xl"
                 />
-                <p className="text-neutral-400 text-center text-lg w-full">
+                <p className="text-neutral-400 text-center text-sm md:text-lg w-full">
                     We&apos;d love to hear from you! Send us a message, and we&apos;ll respond as soon as possible.
                 </p>
                 <div className="mt-auto">
