@@ -59,7 +59,7 @@ const CubingKeralaNavbar = () => {
             )}
           </div>
         </div>
-        <nav className="flex items-center justify-evenly gap-6">
+        <nav className="flex items-center justify-evenly gap-4 md:gap-6">
           <Link href="/competitions" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
             Competitions
           </Link>
