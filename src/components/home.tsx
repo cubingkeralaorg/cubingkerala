@@ -22,35 +22,23 @@ export default function HomeComponent() {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // This code runs only on the client side
-      const alertVisibility = window.localStorage.getItem("alertVisiblity");
-      setIsAlertShow(alertVisibility === "true");
 
       const cookies = cookie.parse(document.cookie);
       const userInfo = cookies.userInfo;
 
       if (userInfo) {
         setUserInfo(JSON.parse(userInfo));
-        if (alertVisibility === null) {
-          setIsAlertShow(true);
-          window.localStorage.setItem("alertVisiblity", "true");
-        }
+        setIsAlertShow(true);
       }
     }
   }, []);
-  
 
-  const handleClick = () => {
-    const newVisibility = !isAlertShow;
-    setIsAlertShow(newVisibility);
-    window.localStorage.setItem("alertVisiblity", newVisibility.toString());
-  };
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <main className="flex-1">
         {isAlertShow && (
-          <AlertComponent show={isAlertShow} userInfo={userInfo} handleClick={handleClick} />
+          <div className="absolute w-fit"><AlertComponent userInfo={userInfo} /></div>
         )}
         <section ref={ref1} className="w-full bg-black relative">
           <motion.div

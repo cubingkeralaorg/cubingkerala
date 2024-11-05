@@ -42,10 +42,6 @@ const CubingKeralaNavbar = () => {
     }
   }
 
-  const handleContactRedirect = () => {
-    router.push('/contact')
-  }
-
   return (
     <header style={{ zIndex: '10000' }} className="bg-black text-stone-200 border-b-[1px] border-neutral-800 py-2 px-1 md:px-0 sticky top-0">
       <div className="container md:flex w-full items-center justify-between h-20 md:h-18 py-0 pb-2 md:py-6 px-4 md:px-6">
@@ -53,9 +49,17 @@ const CubingKeralaNavbar = () => {
           <Link href="/" prefetch={true}>
             <Image className='h-12 w-12 md:w-20 md:h-20' width={200} height={200} src="/logoblack.png" alt="Cubing Kerala" />
           </Link>
-          <div onClick={() => handleContactRedirect()}><ContactAnimatedShinyTextComponent /></div>
+          <div className='block md:hidden'>
+            {userInfo ? (
+              <Profile profileInfo={userInfo} handleLogout={handleLogout} />
+            ) : (
+              <Link href="/login" prefetch={true}>
+                <ContactAnimatedShinyTextComponent userInfo={null} text="Login" />
+              </Link>
+            )}
+          </div>
         </div>
-        <nav className="flex items-center justify-between gap-6">
+        <nav className="flex items-center justify-evenly gap-6">
           <Link href="/competitions" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
             Competitions
           </Link>
@@ -65,13 +69,18 @@ const CubingKeralaNavbar = () => {
           <Link href="/rankings" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
             Rankings
           </Link>
-          {userInfo ? (
-            <Profile profileInfo={userInfo} handleLogout={handleLogout} />
-          ) : (
-            <Link href="/login" className="text-sm md:text-[15px] font-medium hover:text-green-400 mr-1" prefetch={true}>
-              Login
-            </Link>
-          )}
+          <Link href="/contact" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
+            Contact
+          </Link>
+          <div className='hidden md:block'>
+            {userInfo ? (
+              <Profile profileInfo={userInfo} handleLogout={handleLogout} />
+            ) : (
+              <Link href="/login" prefetch={true}>
+                <ContactAnimatedShinyTextComponent userInfo={null} text="Login" />
+              </Link>
+            )}
+          </div>
         </nav>
       </div>
     </header>

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/menubar"
 import { UserInfo } from "@/types/types"
 import Link from "next/link"
+import { ContactAnimatedShinyTextComponent } from "./contact-ck"
 
 export function Profile({ profileInfo, handleLogout }: {
     profileInfo: UserInfo | null,
@@ -16,9 +17,11 @@ export function Profile({ profileInfo, handleLogout }: {
 }) {
 
     return (
-        <Menubar className="bg-black shadow-none border-none rounded-none">
+        <Menubar className="bg-black shadow-none border-none rounded-none absolute top-4 right-0 md:static -ml-5 w-fit">
             <MenubarMenu>
-                <MenubarTrigger className="p-0 cursor-pointer rounded-none hover:text-red-500">Logout</MenubarTrigger>
+                <MenubarTrigger>
+                    <ContactAnimatedShinyTextComponent userInfo={profileInfo?.me.wca_id} text="Logout" />
+                </MenubarTrigger>
                 <MenubarContent style={{zIndex: '10000'}} className="bg-black border-stone-800 rounded-none text-stone-200">
                     <MenubarItem className="text-stone-400 hover:bg-none cursor-default">{profileInfo?.me.name}</MenubarItem>
                     {
