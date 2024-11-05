@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import LoginLotttieComponent from "./login-lottie"
-import ShimmerButton from "./magicui/shimmer-button"
 import LoginLoadingComponent from "./login-loading"
 import { AnimatedGradientTextComponent } from "./gradient-text"
 import { RainbowButton } from "./ui/rainbow-button"
@@ -27,7 +26,7 @@ export default function LoginComponent() {
 
   return (
     <div className="bg-black text-stone-200 relative flex items-center justify-center">
-      <div className="flex flex-col mx-auto max-w-lg w-full py-6 md:py-10 px-4 md:px-5 animate-fade-in">
+      <div className="flex flex-col mx-auto max-w-lg w-full animate-fade-in">
         <div className="space-y-1">
           <AnimatedGradientTextComponent name="Cubing Kerala" />
           <p className="text-neutral-500 text-sm text-center">Authenticate with World Cube Association</p>
