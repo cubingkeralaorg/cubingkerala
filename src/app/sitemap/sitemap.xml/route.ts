@@ -6,11 +6,6 @@ export async function GET() {
       { loc: 'https://www.cubingkerala.org/rankings', lastmod: '2024-10-11' },
       { loc: 'https://www.cubingkerala.org/contact', lastmod: '2024-11-06' },
       { loc: 'https://www.cubingkerala.org/login', lastmod: '2024-10-11' },
-      { loc: 'https://www.cubingkerala.org/api/auth/callback', lastmod: '2024-10-11' },
-      { loc: 'https://github.com/cubingkeralaorg/cubingkerala', lastmod: '2024-10-11' },
-      { loc: 'https://www.instagram.com/cubingkerala', lastmod: '2024-10-11' },
-      { loc: 'https://www.facebook.com/cubingkeralaofficial', lastmod: '2024-10-11' },
-      { loc: 'https://www.allenjohn.online', lastmod: '2024-10-24' },
     ];
   
     // Generate XML content
