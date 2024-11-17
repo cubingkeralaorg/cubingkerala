@@ -8,7 +8,7 @@ import { Profile } from './profile';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Image from 'next/image';
-import { ContactAnimatedShinyTextComponent } from './contact-ck';
+import { AnimatedShinyTextComponent } from './contact-ck';
 
 const CubingKeralaNavbar = () => {
   const router = useRouter();
@@ -54,7 +54,7 @@ const CubingKeralaNavbar = () => {
               <Profile profileInfo={userInfo} handleLogout={handleLogout} />
             ) : (
               <Link href="/login" prefetch={true}>
-                <ContactAnimatedShinyTextComponent userInfo={null} text="Login" />
+                <AnimatedShinyTextComponent userInfo={null} text="Login" />
               </Link>
             )}
           </div>
@@ -77,7 +77,7 @@ const CubingKeralaNavbar = () => {
               <Profile profileInfo={userInfo} handleLogout={handleLogout} />
             ) : (
               <Link href="/login" prefetch={true}>
-                <ContactAnimatedShinyTextComponent userInfo={null} text="Login" />
+                <AnimatedShinyTextComponent userInfo={null} text="Login" />
               </Link>
             )}
           </div>

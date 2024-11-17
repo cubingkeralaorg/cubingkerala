@@ -14,6 +14,7 @@ import { ApiResonse, Competition } from '@/types/types'
 import Link from 'next/link'
 import LoadingComponent from './loading'
 import BlurIn from './ui/blur-in';
+import { Badge } from './ui/badge';
 
 const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
 
@@ -26,7 +27,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
         if (response?.items) {
             const KeralComps = response.items.filter((comp) => comp.city.includes("Kerala"));
             setPastCompetitions(KeralComps.filter((comp) => new Date(comp.date.till) < new Date()));
-            setUpcomingCompetitions((KeralComps.filter((comp) => new Date(comp.date.till) > new Date())).reverse());
+            setUpcomingCompetitions((KeralComps.filter((comp) => new Date(comp.date.from) > new Date())).reverse());
         }
         setTimeout(() => {
             setIsLoading(false);
@@ -36,6 +37,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
     const handleRegisterRedirectToWCA = (id: string) => {
         window.open(`https://www.worldcubeassociation.org/competitions/${id}/register`, '_blank');
     }
+
+    console.log(pastCompetitions);
+
 
     return (
         <div className="flex flex-col items-center gap-6">
@@ -101,7 +105,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <ScrollBar orientation="vertical" />
                                         </ScrollArea>
                                     ) : (
-                                        <div className='w-[90vw] md:w-[600px] max-h-[400px]'><h1 className='text-xl text-stone-400'>New competitions are on the way!</h1></div>
+                                        <div className='w-[90vw] md:w-[600px] max-h-[400px]'><h1 className='text-xl text-center mt-0 md:mt-5 text-neutral-500'>New competitions are on the way!</h1></div>
                                     )
                                 }
                             </section>
@@ -117,6 +121,22 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                     pastCompetitions.map((competition, index) =>
                                                         <>
                                                             <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
+                                                                <div className='w-full relative'>
+                                                                    <Badge className='absolute right-2 top-1 text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
+                                                                        {
+                                                                            competition.isCanceled ? (
+                                                                                <span className="text-red-400">Cancelled</span>
+                                                                            ) : (
+                                                                                new Date(competition.date.from).toDateString() === new Date().toDateString() ||
+                                                                                    new Date(competition.date.till).toDateString() === new Date().toDateString() ? (
+                                                                                    <span className="text-green-300">Ongoing</span>
+                                                                                ) : (
+                                                                                    <span className="text-red-400">Completed</span>
+                                                                                )
+                                                                            )
+                                                                        }
+                                                                    </Badge>
+                                                                </div>
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                     <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
@@ -149,7 +169,6 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                                 : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
                                                                         }
                                                                     </span>
-                                                                    <p className='text-sm cursor-default'>Completed</p>
                                                                 </CardFooter>
                                                             </Card>
                                                         </>
