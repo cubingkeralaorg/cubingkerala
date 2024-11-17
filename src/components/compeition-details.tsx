@@ -42,7 +42,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
     ];
 
     // Convert the information into HTML
-    const convertMarkdownToHTML = (text: string) => {
+    const convertMarkdownToHTML = (text: string) : string => {
         // Convert bullet points to <li> items
         const bulletPointReplaced = text
             .replace(/^\* (.*)$/gm, '<li>$1</li>') // Match bullet points
@@ -168,7 +168,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                         </div>
                                         <div className='hidden md:block space-y-2 mt-4'>
                                             <h2 className="text-xl md:text-2xl font-bold">Information</h2>
-                                            <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className=" text-stone-400 text-[15px] md:text-[16px]"></div>
+                                            <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className=" text-stone-400 text-wrap text-[15px] md:text-[16px]"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                                                 <p onClick={() => handleCompetitionIsOver()} className='cursor-pointer'>Competition was cancelled.</p>
                                                                 <CiLink />
                                                             </div> : <div className='text-red-500 hover:text-red-600 flex gap-1 w-fit'>
-                                                                <p onClick={() => handleCompetitionIsOver()} className='cursor-pointer'>Competition is over. Check results</p>
+                                                                <p onClick={() => handleCompetitionIsOver()} className='cursor-pointer'>Competition is over. Check results here</p>
                                                                 <CiLink />
                                                             </div>
                                                         }
@@ -216,7 +216,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                     </div>
                                     <div className='block md:hidden space-y-2'>
                                         <h2 className="text-xl md:text-2xl font-bold mt-6">Information</h2>
-                                        <div dangerouslySetInnerHTML={{ __html: formatedInformation }} className="mt-4 text-stone-400 text-[15px] md:text-[16px]"></div>
+                                        <div className='w-[90vw] text-wrap'><div dangerouslySetInnerHTML={{ __html: formatedInformation.includes(']') ? formatedInformation.split(']')[0] + ']' : formatedInformation }} className="text-stone-400 text-[15px] md:text-[16px]"></div></div>
                                     </div>
                                     <div className='space-y-2'>
                                         <h2 className="text-xl md:text-2xl font-bold mt-4">Organizers</h2>
