@@ -182,7 +182,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                             {`Online registration opened on ${new Date(currentCompetition.registration_open).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                                         </p>
                                         {
-                                            new Date(currentCompetition.registration_close).toDateString() < new Date().toDateString() ? <p className="text-stone-400 text-[15px] md:text-[16px]">
+                                            new Date(currentCompetition.registration_close) < new Date() ? <p className="text-stone-400 text-[15px] md:text-[16px]">
                                                 {`Registration closed on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                                             </p> : <p className="text-stone-400 text-[15px] md:text-[16px]">
                                                 {`Registration will close on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
