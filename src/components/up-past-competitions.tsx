@@ -105,7 +105,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <ScrollBar orientation="vertical" />
                                         </ScrollArea>
                                     ) : (
-                                        <div className='w-[90vw] md:w-[600px] max-h-[400px]'><h1 className='text-xl text-center mt-0 md:mt-5 text-neutral-500'>New competitions are on the way!</h1></div>
+                                        <div className='w-[90vw] md:w-[600px] max-h-[400px]'><h1 className='text-md md:text-xl text-center mt-0 md:mt-5 text-neutral-500 font-medium'>New competitions are on the way!</h1></div>
                                     )
                                 }
                             </section>
