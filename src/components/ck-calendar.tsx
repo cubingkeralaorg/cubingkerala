@@ -1,10 +1,6 @@
 import DotPattern from "./magicui/dot-pattern";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { RainbowButton } from "./ui/rainbow-button";
-import { IoIosArrowForward } from "react-icons/io";
-import ShinyButton from "./ui/shiny-button";
-import { AnimatedGradientTextComponent } from "./gradient-text";
 import { AnimatedShinyTextComponent } from "./contact-ck";
 
 

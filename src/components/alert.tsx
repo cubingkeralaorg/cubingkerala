@@ -13,13 +13,13 @@ export function AlertComponent({ userInfo }: { userInfo: UserInfo | null }) {
         <>
             {
                 userInfo &&
-                <div className="text-nowrap">
-                    <Alert className="rounded-none absolute top-2 bg-transparent border-none flex z-50 text-stone-200">
+                <div className="relative">
+                    <Alert className="rounded-none absolute top-3 left-3 md:left-0 w-fit bg-black border-none flex z-50 text-neutral-300">
                         <div>
-                            <AlertTitle>
+                            <AlertTitle className="text-nowrap">
                                 Logged in as <span className="font-bold">{userInfo?.me.name}</span>
                             </AlertTitle>
-                            <AlertDescription>
+                            <AlertDescription className="text-nowrap">
                                 Welcome to Cubing Kerala!
                             </AlertDescription>
                         </div>

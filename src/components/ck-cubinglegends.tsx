@@ -3,8 +3,6 @@
 import { cn } from "@/lib/utils";
 import DotPattern from "./magicui/dot-pattern";
 import { useRouter } from "next/navigation";
-import { RainbowButton } from "./ui/rainbow-button";
-import { IoIosArrowForward } from "react-icons/io";
 import { AnimatedShinyTextComponent } from "./contact-ck";
 
 

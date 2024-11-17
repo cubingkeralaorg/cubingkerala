@@ -21,6 +21,7 @@ export default function HomeComponent() {
   const [ref4, isVisible4] = useOnScreen({ threshold: 0.1 });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (typeof window !== 'undefined') {
 
       const cookies = cookie.parse(document.cookie);
@@ -36,11 +37,11 @@ export default function HomeComponent() {
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <main className="flex-1">
+      <main className="flex-1 relative">
         {isAlertShow && (
-          <div className="absolute w-fit"><AlertComponent userInfo={userInfo} /></div>
+          <div className="absolute"><AlertComponent userInfo={userInfo} /></div>
         )}
-        <section ref={ref1} className="w-full bg-black relative">
+        <section ref={ref1} className="w-full bg-black">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible1 ? 1 : 0, y: isVisible1 ? 0 : 0 }}
