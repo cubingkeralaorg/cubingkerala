@@ -74,6 +74,11 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
         window.open(`https://www.worldcubeassociation.org/competitions/${compInfo.id}`, '_blank');
     }
 
+    const handleLiveResultsForThisCompetition = (): void => {
+        window.open(`https://www.worldcubeassociation.org/competitions/${compInfo.id}`, '_blank');
+    }
+
+
     return (
         <div className="w-full mx-auto text-stone-200 py-6 md:py-8 px-4 md:px-5">
             {
@@ -85,9 +90,9 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                     <div className="grid animate-fade-in gap-6">
                         <div>
                             <BlurIn
-                            word={currentCompetition.name}
-                            className="text-4xl text-center font-bold tracking-tighter md:text-6xl"
-                        />
+                                word={currentCompetition.name}
+                                className="text-4xl text-center font-bold tracking-tighter md:text-6xl"
+                            />
                             <p className="mt-2 md:mt-4 text-stone-400 text-center text-[15px]">
                                 {
                                     currentCompetition.start_date === currentCompetition.end_date
@@ -176,22 +181,37 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                         <p className="text-stone-400 text-[15px] md:text-[16px]">
                                             {`Online registration opened on ${new Date(currentCompetition.registration_open).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                                         </p>
-                                        <p className="text-stone-400 text-[15px] md:text-[16px]">
-                                            {`Registration will close on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
-                                        </p>
+                                        {
+                                            new Date(currentCompetition.registration_close).toDateString() < new Date().toDateString() ? <p className="text-stone-400 text-[15px] md:text-[16px]">
+                                                {`Registration closed on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                                            </p> : <p className="text-stone-400 text-[15px] md:text-[16px]">
+                                                {`Registration will close on ${new Date(currentCompetition.registration_close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                                            </p>
+                                        }
                                     </div>
                                     <div className='my-2 text-[15px] md:text-[16px]'>
                                         {
                                             new Date(compInfo.end_date) > new Date() ?
-                                                <div onClick={() => handleRegisterForThisCompetition()} className='text-blue-500 hover:text-blue-600 cursor-pointer flex gap-1'>
-                                                    <p>Register for this competition here</p>
+                                                <div className='flex gap-1 text-blue-500 hover:text-blue-600 w-fit '>
+                                                    <p onClick={() => handleRegisterForThisCompetition()} className='cursor-pointer '>Register for this competition here</p>
                                                     <CiLink />
-                                                </div>
-                                                :
-                                                <div className='text-red-500 flex gap-1 hover:text-red-600 cursor-pointer' onClick={() => handleCompetitionIsOver()}>
-                                                    <p>Competition is over. Check results here</p>
-                                                    <CiLink />
-                                                </div>
+                                                </div> : new Date(compInfo.start_date).toDateString() === new Date().toDateString() || new Date(compInfo.end_date).toDateString() === new Date().toDateString() ?
+                                                    <div className='flex gap-1 text-blue-500 hover:text-blue-600 w-fit'>
+                                                        <p onClick={() => handleLiveResultsForThisCompetition()} className='cursor-pointer'>Competition is ongoing.</p>
+                                                        <CiLink />
+                                                    </div>
+                                                    :
+                                                    <div>
+                                                        {
+                                                            compInfo.cancelled_at ? <div className='text-red-500 hover:text-red-600 flex gap-1 w-fit'>
+                                                                <p onClick={() => handleCompetitionIsOver()} className='cursor-pointer'>Competition was cancelled.</p>
+                                                                <CiLink />
+                                                            </div> : <div className='text-red-500 hover:text-red-600 flex gap-1 w-fit'>
+                                                                <p onClick={() => handleCompetitionIsOver()} className='cursor-pointer'>Competition is over. Check results</p>
+                                                                <CiLink />
+                                                            </div>
+                                                        }
+                                                    </div>
                                         }
                                     </div>
                                     <div className='block md:hidden space-y-2'>
@@ -203,13 +223,13 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                         <div className="grid">
                                             {currentCompetition.organizers.map((organiser) => (
                                                 <div key={organiser.id} className="flex items-center gap-2 text-[15px] md:text-[16px]">
-                                                    <p onClick={()=>handleOrganiserRedirect(organiser.url)} className={`font-medium text-normal text-stone-400 ${organiser.wca_id ? 'hover:text-blue-500 cursor-pointer' : 'cursor-default'}`}>{organiser.name}</p>
+                                                    <p onClick={() => handleOrganiserRedirect(organiser.url)} className={`font-medium text-normal text-stone-400 ${organiser.wca_id ? 'hover:text-blue-500 cursor-pointer' : 'cursor-default'}`}>{organiser.name}</p>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div onClick={()=> handleWCARedirect()} className='flex mt-10 gap-1 text-[15px] md:text-[16px] text-green-400 hover:text-green-500 cursor-pointer'><p>More details on World Cube Association</p>
-                                    <CiLink/>
+                                    <div onClick={() => handleWCARedirect()} className='flex mt-10 gap-1 text-[15px] md:text-[16px] text-green-400 hover:text-green-500 cursor-pointer'><p>More details on World Cube Association</p>
+                                        <CiLink />
                                     </div>
                                 </div>
                             </div>

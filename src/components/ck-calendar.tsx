@@ -3,6 +3,9 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { RainbowButton } from "./ui/rainbow-button";
 import { IoIosArrowForward } from "react-icons/io";
+import ShinyButton from "./ui/shiny-button";
+import { AnimatedGradientTextComponent } from "./gradient-text";
+import { AnimatedShinyTextComponent } from "./contact-ck";
 
 
 export function CubingKeralaCalendars() {
@@ -25,8 +28,9 @@ export function CubingKeralaCalendars() {
                             Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full"><RainbowButton className="text-green-400 hover:text-green-500 gap-1" onClick={handleRedirectToCompetitions}><span>Competitions</span><IoIosArrowForward />
-                    </RainbowButton></div>
+                    <div className="flex items-center justify-start md:justify-center w-full">
+                        <div onClick={() => handleRedirectToCompetitions()}><AnimatedShinyTextComponent userInfo={null} text="Competitions" /></div>
+                    </div>
                 </div>
             </div>
             <DotPattern
