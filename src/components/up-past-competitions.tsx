@@ -122,7 +122,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                         <>
                                                             <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
                                                                 <div className='w-full relative'>
-                                                                    <Badge className='absolute right-2 top-1 text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
+                                                                    <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
                                                                         {
                                                                             competition.isCanceled ? (
                                                                                 <span className="text-red-400">Cancelled</span>
