@@ -108,7 +108,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                     <LoadingComponent />
                 </div>) : (
                     <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
-                        <div className="text-center space-y-2">
+                        <div className="text-center space-y-0 md:space-y-2">
                             {/* <h2 className="text-3xl font-bold">{currentMember.name}</h2> */}
                             <BlurIn
                                 word={currentMember.name}
