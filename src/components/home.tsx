@@ -21,7 +21,9 @@ export default function HomeComponent() {
   const [ref4, isVisible4] = useOnScreen({ threshold: 0.1 });
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
     if (typeof window !== 'undefined') {
 
       const cookies = cookie.parse(document.cookie);
