@@ -12,9 +12,9 @@ export function AlertComponent({ userInfo }: { userInfo: UserInfo | null }) {
     return (
         <>
             {
-                userInfo &&
+                
                 <div className="relative">
-                    <Alert className="rounded-none absolute top-3 left-3 md:left-0 w-fit bg-black border-none flex z-50 text-neutral-300">
+                    <Alert className="rounded-full absolute top-2 left-3 md:left-0 md:top-4 w-fit bg-black/55 border-none flex z-50 text-neutral-300">
                         <div>
                             <AlertTitle className="text-nowrap">
                                 Logged in as <span className="font-bold">{userInfo?.me.name}</span>
