@@ -50,9 +50,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                     <div className='animate-fade-in w-full'>
                         <BlurIn
                             word="Competitions"
-                            className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-6"
+                            className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-0 md:mb-6"
                         />
-                        <div className='flex flex-wrap justify-evenly gap-10 '>
+                        <div className='flex flex-wrap justify-evenly gap-0 md:gap-10'>
                             <section>
                                 <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[95px] bg-black text-center">Upcoming Competitions</h2>
                                 {
@@ -105,7 +105,10 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <ScrollBar orientation="vertical" />
                                         </ScrollArea>
                                     ) : (
-                                        <div className='w-[90vw] md:w-[600px] max-h-[400px]'><h1 className='text-md md:text-xl text-center mt-0 md:mt-5 text-neutral-500 font-medium'>New competitions are on the way!</h1></div>
+                                        <div className='bg-neutral-900 w-[90vw] md:w-[600px] rounded-md h-[125px] flex flex-col items-center justify-center cursor-default'>
+                                            <h3 className="text-[17px] font-bold text-stone-200">Stay tuned!</h3>
+                                            <h1 className='text-md md:text-lg text-neutral-400 font-normal'>New competitions are on the way...</h1>
+                                        </div>
                                     )
                                 }
                             </section>
