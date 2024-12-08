@@ -47,33 +47,33 @@ export default function HomeComponent() {
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible1 ? 1 : 0, y: isVisible1 ? 0 : 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 1 }}
           >
-            <CubingKeralaGetStarted user = {userInfo} />
+            <CubingKeralaGetStarted user = {userInfo}/>
           </motion.div>
         </section>
         <section ref={ref2} className="w-full bg-black">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isVisible2 ? 1 : 0, y: isVisible2 ? 0 : 20 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: isVisible2 ? 1 : 0, y: isVisible2 ? 0 : 0 }}
+            transition={{ duration: 1}}
           >
             <CubingKeralaCalendars />
           </motion.div>
         </section>
         <section ref={ref3} className="bg-black">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isVisible3 ? 1 : 0, y: isVisible3 ? 0 : 20 }}
-            transition={{ duration: 0.5 }}>
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: isVisible3 ? 1 : 0, y: isVisible3 ? 0 : 0 }}
+            transition={{ duration: 1 }}>
             <CubingKeralaCubingLengends />
           </motion.div>
         </section>
         <section ref={ref4} className="w-full bg-black">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isVisible4 ? 1 : 0, y: isVisible4 ? 0 : 20 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: isVisible4 ? 1 : 0, y: isVisible4 ? 0 : 0 }}
+            transition={{ duration: 1 }}
           >
             <CubingKeralaUnravel />
           </motion.div>

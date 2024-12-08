@@ -66,7 +66,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                     <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
-                                                                        <p className="text-wrap text-[15px] py-2">
+                                                                        <p className="text-wrap md:text-nowrap text-[15px] py-2">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                                         </p>
                                                                         <div className='text-xs text-wrap'>
@@ -95,7 +95,6 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                                 : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
                                                                         }
                                                                     </span>
-                                                                    <p onClick={() => handleRegisterRedirectToWCA(competition.id)} className='text-sm hover:text-green-400 cursor-pointer'>Register</p>
                                                                 </CardFooter>
                                                             </Card>
                                                         </>
@@ -143,7 +142,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                     <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
-                                                                        <p className="text-wrap text-[15px] py-2">
+                                                                        <p className="text-wrap md:text-nowrap text-[15px] py-2">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                                         </p>
                                                                         <div className='text-xs text-wrap'>
