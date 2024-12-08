@@ -34,12 +34,6 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
         }, 1000);
     }, [response]);
 
-    const handleRegisterRedirectToWCA = (id: string) => {
-        window.open(`https://www.worldcubeassociation.org/competitions/${id}/register`, '_blank');
-    }
-
-    console.log(pastCompetitions);
-
 
     return (
         <div className="flex flex-col items-center gap-6">
@@ -52,7 +46,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                             word="Competitions"
                             className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-0 md:mb-6"
                         />
-                        <div className='flex flex-wrap justify-evenly gap-0 md:gap-10'>
+                        <div className='flex flex-wrap justify-evenly gap-0 md:gap-5'>
                             <section>
                                 <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[95px] bg-black text-center">Upcoming Competitions</h2>
                                 {
@@ -64,9 +58,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                         <>
                                                             <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                                    <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
+                                                                    <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
-                                                                        <p className="text-wrap md:text-nowrap text-[15px] py-2">
+                                                                        <p className="text-[15px] text-wrap py-2 w-full">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                                         </p>
                                                                         <div className='text-xs text-wrap'>
@@ -142,7 +136,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                     <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
-                                                                        <p className="text-wrap md:text-nowrap text-[15px] py-2">
+                                                                        <p className="text-wrap w-full text-[15px] py-2">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                                         </p>
                                                                         <div className='text-xs text-wrap'>
