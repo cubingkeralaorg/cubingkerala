@@ -92,11 +92,13 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
   };
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 bg-black text-stone-200">
+    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 bg-black text-stone-200 flex flex-col">
       {
-        isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <LoadingComponent />
-        </div>) : (
+        isLoading ? (
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+            <LoadingComponent />
+          </div>
+        ) : (
           <div className="animate-fade-in">
             <div className="flex-col justify-center items-center mb-6">
               <BlurIn
@@ -109,7 +111,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                     {
                       isJoinCkLoading ? (
                         <div className="flex items-center justify-center h-6">
-                            <Loader className="animate-spin text-black" size={16}/>
+                          <Loader className="animate-spin text-black" size={16} />
                         </div>
                       ) : (
                         <span className="text-sm text-black font-semibold">Join Cubing Kerala</span>
@@ -119,10 +121,14 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </div>
               </div>
             </div>
+
+            {/* Search Component */}
             <div className="mb-6">
               <SearchComponent handleSearch={handleSearch} />
             </div>
-            <div className="rounded-none border-none">
+
+            {/* Table Container */}
+            <div className="rounded-none border-none" style={{ minHeight: '300px', overflow: 'hidden' }}>
               <Table className="w-full">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
@@ -177,7 +183,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </TableBody>
               </Table>
             </div>
-          </div>
+          </div> 
         )
       }
     </div>
