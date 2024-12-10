@@ -60,16 +60,16 @@ const CubingKeralaNavbar = () => {
           </div>
         </div>
         <nav className="flex items-center justify-evenly gap-4 md:gap-6">
-          <Link href="/competitions" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
+          <Link href="/competitions" className="text-sm md:text-[15px] font-medium hover:text-green-400 transition-all duration-200 ease-in" prefetch={true}>
             Competitions
           </Link>
-          <Link href="/members" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
+          <Link href="/members" className="text-sm md:text-[15px] font-medium hover:text-green-400 transition-all duration-200 ease-in" prefetch={true}>
             Members
           </Link>
-          <Link href="/rankings" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
+          <Link href="/rankings" className="text-sm md:text-[15px] font-medium hover:text-green-400 transition-all duration-200 ease-in" prefetch={true}>
             Rankings
           </Link>
-          <Link href="/contact" className="text-sm md:text-[15px] font-medium hover:text-green-400" prefetch={true}>
+          <Link href="/contact" className="text-sm md:text-[15px] font-medium hover:text-green-400 transition-all duration-200 ease-in" prefetch={true}>
             Contact
           </Link>
           <div className='hidden md:block'>
