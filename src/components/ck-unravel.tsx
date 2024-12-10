@@ -49,17 +49,17 @@ export function CubingKeralaUnravel() {
                             <div className="inline-block rounded-lg text-start text-green-500 text-sm mt-5">Join us on socials</div>
                             <div className="flex gap-2 items-center flex-wrap w-full justify-start text-sm">
                                 <div onClick={handleRedirectToWhatsapp}>
-                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
+                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-300 ease-in">
                                         <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaWhatsapp /> <span className="hidden md:block">Whatsapp</span></div>
                                     </ShinyButton>
                                 </div>
                                 <div onClick={handleRedirectToInstagram}>
-                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
+                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-300 ease-in">
                                         <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaInstagram /> <span className="hidden md:block">Instagram</span></div>
                                     </ShinyButton>
                                 </div>
                                 <div onClick={handleRedirectToFacebook}>
-                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-200 ease-in-out">
+                                    <ShinyButton className="bg-neutral-900 hover:bg-neutral-800 transition-all duration-300 ease-in">
                                         <div className="flex gap-1 items-center cursor-pointer text-stone-400"><FaFacebook /> <span className="hidden md:block">Facebook</span></div>
                                     </ShinyButton>
                                 </div>

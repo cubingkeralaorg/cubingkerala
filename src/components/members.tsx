@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import Link from "next/link";
 import axios from "axios";
 import LoadingComponent from "./loading";
-import { RainbowButton } from "./ui/rainbow-button";
 import BlurIn from "./ui/blur-in";
-import LoginLoadingComponent from "./login-loading";
+import ShinyButton from "./ui/shiny-button";
+import { Loader } from "lucide-react"
 
 export default function MembersComponent({ membersfromdb }: { membersfromdb: RequestInfo[] }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -104,17 +104,19 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 className="text-4xl text-center md:text-center font-bold tracking-tighter md:text-6xl"
               />
               <div className="flex justify-center items-center my-6">
-                <RainbowButton className="text-green-400 hover:text-green-500 w-[200px]" disabled={isJoinCkLoading} onClick={handleJoinCK}>
-                  {
-                    isJoinCkLoading ? (
-                      <div className="flex items-center justify-center h-6">
-                        <LoginLoadingComponent />
-                      </div>
-                    ) : (
-                      <span className="text-sm font-semibold">Join Cubing Kerala</span>
-                    )
-                  }
-                </RainbowButton>
+                <div onClick={() => handleJoinCK()} className="w-2/3 md:w-1/4 flex justify-center items-center">
+                  <ShinyButton className="w-full rounded-2xl bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
+                    {
+                      isJoinCkLoading ? (
+                        <div className="flex items-center justify-center h-6">
+                            <Loader className="animate-spin text-black" size={16}/>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-black font-semibold">Join Cubing Kerala</span>
+                      )
+                    }
+                  </ShinyButton>
+                </div>
               </div>
             </div>
             <div className="mb-6">
@@ -134,7 +136,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </TableHeader>
                 <TableBody>
                   {filteredMembersList.length > 0 ? (
-                    filteredMembersList.sort((a,b)=>a.name.localeCompare(b.name)).map((member, index) => {
+                    filteredMembersList.sort((a, b) => a.name.localeCompare(b.name)).map((member, index) => {
                       const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
                       return (
                         <TableRow className="border-none hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>

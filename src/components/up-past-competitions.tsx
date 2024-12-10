@@ -56,9 +56,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                 {
                                                     upcomingCompetitions.map((competition, index) =>
                                                         <>
-                                                            <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
+                                                            <Card className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                                    <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
+                                                                    <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
                                                                         <p className="text-[15px] text-wrap py-2 w-full">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
@@ -81,7 +81,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                         </div>
                                                                     </CardContent>
                                                                 </Link>
-                                                                <CardFooter className="bg-neutral-950 py-3 px-5 flex justify-between items-center">
+                                                                <CardFooter className="py-3 px-4 flex justify-start items-center">
                                                                     <span className='text-sm flex font-semibold items-center gap-1'>
                                                                         {
                                                                             competition.date.from === competition.date.till
@@ -116,7 +116,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                 {
                                                     pastCompetitions.map((competition, index) =>
                                                         <>
-                                                            <Card className="bg-neutral-900 hover:bg-neutral-800 transition-all text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
+                                                            <Card className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
                                                                 <div className='w-full relative'>
                                                                     <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
                                                                         {
@@ -134,7 +134,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                     </Badge>
                                                                 </div>
                                                                 <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                                    <CardContent className="p-6 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
+                                                                    <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
                                                                         <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
                                                                         <p className="text-wrap w-full text-[15px] py-2">
                                                                             {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
@@ -157,7 +157,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                                         </div>
                                                                     </CardContent>
                                                                 </Link>
-                                                                <CardFooter className="bg-neutral-950 py-3 px-5 flex justify-between items-center">
+                                                                <CardFooter className="py-3 px-4 flex justify-between items-center">
                                                                     <span className='text-sm lex font-semibold items-center gap-1'>
                                                                         {
                                                                             competition.date.from === competition.date.till
