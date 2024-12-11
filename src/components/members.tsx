@@ -128,7 +128,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
             </div>
 
             {/* Table Container */}
-            <div className="rounded-none border-none" style={{ minHeight: '300px', overflow: 'hidden' }}>
+            <div className="rounded-none border-none" style={{ minHeight: '600px', overflow: 'hidden' }}>
               <Table className="w-full">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
