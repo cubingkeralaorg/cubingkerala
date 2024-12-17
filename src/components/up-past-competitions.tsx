@@ -46,52 +46,53 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                             word="Competitions"
                             className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-0 md:mb-6"
                         />
-                        <div className='flex flex-wrap justify-evenly gap-0 md:gap-5'>
+                        <div className='flex flex-wrap justify-around'>
                             <section>
-                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[95px] bg-black text-center">Upcoming Competitions</h2>
+                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[60px] bg-neutral-950 text-center">Upcoming Competitions</h2>
                                 {
                                     upcomingCompetitions.length > 0 ? (
-                                        <ScrollArea className="whitespace-nowrap rounded-md max-h-[450px] overflow-auto">
-                                            <div className="flex flex-col space-y-4">
+                                        <ScrollArea
+                                            className={`whitespace-nowrap rounded-md h-[70vh] md:h-[50vh] overflow-auto ${upcomingCompetitions.length > 5 ? "h-[70vh]" : "h-fit"
+                                                }`}
+                                        >
+                                            <div className="flex flex-col space-y-2">
                                                 {
                                                     upcomingCompetitions.map((competition, index) =>
-                                                        <>
-                                                            <Card className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
-                                                                <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                                    <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
-                                                                        <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
-                                                                        <p className="text-[15px] text-wrap py-2 w-full">
-                                                                            {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
-                                                                        </p>
-                                                                        <div className='text-xs text-wrap'>
-                                                                            {
-                                                                                competition?.events.map((event, index) => (
-                                                                                    <TooltipProvider key={index}>
-                                                                                        <Tooltip>
-                                                                                            <TooltipTrigger>
-                                                                                                <span className={`cubing-icon event-${event} pr-3`}></span>
-                                                                                            </TooltipTrigger>
-                                                                                            <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
-                                                                                                <p>{event}</p>
-                                                                                            </TooltipContent>
-                                                                                        </Tooltip>
-                                                                                    </TooltipProvider>
-                                                                                ))
-                                                                            }
-                                                                        </div>
-                                                                    </CardContent>
-                                                                </Link>
-                                                                <CardFooter className="py-3 px-4 flex justify-start items-center">
-                                                                    <span className='text-sm flex font-semibold items-center gap-1'>
+                                                        <Card key={index} className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-700 rounded-md">
+                                                            <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
+                                                                <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
+                                                                    <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
+                                                                    <p className="text-[15px] text-wrap py-2">
+                                                                        {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
+                                                                    </p>
+                                                                    <div className='text-xs text-wrap'>
                                                                         {
-                                                                            competition.date.from === competition.date.till
-                                                                                ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-                                                                                : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
+                                                                            competition?.events.map((event, index) => (
+                                                                                <TooltipProvider key={index}>
+                                                                                    <Tooltip>
+                                                                                        <TooltipTrigger>
+                                                                                            <span className={`cubing-icon event-${event} pr-3`}></span>
+                                                                                        </TooltipTrigger>
+                                                                                        <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
+                                                                                            <p>{event}</p>
+                                                                                        </TooltipContent>
+                                                                                    </Tooltip>
+                                                                                </TooltipProvider>
+                                                                            ))
                                                                         }
-                                                                    </span>
-                                                                </CardFooter>
-                                                            </Card>
-                                                        </>
+                                                                    </div>
+                                                                </CardContent>
+                                                            </Link>
+                                                            <CardFooter className="pb-3 px-4 flex justify-start items-center">
+                                                                <span className='text-sm flex font-semibold items-center gap-1'>
+                                                                    {
+                                                                        competition.date.from === competition.date.till
+                                                                            ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                                                                            : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
+                                                                    }
+                                                                </span>
+                                                            </CardFooter>
+                                                        </Card>
                                                     )
                                                 }
                                             </div>
@@ -108,66 +109,64 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
 
                             {/* Similar structure for Past Competitions */}
                             <section>
-                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl text-center text-red-500 font-bold py-5 sticky top-[95px] bg-black">Past Competitions</h2>
+                                <h2 style={{ zIndex: '10000' }} className="text-xl md:text-2xl text-center text-red-500 font-bold py-5 sticky top-[60px] bg-neutral-950">Past Competitions</h2>
                                 {
                                     pastCompetitions.length > 0 ? (
-                                        <ScrollArea className="whitespace-nowrap rounded-md h-[70vh] md:h-[360px] overflow-auto">
-                                            <div className="flex flex-col space-y-4">
+                                        <ScrollArea className="whitespace-nowrap rounded-md h-[70vh] md:h-[50vh] overflow-auto">
+                                            <div className="flex flex-col space-y-2">
                                                 {
                                                     pastCompetitions.map((competition, index) =>
-                                                        <>
-                                                            <Card className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border-none rounded-none">
-                                                                <div className='w-full relative'>
-                                                                    <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
-                                                                        {
-                                                                            competition.isCanceled ? (
-                                                                                <span className="text-red-400">Cancelled</span>
+                                                        <Card key={index} className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-700 rounded-md">
+                                                            <div className='w-full relative'>
+                                                                <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
+                                                                    {
+                                                                        competition.isCanceled ? (
+                                                                            <span className="text-red-400">Cancelled</span>
+                                                                        ) : (
+                                                                            new Date(competition.date.from).toDateString() === new Date().toDateString() ||
+                                                                                new Date(competition.date.till).toDateString() === new Date().toDateString() ? (
+                                                                                <span className="text-green-300">Ongoing</span>
                                                                             ) : (
-                                                                                new Date(competition.date.from).toDateString() === new Date().toDateString() ||
-                                                                                    new Date(competition.date.till).toDateString() === new Date().toDateString() ? (
-                                                                                    <span className="text-green-300">Ongoing</span>
-                                                                                ) : (
-                                                                                    <span className="text-red-400">Completed</span>
-                                                                                )
+                                                                                <span className="text-red-400">Completed</span>
                                                                             )
-                                                                        }
-                                                                    </Badge>
-                                                                </div>
-                                                                <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
-                                                                    <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-[400px] cursor-pointer">
-                                                                        <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
-                                                                        <p className="text-wrap w-full text-[15px] py-2">
-                                                                            {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
-                                                                        </p>
-                                                                        <div className='text-xs text-wrap'>
-                                                                            {
-                                                                                competition?.events.map((event, index) => (
-                                                                                    <TooltipProvider key={index}>
-                                                                                        <Tooltip>
-                                                                                            <TooltipTrigger>
-                                                                                                <span className={`cubing-icon event-${event} pr-3`}></span>
-                                                                                            </TooltipTrigger>
-                                                                                            <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
-                                                                                                <p>{event}</p>
-                                                                                            </TooltipContent>
-                                                                                        </Tooltip>
-                                                                                    </TooltipProvider>
-                                                                                ))
-                                                                            }
-                                                                        </div>
-                                                                    </CardContent>
-                                                                </Link>
-                                                                <CardFooter className="py-3 px-4 flex justify-between items-center">
-                                                                    <span className='text-sm lex font-semibold items-center gap-1'>
+                                                                        )
+                                                                    }
+                                                                </Badge>
+                                                            </div>
+                                                            <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
+                                                                <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
+                                                                    <h3 className="text-[17px] font-bold text-stone-200">{competition.name}</h3>
+                                                                    <p className="text-wrap w-full text-[15px] py-2">
+                                                                        {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
+                                                                    </p>
+                                                                    <div className='text-xs text-wrap'>
                                                                         {
-                                                                            competition.date.from === competition.date.till
-                                                                                ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-                                                                                : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
+                                                                            competition?.events.map((event, index) => (
+                                                                                <TooltipProvider key={index}>
+                                                                                    <Tooltip>
+                                                                                        <TooltipTrigger>
+                                                                                            <span className={`cubing-icon event-${event} pr-3`}></span>
+                                                                                        </TooltipTrigger>
+                                                                                        <TooltipContent className='bg-green-400 text-black py-1 px-2 rounded-none'>
+                                                                                            <p>{event}</p>
+                                                                                        </TooltipContent>
+                                                                                    </Tooltip>
+                                                                                </TooltipProvider>
+                                                                            ))
                                                                         }
-                                                                    </span>
-                                                                </CardFooter>
-                                                            </Card>
-                                                        </>
+                                                                    </div>
+                                                                </CardContent>
+                                                            </Link>
+                                                            <CardFooter className="pb-3 px-4 flex justify-between items-center">
+                                                                <span className='text-sm lex font-semibold items-center gap-1'>
+                                                                    {
+                                                                        competition.date.from === competition.date.till
+                                                                            ? new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                                                                            : `${new Date(competition.date.from).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${new Date(competition.date.till).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`
+                                                                    }
+                                                                </span>
+                                                            </CardFooter>
+                                                        </Card>
                                                     )
                                                 }
                                             </div>

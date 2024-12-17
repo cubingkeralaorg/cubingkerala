@@ -102,7 +102,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
 
 
     return (
-        <div className="min-h-screen bg-black text-stone-200">
+        <div className="min-h-screen text-stone-200">
             {
                 isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                     <LoadingComponent />
@@ -160,10 +160,10 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full max-w-4xl mt-5">
-                            <Table className='text-sm md:text-[15px]'>
+                        <div className="w-full max-w-screen-md mt-5 border rounded-md border-neutral-700">
+                            <Table className='text-sm md:text-[15px] rounded-md bg-neutral-900'>
                                 <TableHeader>
-                                    <TableRow className='hover:bg-transparent border-none'>
+                                    <TableRow className='hover:bg-transparent border-y-neutral-700'>
                                         <TableHead className='text-neutral-500'>Event</TableHead>
                                         <TableHead className='text-neutral-500'>NR</TableHead>
                                         <TableHead className='text-neutral-500'>CR</TableHead>
@@ -178,7 +178,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                                 <TableBody>
                                     {
                                         personalRecordsArray.map((event, index) => (
-                                            <TableRow className='hover:bg-neutral-900 border-none' key={index}>
+                                            <TableRow className='hover:bg-neutral-900 border-y-neutral-700' key={index}>
                                                 <TableCell>
                                                     <TooltipProvider>
                                                         <Tooltip>

@@ -23,7 +23,7 @@ export function CubingKeralaUnravel() {
     }
 
     return (
-        <div className="relative flex w-full flex-col bg-black text-stone-200 items-center justify-center overflow-hidden rounded-none py-12 md:py-24 lg:py-32">
+        <div className="relative flex w-full flex-col text-stone-200 items-center justify-center overflow-hidden rounded-none py-12 md:py-24 lg:py-32">
             <div className="container px-6 z-20">
                 <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
                     <div className="space-y-4">

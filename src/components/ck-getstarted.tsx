@@ -24,7 +24,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
   }
 
   return (
-    <div className="relative flex min-h-[90vh] w-full overflow-hidden bg-black text-stone-200">
+    <div className="relative flex min-h-[90vh] w-full overflow-hidden text-stone-200">
       <div className="container px-6 flex flex-col justify-center items-center my-auto">
         <div className="grid h-full gap-10 sm:px-10 md:gap-16 md:grid-cols-1">
           <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw]">
@@ -59,6 +59,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
           "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
         )}
       />
+
     </div>
   );
 };

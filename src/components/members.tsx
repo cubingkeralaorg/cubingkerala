@@ -92,7 +92,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
   };
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 bg-black text-stone-200 flex flex-col">
+    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-stone-200 flex flex-col">
       {
         isLoading ? (
           <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
@@ -122,22 +122,20 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
               </div>
             </div>
 
-            {/* Search Component */}
-            <div className="mb-6">
-              <SearchComponent handleSearch={handleSearch} />
-            </div>
 
             {/* Table Container */}
-            <div className="rounded-none border-none" style={{ minHeight: '600px', overflow: 'hidden' }}>
+            <div className="rounded-md bg-neutral-900 border border-neutral-700" style={{ minHeight: '600px', overflow: 'hidden' }}>
+              {/* Search Component */}
+              <SearchComponent handleSearch={handleSearch} />
               <Table className="w-full">
-                <TableHeader>
+                <TableHeader className="border-y border-y-neutral-700">
                   <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
-                    <TableHead className="text-neutral-500">#</TableHead>
-                    <TableHead className="text-neutral-500">Name</TableHead>
-                    <TableHead className="text-neutral-500">WCA ID</TableHead>
-                    <TableHead className="text-neutral-500">Role</TableHead>
-                    <TableHead className="hidden md:table-cell text-neutral-500">Competitions</TableHead>
-                    <TableHead className="hidden md:table-cell text-neutral-500">Medals</TableHead>
+                    <TableHead className="text-neutral-500 ">#</TableHead>
+                    <TableHead className="text-neutral-500 ">Name</TableHead>
+                    <TableHead className="text-neutral-500 ">WCA ID</TableHead>
+                    <TableHead className="text-neutral-500 ">Role</TableHead>
+                    <TableHead className="hidden md:table-cell text-neutral-500 ">Competitions</TableHead>
+                    <TableHead className="hidden md:table-cell text-neutral-500 ">Medals</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -145,9 +143,9 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                     filteredMembersList.sort((a, b) => a.name.localeCompare(b.name)).map((member, index) => {
                       const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
                       return (
-                        <TableRow className="border-none hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
-                          <TableCell className="cursor-default">{index + 1}</TableCell>
-                          <TableCell className="text-nowrap">
+                        <TableRow className="border-y-neutral-700 hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
+                          <TableCell className="cursor-default ">{index + 1}</TableCell>
+                          <TableCell className="text-nowrap ">
                             <Link prefetch={true} href={`/members/${member.wcaid}`}>
                               <span className="cursor-pointer hover:text-blue-500">
                                 {member.name.split('(')[0]}
@@ -161,13 +159,13 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                               </span>
                             </Link>
                           </TableCell>
-                          <TableCell className="cursor-default text-nowrap">
+                          <TableCell className="cursor-default text-nowrap ">
                             {(member.role).split('')[0].toUpperCase() + (member.role).slice(1)}
                           </TableCell>
-                          <TableCell className="cursor-default hidden md:table-cell">
+                          <TableCell className="cursor-default hidden md:table-cell ">
                             {memberDetails?.competition_count || 0}
                           </TableCell>
-                          <TableCell className="cursor-default hidden md:table-cell">
+                          <TableCell className="cursor-default hidden md:table-cell ">
                             {memberDetails?.medals.total || 0}
                           </TableCell>
                         </TableRow>
@@ -183,7 +181,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 </TableBody>
               </Table>
             </div>
-          </div> 
+          </div>
         )
       }
     </div>

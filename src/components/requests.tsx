@@ -156,7 +156,7 @@ export default function RequestsComponent({ requests, members }: {
 
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black text-stone-200">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-stone-200">
       {
         isLoading ? (<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
           <LoadingComponent />
@@ -167,9 +167,9 @@ export default function RequestsComponent({ requests, members }: {
               className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
             />
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px]">
+              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px] bg-neutral-900 border border-neutral-700 rounded-lg">
                 <thead>
-                  <tr className="border-none">
+                  <tr className="border border-neutral-700">
                     <th className="px-4 py-1 text-left">Name</th>
                     <th className="px-4 py-1 text-left">WCA ID</th>
                     <th className="px-4 py-1 text-left">Role</th>
@@ -179,11 +179,11 @@ export default function RequestsComponent({ requests, members }: {
                 <tbody>
                   {
                     requestsData.length > 0 ? requestsData?.map((request, index) => (
-                      <tr key={index} className="border-b">
+                      <tr key={index} className="border-y-neutral-700">
                         <td className="px-2 py-2 text-nowrap">{request.name.split('(')[0]}</td>
                         <td className="px-2 py-2">{request.wcaid}</td>
                         <td className="px-2 py-2">
-                          <select className="bg-black text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={request.role || "member"}>
+                          <select className="bg-neutral-900 text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={request.role || "member"}>
                             <option value="member">Member</option>
                             <option value="organiser">Organiser</option>
                             <option value="co-founder">Co-Founder</option>
@@ -206,7 +206,7 @@ export default function RequestsComponent({ requests, members }: {
               className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
             />
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px]">
+              <table className="w-full min-w-[500px] table-auto text-sm md:text-[15px] bg-neutral-900 border border-neutral-700 rounded-lg">
                 <thead>
                   <tr className="border-none">
                     <th className="px-4 py-1 text-left">Name</th>
@@ -218,11 +218,11 @@ export default function RequestsComponent({ requests, members }: {
                 <tbody>
                   {
                     membersData.length > 0 ? membersData?.map((member, index) => (
-                      <tr key={index}>
+                      <tr key={index} className="border-y-1 border-y-neutral-700">
                         <td className="px-2 py-2 text-nowrap">{member.name.split('(')[0]}</td>
                         <td className="px-2 py-2">{member.wcaid}</td>
                         <td className="px-2 py-2">
-                          <select className="bg-black text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={member.role || "member"}>
+                          <select className="bg-neutral-900 text-stone-200 rounded-none" id={`role-${index}`} name="role" defaultValue={member.role || "member"}>
                             <option value="member">Member</option>
                             <option value="organiser">Organiser</option>
                             <option value="co-founder">Co-Founder</option>
