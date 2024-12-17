@@ -136,10 +136,10 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
               />
             </div>
           </div>
-          <div className="rounded-none">
-            <Table className="w-full text-sm md:text-[15px]">
+          <div className="rounded-md border border-neutral-700">
+            <Table className="w-full text-sm md:text-[15px] bg-neutral-900">
               <TableHeader>
-                <TableRow className="border-none hover:bg-transparent">
+                <TableRow className="border-neutral-700 hover:bg-transparent">
                   <TableHead className="text-neutral-500">#</TableHead>
                   <TableHead className="text-neutral-500">Name</TableHead>
                   <TableHead className="text-neutral-500">Best</TableHead>
@@ -152,7 +152,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
                 {sortedResults.map((member, index) => {
                   const result = member.rank[selectedFilter.round === 'average' ? 'averages' : 'singles'].find(r => r.eventId === selectedFilter.event);
                   return (
-                    <TableRow className="border-none hover:bg-neutral-900" key={member.id}>
+                    <TableRow className="border-neutral-700 hover:bg-neutral-900" key={member.id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell className="font-medium text-nowrap">
                         <Link href={`/members/${member.id}`}><span className="cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>

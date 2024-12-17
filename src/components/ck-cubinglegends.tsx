@@ -15,7 +15,7 @@ const CubingKeralaCubingLengends = () => {
     }
 
     return (
-        <div className="relative flex h-full w-full py-12 md:py-24 lg:py-32 items-center justify-center overflow-hidden bg-black text-stone-200">
+        <div className="relative flex h-full w-full py-12 md:py-24 lg:py-32 items-center justify-center overflow-hidden text-stone-200">
             <div className="container px-6">
                 <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-4">

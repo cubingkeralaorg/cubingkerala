@@ -15,7 +15,7 @@ export default function SearchComponent({ handleSearch }: { handleSearch: (searc
           type="search"
           onChange={handleInputChange}
           placeholder="Search Member"
-          className="w-full pl-10 pr-4 py-2 rounded-none border-none bg-black text-stone-200 shadow-sm focus:outline-none focus:border-stone-800 focus:ring-1 focus:ring-stone-800 placeholder:text-stone-600"
+          className="w-full pl-10 pr-4 py-2 rounded-none border-none text-stone-200 shadow-sm focus:outline-none focus:border-stone-800 focus:ring-1 focus:ring-stone-800 placeholder:text-stone-600"
         />
       </div>
     </div>
