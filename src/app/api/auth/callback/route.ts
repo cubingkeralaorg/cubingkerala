@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
         const tokenResponse = await axios.post('https://www.worldcubeassociation.org/oauth/token', {
             client_id: process.env.CLIENT_ID as string,
             client_secret: process.env.CLIENT_SECRET as string,
-            // redirect_uri: 'http://localhost:3000/api/auth/callback',
-            redirect_uri: 'https://www.cubingkerala.org/api/auth/callback',
+            redirect_uri: 'http://localhost:3000/api/auth/callback',
+            // redirect_uri: 'https://www.cubingkerala.org/api/auth/callback',
             grant_type: 'authorization_code',
             code,
         });
