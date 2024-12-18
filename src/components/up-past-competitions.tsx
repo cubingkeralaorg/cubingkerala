@@ -58,7 +58,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <div className="flex flex-col space-y-2">
                                                 {
                                                     upcomingCompetitions.map((competition, index) =>
-                                                        <Card key={index} className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-700 rounded-md">
+                                                        <Card key={index} className="bg-neutral-950 hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-800 rounded-md">
                                                             <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                 <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
                                                                     <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
@@ -116,7 +116,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <div className="flex flex-col space-y-2">
                                                 {
                                                     pastCompetitions.map((competition, index) =>
-                                                        <Card key={index} className="bg-neutral-900 hover:bg-[#202020] transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-700 rounded-md">
+                                                        <Card key={index} className="bg-neutral-950 hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-800 rounded-md">
                                                             <div className='w-full relative'>
                                                                 <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
                                                                     {

@@ -20,7 +20,7 @@ export function CubingKeralaCalendars() {
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-sm text-green-500">Upcoming Competitions</div>
                         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">Mark Your Calendars</h2>
-                        <p className="max-w-[900px] text-stone-400 text-[15px] md:text-xl">
+                        <p className="max-w-[900px] text-stone-400 text-[15px] md:text-lg">
                             Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala.
                         </p>
                     </div>

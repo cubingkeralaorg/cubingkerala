@@ -23,7 +23,7 @@ const CubingKeralaCubingLengends = () => {
                         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">
                             Cubing Legends of Kerala
                         </h2>
-                        <p className="max-w-[900px] text-stone-400 text-[15px] md:text-xl">
+                        <p className="max-w-[900px] text-stone-400 text-[15px] md:text-lg">
                             Meet the top-ranked Rubik&apos;s Cube solvers in Kerala.
                         </p>
                     </div>
