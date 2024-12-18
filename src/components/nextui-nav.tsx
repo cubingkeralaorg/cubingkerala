@@ -1,15 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-    Navbar,
-    NavbarBrand,
-    NavbarMenuToggle,
-    NavbarMenu,
-    NavbarMenuItem,
-    NavbarContent,
-    NavbarItem,
-} from "@nextui-org/react";
 import cookie from 'cookie';
 import { UserInfo } from '@/types/types';
 import { Profile } from './profile';
@@ -20,9 +11,10 @@ import { Badge } from "./ui/badge";
 import ShinyButton from "./ui/shiny-button";
 import Link from "next/link";
 import Image from "next/image";
+import { AlignRight } from "lucide-react";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 
 export default function NextUiNavbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const router = useRouter();
     const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -55,151 +47,93 @@ export default function NextUiNavbar() {
         }
     }
 
-    // to close the menu when a menu item is clicked
-    const handleMenuItemClick = () => {
-        setIsMenuOpen(false);
-    };
+    const handleRedirectToPage = (page: string) => {
+        router.push(`/${page}`)
+    }
+
 
     return (
-        <Navbar
-            isMenuOpen={isMenuOpen}
-            onMenuOpenChange={setIsMenuOpen}
-            disableAnimation
-            isBordered
-            className="bg-neutral-950/80 rounded-3xl text-stone-200"
-        >
-            <div className="hidden md:flex items-center lg:-ml-[7vw]">
-                <Link href={"/"}>
-                    <NavbarBrand className="gap-1">
-                        <Image className="h-12 w-12" width={100} height={100} src="/logotransparent.png" alt="Cubing Kerala" />
-                        <p className="font-bold text-inherit mt-1">Cubing Kerala</p>
-                    </NavbarBrand>
+        <div style={{ zIndex: '10000' }} className="w-full bg-neutral-950/90 backdrop-blur-2xl flex sticky top-0 justify-between items-center px-5 md:px-10 p-2 pb-3">
+            <div className="flex justify-between w-full">
+                {/* larger screen */}
+                <Link href={"/"} className="flex items-center">
+                    <Image className="h-12 w-12" width={100} height={100} src="/logotransparent.png" alt="Cubing Kerala" />
+                    <p className="font-bold text-stone-200 text-inherit mt-1 hidden lg:block">Cubing Kerala</p>
+                    <Badge className="bg-neutral-900 hidden lg:block cursor-default h-5 mt-1 hover:bg-neutral-900 ml-2">
+                        Beta
+                    </Badge>
                 </Link>
-                <Badge className="bg-neutral-900 cursor-default h-5 mt-1 hover:bg-neutral-900 ml-2">
-                    Beta
-                </Badge>
-            </div>
-
-            <div className="hidden md:flex items-center gap-5 lg:-mr-[8vw]">
-                <NavbarItem>
-                    <Link href={"/competitions"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
-                        Competitions
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link href={"/members"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
-                        Members
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link href={"/rankings"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
-                        Rankings
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link href={"/classes"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
-                        Classes
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link href={"/contact"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
-                        Contact
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    {
-                        userInfo ? (
-                            <Profile profileInfo={userInfo} handleLogout={handleLogout} />
-                        ) : (
-                            <Link href={"/login"}>
-                                <ShinyButton className="rounded-md px-4 py-[2px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                    <span className="text-stone-200 text-[15px]">Login</span>
-                                </ShinyButton>
-                            </Link>
-                        )
-                    }
-                </NavbarItem >
-            </div >
-
-            <div className="md:hidden">
-                <Link href={"/"}>
-                    <NavbarBrand>
-                        <Image className="h-12 w-12" width={100} height={100} src="/logotransparent.png" alt="Cubing Kerala" />
-                        {/* <p className="font-semibold text-inherit mt-1">Cubing Kerala</p> */}
-                    </NavbarBrand>
-                </Link>
-            </div>
-
-            <NavbarContent justify="end" className="md:hidden">
-                <NavbarItem>
-                {
-                        userInfo ? (
-                            <Profile profileInfo={userInfo} handleLogout={handleLogout} />
-                        ) : (
-                            <Link href={"/login"}>
-                                <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                    <span className="text-stone-200">Login</span>
-                                </ShinyButton>
-                            </Link>
-                        )
-                    }
-                </NavbarItem>
-                <NavbarMenuToggle />
-            </NavbarContent>
-
-            <NavbarMenu className="bg-neutral-950/80 pt-2">
-                <NavbarMenuItem>
-                    <Link
-                        href={"/competitions"}
-                        className="text-stone-200 hover:underline hover:underline-offset-4"
-                        onClick={handleMenuItemClick}
-                    >
-                        Competitions
-                    </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
-                    <Link
-                        href={"/members"}
-                        className="text-stone-200 hover:underline hover:underline-offset-4"
-                        onClick={handleMenuItemClick}
-                    >
-                        Members
-                    </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
-                    <Link
-                        href={"/rankings"}
-                        className="text-stone-200 hover:underline hover:underline-offset-4"
-                        onClick={handleMenuItemClick}
-                    >
-                        Rankings
-                    </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
-                    <Link
-                        href={"/classes"}
-                        className="text-stone-200 hover:underline hover:underline-offset-4"
-                        onClick={handleMenuItemClick}
-                    >
-                        Classes
-                    </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem>
-                    <Link
-                        href={"/contact"}
-                        className="text-stone-200 hover:underline hover:underline-offset-4"
-                        onClick={handleMenuItemClick}
-                    >
-                        Contact
-                    </Link>
-                </NavbarMenuItem>
-                <NavbarMenuItem className="-m-4 absolute bottom-5 w-[95vw]">
+                <div className="hidden md:flex items-center text-stone-200 gap-5">
+                    <Link className="hover:underline hover:underline-offset-4" href={"/competitions"}>Competitions</Link>
+                    <Link className="hover:underline hover:underline-offset-4" href={"/members"}>Members</Link>
+                    <Link className="hover:underline hover:underline-offset-4" href={"/rankings"}>Rankings</Link>
+                    <Link className="hover:underline hover:underline-offset-4" href={"/classes"}>Classes</Link>
+                    <Link className="hover:underline hover:underline-offset-4" href={"/contact"}>Contact</Link>
                     <div>
-                        <CubingKeralaFooter />
+                        {
+                            userInfo ? (
+                                <Profile profileInfo={userInfo} handleLogout={handleLogout} />
+                            ) : (
+                                <Link href={"/login"}>
+                                    <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
+                                        <span className="text-stone-200">Login</span>
+                                    </ShinyButton>
+                                </Link>
+                            )
+                        }
                     </div>
-                </NavbarMenuItem>
-            </NavbarMenu>
-        </Navbar >
+                </div>
+                {/* Smaller screen */}
+                <div className="md:hidden flex items-center gap-2">
+                    <div>
+                        {
+                            userInfo ? (
+                                <Profile profileInfo={userInfo} handleLogout={handleLogout} />
+                            ) : (
+                                <Link href={"/login"}>
+                                    <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
+                                        <span className="text-stone-200">Login</span>
+                                    </ShinyButton>
+                                </Link>
+                            )
+                        }
+                    </div>
+                    <div className="w-fit h-fit">
+                        <Sheet>
+                            <SheetTrigger className="flex items-center border border-neutral-800 p-1 px-3 rounded-md">
+                                <AlignRight className="w-5 h-5 text-stone-200" />
+                            </SheetTrigger>
+                            <SheetContent className="w-full bg-neutral-950 border-none">
+                                <SheetHeader className="absolute top-2">
+                                    <SheetTrigger onClick={() => handleRedirectToPage('')}>
+                                        <SheetTitle>
+                                            <div className="flex items-center">
+                                                <Image className="h-12 w-12" width={100} height={100} src="/logotransparent.png" alt="Cubing Kerala" />
+                                                <Badge className="bg-neutral-900 hidden md:block cursor-default h-5 mt-1 hover:bg-neutral-900 ml-2">
+                                                    Beta
+                                                </Badge>
+                                            </div>
+                                        </SheetTitle>
+                                    </SheetTrigger>
+                                    <SheetDescription className="py-2">
+                                        <div className="text-stone-200 flex flex-col space-y-3">
+                                            <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Competitions</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Members</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Rankings</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('classes')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Classes</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Contact</p></SheetTrigger>
+                                        </div>
+                                    </SheetDescription>
+                                </SheetHeader>
+                                <SheetFooter className="absolute bottom-2 left-0 w-full px-2">
+                                    <CubingKeralaFooter />
+                                </SheetFooter>
+                            </SheetContent>
+                        </Sheet>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 
