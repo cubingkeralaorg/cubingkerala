@@ -137,7 +137,7 @@ export default function NextUiNavbar() {
                             <Profile profileInfo={userInfo} handleLogout={handleLogout} />
                         ) : (
                             <Link href={"/login"}>
-                                <ShinyButton className="rounded-md text-sm px-4 py-[2px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
+                                <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
                                     <span className="text-stone-200">Login</span>
                                 </ShinyButton>
                             </Link>
@@ -147,7 +147,7 @@ export default function NextUiNavbar() {
                 <NavbarMenuToggle />
             </NavbarContent>
 
-            <NavbarMenu className="bg-neutral-950/80 py-2">
+            <NavbarMenu className="bg-neutral-950/80 pt-2">
                 <NavbarMenuItem>
                     <Link
                         href={"/competitions"}
@@ -193,11 +193,11 @@ export default function NextUiNavbar() {
                         Contact
                     </Link>
                 </NavbarMenuItem>
-                <NavbarContent className="-m-3 relative h-full">
-                    <div className="absolute bottom-3 w-full">
+                <NavbarMenuItem className="-m-4 absolute bottom-5 w-[95vw]">
+                    <div>
                         <CubingKeralaFooter />
                     </div>
-                </NavbarContent>
+                </NavbarMenuItem>
             </NavbarMenu>
         </Navbar >
     );
