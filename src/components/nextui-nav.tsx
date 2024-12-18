@@ -82,27 +82,27 @@ export default function NextUiNavbar() {
 
             <div className="hidden md:flex items-center gap-5 lg:-mr-[8vw]">
                 <NavbarItem>
-                    <Link href={"/competitions"} className="text-stone-200 hover:underline hover:underline-offset-4">
+                    <Link href={"/competitions"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
                         Competitions
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link href={"/members"} className="text-stone-200 hover:underline hover:underline-offset-4">
+                    <Link href={"/members"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
                         Members
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link href={"/rankings"} className="text-stone-200 hover:underline hover:underline-offset-4">
+                    <Link href={"/rankings"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
                         Rankings
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link href={"/classes"} className="text-stone-200 hover:underline hover:underline-offset-4">
+                    <Link href={"/classes"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
                         Classes
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link href={"/contact"} className="text-stone-200 hover:underline hover:underline-offset-4">
+                    <Link href={"/contact"} className="text-stone-200 text-[15px] hover:underline hover:underline-offset-4">
                         Contact
                     </Link>
                 </NavbarItem>
@@ -113,7 +113,7 @@ export default function NextUiNavbar() {
                         ) : (
                             <Link href={"/login"}>
                                 <ShinyButton className="rounded-md px-4 py-[2px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                    <span className="text-stone-200">Login</span>
+                                    <span className="text-stone-200 text-[15px]">Login</span>
                                 </ShinyButton>
                             </Link>
                         )

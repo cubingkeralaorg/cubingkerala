@@ -35,7 +35,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
               word="Rubik&apos;s Cube Community in Kerala."
               className="text-4xl text-start md:text-center font-bold tracking-tighter md:text-7xl"
             />
-            <p className="text-stone-400 pb-5 mx-auto text-[15px] md:text-xl text-start md:text-center md:pt-5">
+            <p className="text-stone-400 pb-5 mx-auto text-[15px] md:text-lg text-start md:text-center md:pt-5">
               Join us for competitions and meetups that connect cubers of all skill levels. <br /> <strong className="text-white">Cubing Kerala</strong> is here to help you learn and grow.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-5">

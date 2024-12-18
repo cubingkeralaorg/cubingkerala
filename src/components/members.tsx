@@ -105,7 +105,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                 word="Members"
                 className="text-4xl text-center md:text-center font-bold tracking-tighter md:text-6xl"
               />
-              <div className="flex justify-center items-center my-6">
+              <div className="flex justify-center items-center mt-3 md:mt-6">
                 <div onClick={() => handleJoinCK()} className="w-2/3 md:w-1/4 flex justify-center items-center">
                   <ShinyButton className="w-full rounded-2xl bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
                     {
@@ -124,11 +124,11 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
 
 
             {/* Table Container */}
-            <div className="rounded-md bg-neutral-900 border border-neutral-700" style={{ minHeight: '600px', overflow: 'hidden' }}>
+            <div className="rounded-md border border-neutral-800" style={{ minHeight: '600px', overflow: 'hidden' }}>
               {/* Search Component */}
               <SearchComponent handleSearch={handleSearch} />
               <Table className="w-full">
-                <TableHeader className="border-y border-y-neutral-700">
+                <TableHeader className="border-y border-y-neutral-800">
                   <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
                     <TableHead className="text-neutral-500 ">#</TableHead>
                     <TableHead className="text-neutral-500 ">Name</TableHead>
@@ -143,7 +143,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                     filteredMembersList.sort((a, b) => a.name.localeCompare(b.name)).map((member, index) => {
                       const memberDetails = membersDetails.find((details) => details.person.wca_id === member.wcaid);
                       return (
-                        <TableRow className="border-y-neutral-700 hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
+                        <TableRow className="border-y-neutral-800 hover:bg-neutral-900 text-sm md:text-[15px]" key={index}>
                           <TableCell className="cursor-default ">{index + 1}</TableCell>
                           <TableCell className="text-nowrap ">
                             <Link prefetch={true} href={`/members/${member.wcaid}`}>
