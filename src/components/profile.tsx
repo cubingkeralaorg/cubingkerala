@@ -17,12 +17,12 @@ export function Profile({ profileInfo, handleLogout }: {
 }) {
 
     return (
-        <Menubar className="bg-transparent -mx-5 shadow-none border-none rounded-none">
+        <Menubar className="bg-transparent -mx-4 shadow-none border-none">
             <MenubarMenu>
                 <MenubarTrigger>
                     <AnimatedShinyTextComponent userInfo={profileInfo?.me.wca_id} text="Logout" />
                 </MenubarTrigger>
-                <MenubarContent style={{zIndex: '10000'}} className="bg-neutral-950 border-stone-800 rounded-none text-stone-200">
+                <MenubarContent style={{zIndex: '10000'}} className="bg-neutral-950 border-stone-800 rounded-md text-stone-200">
                     <MenubarItem className="text-stone-400 hover:bg-none cursor-default">{profileInfo?.me.name}</MenubarItem>
                     {
                         profileInfo?.me.wca_id == "2017JOHN14" ? <Link href={"/requests"}><MenubarItem className="hover:bg-neutral-900 cursor-pointer">Requsets</MenubarItem></Link> : null
