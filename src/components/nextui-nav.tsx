@@ -68,7 +68,7 @@ export default function NextUiNavbar() {
                     <Link className="hover:underline hover:underline-offset-4" href={"/competitions"}>Competitions</Link>
                     <Link className="hover:underline hover:underline-offset-4" href={"/members"}>Members</Link>
                     <Link className="hover:underline hover:underline-offset-4" href={"/rankings"}>Rankings</Link>
-                    <Link className="hover:underline hover:underline-offset-4" href={"/classes"}>Classes</Link>
+                    <Link className="hover:underline hover:underline-offset-4" href={"/learning"}>Learning</Link>
                     <Link className="hover:underline hover:underline-offset-4" href={"/contact"}>Contact</Link>
                     <div>
                         {
@@ -146,7 +146,7 @@ export default function NextUiNavbar() {
                                             <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Competitions</p></SheetTrigger>
                                             <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Members</p></SheetTrigger>
                                             <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Rankings</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('classes')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Classes</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('learning')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Learning</p></SheetTrigger>
                                             <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Contact</p></SheetTrigger>
                                         </div>
                                     </SheetDescription>
