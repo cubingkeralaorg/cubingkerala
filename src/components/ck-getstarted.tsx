@@ -27,9 +27,9 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
   return (
     <div className="relative flex min-h-[90vh] w-full overflow-hidden text-stone-200">
       <div className="container px-6 flex flex-col justify-center items-center my-auto">
-        <div className="absolute -top-[5vh] md:-top-[1vh] left-5 md:left-0 md:w-full"><AnimatedShinyTextLearnignComingSoon /></div>
         <div className="grid h-full gap-10 sm:px-10 md:gap-16 md:grid-cols-1 pt-10 md:pt-5">
-          <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw]">
+          <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw] mb-20">
+          <div className="my-5"><AnimatedShinyTextLearnignComingSoon /></div>
             <div className="w-full flex justify-start md:justify-center">
               <AnimatedGradientTextComponent name="Cubing Kerala" />
             </div>
