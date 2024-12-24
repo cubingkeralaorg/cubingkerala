@@ -141,13 +141,13 @@ export default function NextUiNavbar() {
                                             </div>
                                         </SheetTitle>
                                     </SheetTrigger>
-                                    <SheetDescription className="py-2">
-                                        <div className="text-stone-200 flex flex-col space-y-3">
-                                            <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Competitions</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Members</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Rankings</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('learning')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Learning</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[17px] text-start hover:underline hover:underline-offset-4">Contact</p></SheetTrigger>
+                                    <SheetDescription className="py-5">
+                                        <div className="text-stone-200 flex flex-col space-y-5">
+                                            <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Competitions</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Members</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Rankings</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('learning')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Learning</p></SheetTrigger>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Contact</p></SheetTrigger>
                                         </div>
                                     </SheetDescription>
                                 </SheetHeader>
