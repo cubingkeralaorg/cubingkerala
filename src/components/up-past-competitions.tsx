@@ -116,9 +116,9 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <div className="flex flex-col space-y-2">
                                                 {
                                                     pastCompetitions.map((competition, index) =>
-                                                        <Card key={index} className="bg-neutral-950 hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-800 rounded-md">
-                                                            <div className='w-full relative'>
-                                                                <Badge className='absolute right-1 md:right-2 top-1 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
+                                                        <Card key={index} className="bg-neutral-950 relative hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 w-[90vw] md:w-[600px] border border-neutral-800 rounded-md">
+                                                            <div className='w-full'>
+                                                                <Badge className='absolute right-3 bottom-3 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1'>
                                                                     {
                                                                         competition.isCanceled ? (
                                                                             <span className="text-red-400">Cancelled</span>
