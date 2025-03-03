@@ -62,7 +62,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                                             <Link prefetch={true} key={index} href={`/competitions/${competition.id}`}>
                                                                 <CardContent className="py-3 px-4 h-fit max-w-[90vw] md:max-w-full cursor-pointer">
                                                                     <h3 className="text-[17px] font-bold text-stone-200 text-wrap">{competition.name}</h3>
-                                                                    <p className="text-[15px] text-wrap py-2">
+                                                                    <p className="text-wrap w-full text-[15px] py-2">
                                                                         {competition?.venue.name.includes('[') ? (competition.venue.name).split('(')[0].slice(1, -1) : competition?.venue.name}
                                                                     </p>
                                                                     <div className='text-xs text-wrap'>
@@ -99,7 +99,7 @@ const UpPastCompetitions = ({ response }: { response: ApiResonse }) => {
                                             <ScrollBar orientation="vertical" />
                                         </ScrollArea>
                                     ) : (
-                                        <div className='bg-neutral-900 w-[90vw] md:w-[600px] rounded-md h-[125px] flex flex-col items-center justify-center cursor-default'>
+                                        <div className='bg-neutral-950 w-[90vw] md:w-[600px] border border-neutral-800 rounded-md h-[125px] flex flex-col items-center justify-center cursor-default'>
                                             <h3 className="text-[17px] font-bold text-stone-200">Stay tuned!</h3>
                                             <h1 className='text-md md:text-lg text-neutral-400 font-normal'>New competitions are on the way...</h1>
                                         </div>

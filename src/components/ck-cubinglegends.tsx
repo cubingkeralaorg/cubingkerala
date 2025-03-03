@@ -27,7 +27,7 @@ const CubingKeralaCubingLengends = () => {
                             Meet the top-ranked Rubik&apos;s Cube solvers in Kerala.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full">
+                    <div className="flex items-center justify-start sm:justify-center md:justify-center w-full">
                         <div onClick={() => handleRedirectToRankings()}><AnimatedShinyTextComponent userInfo={null} text="Rankings" /></div>
                     </div>
                 </div>

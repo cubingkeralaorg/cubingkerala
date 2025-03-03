@@ -31,7 +31,7 @@ const CubingKeralaGetStarted = ({ user }: { user: UserInfo | null }) => {
           <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw] mb-20">
           <div className="my-5"><AnimatedShinyTextLearnignComingSoon /></div>
             <div className="w-full flex justify-start md:justify-center">
-              <AnimatedGradientTextComponent name="Cubing Kerala" />
+              <AnimatedGradientTextComponent width={4} name="Cubing Kerala" />
             </div>
             <BlurIn
               word="Rubik&apos;s Cube Community in Kerala."

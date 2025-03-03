@@ -54,22 +54,22 @@ export default function NextUiNavbar() {
 
 
     return (
-        <div className="w-full bg-neutral-950 z-50 flex sticky top-0 justify-between items-center px-5 md:px-10 p-2 pb-3">
+        <div className="w-full bg-neutral-950 z-50 flex sticky top-0 justify-between items-center px-5 md:px-10 md:py-3 p-2 pb-3">
             <div className="flex justify-between w-full">
                 {/* larger screen */}
                 <Link href={"/"} className="flex items-center">
                     <Image className="h-12 w-12" width={100} priority height={100} src="/logotransparent.png" alt="Cubing Kerala" />
                     <p className="font-bold text-stone-200 text-inherit mt-1 hidden lg:block">Cubing Kerala</p>
-                    <Badge className="bg-neutral-900 hidden lg:block cursor-default h-5 mt-1 hover:bg-neutral-900 ml-2">
+                    <Badge className="bg-neutral-800 hidden lg:block cursor-default h-5 mt-1 hover:bg-neutral-800 ml-2">
                         Beta
                     </Badge>
                 </Link>
                 <div className="hidden md:flex items-center text-stone-200 gap-5">
-                    <Link className="hover:underline hover:underline-offset-4" href={"/competitions"}>Competitions</Link>
-                    <Link className="hover:underline hover:underline-offset-4" href={"/members"}>Members</Link>
-                    <Link className="hover:underline hover:underline-offset-4" href={"/rankings"}>Rankings</Link>
-                    <Link className="hover:underline hover:underline-offset-4" href={"/learning"}>Learning</Link>
-                    <Link className="hover:underline hover:underline-offset-4" href={"/contact"}>Contact</Link>
+                    <Link className="hover:text-green-400 hover:scale-105 transition-all ease-in-out" href={"/competitions"}>Competitions</Link>
+                    <Link className="hover:text-green-400 hover:scale-105 transition-all ease-in-out" href={"/members"}>Members</Link>
+                    <Link className="hover:text-green-400 hover:scale-105 transition-all ease-in-out" href={"/rankings"}>Rankings</Link>
+                    <Link className="hover:text-green-400 hover:scale-105 transition-all ease-in-out" href={"/learn"}>Learn</Link>
+                    <Link className="hover:text-green-400 hover:scale-105 transition-all ease-in-out" href={"/contact"}>Contact</Link>
                     <div>
                         {
                             userInfo ? (
@@ -77,7 +77,7 @@ export default function NextUiNavbar() {
                             ) : (
                                 <Link href={"/login"}>
                                     <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                        <span className="text-stone-200">Login</span>
+                                        <span className="text-green-400">Login</span>
                                     </ShinyButton>
                                 </Link>
                             )
@@ -93,7 +93,7 @@ export default function NextUiNavbar() {
                             ) : (
                                 <Link href={"/login"}>
                                     <ShinyButton className="rounded-md text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                        <span className="text-stone-200">Login</span>
+                                        <span className="text-green-400">Login</span>
                                     </ShinyButton>
                                 </Link>
                             )
@@ -117,7 +117,7 @@ export default function NextUiNavbar() {
                                             <Link href={"/login"}>
                                                 <SheetClose>
                                                     <ShinyButton className="rounded-md absolute -top-1 right-[52px] text-sm px-3 py-[4px] bg-neutral-800 hover:bg-neutral-700 transition-all duration-200 ease-in">
-                                                        <span className="text-stone-200">Login</span>
+                                                        <span className="text-green-400">Login</span>
                                                     </ShinyButton>
                                                 </SheetClose>
                                             </Link>
@@ -141,13 +141,19 @@ export default function NextUiNavbar() {
                                             </div>
                                         </SheetTitle>
                                     </SheetTrigger>
-                                    <SheetDescription className="py-5">
-                                        <div className="text-stone-200 flex flex-col space-y-5">
-                                            <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Competitions</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Members</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Rankings</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('learning')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Learning</p></SheetTrigger>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[20px] text-start hover:underline hover:underline-offset-4">Contact</p></SheetTrigger>
+                                    <SheetDescription className="py-10">
+                                        <div className="text-stone-200 flex flex-col space-y-6">
+                                            <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Competitions</p>
+                                            </SheetTrigger>
+                                            <div className="mx-auto"><hr className="border-neutral-700 w-[86vw]" /></div>
+                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Members</p></SheetTrigger>
+                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
+                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Rankings</p></SheetTrigger>
+                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
+                                            <SheetTrigger onClick={() => handleRedirectToPage('learn')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Learn</p></SheetTrigger>
+                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
+                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Contact</p></SheetTrigger>
+                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
                                         </div>
                                     </SheetDescription>
                                 </SheetHeader>
