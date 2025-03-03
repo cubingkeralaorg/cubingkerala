@@ -10,6 +10,10 @@ body::-webkit-scrollbar {
   display: none; 
 }
 
+ul {
+  list-style-type: square
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -80,6 +84,17 @@ body::-webkit-scrollbar {
 @layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;

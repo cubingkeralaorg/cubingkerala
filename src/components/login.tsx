@@ -27,11 +27,11 @@ export default function LoginComponent() {
   }, []);
 
   return (
-    <div className=" text-stone-200 h-[80vh] relative flex items-center justify-center">
+    <div className=" text-stone-200 h-[75vh] md:h-[78vh] relative flex items-center justify-center">
       <div className="flex flex-col mx-auto max-w-lg w-full animate-fade-in">
         <div className="space-y-1">
-          <AnimatedGradientTextComponent name="Cubing Kerala" />
-          <p className="text-neutral-500 text-sm text-center">Authenticate with World Cube Association</p>
+          <AnimatedGradientTextComponent width={2} name="Cubing Kerala" />
+          <p className="text-neutral-500 text-sm md:text-medium text-center">Authenticate with World Cube Association</p>
         </div>
         <div>
           <div className="flex items-center justify-center h-[230px] w-full"><LoginLotttieComponent path="/login2.json" /></div>

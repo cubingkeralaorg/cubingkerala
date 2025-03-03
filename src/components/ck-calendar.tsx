@@ -24,7 +24,7 @@ export function CubingKeralaCalendars() {
                             Stay tuned for our upcoming Rubik&apos;s Cube competitions in Kerala.
                         </p>
                     </div>
-                    <div className="flex items-center justify-start md:justify-center w-full">
+                    <div className="flex items-center justify-start sm:justify-center md:justify-center w-full">
                         <div onClick={() => handleRedirectToCompetitions()}><AnimatedShinyTextComponent userInfo={null} text="Competitions" /></div>
                     </div>
                 </div>
