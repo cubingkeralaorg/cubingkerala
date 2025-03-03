@@ -105,7 +105,7 @@ export default function NextUiNavbar() {
                                 <AlignRight className="w-5 h-5 text-stone-200" />
                             </SheetTrigger>
                             <SheetContent className="w-full bg-neutral-950 border-none">
-                                <div className="w-full relative">
+                                <div style={{zIndex: '1000'}} className="w-full relative">
                                     {
                                         userInfo ? (
                                                 <SheetClose onClick={() => handleLogout()}>
