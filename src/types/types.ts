@@ -1,36 +1,40 @@
-//interface for single competition details
 export interface Competition {
+  announced_at: string; // e.g. "2025-01-30T19:52:22.000Z"
+  cancelled_at: string | null;
   city: string;
-  country: string;
-  date: {
-    from: string;
-    till: string;
-    numberOfDays: number;
-  };
-  events: string[];
-  externalWebsite: string | null;
+  class: string;
+  competitor_limit: number;
+  country_iso2: string;
+  date_range: string;
+  delegates: {
+    name: string;
+    email: string;
+  }[];
+  end_date: string;
+  event_ids: string[];
   id: string;
-  information: string;
-  isCanceled: boolean;
+  latitude_degrees: number;
+  longitude_degrees: number;
   name: string;
-  organisers: {
+  organizers: {
     name: string;
     email: string;
   }[];
-  venue: {
-    address: string;
-    coordinates: {
-      latitude: number;
-      longitude: number;
-    };
-    details: string;
-    name: string;
-  };
-  wcaDelegates: {
-    name: string;
-    email: string;
-  }[];
+  registration_close: string;
+  registration_open: string;
+  results_posted_at: string;
+  short_display_name: string;
+  short_name: string;
+  start_date: string;
+  time_until_registration: string;
+  url: string;
+  venue: string;
+  venue_address: string;
+  venue_details: string;
+  website: string;
 }
+
+
 
 
 //interface for competitions
