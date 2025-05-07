@@ -144,16 +144,11 @@ export default function NextUiNavbar() {
                                     <SheetDescription className="py-10">
                                         <div className="text-stone-200 flex flex-col space-y-6">
                                             <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Competitions</p>
-                                            </SheetTrigger>
-                                            <div className="mx-auto"><hr className="border-neutral-700 w-[86vw]" /></div>
-                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Members</p></SheetTrigger>
-                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
-                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Rankings</p></SheetTrigger>
-                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
-                                            <SheetTrigger onClick={() => handleRedirectToPage('learn')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Learn</p></SheetTrigger>
-                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
-                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Contact</p></SheetTrigger>
-                                            <hr className="border-neutral-700 w-[86vw] mx-auto" />
+                                            </SheetTrigger>                                          
+                                            <SheetTrigger onClick={() => handleRedirectToPage('members')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Members</p></SheetTrigger>                                           
+                                            <SheetTrigger onClick={() => handleRedirectToPage('rankings')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Rankings</p></SheetTrigger>                      
+                                            <SheetTrigger onClick={() => handleRedirectToPage('learn')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Learn</p></SheetTrigger>                                           
+                                            <SheetTrigger onClick={() => handleRedirectToPage('contact')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Contact</p></SheetTrigger> 
                                         </div>
                                     </SheetDescription>
                                 </SheetHeader>
