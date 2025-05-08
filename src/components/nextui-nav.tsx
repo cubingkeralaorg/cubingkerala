@@ -104,7 +104,7 @@ export default function NextUiNavbar() {
                             <SheetTrigger className="flex items-center border border-neutral-800 p-1 px-3 rounded-md">
                                 <AlignRight className="w-5 h-5 text-stone-200" />
                             </SheetTrigger>
-                            <SheetContent className="w-full bg-neutral-950 border-none">
+                            <SheetContent className="w-full h-screen bg-neutral-950 border-none">
                                 <div style={{zIndex: '1000'}} className="w-full relative">
                                     {
                                         userInfo ? (
@@ -141,7 +141,7 @@ export default function NextUiNavbar() {
                                             </div>
                                         </SheetTitle>
                                     </SheetTrigger>
-                                    <SheetDescription className="py-10">
+                                    <SheetDescription className="py-5">
                                         <div className="text-stone-200 flex flex-col space-y-6">
                                             <SheetTrigger onClick={() => handleRedirectToPage('competitions')}><p className="text-[20px] text-start hover:text-green-400 hover:scale-105 transition-all ease-in-out">Competitions</p>
                                             </SheetTrigger>                                          

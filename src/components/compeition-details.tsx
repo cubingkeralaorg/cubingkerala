@@ -107,7 +107,7 @@ const CompetitionDetailsComponent = ({ compInfo }: { compInfo: EventDetails }) =
                                     <h2 className="text-xl md:text-2xl font-bold">Event Details</h2>
                                     <div className="grid gap-2">
                                         <div className="flex items-center gap-2">
-                                            <div className='space-y-1 max-w-[50vw]'>
+                                            <div className='space-y-1 md:max-w-[50vw]'>
                                                 <p className="font-medium text-[17px] md:text-[18px]">Location</p>
                                                 <p className="text-stone-400 text-[15px] text-wrap md:text-[16px]">
                                                     {`${currentCompetition?.venue.includes('[') ? (currentCompetition.venue).split('(')[0].slice(1, -1) : currentCompetition?.venue}, ${currentCompetition.venue_address}`}
