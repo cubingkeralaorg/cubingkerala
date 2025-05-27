@@ -1,20 +1,34 @@
-'use client';
+"use client";
 
 import { FilterComponent } from "@/components/filter";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
 import { MemberPersonResult, RequestInfo } from "@/types/types";
 import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import LoadingComponent from "./loading";
+import { Suspense, useEffect, useState } from "react";
+import RankingsLoading from "../app/rankings/loading";
 import BlurIn from "./ui/blur-in";
 
-export default function RankingsComponent({ members }: { members: RequestInfo[] }) {
+export default function RankingsComponent({
+  members,
+}: {
+  members: RequestInfo[];
+}) {
   const [membersList, setMembersList] = useState<RequestInfo[]>([]);
   const [memberResults, setMemberResults] = useState<MemberPersonResult[]>([]);
   const [sortedResults, setSortedResults] = useState<MemberPersonResult[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState<{ event: string; round: string }>({ event: "333", round: "single" });
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<{
+    event: string;
+    round: string;
+  }>({ event: "333", round: "single" });
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,21 +46,19 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
   const fetchMemberResults = async () => {
     try {
       const results = await Promise.all(
-        membersList.map(member =>
-          axios.get(`https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/${member.wcaid}.json`)
+        membersList.map((member) =>
+          axios.get(
+            `https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/${member.wcaid}.json`
+          )
         )
       );
 
-      const data: MemberPersonResult[] = results.map(res => res.data);
+      const data: MemberPersonResult[] = results.map((res) => res.data);
       setMemberResults(data);
       // Automatically sort on initial load for event "333" and round "single"
       sortMembers(data);
     } catch (error) {
       console.error("Error fetching member results:", error);
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
     }
   };
 
@@ -55,20 +67,23 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
     const roundType = round === "average" ? "averages" : "singles";
 
     const sorted = results.slice().sort((a, b) => {
-      const aEvent = a.rank[roundType]?.find(r => r.eventId === event);
-      const bEvent = b.rank[roundType]?.find(r => r.eventId === event);
+      const aEvent = a.rank[roundType]?.find((r) => r.eventId === event);
+      const bEvent = b.rank[roundType]?.find((r) => r.eventId === event);
       const aBest = aEvent ? aEvent.best : Infinity;
       const bBest = bEvent ? bEvent.best : Infinity;
       return aBest - bBest;
     });
 
     setSortedResults(sorted);
+    setLoading(false);
   };
 
   function convertMillisecondsToTime(milliseconds: number) {
-    if (milliseconds === Infinity) { return '' }
+    if (milliseconds === Infinity) {
+      return "";
+    }
     if (milliseconds < 0) {
-      return 'DNF';
+      return "DNF";
     }
 
     let totalSeconds = milliseconds / 100;
@@ -85,9 +100,10 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
     }
   }
 
-
   function convertMbldToMinutes(number: number): string {
-    if (number === Infinity) { return '' }
+    if (number === Infinity) {
+      return "";
+    }
     const numStr = `0${number.toString()}`;
 
     const DD = parseInt(numStr.substring(1, 3), 10);
@@ -103,12 +119,13 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
 
-    const timeFormatted = `${String(minutes).padStart(2, '0')}.${String(seconds).padStart(2, '0')}`;
+    const timeFormatted = `${String(minutes).padStart(2, "0")}.${String(
+      seconds
+    ).padStart(2, "0")}`;
 
     const finalOutput = `${solved}/${attempted} ${timeFormatted}`;
     return finalOutput;
   }
-
 
   // Effect to sort members whenever selectedFilter changes
   useEffect(() => {
@@ -118,12 +135,12 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
   }, [selectedFilter, memberResults]);
 
   return (
-    <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
-      {isLoading ? (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
-          <LoadingComponent />
-        </div>
-      ) : (
+    <Suspense fallback={<RankingsLoading />}>
+      {
+        loading ? (
+          <RankingsLoading/>
+        ) : (
+          <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
         <div className="animate-fade-in">
           <BlurIn
             word="Rankings"
@@ -131,9 +148,7 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
           />
           <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
             <div className="flex justify-center w-full">
-              <FilterComponent
-                onFilterChange={setSelectedFilter}
-              />
+              <FilterComponent onFilterChange={setSelectedFilter} />
             </div>
           </div>
           <div className="rounded-md border border-neutral-800">
@@ -150,24 +165,33 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
               </TableHeader>
               <TableBody>
                 {sortedResults.map((member, index) => {
-                  const result = member.rank[selectedFilter.round === 'average' ? 'averages' : 'singles'].find(r => r.eventId === selectedFilter.event);
+                  const result = member.rank[
+                    selectedFilter.round === "average" ? "averages" : "singles"
+                  ].find((r) => r.eventId === selectedFilter.event);
                   return (
-                    <TableRow className="border-neutral-800 hover:bg-neutral-900" key={member.id}>
+                    <TableRow
+                      className="border-neutral-800 hover:bg-neutral-900"
+                      key={member.id}
+                    >
                       <TableCell>{index + 1}</TableCell>
                       <TableCell className="font-medium text-nowrap">
-                        <Link href={`/members/${member.id}`}><span className="cursor-pointer hover:text-blue-500">{member.name.split('(')[0]}</span></Link>
+                        <Link href={`/members/${member.id}`}>
+                          <span className="cursor-pointer hover:text-blue-500">
+                            {member.name.split("(")[0]}
+                          </span>
+                        </Link>
                       </TableCell>
                       <TableCell className="font-semibold text-nowrap">
-                        {result?.eventId === '333fm' && selectedFilter.round === 'single'
+                        {result?.eventId === "333fm" &&
+                        selectedFilter.round === "single"
                           ? result.best
-                          : result?.eventId === '333mbf'
-                            ? convertMbldToMinutes(result?.best || Infinity)
-                            : convertMillisecondsToTime(result?.best || Infinity)
-                        }
+                          : result?.eventId === "333mbf"
+                          ? convertMbldToMinutes(result?.best || Infinity)
+                          : convertMillisecondsToTime(result?.best || Infinity)}
                       </TableCell>
-                      <TableCell>{result?.rank?.country || ''}</TableCell>
-                      <TableCell>{result?.rank?.continent || ''}</TableCell>
-                      <TableCell>{result?.rank?.world || ''}</TableCell>
+                      <TableCell>{result?.rank?.country || ""}</TableCell>
+                      <TableCell>{result?.rank?.continent || ""}</TableCell>
+                      <TableCell>{result?.rank?.world || ""}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -175,11 +199,9 @@ export default function RankingsComponent({ members }: { members: RequestInfo[] 
             </Table>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+        )
+      }
+    </Suspense>
   );
 }
-
-
-
-
