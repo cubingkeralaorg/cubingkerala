@@ -1,8 +1,7 @@
 import CompetitionDetailsComponent from '@/components/compeition-details'
-import LoadingComponent from '@/components/loading'
 import axios from 'axios';
 import { Metadata } from 'next';
-import React, { Suspense } from 'react'
+import React from 'react'
 export const dynamic = 'force-dynamic'
 
 
@@ -24,14 +23,7 @@ const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
 
     return (
         <>
-            <Suspense
-                fallback={
-                    <div className='flex items-center justify-center min-h-[50vh] w-full'>
-                        <LoadingComponent />
-                    </div>
-                }
-            ><CompetitionDetailsComponent compInfo={competitionResponse.data} />
-            </Suspense>
+            <CompetitionDetailsComponent compInfo={competitionResponse.data} />
         </>
     )
 }
