@@ -13,50 +13,19 @@ import Image from "next/image";
 import logo from "../../public/logotransparent.png";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import cookie from "cookie";
 import { UserInfo } from "@/types/types";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 export default function HeroDrawer({
   isOpen,
   onOpenChange,
+  userInfo,
+  handleLogout
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
+  userInfo: UserInfo | null;
+  handleLogout: () => void;
 }) {
-
-  const router = useRouter();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
-  useEffect(() => {
-    const cookies = cookie.parse(document.cookie);
-    const userInfoFromCookie = cookies.userInfo;
-
-    if (userInfoFromCookie) {
-      setUserInfo(JSON.parse(userInfoFromCookie));
-    }
-  }, []);
-
-  async function handleLogout() {
-        const response = await fetch('/api/auth/logout', {
-            method: 'POST',
-            credentials: 'include',
-        });
-
-        if (response.ok) {
-            toast.success('Logged out successfully');
-            setTimeout(() => {
-                window.localStorage.clear();
-                window.location.reload();
-            }, 2000);
-            router.replace('/')
-        } else {
-            console.error('Logout failed');
-            toast.error('Logout failed. Please try again.');
-        }
-    }
 
   return (
     <>

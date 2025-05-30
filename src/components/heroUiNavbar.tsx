@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, useDisclosure } from "@heroui/react";
 import HeroDrawer from "./heroDrawer";
 import { Menu } from "lucide-react";
@@ -6,9 +6,43 @@ import Link from "next/link";
 import logo from "../../public/logotransparent.png";
 import Image from "next/image";
 import { Badge } from "./ui/badge";
+import { useRouter } from "next/navigation";
+import { UserInfo } from "@/types/types";
+import cookie from "cookie";
+import { toast } from "sonner";
 
 export default function HeroUiNavbar() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    const cookies = cookie.parse(document.cookie);
+    const userInfoFromCookie = cookies.userInfo;
+
+    if (userInfoFromCookie) {
+      setUserInfo(JSON.parse(userInfoFromCookie));
+    }
+  }, []);
+
+  async function handleLogout() {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            toast.success('Logged out successfully');
+            setTimeout(() => {
+                window.localStorage.clear();
+                window.location.reload();
+            }, 2000);
+            router.replace('/')
+        } else {
+            console.error('Logout failed');
+            toast.error('Logout failed. Please try again.');
+        }
+    }
 
   return (
     <>
@@ -26,17 +60,32 @@ export default function HeroUiNavbar() {
           <Link href={"/members"}>Members</Link>
           <Link href={"/learn"}>Learn</Link>
           <Link href={"/contact"}>Contact</Link>
-          <Link href={"/login"}>
-            <Button className="bg-neutral-800 text-stone-200" size="sm">
-              <p className="text-[15px]">Login</p>
-            </Button>
-          </Link>
+          {userInfo ? (
+                  <Button
+                    onPress={() => {
+                      handleLogout();
+                    }}
+                    className="bg-neutral-800 w-full text-stone-200"
+                    size="sm"
+                  >
+                    <p className="text-[15px] text-red-500">Logout</p>
+                  </Button>
+                ) : (
+                  <Link href={"/login"}>
+                    <Button
+                      className="bg-neutral-800 w-full text-stone-200"
+                      size="sm"
+                    >
+                      <p className="text-[15px]">Login</p>
+                    </Button>
+                  </Link>
+                )}
         </div>
         <div className="md:hidden">
           <Menu className="text-stone-200" onClick={onOpen} />
         </div>
       </div>
-      <HeroDrawer isOpen={isOpen} onOpenChange={onOpenChange} />
+      <HeroDrawer userInfo={userInfo} isOpen={isOpen} onOpenChange={onOpenChange} handleLogout={handleLogout} />
     </>
   );
 }

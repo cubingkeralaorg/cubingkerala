@@ -3,6 +3,7 @@ import db from '@/lib/db'
 import { RequestInfo } from '@/types/types'
 import { Metadata } from 'next';
 import React from 'react'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: "Rankings | Cubing Kerala",

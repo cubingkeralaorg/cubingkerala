@@ -1,5 +1,6 @@
 import axios from "axios"
 import UpPastCompetitions from "./up-past-competitions";
+export const dynamic = 'force-dynamic'
 
 export default async function CompetitionsComponent() {
 

@@ -17,7 +17,6 @@ const Members = async () => {
 
   const members = await db.members.findMany()
 
-
   return (
     <>
       <MembersComponent membersfromdb={members as RequestInfo[]} />
