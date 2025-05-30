@@ -14,18 +14,20 @@ import logo from "../../public/logotransparent.png";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { UserInfo } from "@/types/types";
+import { usePathname } from "next/navigation";
 
 export default function HeroDrawer({
   isOpen,
   onOpenChange,
   userInfo,
-  handleLogout
+  handleLogout,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
   userInfo: UserInfo | null;
   handleLogout: () => void;
 }) {
+  const pathname = usePathname();
 
   return (
     <>
@@ -52,19 +54,54 @@ export default function HeroDrawer({
                 <X onClick={onClose} />
               </DrawerHeader>
               <DrawerBody className="flex flex-col gap-4">
-                <Link onClick={onClose} href={"/competitions"}>
+                <Link onClick={onClose}
+                  className={
+                    pathname == "/competitions"
+                      ? "text-green-400"
+                      : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                  }
+                  href={"/competitions"}
+                >
                   Competitions
                 </Link>
-                <Link onClick={onClose} href={"/rankings"}>
+                <Link onClick={onClose}
+                  className={
+                    pathname == "/rankings"
+                      ? "text-green-400"
+                      : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                  }
+                  href={"/rankings"}
+                >
                   Rankings
                 </Link>
-                <Link onClick={onClose} href={"/members"}>
+                <Link onClick={onClose}
+                  className={
+                    pathname == "/members"
+                      ? "text-green-400"
+                      : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                  }
+                  href={"/members"}
+                >
                   Members
                 </Link>
-                <Link onClick={onClose} href={"/learn"}>
+                <Link onClick={onClose}
+                  className={
+                    pathname == "/learn"
+                      ? "text-green-400"
+                      : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                  }
+                  href={"/learn"}
+                >
                   Learn
                 </Link>
-                <Link onClick={onClose} href={"/contact"}>
+                <Link onClick={onClose}
+                  className={
+                    pathname == "/contact"
+                      ? "text-green-400"
+                      : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                  }
+                  href={"/contact"}
+                >
                   Contact
                 </Link>
                 {userInfo ? (
