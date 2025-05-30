@@ -9,11 +9,9 @@ import { CubingKeralaUnravel } from "./ck-unravel"
 import { useEffect, useState } from "react"
 import cookie from "cookie"
 import { UserInfo } from "@/types/types"
-// import { AlertComponent } from "./alert"
 
 export default function HomeComponent() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [isAlertShow, setIsAlertShow] = useState<boolean | null>(null);
 
   const [ref1, isVisible1] = useOnScreen({ threshold: 0.1 });
   const [ref2, isVisible2] = useOnScreen({ threshold: 0.1 });
@@ -31,7 +29,6 @@ export default function HomeComponent() {
 
       if (userInfo) {
         setUserInfo(JSON.parse(userInfo));
-        setIsAlertShow(true);
       }
     }
   }, []);
@@ -40,9 +37,6 @@ export default function HomeComponent() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <main className="flex-1 relative">
-        {/* {isAlertShow && (
-          <div className="absolute"><AlertComponent userInfo={userInfo} /></div>
-        )} */}
         <section ref={ref1} className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
