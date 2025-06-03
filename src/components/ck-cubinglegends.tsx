@@ -15,8 +15,8 @@ const CubingKeralaCubingLengends = () => {
     }
 
     return (
-        <div className="relative flex h-full w-full py-12 md:py-24 lg:py-32 items-center justify-center overflow-hidden text-stone-200">
-            <div className="container px-6">
+        <div className="relative flex h-full w-full items-center justify-center overflow-hidden text-stone-200">
+            <div className="container px-6 border bg-neutral-900 border-neutral-800 rounded-lg py-20">
                 <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-sm text-green-400">Top Ranked Cubers</div>
@@ -32,16 +32,6 @@ const CubingKeralaCubingLengends = () => {
                     </div>
                 </div>
             </div>
-            <DotPattern
-                width={20}
-                height={20}
-                cx={1}
-                cy={1}
-                cr={1}
-                className={cn(
-                    "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
-                )}
-            />
         </div>
     );
 };

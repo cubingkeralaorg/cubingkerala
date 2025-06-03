@@ -13,7 +13,7 @@ export default function ContactComponent() {
     return (
         <Suspense fallback={<ContactLoading />}>
             <div className="flex flex-col items-center w-full px-6 py-8 space-y-6">
-                <div className="flex flex-col items-center justify-center w-full space-y-4 h-[60vh] px-6 py-8 border border-neutral-800 rounded-lg shadow-lg">
+                <div className="flex flex-col bg-neutral-900 items-center justify-center w-full space-y-4 h-[60vh] px-6 py-8 border border-neutral-800 rounded-lg shadow-lg">
                     <BlurIn
                         word="Contact Us"
                         className="text-4xl text-stone-200 font-bold tracking-tighter md:text-6xl"

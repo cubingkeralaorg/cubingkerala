@@ -23,8 +23,8 @@ export function CubingKeralaUnravel() {
     }
 
     return (
-        <div className="relative flex w-full flex-col text-stone-200 items-center justify-center overflow-hidden rounded-none py-12 md:py-24 lg:py-32">
-            <div className="container px-6 z-20">
+        <div className="relative flex w-full flex-col text-stone-200 items-center justify-center overflow-hidden rounded-none">
+            <div className="container bg-neutral-900 px-6 z-20 border border-neutral-800 rounded-lg py-20">
                 <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-green-500 text-sm">About Cubing Kerala</div>
@@ -68,17 +68,6 @@ export function CubingKeralaUnravel() {
                     </div>
                 </div>
             </div>
-
-            <DotPattern
-                width={20}
-                height={20}
-                cx={1}
-                cy={1}
-                cr={1}
-                className={cn(
-                    "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
-                )}
-            />
         </div>
     );
 }
