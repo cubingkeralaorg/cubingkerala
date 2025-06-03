@@ -109,6 +109,18 @@ export default function HeroUiNavbar() {
           >
             Contact
           </Link>
+          {userInfo?.me?.id == 6996 ? (
+            <Link
+              className={
+                pathname == "/contact"
+                  ? "text-green-400"
+                  : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+              }
+              href={"/requests"}
+            >
+              Requests
+            </Link>
+          ) : null}
           {userInfo ? (
             <Button
               onPress={() => {

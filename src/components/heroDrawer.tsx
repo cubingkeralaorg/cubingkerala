@@ -54,7 +54,8 @@ export default function HeroDrawer({
                 <X onClick={onClose} />
               </DrawerHeader>
               <DrawerBody className="flex flex-col gap-4">
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   className={
                     pathname == "/competitions"
                       ? "text-green-400"
@@ -64,7 +65,8 @@ export default function HeroDrawer({
                 >
                   Competitions
                 </Link>
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   className={
                     pathname == "/rankings"
                       ? "text-green-400"
@@ -74,7 +76,8 @@ export default function HeroDrawer({
                 >
                   Rankings
                 </Link>
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   className={
                     pathname == "/members"
                       ? "text-green-400"
@@ -84,7 +87,8 @@ export default function HeroDrawer({
                 >
                   Members
                 </Link>
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   className={
                     pathname == "/learn"
                       ? "text-green-400"
@@ -94,7 +98,8 @@ export default function HeroDrawer({
                 >
                   Learn
                 </Link>
-                <Link onClick={onClose}
+                <Link
+                  onClick={onClose}
                   className={
                     pathname == "/contact"
                       ? "text-green-400"
@@ -104,6 +109,18 @@ export default function HeroDrawer({
                 >
                   Contact
                 </Link>
+                {userInfo?.me?.id == 6996 ? (
+                  <Link
+                    className={
+                      pathname == "/contact"
+                        ? "text-green-400"
+                        : "text-stone-200 hover:text-green-400 transition-all ease-in duration-200text-stone-200"
+                    }
+                    href={"/requests"}
+                  >
+                    Requests
+                  </Link>
+                ) : null}
                 {userInfo ? (
                   <Button
                     onPress={() => {
