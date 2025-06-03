@@ -15,7 +15,7 @@ export function CubingKeralaCalendars() {
 
     return (
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-none text-stone-200">
-            <div className="container z-20 bg-neutral-900 px-6 border border-neutral-800 rounded-lg py-20">
+            <div className="container z-20 bg-neutral-900 px-4 border border-neutral-800 rounded-lg py-10 md:py-24">
                 <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-sm text-green-500">Upcoming Competitions</div>
