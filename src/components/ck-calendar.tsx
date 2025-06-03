@@ -14,8 +14,8 @@ export function CubingKeralaCalendars() {
     }
 
     return (
-        <div className="relative flex py-12 md:py-24 lg:py-32 w-full flex-col items-center justify-center overflow-hidden rounded-none text-stone-200">
-            <div className="container z-20 px-6">
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-none text-stone-200">
+            <div className="container z-20 bg-neutral-900 px-6 border border-neutral-800 rounded-lg py-20">
                 <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
                     <div className="space-y-4">
                         <div className="inline-block rounded-lg text-sm text-green-500">Upcoming Competitions</div>
@@ -29,16 +29,6 @@ export function CubingKeralaCalendars() {
                     </div>
                 </div>
             </div>
-            <DotPattern
-                width={20}
-                height={20}
-                cx={1}
-                cy={1}
-                cr={1}
-                className={cn(
-                    "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
-                )}
-            />
         </div>
     );
 }

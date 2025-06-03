@@ -36,7 +36,7 @@ export default function HomeComponent() {
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <main className="flex-1 relative">
+      <main className="flex-1 space-y-5 relative">
         <section ref={ref1} className="w-full">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
@@ -46,7 +46,7 @@ export default function HomeComponent() {
             <CubingKeralaGetStarted user = {userInfo}/>
           </motion.div>
         </section>
-        <section ref={ref2} className="w-full">
+        <section ref={ref2} className="mx-5">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible2 ? 1 : 0, y: isVisible2 ? 0 : 0 }}
@@ -55,7 +55,7 @@ export default function HomeComponent() {
             <CubingKeralaCalendars />
           </motion.div>
         </section>
-        <section ref={ref3} className="">
+        <section ref={ref3} className="mx-5">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible3 ? 1 : 0, y: isVisible3 ? 0 : 0 }}
@@ -63,7 +63,7 @@ export default function HomeComponent() {
             <CubingKeralaCubingLengends />
           </motion.div>
         </section>
-        <section ref={ref4} className="w-full">
+        <section ref={ref4} className="mx-5">
           <motion.div
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: isVisible4 ? 1 : 0, y: isVisible4 ? 0 : 0 }}
