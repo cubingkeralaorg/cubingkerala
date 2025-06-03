@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import "@cubing/icons";
@@ -15,31 +15,44 @@ import Link from "next/link";
 import BlurIn from "./ui/blur-in";
 import { Badge } from "./ui/badge";
 import LoadingComponent from "./loading";
+import axios from "axios";
 
-const UpPastCompetitions = ({ response }: { response: any }) => {
+const UpPastCompetitions = () => {
   const [upcomingCompetitions, setUpcomingCompetitions] = useState<
     Competition[]
   >([]);
   const [pastCompetitions, setPastCompetitions] = useState<Competition[]>([]);
   const [loading, setLoading] = useState(true);
-
+    
   useEffect(() => {
-    window.scrollTo(0, 0);
-    if (response) {
-      const KeralComps = response?.filter((comp: any) =>
-        comp.city.includes("Kerala")
-      );
-      setPastCompetitions(
-        KeralComps.filter((comp: any) => new Date(comp.end_date) < new Date())
-      );
-      setUpcomingCompetitions(
-        KeralComps.filter(
-          (comp: any) => new Date(comp.start_date) > new Date()
-        ).reverse()
-      );
-      setLoading(false);
-    }
-  }, [response]);
+  window.scrollTo(0, 0);
+
+  const cachedCompetitions = localStorage.getItem("competitions");
+
+  if (cachedCompetitions) {
+    const parsedData = JSON.parse(cachedCompetitions);
+    setUpcomingCompetitions(parsedData.upcomingCompetitions);
+    setPastCompetitions(parsedData.pastCompetitions);
+    setLoading(false);
+  } else {
+    const fetchCompetitions = async () => {
+      try {
+        const Competitions = await axios.get("/api/get-competitions");
+        if (Competitions.data) {
+          setUpcomingCompetitions(Competitions.data.upcomingCompetitions);
+          setPastCompetitions(Competitions.data.pastCompetitions);
+          localStorage.setItem("competitions", JSON.stringify(Competitions.data));
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching competitions:", error);
+        setLoading(false);
+      }
+    };
+    fetchCompetitions();
+  }
+}, []);
+
 
   if (loading) {
     return <LoadingComponent/>
