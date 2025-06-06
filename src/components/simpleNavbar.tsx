@@ -147,7 +147,7 @@ export const SimpleNavbar = () => {
           isMenuOpen ? "h-screen w-screen" : "h-0 w-screen"
         }`}
       >
-        <div className="flex flex-col space-y-4 p-6 py-4">
+        <div className="flex flex-col space-y-4 p-6 py-5">
           <Link
             href="/competitions"
             onClick={closeMenu}
@@ -204,8 +204,9 @@ export const SimpleNavbar = () => {
               <p className="text-[15px] text-red-500">Logout</p>
             </Button>
           ) : (
-            <Link onClick={closeMenu} href={"/login"}>
+            <Link href={"/login"}>
               <Button
+                onPress={closeMenu}
                 className="bg-neutral-800 w-full text-stone-200"
                 size="sm"
               >
