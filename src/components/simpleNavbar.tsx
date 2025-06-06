@@ -147,7 +147,7 @@ export const SimpleNavbar = () => {
           isMenuOpen ? "h-screen w-screen" : "h-0 w-screen"
         }`}
       >
-        <div className="flex flex-col space-y-3 p-6 py-4">
+        <div className="flex flex-col space-y-4 p-6 py-4">
           <Link
             href="/competitions"
             onClick={closeMenu}
@@ -185,6 +185,7 @@ export const SimpleNavbar = () => {
           </Link>
           {userInfo?.me?.id == 6996 ? (
             <Link
+              onClick={closeMenu}
               className="hover:underline hover:underline-offset-2"
               href={"/requests"}
             >
@@ -194,6 +195,7 @@ export const SimpleNavbar = () => {
           {userInfo ? (
             <Button
               onPress={() => {
+                closeMenu();
                 handleLogout();
               }}
               className="bg-neutral-800 w-full text-stone-200"
@@ -202,7 +204,7 @@ export const SimpleNavbar = () => {
               <p className="text-[15px] text-red-500">Logout</p>
             </Button>
           ) : (
-            <Link href={"/login"}>
+            <Link onClick={closeMenu} href={"/login"}>
               <Button
                 className="bg-neutral-800 w-full text-stone-200"
                 size="sm"
