@@ -9,7 +9,7 @@ export function AnimatedGradientTextComponent({name, width}: { name: string, wid
       <AnimatedGradientText>
         <span
           className={cn(
-            `inline animate-gradient text-xl md:text-${width}xl bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+            `inline animate-gradient pb-1 text-xl md:text-${width}xl bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
           )}
         >
           {name}

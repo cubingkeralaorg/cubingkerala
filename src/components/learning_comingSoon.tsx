@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export function AnimatedShinyTextLearnignComingSoon() {
   return (
-    <div className="z-10 flex items-center justify-start md:justify-center">
+    <div className="z-50 flex items-center justify-start md:justify-center">
       <Link href={"/learn"}>
           <div
             className={cn(
