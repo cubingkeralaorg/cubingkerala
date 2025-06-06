@@ -26,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-neutral-950`}>
         <Providers>
-          <div className="sticky top-0 z-50"><CubingKeralaNavbar /></div>
+          <CubingKeralaNavbar/>
           {children}
           <Toaster richColors />
           <CubingKeralaFooter />
