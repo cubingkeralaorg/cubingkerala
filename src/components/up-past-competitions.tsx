@@ -23,25 +23,34 @@ const UpPastCompetitions = () => {
   >([]);
   const [pastCompetitions, setPastCompetitions] = useState<Competition[]>([]);
   const [loading, setLoading] = useState(true);
-    
+
+  const CACHE_KEY = "competitions";
+  const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
   useEffect(() => {
-  window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
 
-  const cachedCompetitions = localStorage.getItem("competitions");
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < CACHE_TTL) {
+        setUpcomingCompetitions(data.upcomingCompetitions);
+        setPastCompetitions(data.pastCompetitions);
+        setLoading(false);
+        return;
+      }
+    }
 
-  if (cachedCompetitions) {
-    const parsedData = JSON.parse(cachedCompetitions);
-    setUpcomingCompetitions(parsedData.upcomingCompetitions);
-    setPastCompetitions(parsedData.pastCompetitions);
-    setLoading(false);
-  } else {
     const fetchCompetitions = async () => {
       try {
-        const Competitions = await axios.get("/api/get-competitions");
-        if (Competitions.data) {
-          setUpcomingCompetitions(Competitions.data.upcomingCompetitions);
-          setPastCompetitions(Competitions.data.pastCompetitions);
-          localStorage.setItem("competitions", JSON.stringify(Competitions.data));
+        const res = await axios.get("/api/get-competitions");
+        if (res.data) {
+          setUpcomingCompetitions(res.data.upcomingCompetitions);
+          setPastCompetitions(res.data.pastCompetitions);
+          localStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({ data: res.data, timestamp: Date.now() })
+          );
           setLoading(false);
         }
       } catch (error) {
@@ -50,12 +59,10 @@ const UpPastCompetitions = () => {
       }
     };
     fetchCompetitions();
-  }
-}, []);
-
+  }, []);
 
   if (loading) {
-    return <LoadingComponent/>
+    return <LoadingComponent />;
   }
 
   return (
