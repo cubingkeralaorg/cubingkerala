@@ -33,7 +33,7 @@ const UpPastCompetitions = () => {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
       const { data, timestamp } = JSON.parse(cached);
-      if (Date.now() - timestamp < CACHE_TTL) {
+      if (Date.now() - timestamp < CACHE_TTL ) {
         setUpcomingCompetitions(data.upcomingCompetitions);
         setPastCompetitions(data.pastCompetitions);
         setLoading(false);
