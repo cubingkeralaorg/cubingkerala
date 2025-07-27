@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
 
     const pastCompetitions = keralaCompetitions
       .filter((competition: any) => new Date(competition.start_date) <= now);
-
     // --- Set NO CACHE HEADERS ---
     const response = NextResponse.json({
       upcomingCompetitions,
@@ -39,5 +38,8 @@ export async function GET(request: NextRequest) {
       { error: "Failed to fetch competitions" },
       { status: 500 }
     );
+    return NextResponse.json({ upcomingCompetitions, pastCompetitions });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch competitions" }, { status: 500 });
   }
 }

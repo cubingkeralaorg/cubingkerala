@@ -17,6 +17,9 @@ import { Badge } from "./ui/badge";
 import LoadingComponent from "./loading";
 import axios from "axios";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const UpPastCompetitions = () => {
   const [upcomingCompetitions, setUpcomingCompetitions] = useState<
     Competition[]
