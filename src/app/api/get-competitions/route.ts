@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
@@ -12,9 +12,6 @@ export async function GET(request: NextRequest) {
     const keralaCompetitions = res.data.filter(
       (competition: any) =>
         competition.city && competition.city.includes("Kerala")
-    const res = await axios.get("https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=1000");
-    const keralaCompetitions = res.data.filter((competition: any) =>
-      competition.city && competition.city.includes("Kerala")
     );
 
     const now = new Date();
