@@ -27,22 +27,8 @@ const UpPastCompetitions = () => {
   const [pastCompetitions, setPastCompetitions] = useState<Competition[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const CACHE_KEY = "competitions";
-  const CACHE_TTL = 60 * 60 * 1000; // 1 hour
-
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) {
-      const { data, timestamp } = JSON.parse(cached);
-      if (Date.now() - timestamp < CACHE_TTL) {
-        setUpcomingCompetitions(data.upcomingCompetitions);
-        setPastCompetitions(data.pastCompetitions);
-        setLoading(false);
-        return;
-      }
-    }
 
     const fetchCompetitions = async () => {
       try {
@@ -50,10 +36,6 @@ const UpPastCompetitions = () => {
         if (res.data) {
           setUpcomingCompetitions(res.data.upcomingCompetitions);
           setPastCompetitions(res.data.pastCompetitions);
-          localStorage.setItem(
-            CACHE_KEY,
-            JSON.stringify({ data: res.data, timestamp: Date.now() })
-          );
           setLoading(false);
         }
       } catch (error) {
