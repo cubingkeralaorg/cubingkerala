@@ -17,6 +17,7 @@ import LoadingComponent from './loading'
 import { Metadata } from 'next'
 import axios from 'axios'
 import BlurIn from './ui/blur-in'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
     title: "Member Info | Cubing Kerala",
@@ -136,7 +137,7 @@ const MemberInfoComponent = ({ member, memberResult }: { member: RequestInfo, me
                             </div>
                             <div className="text-center">
                                 <p className="text-xs text-neutral-500 font-medium">WCA ID</p>
-                                <p className='text-sm font-semibold'>{currentMember.wcaid}</p>
+                                <Link className='hover:text-blue-500' href={`https://www.worldcubeassociation.org/persons/${currentMember.wcaid}`} target="_blank" rel="noopener noreferrer"><p className='text-sm font-semibold'>{currentMember.wcaid}</p></Link>
                             </div>
                             <div className="text-center">
                                 <p className="text-xs text-neutral-500 font-medium">COMPETITIONS</p>

@@ -142,7 +142,7 @@ export default function MembersComponent({ membersfromdb }: { membersfromdb: Req
                               </Link>
                             </TableCell>
                             <TableCell>
-                              <Link prefetch={true} href={`/members/${member.wcaid}`}>
+                              <Link prefetch={true} href={`https://www.worldcubeassociation.org/persons/${member.wcaid}`} target="_blank" rel="noopener noreferrer">
                                 <span className="cursor-pointer hover:text-blue-500">
                                   {member.wcaid}
                                 </span>
