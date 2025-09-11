@@ -17,8 +17,42 @@ import { Badge } from "./ui/badge";
 import LoadingComponent from "./loading";
 import axios from "axios";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+// Helper functions for localStorage with expiry
+const setCompetitionsWithExpiry = (data: any) => {
+  const now = new Date();
+  const item = {
+    value: data,
+    expiry: now.getTime() + (60 * 60 * 1000), // 1 hour in milliseconds
+  };
+  localStorage.setItem("competitions", JSON.stringify(item));
+};
+
+const getCompetitionsWithExpiry = () => {
+  const itemStr = localStorage.getItem("competitions");
+  if (!itemStr) {
+    return null;
+  }
+  
+  try {
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+    
+    // Check if the item has expired
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem("competitions");
+      return null;
+    }
+    
+    return item.value;
+  } catch (error) {
+    // If parsing fails, remove the corrupted item
+    localStorage.removeItem("competitions");
+    return null;
+  }
+};
 
 const UpPastCompetitions = () => {
   const [upcomingCompetitions, setUpcomingCompetitions] = useState<
@@ -30,20 +64,38 @@ const UpPastCompetitions = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const fetchCompetitions = async () => {
-      try {
-        const res = await axios.get("/api/get-competitions");
-        if (res.data) {
-          setUpcomingCompetitions(res.data.upcomingCompetitions);
-          setPastCompetitions(res.data.pastCompetitions);
+    const cachedData = getCompetitionsWithExpiry();
+    
+    if (cachedData) {
+      // Use cached data if it's still valid
+      setUpcomingCompetitions(cachedData.upcomingCompetitions);
+      setPastCompetitions(cachedData.pastCompetitions);
+      setLoading(false);
+    } else {
+      // Fetch fresh data if cache is expired or doesn't exist
+      const fetchCompetitions = async () => {
+        try {
+          const res = await axios.get("/api/get-competitions", {
+            headers: {
+              "Cache-Control":
+                "no-store, no-cache, must-revalidate, proxy-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          });
+          if (res.data) {
+            setUpcomingCompetitions(res.data.upcomingCompetitions);
+            setPastCompetitions(res.data.pastCompetitions);
+            setCompetitionsWithExpiry(res.data);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Error fetching competitions:", error);
           setLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching competitions:", error);
-        setLoading(false);
-      }
-    };
-    fetchCompetitions();
+      };
+      fetchCompetitions();
+    }
   }, []);
 
   if (loading) {
