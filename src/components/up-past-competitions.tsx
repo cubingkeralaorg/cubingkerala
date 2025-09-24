@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 // Cache for 7 days since competitions don't change frequently
-const CACHE_DURATION = 2 * 24 * 60 * 60 * 1000; // 2 days
+const CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 
 // Helper functions for localStorage with long-term storage
 const setCompetitionsCache = (data: any) => {
@@ -129,9 +129,9 @@ const UpPastCompetitions = () => {
 
     if (cachedResult) {
       // Always show cached data immediately
-      setUpcomingCompetitions(cachedResult.data.upcomingCompetitions);
-      setPastCompetitions(cachedResult.data.pastCompetitions);
-      const lastFetch = new Date(cachedResult.data.lastFetch).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+      setUpcomingCompetitions(cachedResult.data?.upcomingCompetitions);
+      setPastCompetitions(cachedResult.data?.pastCompetitions);
+      const lastFetch = new Date(cachedResult.data?.lastFetch).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
       setLastUpdated(lastFetch);
     } else {
       // No cache exists - this is the first visit, so fetch data
@@ -261,7 +261,7 @@ const UpPastCompetitions = () => {
             >
               Past Competitions
             </h2>
-            {pastCompetitions.length > 0 ? (
+            {pastCompetitions?.length > 0 ? (
               <ScrollArea className="whitespace-nowrap rounded-md h-[70vh] md:h-[50vh] overflow-auto">
                 <div className="flex flex-col space-y-2">
                   {pastCompetitions.map((competition, index) => (
