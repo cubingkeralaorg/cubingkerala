@@ -16,6 +16,7 @@ import cookie from "cookie";
 import { useRouter } from "next/navigation";
 import { UserInfo } from "@/types/types";
 import Link from "next/link";
+import CubingKeralaFooter from "../ck-footer";
 
 export function DrawerMenuComponent() {
   const router = useRouter();
@@ -55,41 +56,41 @@ export function DrawerMenuComponent() {
         <Menu/>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="flex flex-col text-stone-200 space-y-4 p-6 py-5">
+        <div className="flex flex-col text-stone-200 space-y-4 px-6 pt-4">
           <Link
             href="/competitions"
-            className="hover:underline hover:underline-offset-2"
+            className="hover:underline w-fit hover:underline-offset-2"
           >
             <DrawerClose>Competitions</DrawerClose>
           </Link>
           <Link
             href="/rankings"
-            className="hover:underline hover:underline-offset-2"
+            className="hover:underline w-fit hover:underline-offset-2"
           >
             <DrawerClose>Rankings</DrawerClose>
           </Link>
           <Link
             href="/members"
-            className="hover:underline hover:underline-offset-2"
+            className="hover:underline w-fit hover:underline-offset-2"
           >
             <DrawerClose>Members</DrawerClose>
           </Link>
           <Link
             href="/learn"
-            className="hover:underline hover:underline-offset-2"
+            className="hover:underline w-fit hover:underline-offset-2"
           >
             <DrawerClose>Learn</DrawerClose>
           </Link>
           <Link
             href="/contact"
-            className="hover:underline hover:underline-offset-2"
+            className="hover:underline w-fit hover:underline-offset-2"
           >
             <DrawerClose>Contact</DrawerClose>
           </Link>
           {userInfo?.me?.id == 6996 ? (
             <Link
 
-              className="hover:underline hover:underline-offset-2"
+              className="hover:underline w-fit hover:underline-offset-2"
               href={"/requests"}
             >
               <DrawerClose>Requests</DrawerClose>
@@ -116,6 +117,7 @@ export function DrawerMenuComponent() {
             </Link>
           )}
         </div>
+        <CubingKeralaFooter/>
       </DrawerContent>
     </Drawer>
   )

@@ -73,7 +73,7 @@ export const SimpleNavbar = () => {
           />
         </Link>
         <nav className="flex space-x-4">
-          <DrawerMenuComponent/>
+          <div className="block md:hidden z-50"><DrawerMenuComponent/></div>
           <div className="hidden md:flex space-x-4 justify-center items-center">
             <Link
               href="/competitions"
