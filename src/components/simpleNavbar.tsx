@@ -1,20 +1,20 @@
 "use client";
 import { UserInfo } from "@/types/types";
 import { Button } from "@heroui/react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import cookie from "cookie";
 import { toast } from "sonner";
 import CubingKeralaFooter from "./ck-footer";
+import { DrawerMenuComponent } from "./ui/drawerMenuComponent";
 const logo = "/logotransparent.png";
 
 export const SimpleNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const router = useRouter();
-  const pathname = usePathname();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
@@ -75,9 +75,10 @@ export const SimpleNavbar = () => {
           />
         </Link>
         <nav className="flex space-x-4">
-          <button className="md:hidden" onClick={toggleMenu}>
-            {isMenuOpen ? <ChevronUp size={22} /> : <ChevronDown size={22} />}
-          </button>
+          {/* <button className="md:hidden" onClick={toggleMenu}>
+            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button> */}
+          <DrawerMenuComponent/>
           <div className="hidden md:flex space-x-4 justify-center items-center">
             <Link
               href="/competitions"
@@ -142,7 +143,7 @@ export const SimpleNavbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div
+      {/* <div
         className={`md:hidden absolute border-none overflow-hidden transition-all duration-200 ease-out bg-neutral-950 text-stone-200 ${
           isMenuOpen ? "h-screen w-screen" : "h-0 w-screen"
         }`}
@@ -218,7 +219,7 @@ export const SimpleNavbar = () => {
         <div className="absolute bottom-14 left-0 right-0">
           <CubingKeralaFooter />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

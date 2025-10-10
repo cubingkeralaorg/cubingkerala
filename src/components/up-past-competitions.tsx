@@ -131,7 +131,7 @@ const UpPastCompetitions = () => {
       // Always show cached data immediately
       setUpcomingCompetitions(cachedResult.data?.upcomingCompetitions);
       setPastCompetitions(cachedResult.data?.pastCompetitions);
-      const lastFetch = new Date(cachedResult.data?.lastFetch).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const lastFetch = new Date(cachedResult.data?.lastFetch).toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       setLastUpdated(lastFetch);
     } else {
       // No cache exists - this is the first visit, so fetch data
@@ -156,7 +156,7 @@ const UpPastCompetitions = () => {
           <section>
             <h2
               style={{ zIndex: "10000" }}
-              className="text-xl md:text-2xl font-bold text-green-500 py-5 sticky top-[60px] bg-neutral-950 text-center"
+              className="text-xl md:text-2xl font-bold text-green-500 py-5 bg-neutral-950 text-center"
             >
               Upcoming Competitions
             </h2>
@@ -257,12 +257,12 @@ const UpPastCompetitions = () => {
           <section>
             <h2
               style={{ zIndex: "10000" }}
-              className="text-xl md:text-2xl text-center text-red-500 font-bold py-5 sticky top-[60px] bg-neutral-950"
+              className="text-xl md:text-2xl text-center text-red-500 font-bold py-5 bg-neutral-950"
             >
               Past Competitions
             </h2>
             {pastCompetitions?.length > 0 ? (
-              <ScrollArea className="whitespace-nowrap rounded-md h-[70vh] md:h-[50vh] overflow-auto">
+              <ScrollArea className="whitespace-nowrap rounded-md h-[90vh] md:h-[50vh] overflow-auto">
                 <div className="flex flex-col space-y-2">
                   {pastCompetitions.map((competition, index) => (
                     <Card
