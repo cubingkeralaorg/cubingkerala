@@ -1,13 +1,11 @@
 "use client";
 import { UserInfo } from "@/types/types";
 import { Button } from "@heroui/react";
-import { ChevronDown, ChevronUp, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import cookie from "cookie";
 import { toast } from "sonner";
-import CubingKeralaFooter from "./ck-footer";
 import { DrawerMenuComponent } from "./ui/drawerMenuComponent";
 const logo = "/logotransparent.png";
 
@@ -75,9 +73,6 @@ export const SimpleNavbar = () => {
           />
         </Link>
         <nav className="flex space-x-4">
-          {/* <button className="md:hidden" onClick={toggleMenu}>
-            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button> */}
           <DrawerMenuComponent/>
           <div className="hidden md:flex space-x-4 justify-center items-center">
             <Link
@@ -141,85 +136,6 @@ export const SimpleNavbar = () => {
           </div>
         </nav>
       </div>
-
-      {/* Mobile Menu */}
-      {/* <div
-        className={`md:hidden absolute border-none overflow-hidden transition-all duration-200 ease-out bg-neutral-950 text-stone-200 ${
-          isMenuOpen ? "h-screen w-screen" : "h-0 w-screen"
-        }`}
-      >
-        <div className="flex flex-col space-y-4 p-6 py-5">
-          <Link
-            href="/competitions"
-            onClick={closeMenu}
-            className="hover:underline hover:underline-offset-2"
-          >
-            Competitions
-          </Link>
-          <Link
-            href="/rankings"
-            onClick={closeMenu}
-            className="hover:underline hover:underline-offset-2"
-          >
-            Rankings
-          </Link>
-          <Link
-            href="/members"
-            onClick={closeMenu}
-            className="hover:underline hover:underline-offset-2"
-          >
-            Members
-          </Link>
-          <Link
-            href="/learn"
-            onClick={closeMenu}
-            className="hover:underline hover:underline-offset-2"
-          >
-            Learn
-          </Link>
-          <Link
-            href="/contact"
-            onClick={closeMenu}
-            className="hover:underline hover:underline-offset-2"
-          >
-            Contact
-          </Link>
-          {userInfo?.me?.id == 6996 ? (
-            <Link
-              onClick={closeMenu}
-              className="hover:underline hover:underline-offset-2"
-              href={"/requests"}
-            >
-              Requests
-            </Link>
-          ) : null}
-          {userInfo ? (
-            <Button
-              onPress={() => {
-                closeMenu();
-                handleLogout();
-              }}
-              className="bg-neutral-800 w-full text-stone-200"
-              size="sm"
-            >
-              <p className="text-[15px] text-red-500">Logout</p>
-            </Button>
-          ) : (
-            <Link href={"/login"}>
-              <Button
-                onPress={closeMenu}
-                className="bg-neutral-800 w-full text-stone-200"
-                size="sm"
-              >
-                <p className="text-[15px]">Login</p>
-              </Button>
-            </Link>
-          )}
-        </div>
-        <div className="absolute bottom-14 left-0 right-0">
-          <CubingKeralaFooter />
-        </div>
-      </div> */}
     </div>
   );
 };
