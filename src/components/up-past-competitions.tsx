@@ -150,8 +150,31 @@ const UpPastCompetitions = () => {
       <div className="animate-fade-in w-full">
         <BlurIn
           word="Competitions"
-          className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-0 md:mb-6"
+          className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-3 md:mb-6"
         />
+        {/* Status info and refresh controls */}
+      <div className="text-xs text-gray-400 text-center mb-4 space-y-2">
+        <div>Last updated: {lastUpdated}</div>
+
+        <div className="flex items-center justify-center gap-4">
+          {!loading && !isRefreshing && (
+            <>
+              <button
+                onClick={handleForceRefresh}
+                className="px-3 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded text-xs transition-colors"
+                disabled={isRefreshing}
+              >
+                Refresh Competitions
+              </button>
+            </>
+          )}
+          {isRefreshing && (
+            <div className="px-3 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded text-xs transition-colors">
+              Refreshing competitions...
+            </div>
+          )}
+        </div>
+      </div>
         <div className="flex flex-wrap justify-around">
           <section>
             <h2
@@ -353,29 +376,6 @@ const UpPastCompetitions = () => {
               )
             )}
           </section>
-        </div>
-      </div>
-      {/* Status info and refresh controls */}
-      <div className="text-xs text-gray-400 text-center mb-4 mt-6 space-y-2">
-        <div>Last updated: {lastUpdated}</div>
-
-        <div className="flex items-center justify-center gap-4">
-          {!loading && !isRefreshing && (
-            <>
-              <button
-                onClick={handleForceRefresh}
-                className="px-3 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded text-xs transition-colors"
-                disabled={isRefreshing}
-              >
-                Refresh Competitions
-              </button>
-            </>
-          )}
-          {isRefreshing && (
-            <div className="px-3 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded text-xs transition-colors">
-              Refreshing competitions...
-            </div>
-          )}
         </div>
       </div>
     </div>
