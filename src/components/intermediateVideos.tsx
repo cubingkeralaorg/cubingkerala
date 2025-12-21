@@ -23,13 +23,13 @@ export default function IntermediateVideosSection() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-10">
+    <div className="container mx-auto px-4 py-8 space-y-5">
       <BlurIn
         word="Intermediate Level"
-        className="text-4xl text-center md:text-center text-stone-200 font-bold tracking-tighter md:text-6xl"
+        className="text-4xl text-start text-stone-200 font-bold tracking-tighter md:text-6xl"
       />
       <div className="space-y-5">
-        <div className="w-fit mx-auto md:mx-0">
+        <div className="w-fit">
           <h1 className="text-stone-400">
             Intermediate level - Tips and tricks
           </h1>
@@ -52,7 +52,7 @@ export default function IntermediateVideosSection() {
             </div>
           ))}
         </div>
-        <div className="w-fit mx-auto md:mx-0">
+        <div className="w-fit">
           <h1 className="text-stone-400">What&apos;s Next: Learn more algorithms</h1>
           <hr className="w-full" />
         </div>
@@ -73,7 +73,7 @@ export default function IntermediateVideosSection() {
             </div>
           ))}
         </div>
-        <div className="w-fit mx-auto md:mx-0">
+        <div className="w-fit">
           <h1 className="text-stone-400">Learning Resources</h1>
           <hr className="w-full" />
         </div>
