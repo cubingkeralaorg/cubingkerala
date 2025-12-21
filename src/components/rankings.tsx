@@ -142,14 +142,14 @@ export default function RankingsComponent({
         ) : (
           <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
         <div className="animate-fade-in">
-          <BlurIn
-            word="Rankings"
-            className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-3 md:mb-6"
-          />
-          <div className="flex items-center justify-center gap-3 md:justify-between mb-6">
-            <div className="flex justify-center w-full">
-              <FilterComponent onFilterChange={setSelectedFilter} />
-            </div>
+          <div className="flex items-center justify-between mb-3 md:mb-6">
+            <BlurIn
+              word="Rankings"
+              className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
+            />
+              <div className="flex justify-end w-full">
+                <FilterComponent onFilterChange={setSelectedFilter} />
+              </div>
           </div>
           <div className="rounded-md border border-neutral-800">
             <Table className="w-full rounded-md text-sm md:text-[15px]">
