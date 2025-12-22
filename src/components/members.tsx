@@ -112,7 +112,7 @@ export default function MembersComponent({
     <Suspense fallback={<MembersLoading />}>
       <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-stone-200 flex flex-col">
         <div className="animate-fade-in">
-          <div className="flex justify-between items-center gap-6 mb-6">
+          <div className="flex justify-between items-center gap-6 mb-4">
             <BlurIn
               word="Members"
               className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
