@@ -23,7 +23,7 @@ export default function IntermediateVideosSection() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-5">
+    <div className="container mx-auto py-4 md:py-8 px-4 md:px-5 space-y-2 md:space-y-4">
       <BlurIn
         word="Intermediate Level"
         className="text-4xl text-start text-stone-200 font-bold tracking-tighter md:text-6xl"
