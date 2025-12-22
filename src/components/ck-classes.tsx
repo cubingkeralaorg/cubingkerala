@@ -7,7 +7,7 @@ import LearnLoading from '../app/learn/loading'
 const Learn = () => {
   return (
    <Suspense fallback={<LearnLoading/>}>
-      <div>
+      <div className='py-2 md:py-1'>
         <BeginnerVideosSection/>
         <IntermediateVideosSection/>
         <AdvancedVideosSection/>
