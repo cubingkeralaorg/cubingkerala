@@ -121,7 +121,7 @@ export default function MembersComponent({
               onClick={() => handleJoinCK()}
               className="w-2/3 md:w-1/4 flex justify-end items-center"
             >
-              <ShinyButton className="rounded px-3 py-1 md:px-5 md:py-2 bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
+              <ShinyButton className="rounded w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
                 {isJoinCkLoading ? (
                   <div className="flex items-center justify-center h-6">
                     <Loader className="animate-spin text-black" size={16} />

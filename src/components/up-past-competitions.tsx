@@ -208,11 +208,11 @@ const UpPastCompetitions = () => {
   return (
     <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-stone-200 flex flex-col min-h-[calc(100vh-160px)]">
       <div className="animate-fade-in w-full">
-        <div className="flex align-center justify-between mb-4">
+        <div className="flex align-center justify-between mb-6">
           <div>
             <BlurIn
               word="Competitions"
-              className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-3 md:mb-4"
+              className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-2 md:mb-4"
             />
             <div className="text-xs text-gray-400 text-start ml-1">
               Last updated: {lastUpdated}
@@ -318,14 +318,6 @@ const UpPastCompetitions = () => {
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
             ) : (
-              // <div className="bg-neutral-950 w-full h-[100px] flex flex-col items-start justify-start cursor-default">
-              //   <h3 className="text-[17px] font-bold text-stone-200">
-              //     Stay tuned!
-              //   </h3>
-              //   <h1 className="text-md md:text-lg text-neutral-400 font-normal">
-              //     New competitions are on the way...
-              //   </h1>
-              // </div>
               <Card className="bg-neutral-950 w-full md:w-[380px] h-[150px] border border-neutral-800 rounded-md">
                 <CardContent className="p-4 h-fit flex flex-col justify-center">
                   <h3 className="text-[17px] font-bold text-stone-200">

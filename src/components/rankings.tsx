@@ -142,7 +142,7 @@ export default function RankingsComponent({
         ) : (
           <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
         <div className="animate-fade-in">
-          <div className="flex items-center justify-between mb-3 md:mb-6">
+          <div className="flex items-center justify-between mb-6">
             <BlurIn
               word="Rankings"
               className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
