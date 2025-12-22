@@ -19,7 +19,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Image from "next/image";
 import LoadingComponent from "./loading";
 import { Metadata } from "next";
 import axios from "axios";

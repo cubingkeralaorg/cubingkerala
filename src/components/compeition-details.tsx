@@ -11,7 +11,6 @@ import React, { Suspense, useEffect, useState } from "react";
 import "@cubing/icons";
 import dynamic from "next/dynamic";
 import { LatLngTuple } from "leaflet";
-import LoadingComponent from "./loading";
 import { CiLink } from "react-icons/ci";
 import BlurIn from "./ui/blur-in";
 import Loading from "@/app/competitions/loading";
