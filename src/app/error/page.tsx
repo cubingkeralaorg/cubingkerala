@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Error() {
     return (
-      <div className="flex min-h-[50dvh] bg-neutral-950 bg-black text-stone-200 flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <div className="flex min-h-[50dvh] bg-neutral-950 text-stone-200 flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-md text-center">
             <p>401</p>
           <div className="space-y-2">
