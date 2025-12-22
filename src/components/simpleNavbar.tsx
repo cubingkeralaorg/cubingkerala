@@ -194,7 +194,7 @@ export const SimpleNavbar = () => {
                 handleLogout();
                 closeMenu();
               }}
-              className="bg-neutral-800 w-full text-stone-200"
+              className="bg-neutral-800 rounded w-full text-stone-200"
               size="sm"
             >
               <p className="text-[15px] text-red-500">Logout</p>
@@ -202,7 +202,7 @@ export const SimpleNavbar = () => {
           ) : (
             <Link href={"/login"} onClick={closeMenu}>
               <Button
-                className="bg-neutral-800 w-full text-stone-200"
+                className="bg-neutral-800 rounded w-full text-stone-200"
                 size="sm"
               >
                 <p className="text-[15px]">Login</p>
