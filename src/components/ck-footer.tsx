@@ -5,7 +5,7 @@ import { FaGithub } from "react-icons/fa";
 
 
 const handleLinkRedirect = () => {
-    window.open("https://www.allenjohn.online", "_blank")
+    window.open("https://allenjohn.vercel.app/", "_blank")
 }
 
 
@@ -25,7 +25,7 @@ const CubingKeralaFooter = () => {
                         <FaGithub className='text-xs' />
                         <span>github</span>
                     </div>
-                    <FaGithub className='text-stone-400 hover:text-blue-500 cursor-pointer text-xs md:hidden mr-1' />
+                    <FaGithub onClick={() => handleGithubRedirect()} className='text-stone-400 hover:text-blue-500 cursor-pointer text-xs md:hidden mr-1' />
                 </div>
             </div>
         </footer>
