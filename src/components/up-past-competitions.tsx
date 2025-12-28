@@ -253,7 +253,7 @@ const UpPastCompetitions = () => {
                   {upcomingCompetitions.map((competition, index) => (
                     <Card
                       key={`upcoming-${competition.id}-${index}`}
-                      className="bg-neutral-950 hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 w-[320px] md:w-[380px] flex-shrink-0 border border-neutral-800 rounded-md"
+                      className="bg-neutral-950 hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 min-w-[320px] max-w-fit md:w-[380px] flex-shrink-0 border border-neutral-800 rounded-md"
                     >
                       <Link
                         prefetch={true}
@@ -266,7 +266,7 @@ const UpPastCompetitions = () => {
                           <p className="text-wrap w-full text-[15px] py-2">
                             {competition?.city}
                           </p>
-                          <div className="text-xs text-wrap max-w-[350px]">
+                          <div className="text-xs text-wrap max-w-[300px]">
                             {competition?.event_ids.map(
                               (event: any, eventIndex: number) => (
                                 <TooltipProvider
