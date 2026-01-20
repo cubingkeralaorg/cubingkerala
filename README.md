@@ -17,7 +17,7 @@ This website is designed to serve as the central hub for all Rubik's Cube enthus
 
 1. **Explore Competitions**: Navigate to the 'Competitions' section to view details of upcoming and past events.
 2. **View Rankings**: Go to the 'Rankings' section to see how our members are performing.
-3. **Become a Member**: Click on the 'Join Cubing Kerala' section to fill out the membership form and join our organization.
+3. **Become a Member**: Click on the 'Join Cubing Kerala' section to join our organization.
 
 ## Contributing
 
