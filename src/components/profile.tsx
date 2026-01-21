@@ -7,9 +7,9 @@ import {
     MenubarMenu,
     MenubarTrigger,
 } from "@/components/ui/menubar"
-import { UserInfo } from "@/types/types"
 import Link from "next/link"
 import { AnimatedShinyTextComponent } from "./contact-ck"
+import { UserInfo } from "@/types/api"
 
 export function Profile({ profileInfo, handleLogout }: {
     profileInfo: UserInfo | null,

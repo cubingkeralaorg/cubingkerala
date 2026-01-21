@@ -5,7 +5,7 @@ import {
     AlertDescription,
     AlertTitle,
 } from "@/components/ui/alert"
-import { UserInfo } from "@/types/types"
+import { UserInfo } from "@/types/api"
 
 
 export function AlertComponent({ userInfo }: { userInfo: UserInfo | null }) {

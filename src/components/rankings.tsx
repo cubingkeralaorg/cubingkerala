@@ -9,12 +9,12 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { MemberPersonResult, RequestInfo } from "@/types/types";
 import axios from "axios";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import RankingsLoading from "../app/rankings/loading";
 import BlurIn from "./ui/blur-in";
+import { MemberPersonResult, RequestInfo } from "@/types/api";
 
 export default function RankingsComponent({
   members,

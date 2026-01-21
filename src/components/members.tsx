@@ -10,11 +10,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Suspense, useEffect, useState } from "react";
-import {
-  MemberPersonResult,
-  RequestInfo,
-  UserInfo,
-} from "@/types/types";
 import cookie from "cookie";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -23,6 +18,7 @@ import MembersLoading from "../app/members/loading";
 import BlurIn from "./ui/blur-in";
 import ShinyButton from "./ui/shiny-button";
 import { Loader } from "lucide-react";
+import { MemberPersonResult, RequestInfo, UserInfo } from "@/types/api";
 
 export default function MembersComponent({
   membersfromdb,

@@ -5,9 +5,7 @@ import { SimpleNavbar } from "./simpleNavbar";
 
 const CubingKeralaNavbar = () => {
   return (
-    <>
-      <SimpleNavbar/>
-    </>
+    <SimpleNavbar/>
   );
 };
 
