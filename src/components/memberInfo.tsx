@@ -1,6 +1,5 @@
 "use client";
 
-import { CompetitorData, RequestInfo } from "@/types/types";
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -24,6 +23,7 @@ import { Metadata } from "next";
 import axios from "axios";
 import BlurIn from "./ui/blur-in";
 import Link from "next/link";
+import { CompetitorData, RequestInfo } from "@/types/api";
 
 export const metadata: Metadata = {
   title: "Member Info | Cubing Kerala",

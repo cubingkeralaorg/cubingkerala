@@ -3,18 +3,19 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CubingKeralaNavbar from "@/components/ck-navbar";
 import CubingKeralaFooter from "@/components/ck-footer";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Cubing Kerala",
-  description: "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
+  description:
+    "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
   icons: {
     icon: "logoblack.png",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-neutral-950`}>
         <Providers>
-          <CubingKeralaNavbar/>
+          <CubingKeralaNavbar />
           {children}
           <Toaster richColors />
           <CubingKeralaFooter />

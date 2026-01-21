@@ -1,6 +1,5 @@
 "use client";
 
-import { EventDetails } from "@/types/types";
 import {
   Tooltip,
   TooltipContent,
@@ -14,6 +13,7 @@ import { LatLngTuple } from "leaflet";
 import { CiLink } from "react-icons/ci";
 import BlurIn from "./ui/blur-in";
 import Loading from "@/app/competitions/loading";
+import { EventDetails } from "@/types/api";
 
 const LeafletMap = dynamic(() => import("@/components/map"), {
   ssr: false,

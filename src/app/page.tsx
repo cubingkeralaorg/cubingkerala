@@ -3,12 +3,12 @@
 import { useOnScreen } from "@/util/animation";
 import { useEffect, useState } from "react";
 import cookie from "cookie";
-import { UserInfo } from "@/types/types";
 import { motion } from "framer-motion";
 import CubingKeralaGetStarted from "@/components/ck-getstarted";
 import { CubingKeralaCalendars } from "@/components/ck-calendar";
 import CubingKeralaCubingLengends from "@/components/ck-cubinglegends";
 import { CubingKeralaUnravel } from "@/components/ck-unravel";
+import { UserInfo } from "@/types/api";
 
 export default function Home() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -41,7 +41,6 @@ export default function Home() {
   ]);
 
   useEffect(() => {
-
     scrollTo(0, 0);
 
     if (typeof window !== "undefined") {

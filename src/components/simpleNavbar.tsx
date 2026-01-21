@@ -1,5 +1,4 @@
 "use client";
-import { UserInfo } from "@/types/types";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import cookie from "cookie";
 import { toast } from "sonner";
 import { Menu, X } from "lucide-react";
+import { UserInfo } from "@/types/api";
 const logo = "/logotransparent.png";
 
 export const SimpleNavbar = () => {

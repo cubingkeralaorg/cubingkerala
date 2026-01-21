@@ -1,7 +1,7 @@
-import LoginComponent from '@/components/login'
-import { Metadata } from 'next';
-import React from 'react'
-export const dynamic = 'force-dynamic'
+import LoginComponent from "@/components/login";
+import { Metadata } from "next";
+import React from "react";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Login | Cubing Kerala",
@@ -9,11 +9,7 @@ export const metadata: Metadata = {
 };
 
 const Login = () => {
-  return (
-    <>
-      <LoginComponent />
-    </>
-  )
-}
+  return <LoginComponent />;
+};
 
-export default Login
+export default Login;

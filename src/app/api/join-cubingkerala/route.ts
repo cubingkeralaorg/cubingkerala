@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserInfo } from '@/types/types';
 import db from '@/lib/db';
 import { revalidatePath } from 'next/cache';
+import { UserInfo } from '@/types/api';
 
 export async function POST(request: NextRequest) {
     const cookies = request.cookies;
