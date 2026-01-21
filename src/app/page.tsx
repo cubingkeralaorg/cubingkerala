@@ -1,6 +1,6 @@
 "use client";
 
-import { useOnScreen } from "@/util/animation";
+import { useOnScreen } from "@/utils/animation";
 import { useEffect, useState } from "react";
 import cookie from "cookie";
 import { motion } from "framer-motion";
