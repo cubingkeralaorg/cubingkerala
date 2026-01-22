@@ -4,7 +4,6 @@ import BlurIn from "./ui/blur-in";
 import { Badge } from "./ui/badge";
 
 export default function AdvancedVideosSection() {
-
   const advancedVideos = [
     { id: "P9POsBAaKd0", title: "X-Cross (Cross + First Pair)" },
     { id: "CFIQMKxJP4k", title: "COLL-U" },
@@ -16,7 +15,11 @@ export default function AdvancedVideosSection() {
   ];
 
   const pdfs = [
-    { name: "JPerm COLL Algorithms", url: "https://jperm.net/algs/coll", link: true },
+    {
+      name: "JPerm COLL Algorithms",
+      url: "https://jperm.net/algs/coll",
+      link: true,
+    },
     { name: "CubeRoot ZBLL Algorithms", url: "/pdf/167-ZBLL.pdf" },
   ];
 
@@ -58,8 +61,16 @@ export default function AdvancedVideosSection() {
           <ul className="text-stone-400 space-y-1">
             {pdfs.map((pdf, index) => (
               <li key={index}>
-                <a className="hover:text-stone-200 transition-all ease-in-out duration-200" href={pdf.url} target="_blank" rel="noopener noreferrer">
-                  {pdf.name} <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">{pdf.link ? "LINK" : "PDF"}</Badge>
+                <a
+                  className="hover:text-stone-200 transition-all ease-in-out duration-200"
+                  href={pdf.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {pdf.name}{" "}
+                  <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">
+                    {pdf.link ? "LINK" : "PDF"}
+                  </Badge>
                 </a>
               </li>
             ))}

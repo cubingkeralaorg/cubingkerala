@@ -51,3 +51,20 @@ export const formatResult = (
 
   return convertMillisecondsToTime(result.best || Infinity);
 };
+
+export const formatEventResult = (
+  best: number | undefined,
+  eventId: string
+): string | null => {
+  if (!best) return null;
+  
+  if (eventId === "333mbf") {
+    return convertMbldToMinutes(best);
+  }
+  
+  if (eventId === "333fm") {
+    return best.toString();
+  }
+  
+  return convertMillisecondsToTime(best);
+};

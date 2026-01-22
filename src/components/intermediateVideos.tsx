@@ -4,7 +4,6 @@ import BlurIn from "./ui/blur-in";
 import { Badge } from "./ui/badge";
 
 export default function IntermediateVideosSection() {
-
   const inermediateVideos = [
     { id: "__q-5MwlOiU", title: "How to turn faster" },
     { id: "KWe4SNIMtrg", title: "Advanced finger tricks" },
@@ -17,7 +16,10 @@ export default function IntermediateVideosSection() {
   ];
 
   const pdfs = [
-    { name: "CubeSkills All Angle F2L Guide", url: "/pdf/f2l-algorithms-different-slot-positions.pdf" },
+    {
+      name: "CubeSkills All Angle F2L Guide",
+      url: "/pdf/f2l-algorithms-different-slot-positions.pdf",
+    },
     { name: "CubeSkills OLL Guide", url: "/pdf/oll-algorithms.pdf" },
     { name: "CubeSkills PLL Guide", url: "/pdf/pll-algorithms.pdf" },
   ];
@@ -53,7 +55,9 @@ export default function IntermediateVideosSection() {
           ))}
         </div>
         <div className="w-fit">
-          <h1 className="text-stone-400">What&apos;s Next: Learn more algorithms</h1>
+          <h1 className="text-stone-400">
+            What&apos;s Next: Learn more algorithms
+          </h1>
           <hr className="w-full" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -81,8 +85,16 @@ export default function IntermediateVideosSection() {
           <ul className="text-stone-400 space-y-1">
             {pdfs.map((pdf, index) => (
               <li key={index}>
-                <a className="hover:text-stone-200 transition-all ease-in-out duration-200" href={pdf.url} target="_blank" rel="noopener noreferrer">
-                  {pdf.name} <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">PDF</Badge>
+                <a
+                  className="hover:text-stone-200 transition-all ease-in-out duration-200"
+                  href={pdf.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {pdf.name}{" "}
+                  <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">
+                    PDF
+                  </Badge>
                 </a>
               </li>
             ))}

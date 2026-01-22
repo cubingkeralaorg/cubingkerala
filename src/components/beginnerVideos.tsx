@@ -4,7 +4,6 @@ import BlurIn from "./ui/blur-in";
 import { Badge } from "./ui/badge";
 
 export default function BeginnerVideosSection() {
-
   const beginnerVideos = [
     { id: "PW2J8IblczM", title: "Simple beginner's guide" },
     { id: "7Ron6MN45LY", title: "10-minute beginner tutorial" },
@@ -22,7 +21,10 @@ export default function BeginnerVideosSection() {
   ];
 
   const pdfs = [
-    { name: "CubeSkills Beginner Guide", url: "/pdf/cubeskills_beginners_guide.pdf" },
+    {
+      name: "CubeSkills Beginner Guide",
+      url: "/pdf/cubeskills_beginners_guide.pdf",
+    },
     { name: "CubeSkills F2L Guide", url: "/pdf/f2l.pdf" },
     { name: "CubeSkills Last Layer Guide", url: "/pdf/4-look-last-layer.pdf" },
   ];
@@ -86,8 +88,16 @@ export default function BeginnerVideosSection() {
           <ul className="text-stone-400 space-y-1">
             {pdfs.map((pdf, index) => (
               <li key={index}>
-                <a className="hover:text-stone-200 transition-all ease-in-out duration-200" href={pdf.url} target="_blank" rel="noopener noreferrer">
-                  {pdf.name} <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">PDF</Badge>
+                <a
+                  className="hover:text-stone-200 transition-all ease-in-out duration-200"
+                  href={pdf.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {pdf.name}{" "}
+                  <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">
+                    PDF
+                  </Badge>
                 </a>
               </li>
             ))}
