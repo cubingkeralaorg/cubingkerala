@@ -1,108 +1,98 @@
 "use client";
 
 import SearchComponent from "@/components/search";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { Suspense, useEffect, useState } from "react";
-import cookie from "cookie";
+import { Suspense, useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
-import Link from "next/link";
-import axios from "axios";
 import MembersLoading from "../app/members/loading";
 import BlurIn from "./ui/blur-in";
 import ShinyButton from "./ui/shiny-button";
 import { Loader } from "lucide-react";
 import { MemberPersonResult, RequestInfo, UserInfo } from "@/types/api";
+import { getUserInfoFromCookie } from "@/utils/cookieUtils";
+import { sortMembersByName } from "@/utils/memberUtils";
+import { fetchMultiplePersonsData } from "@/services/wcaApi";
+import { joinCubingKerala } from "@/services/memberApi";
+import { MembersTable } from "./members/membersTable";
+
+interface MembersComponentProps {
+  membersfromdb: RequestInfo[];
+}
 
 export default function MembersComponent({
   membersfromdb,
-}: {
-  membersfromdb: RequestInfo[];
-}) {
+}: MembersComponentProps) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [membersList, setMembersList] = useState<RequestInfo[]>([]);
-  const [filteredMembersList, setFilteredMembersList] = useState<RequestInfo[]>(
-    []
-  );
+  const [searchTerm, setSearchTerm] = useState("");
   const [membersDetails, setMembersDetails] = useState<MemberPersonResult[]>(
-    []
+    [],
   );
   const [isJoinCkLoading, setIsJoinCkLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const cookies = cookie.parse(document.cookie);
-    const userInfoFromCookie = cookies.userInfo;
+
+    const userInfoFromCookie = getUserInfoFromCookie();
     if (userInfoFromCookie) {
-      setUserInfo(JSON.parse(userInfoFromCookie));
+      setUserInfo(userInfoFromCookie);
     }
+
     if (membersfromdb) {
       setMembersList(membersfromdb);
-      setFilteredMembersList(membersfromdb);
-      getMembersDetails(membersfromdb.map((member) => member.wcaid));
+
+      const wcaIds = membersfromdb.map((member) => member.wcaid);
+      fetchMultiplePersonsData(wcaIds)
+        .then(setMembersDetails)
+        .catch((error) => {
+          console.error("Failed to fetch member details:", error);
+          toast.error("Failed to load member details");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
     }
   }, [membersfromdb]);
 
-  const getMembersDetails = async (wcaids: string[]) => {
-    try {
-      const responses = await Promise.all(
-        wcaids.map((wcaid) =>
-          axios.get(
-            `https://raw.githubusercontent.com/robiningelbrecht/wca-rest-api/master/api/persons/${wcaid}.json`
-          )
-        )
-      );
-      setMembersDetails(responses.map((response) => response.data));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleSearch = (searchTerm: string) => {
-    const filteredMembers = membersList.filter((member) =>
-      member.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAndSortedMembers = useMemo(() => {
+    const filtered = membersList.filter((member) =>
+      member.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
-    setFilteredMembersList(filteredMembers);
+    return sortMembersByName(filtered);
+  }, [membersList, searchTerm]);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
   };
 
   const handleJoinCK = async () => {
-    if (userInfo == null) {
+    if (!userInfo) {
       toast.error("Please login to join Cubing Kerala");
       return;
     }
-    setIsJoinCkLoading(true);
-    try {
-      const response = await fetch("/api/join-cubingkerala", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userInfo),
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        setIsJoinCkLoading(false);
-        toast.success(`${data.message}`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else {
-        const error = await response.json();
-        setIsJoinCkLoading(false);
-        toast(`${error.message}`);
-      }
+    setIsJoinCkLoading(true);
+
+    try {
+      const data = await joinCubingKerala(userInfo);
+      toast.success(data.message);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to join Cubing Kerala",
+      );
+    } finally {
       setIsJoinCkLoading(false);
-      toast(`${error}`);
     }
   };
+
+  if (isLoading) {
+    return <MembersLoading />;
+  }
 
   return (
     <Suspense fallback={<MembersLoading />}>
@@ -114,7 +104,7 @@ export default function MembersComponent({
               className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
             />
             <div
-              onClick={() => handleJoinCK()}
+              onClick={handleJoinCK}
               className="w-2/3 md:w-1/4 flex justify-end items-center"
             >
               <ShinyButton className="rounded w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
@@ -136,84 +126,10 @@ export default function MembersComponent({
             style={{ minHeight: "600px", overflow: "hidden" }}
           >
             <SearchComponent handleSearch={handleSearch} />
-            <Table className="w-full">
-              <TableHeader className="border-y border-y-neutral-800">
-                <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
-                  <TableHead className="text-neutral-500 ">#</TableHead>
-                  <TableHead className="text-neutral-500 ">Name</TableHead>
-                  <TableHead className="text-neutral-500 ">WCA ID</TableHead>
-                  <TableHead className="text-neutral-500 ">Role</TableHead>
-                  <TableHead className="text-neutral-500 ">
-                    Competitions
-                  </TableHead>
-                  <TableHead className="text-neutral-500 ">Medals</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredMembersList.length > 0 ? (
-                  filteredMembersList
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((member, index) => {
-                      const memberDetails = membersDetails.find(
-                        (details) => details.id === member.wcaid
-                      );
-                      return (
-                        <TableRow
-                          className="border-y-neutral-800 hover:bg-neutral-900 text-sm md:text-[15px]"
-                          key={index}
-                        >
-                          <TableCell className="cursor-default ">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell className="text-nowrap ">
-                            <Link
-                              prefetch={true}
-                              href={`/members/${member.wcaid}`}
-                            >
-                              <span className="cursor-pointer hover:text-blue-500">
-                                {member.name.split("(")[0]}
-                              </span>
-                            </Link>
-                          </TableCell>
-                          <TableCell>
-                            <Link
-                              prefetch={true}
-                              href={`https://www.worldcubeassociation.org/persons/${member.wcaid}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <span className="cursor-pointer hover:text-blue-500">
-                                {member.wcaid}
-                              </span>
-                            </Link>
-                          </TableCell>
-                          <TableCell className="cursor-default text-nowrap ">
-                            {member.role.split("")[0].toUpperCase() +
-                              member.role.slice(1)}
-                          </TableCell>
-                          <TableCell className="cursor-default">
-                            {memberDetails?.numberOfCompetitions || 0}
-                          </TableCell>
-                          <TableCell className="cursor-default">
-                            {(memberDetails?.medals.gold || 0) +
-                              (memberDetails?.medals.silver || 0) +
-                              (memberDetails?.medals.bronze || 0)}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      className="text-stone-600 px-4 hover:bg-neutral-900 py-4"
-                      colSpan={6}
-                    >
-                      No results found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+            <MembersTable
+              members={filteredAndSortedMembers}
+              membersDetails={membersDetails}
+            />
           </div>
         </div>
       </div>
