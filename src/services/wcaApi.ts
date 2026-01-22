@@ -23,3 +23,10 @@ export const fetchMultiplePersonsData = async (
     throw error;
   }
 };
+
+export const fetchPersonFromWCA = async (wcaId: string) => {
+  const response = await axios.get(
+    `https://www.worldcubeassociation.org/api/v0/persons/${wcaId}`,
+  );
+  return response.data;
+};

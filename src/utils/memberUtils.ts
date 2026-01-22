@@ -19,3 +19,12 @@ export const sortMembersByName = <T extends { name: string }>(
 ): T[] => {
   return [...members].sort((a, b) => a.name.localeCompare(b.name));
 };
+
+export const getRoleBadgeColor = (role: string): string => {
+  const colors: Record<string, string> = {
+    member: "text-blue-300",
+    organiser: "text-green-400",
+    "co-founder": "text-red-500",
+  };
+  return colors[role] || "text-white";
+};
