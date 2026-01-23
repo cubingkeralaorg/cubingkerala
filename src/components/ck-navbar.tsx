@@ -1,12 +1,8 @@
-"use client";
-
 import React from "react";
-import { SimpleNavbar } from "./simpleNavbar";
+import { NavbarComponent } from "./navbarComponent";
 
 const CubingKeralaNavbar = () => {
-  return (
-    <SimpleNavbar/>
-  );
+  return <NavbarComponent />;
 };
 
 export default CubingKeralaNavbar;
