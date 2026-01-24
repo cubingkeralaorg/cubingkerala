@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -21,18 +22,14 @@ export const NavbarComponent = () => {
   return (
     <div className="bg-neutral-950 text-stone-200 sticky top-0 z-50">
       <div className="container mx-auto border-b-1 border-b-stone-800 relative flex justify-between items-center px-4 py-1 md:py-3">
-        <Link href="/" onClick={closeMenu}>
-          <div className="flex items-center justify-center">
-            <img
-              className="w-[50px] hidden md:block"
-              src={LOGO_PATH}
-              alt="Cubing Kerala Logo"
-            />
-          </div>
-          <img
-            className="w-[50px] block md:hidden"
+        <Link href="/" onClick={closeMenu} className="flex items-center">
+          <Image
             src={LOGO_PATH}
             alt="Cubing Kerala Logo"
+            width={50}
+            height={50}
+            priority // Preloads the logo for better LCP performance
+            className="w-[50px] h-auto object-contain"
           />
         </Link>
 
