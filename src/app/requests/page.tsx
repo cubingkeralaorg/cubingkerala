@@ -1,4 +1,4 @@
-import RequestsComponent from "@/components/requests";
+import RequestsComponent from "@/components/requestsComponent";
 import db from "@/lib/db";
 import { Metadata } from "next";
 import React from "react";
