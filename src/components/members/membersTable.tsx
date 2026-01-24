@@ -21,8 +21,8 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
   if (members.length === 0) {
     return (
       <Table className="w-full">
-        <TableHeader className="border-y border-y-neutral-800">
-          <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
+        <TableHeader className="border-y hover:bg-neutral-950 border-y-neutral-800">
+          <TableRow className="text-sm md:text-[15px] border-none">
             <TableHead className="text-neutral-500">#</TableHead>
             <TableHead className="text-neutral-500">Name</TableHead>
             <TableHead className="text-neutral-500">WCA ID</TableHead>
@@ -47,8 +47,8 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
 
   return (
     <Table className="w-full">
-      <TableHeader className="border-y border-y-neutral-800">
-        <TableRow className="hover:bg-transparent text-sm md:text-[15px] border-none">
+      <TableHeader className="border-y hover:bg-neutral-950 border-y-neutral-800">
+        <TableRow className="text-sm md:text-[15px] hover:bg-neutral-950 border-none">
           <TableHead className="text-neutral-500">#</TableHead>
           <TableHead className="text-neutral-500">Name</TableHead>
           <TableHead className="text-neutral-500">WCA ID</TableHead>
@@ -65,7 +65,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
 
           return (
             <TableRow
-              className="border-y-neutral-800 hover:bg-neutral-900 text-sm md:text-[15px]"
+              className="border-y-neutral-800 hover:bg-neutral-950 text-sm md:text-[15px]"
               key={member.wcaid}
             >
               <TableCell className="cursor-default">{index + 1}</TableCell>
