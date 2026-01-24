@@ -1,4 +1,4 @@
-import CompetitionDetailsComponent from "@/components/compeition-details";
+import CompetitionDetailsComponent from "@/components/competitionDetailsComponent";
 import axios from "axios";
 import { Metadata } from "next";
 import React from "react";
