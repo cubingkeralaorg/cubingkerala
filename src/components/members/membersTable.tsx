@@ -83,7 +83,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="cursor-pointer hover:text-blue-500">
+                  <span className="inline-flex items-center px-3 py-1 rounded-md bg-neutral-800/60 text-neutral-300 text-xs font-mono border border-neutral-700/50 hover:text-blue-500">
                     {member.wcaid}
                   </span>
                 </Link>
