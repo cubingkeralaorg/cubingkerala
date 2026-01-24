@@ -43,7 +43,7 @@ export function RankingsTable({
             const result = getResult(member);
             return (
               <TableRow
-                className="border-neutral-800 hover:bg-neutral-900"
+                className="border-neutral-800 hover:bg-transparent"
                 key={member.id}
               >
                 <TableCell>{index + 1}</TableCell>

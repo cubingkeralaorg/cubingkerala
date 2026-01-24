@@ -48,7 +48,7 @@ export function PersonalRecordsTable({
         <TableBody>
           {personalRecords.map((record, index) => (
             <TableRow
-              className="hover:bg-neutral-900 border-y-neutral-800"
+              className="hover:bg-transparent border-y-neutral-800"
               key={index}
             >
               <TableCell>
