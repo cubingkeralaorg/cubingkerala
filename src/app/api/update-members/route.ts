@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
         country: updatedRequest.country,
         gender: updatedRequest.gender,
         role: updatedRequest.role,
-        updatedAt: new Date(),
       },
     });
 
