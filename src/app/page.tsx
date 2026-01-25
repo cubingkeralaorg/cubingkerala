@@ -4,10 +4,7 @@ import { useOnScreen } from "@/utils/animation";
 import { useEffect, useState } from "react";
 import cookie from "cookie";
 import { motion } from "framer-motion";
-import CubingKeralaGetStarted from "@/components/ck-getstarted";
-import { CubingKeralaCalendars } from "@/components/ck-calendar";
-import CubingKeralaCubingLengends from "@/components/ck-cubinglegends";
-import { CubingKeralaUnravel } from "@/components/ck-unravel";
+import { HeroSection, CalendarSection, LegendsSection, UnravelSection } from "@/components/home";
 import { UserInfo } from "@/types/api";
 
 export default function Home() {
@@ -65,7 +62,7 @@ export default function Home() {
             }}
             transition={{ duration: 1 }}
           >
-            <CubingKeralaGetStarted />
+            <HeroSection />
           </motion.div>
         </section>
         <section ref={ref2} className="mx-5">
@@ -77,7 +74,7 @@ export default function Home() {
             }}
             transition={{ duration: 1 }}
           >
-            <CubingKeralaCalendars />
+            <CalendarSection />
           </motion.div>
         </section>
         <section ref={ref3} className="mx-5">
@@ -89,7 +86,7 @@ export default function Home() {
             }}
             transition={{ duration: 1 }}
           >
-            <CubingKeralaCubingLengends />
+            <LegendsSection />
           </motion.div>
         </section>
         <section ref={ref4} className="mx-5">
@@ -101,7 +98,7 @@ export default function Home() {
             }}
             transition={{ duration: 1 }}
           >
-            <CubingKeralaUnravel />
+            <UnravelSection />
           </motion.div>
         </section>
       </main>

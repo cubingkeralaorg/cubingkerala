@@ -1,4 +1,4 @@
-import LoadingComponent from "@/components/loading";
+import LoadingComponent from "@/components/shared/loading";
 
 // app/competitions/loading.js
 export default function MembersLoading() {

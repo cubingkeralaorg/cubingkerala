@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import CubingKeralaNavbar from "@/components/ck-navbar";
-import CubingKeralaFooter from "@/components/ck-footer";
+import { Navbar, Footer } from "@/components/layout";
 import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
 export const dynamic = "force-dynamic";
@@ -27,10 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-neutral-950`}>
         <Providers>
-          <CubingKeralaNavbar />
+          <Navbar />
           {children}
           <Toaster richColors />
-          <CubingKeralaFooter />
+          <Footer />
         </Providers>
       </body>
     </html>

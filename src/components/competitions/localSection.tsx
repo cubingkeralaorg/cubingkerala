@@ -5,7 +5,7 @@ import { LatLngTuple } from "leaflet";
 import { CiLink } from "react-icons/ci";
 import { getFullVenueAddress } from "@/utils/venuUtils";
 
-const LeafletMap = dynamic(() => import("@/components/map"), {
+const LeafletMap = dynamic(() => import("@/components/shared/map"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });

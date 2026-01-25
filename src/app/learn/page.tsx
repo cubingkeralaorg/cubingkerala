@@ -1,4 +1,4 @@
-import Learn from "@/components/ck-classes";
+import { ClassesPage } from "@/components/learn";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ClassesComponent() {
-  return <Learn />;
+  return <ClassesPage />;
 }

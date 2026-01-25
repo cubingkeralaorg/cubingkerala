@@ -1,6 +1,6 @@
 "use client";
 
-import { ROLES } from "@/constants/roles";
+import { ROLES } from "@/config/roles.config";
 
 interface RoleSelectorProps {
   id: string;

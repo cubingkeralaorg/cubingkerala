@@ -1,4 +1,4 @@
-import RequestsComponent from "@/components/requestsComponent";
+import { RequestsPage } from "@/components/requests";
 import db from "@/lib/db";
 import { Metadata } from "next";
 import React from "react";
@@ -13,7 +13,7 @@ const Request = async () => {
   const requests = await db.requests.findMany();
   const members = await db.members.findMany();
 
-  return <RequestsComponent requests={requests} members={members} />;
+  return <RequestsPage requests={requests} members={members} />;
 };
 
 export default Request;

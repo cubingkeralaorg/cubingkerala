@@ -9,13 +9,13 @@ export const extractFirstName = (fullName: string): string => {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Request } from "@/types/request";
+import { Request } from "@/types/request.types";
 import {
   approveRequest,
   updateMember,
   deleteMember,
   deleteRequest,
-} from "@/services/requestApi";
+} from "@/services/request.api";
 
 export function useRequests(
   initialRequests: Request[],

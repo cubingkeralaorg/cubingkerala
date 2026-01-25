@@ -1,5 +1,5 @@
-import { CACHE_DURATION } from "@/constants/competitions";
-import { CachedData, CompetitionsData } from "@/types/competition";
+import { CACHE_DURATION } from "@/config/competitions.config";
+import { CachedData, CompetitionsData } from "@/types/competition.types";
 
 const STORAGE_KEY = "competitions";
 
