@@ -1,45 +1,43 @@
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import {
+  requireAuth,
+  createSuccessResponse,
+  createErrorResponse,
+  handleApiError,
+  validateRequestBody,
+  wcaIdSchema,
+} from "@/lib/api";
 
 export async function DELETE(request: NextRequest) {
-    const cookies = request.cookies;
-    const user = cookies.get("userInfo");
+  // Check authentication
+  const authError = requireAuth(request);
+  if (authError) return authError;
 
-    // Check for user authorization
-    if (!user) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  try {
+    // Parse and validate request body
+    const validation = await validateRequestBody(request, wcaIdSchema);
+    if (!validation.success) {
+      return createErrorResponse("Invalid request body", 400, {
+        errors: validation.error.issues,
+      });
     }
 
-    // Parse the request body to get the WCA ID
-    const { wcaid } = await request.json();
+    const { wcaid } = validation.data;
+    // Attempt to delete the member from the database
+    const deletedMember = await db.members.delete({
+      where: {
+        wcaid: wcaid,
+      },
+    });
 
-    // Validate the WCA ID
-    if (!wcaid) {
-        return NextResponse.json({ message: 'WCA ID is empty!' }, { status: 400 });
+    // Check if the member was found and deleted
+    if (!deletedMember) {
+      return createErrorResponse("Member not found", 404);
     }
 
-    try {
-        // Attempt to delete the member from the database
-        const deletedMember = await db.members.delete({
-            where: {
-                wcaid: wcaid,
-            },
-        });
-
-        // Check if the member was found and deleted
-        if (!deletedMember) {
-            return NextResponse.json({ message: 'Member not found' }, { status: 404 });
-        }
-
-        // Create the response with cache control headers
-        const response = NextResponse.json({ message: 'Member deleted successfully' }, { status: 200 });
-        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-        response.headers.set('Pragma', 'no-cache');
-        response.headers.set('Expires', '0');
-
-        return response;
-    } catch (error) {
-        console.error('Error details:', error);
-        return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
-    }
+    return createSuccessResponse({ message: "Member deleted successfully" });
+  } catch (error) {
+    return handleApiError(error);
+  }
 }
