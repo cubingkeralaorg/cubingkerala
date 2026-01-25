@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { logoutUser } from "@/services/authApi";
+import { logoutUser } from "@/services/auth.api";
 
 export function useLogout() {
   const router = useRouter();

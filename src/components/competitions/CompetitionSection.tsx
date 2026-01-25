@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import CompetitionCard from "./CompetitionCard";
-import { CompetitionSectionProps } from "@/types/competition";
+import { CompetitionSectionProps } from "@/types/competition.types";
 
 const CompetitionSection: React.FC<CompetitionSectionProps> = ({
   title,

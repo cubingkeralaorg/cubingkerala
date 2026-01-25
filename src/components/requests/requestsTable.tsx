@@ -1,9 +1,9 @@
 "use client";
 
-import { Request } from "@/types/request";
+import { Request } from "@/types/request.types";
 import { RoleSelector } from "./roleSelector";
-import ApprovePopover from "../approve-popover";
-import DeleteRequestPopover from "../delete-request-popover";
+import ApprovePopover from "@/components/shared/popovers/approve-popover";
+import DeleteRequestPopover from "@/components/shared/popovers/delete-request-popover";
 import { extractFirstName } from "@/utils/nameUtils";
 import Link from "next/link";
 

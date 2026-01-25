@@ -1,4 +1,4 @@
-import RankingsComponent from "@/components/rankings";
+import { RankingsPage } from "@/components/rankings";
 import db from "@/lib/db";
 import { RequestInfo } from "@/types/api";
 import { Metadata } from "next";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const Rankings = async () => {
   const members = await db.members.findMany();
 
-  return <RankingsComponent members={members as RequestInfo[]} />;
+  return <RankingsPage members={members as RequestInfo[]} />;
 };
 
 export default Rankings;

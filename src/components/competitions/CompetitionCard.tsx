@@ -11,7 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import "@cubing/icons";
-import { CompetitionCardProps } from "@/types/competition";
+import { CompetitionCardProps } from "@/types/competition.types";
 
 const CompetitionCard: React.FC<CompetitionCardProps> = ({
   competition,

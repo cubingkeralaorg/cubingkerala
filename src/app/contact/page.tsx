@@ -1,4 +1,4 @@
-import ContactComponent from "@/components/contact";
+import { ContactPage } from "@/components/contact";
 import { Metadata } from "next";
 import React from "react";
 export const dynamic = "force-dynamic";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const Contact = () => {
-  return <ContactComponent />;
+  return <ContactPage />;
 };
 
 export default Contact;

@@ -1,4 +1,4 @@
-import CompetitionsPage from "@/components/competitionsComponent";
+import { CompetitionsPage } from "@/components/competitions";
 import { Metadata } from "next";
 import React from "react";
 export const dynamic = "force-dynamic";

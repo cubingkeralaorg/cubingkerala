@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
-import { API_TIMEOUT, ERROR_MESSAGES } from "@/constants/competitions";
+import { API_TIMEOUT, ERROR_MESSAGES } from "@/config/competitions.config";
 import { setCompetitionsCache } from "./cache";
-import { CompetitionsData } from "@/types/competition";
+import { CompetitionsData } from "@/types/competition.types";
 
 interface FetchCompetitionsResult {
   success: boolean;

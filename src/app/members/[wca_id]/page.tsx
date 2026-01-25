@@ -1,4 +1,4 @@
-import MemberInfoComponent from "@/components/memberInfo";
+import { MemberDetails } from "@/components/members";
 import db from "@/lib/db";
 import { CompetitorData, RequestInfo } from "@/types/api";
 import axios from "axios";
@@ -41,7 +41,7 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
   );
 
   return (
-    <MemberInfoComponent
+    <MemberDetails
       member={member as RequestInfo}
       memberResult={memberResult.data as CompetitorData}
     />

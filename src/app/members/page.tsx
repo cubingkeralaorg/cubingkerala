@@ -1,4 +1,4 @@
-import MembersComponent from "@/components/members";
+import { MembersList } from "@/components/members";
 import db from "@/lib/db";
 import { RequestInfo } from "@/types/api";
 import { Metadata } from "next";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const Members = async () => {
   const members = await db.members.findMany();
 
-  return <MembersComponent membersfromdb={members as RequestInfo[]} />;
+  return <MembersList membersfromdb={members as RequestInfo[]} />;
 };
 
 export default Members;

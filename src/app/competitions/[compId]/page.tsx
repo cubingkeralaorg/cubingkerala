@@ -1,4 +1,4 @@
-import CompetitionDetailsComponent from "@/components/competitionDetailsComponent";
+import { CompetitionDetails } from "@/components/competitions";
 import axios from "axios";
 import { Metadata } from "next";
 import React from "react";
@@ -21,7 +21,7 @@ const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
     `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}`,
   );
 
-  return <CompetitionDetailsComponent compInfo={competitionResponse.data} />;
+  return <CompetitionDetails compInfo={competitionResponse.data} />;
 };
 
 export default CompetitionsDetails;

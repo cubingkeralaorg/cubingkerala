@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Competition } from "@/types/competition";
+import { Competition } from "@/types/competition.types";
 import {
   getCompetitionsCache,
   clearCompetitionsCache,

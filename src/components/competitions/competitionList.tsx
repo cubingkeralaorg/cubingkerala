@@ -1,6 +1,6 @@
 "use client";
 
-import { Competition } from "@/types/competition";
+import { Competition } from "@/types/competition.types";
 import CompetitionSection from "./CompetitionSection";
 
 interface CompetitionsListProps {
