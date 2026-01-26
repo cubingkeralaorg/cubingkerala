@@ -34,7 +34,7 @@ jobs:
       - name: Run unit & integration tests
         run: npm run test:ci
         env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL_TEST }}
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
@@ -42,7 +42,7 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e
         env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL_TEST }}
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Upload test coverage
         uses: codecov/codecov-action@v3
