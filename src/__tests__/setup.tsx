@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import { vi, beforeAll, afterEach, afterAll } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import Image from 'next/image';
 
 // Cleanup after each test
 afterEach(() => {
@@ -46,7 +47,7 @@ vi.mock('framer-motion', () => ({
     h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
     p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
     button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
-    img: (props: any) => <img {...props} />,
+    img: (props: any) => <Image {...props} alt='image'/>,
     a: ({ children, ...props }: any) => <a {...props}>{children}</a>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
@@ -82,8 +83,11 @@ class MockIntersectionObserver {
 
 global.IntersectionObserver = MockIntersectionObserver as any;
 
-// Mock window.scrollTo
-global.scrollTo = vi.fn();
+// Mock window.scrollTo with proper typing
+Object.defineProperty(global, 'scrollTo', {
+  writable: true,
+  value: vi.fn(),
+});
 
 // Mock matchMedia with full implementation
 Object.defineProperty(window, 'matchMedia', {
