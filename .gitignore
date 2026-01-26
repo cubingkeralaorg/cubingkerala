@@ -38,3 +38,7 @@ next-env.d.ts
 
 
 bin.txt
+.vercel
+coverage/
+playwright-report/
+test-results/
