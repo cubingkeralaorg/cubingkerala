@@ -17,5 +17,11 @@
         { "key": "Expires", "value": "0" }
       ]
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "test": false
+    }
+  }
 }
