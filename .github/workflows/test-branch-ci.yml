@@ -7,14 +7,13 @@ on:
     branches: [test]
 
 permissions:
-  contents: read
-  pull-requests: write
-  issues: write
+  contents: write # Required to post commit comments
+  pull-requests: write # Required for PR interactions
+  issues: write # Required for issue/PR comments
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -77,7 +76,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: success()
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -89,16 +87,17 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
-          github-comment: true
+          github-comment: false # Disabled to avoid duplicate comments with the script below
 
       - name: Comment Preview URL
         uses: actions/github-script@v7
         if: success()
         with:
           script: |
+            const sha = context.payload.pull_request ? context.payload.pull_request.head.sha : context.sha;
             github.rest.repos.createCommitComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: context.sha,
-              body: '✅ Tests passed! Preview deployed to: ${{ steps.vercel-deploy.outputs.preview-url }}'
+              commit_sha: sha,
+              body: `✅ Tests passed! Preview deployed to: ${{ steps.vercel-deploy.outputs.preview-url }}`
             })
