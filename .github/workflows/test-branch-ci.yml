@@ -36,6 +36,16 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
+
+      - name: Run database migrations
+        run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
