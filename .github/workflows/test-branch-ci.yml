@@ -7,9 +7,9 @@ on:
     branches: [test]
 
 permissions:
-  contents: write # Required to post commit comments
-  pull-requests: write # Required for PR interactions
-  issues: write # Required for issue/PR comments
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
   test:
@@ -35,11 +35,6 @@ jobs:
         run: npx tsc --noEmit
         continue-on-error: false
 
-      - name: Run unit & integration tests
-        run: npm run test:ci
-        env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
-
       - name: Generate Prisma Client
         run: npx prisma generate
         env:
@@ -50,13 +45,18 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
+      - name: Run unit & integration tests
+        run: npm run test:ci
+        env:
+          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-        timeout-minutes: 10
+        run: npx playwright install chromium --with-deps
+        timeout-minutes: 5
 
       - name: Run E2E tests
-        run: npm run test:e2e
-        timeout-minutes: 20
+        run: npm run test:e2e -- --reporter=github
+        timeout-minutes: 15
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
@@ -70,7 +70,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-test
           path: playwright-report/
           retention-days: 30
 
@@ -89,7 +89,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
-          github-comment: false # Disabled to avoid duplicate comments with the script below
+          github-comment: false
 
       - name: Comment Preview URL
         uses: actions/github-script@v7

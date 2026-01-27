@@ -40,6 +40,11 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+      - name: Run database migrations
+        run: npx prisma db push --skip-generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: Run unit & integration tests
         run: npm run test:ci
         env:
@@ -47,11 +52,11 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
-        timeout-minutes: 10
+        timeout-minutes: 5
 
       - name: Run E2E tests
-        run: npm run test:e2e -- --reporter=github --max-failures=5
-        timeout-minutes: 20
+        run: npm run test:e2e -- --reporter=github
+        timeout-minutes: 15
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
@@ -73,7 +78,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && success()
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -85,7 +90,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
           github-comment: true
 
       - name: Create deployment comment
@@ -98,5 +103,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               commit_sha: sha,
-              body: `🚀 Successfully deployed to production!\n\n✅ All tests passed\n🌐 Production URL: ${{ steps.vercel-deploy.outputs.preview-url }}\n📊 [View deployment logs](https://vercel.com)`
+              body: `🚀 Successfully deployed to production!\n\n✅ All tests passed\n🌐 Production URL: ${{ steps.vercel-deploy.outputs.preview-url }}`
             })
