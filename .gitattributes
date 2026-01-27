@@ -1,0 +1,29 @@
+# Linguist overrides - exclude generated files from language stats
+
+# Test reports and artifacts
+playwright-report/** linguist-generated=true
+coverage/** linguist-generated=true
+test-results/** linguist-generated=true
+.playwright/** linguist-generated=true
+
+# Build outputs
+.next/** linguist-generated=true
+out/** linguist-generated=true
+build/** linguist-generated=true
+dist/** linguist-generated=true
+
+# Documentation
+*.md linguist-documentation=true
+docs/** linguist-documentation=true
+
+# Dependencies and generated code
+node_modules/** linguist-vendored=true
+package-lock.json linguist-generated=true
+prisma/migrations/** linguist-generated=true
+
+# Ensure TypeScript test files are counted correctly
+**/*.test.ts linguist-detectable=true
+**/*.test.tsx linguist-detectable=true
+**/*.spec.ts linguist-detectable=true
+**/*.spec.tsx linguist-detectable=true
+e2e/** linguist-detectable=true

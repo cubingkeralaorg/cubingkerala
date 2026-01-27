@@ -1,37 +1,49 @@
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp/
 .pnp.js
 .yarn/install-state.gz
 
-# Next.js & Production
-/.next/
-/out/
-/build
-.vercel
+# Next.js & Build outputs
+.next/
+out/
+build/
+dist/
 
-# TypeScript & Debug
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Testing & Artifacts
-/coverage/
-/playwright-report/
-/test-results/
+coverage/
+playwright-report/
+test-results/
+.playwright/
 bin.txt
+.last-run.json
 
 # Environment variables & Secrets
 .env
 .env.local
 .env*.local
 *.pem
+prisma/.env
 
-# Database backups
+# Database
 backup*.sql
 *.backup
+*.db
+*.db-journal
 
-# Misc
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Deployment
+.vercel
