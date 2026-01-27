@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    // Dynamically detect base URL from request
+    const baseUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}`;
     const tokenResponse = await axios.post(
       "https://www.worldcubeassociation.org/oauth/token",
       {
