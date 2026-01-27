@@ -4,19 +4,12 @@ import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createErrorResponse } from "@/lib/api";
 
-function getBaseUrl(): string {
-  // Use localhost in development
-  if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3000";
-  }
+function getBaseUrl(req: NextRequest): string {
+  // Get the host from the request headers
+  const host = req.headers.get("host");
+  const protocol = req.headers.get("x-forwarded-proto") || "http";
 
-  // Use NEXT_PUBLIC_BASE_URL from .env if available
-  if (process.env.NEXT_PUBLIC_BASE_URL) {
-    return process.env.NEXT_PUBLIC_BASE_URL;
-  }
-
-  // Fallback to localhost for development
-  return "http://localhost:3000";
+  return `${protocol}://${host}`;
 }
 
 export async function GET(req: NextRequest) {
@@ -27,8 +20,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Dynamically detect base URL from request
-    const baseUrl = getBaseUrl();
+    // Get base URL from the actual request
+    const baseUrl = getBaseUrl(req);
+
     const tokenResponse = await axios.post(
       "https://www.worldcubeassociation.org/oauth/token",
       {
@@ -87,10 +81,15 @@ export async function GET(req: NextRequest) {
       path: "/",
       expires: new Date(cookieExpires),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      secure: process.env.NODE_ENV === "production",
     });
 
-    response.cookies.set("userInfo", JSON.stringify(userInfo));
+    response.cookies.set("userInfo", JSON.stringify(userInfo), {
+      path: "/",
+      expires: new Date(cookieExpires),
+      httpOnly: false, // Allow client-side access to userInfo
+    });
+
     revalidatePath("/");
     return response;
   } catch (error) {

@@ -1,24 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-function getBaseUrl(): string {
-  // Use localhost in development
-  if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3000";
-  }
+function getBaseUrl(req: NextRequest): string {
+  // Get the host from the request headers
+  const host = req.headers.get("host");
+  const protocol = req.headers.get("x-forwarded-proto") || "http";
 
-  // Use NEXT_PUBLIC_BASE_URL from .env if available
-  if (process.env.NEXT_PUBLIC_BASE_URL) {
-    return process.env.NEXT_PUBLIC_BASE_URL;
-  }
-
-  // Fallback to localhost for development
-  return "http://localhost:3000";
+  return `${protocol}://${host}`;
 }
 
 export async function GET(req: NextRequest) {
   const clientId = process.env.CLIENT_ID as string;
-  // Dynamically detect base URL from request
-  const baseUrl = getBaseUrl();
+
+  // Get base URL from the actual request
+  const baseUrl = getBaseUrl(req);
   const redirectUri = encodeURIComponent(`${baseUrl}/api/auth/callback`);
 
   const authorizationUrl = `https://www.worldcubeassociation.org/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=public`;
