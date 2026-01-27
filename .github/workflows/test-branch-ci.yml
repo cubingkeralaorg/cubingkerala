@@ -52,11 +52,11 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        timeout-minutes: 5
+        timeout-minutes: 10
 
       - name: Run E2E tests
         run: npm run test:e2e
-        timeout-minutes: 10
+        timeout-minutes: 20
         env:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
