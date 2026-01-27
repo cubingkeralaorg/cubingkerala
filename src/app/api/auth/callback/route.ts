@@ -4,6 +4,21 @@ import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createErrorResponse } from "@/lib/api";
 
+function getBaseUrl(): string {
+  // Use localhost in development
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
+  }
+
+  // Use NEXT_PUBLIC_BASE_URL from .env if available
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL;
+  }
+
+  // Fallback to localhost for development
+  return "http://localhost:3000";
+}
+
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
 
@@ -13,7 +28,7 @@ export async function GET(req: NextRequest) {
 
   try {
     // Dynamically detect base URL from request
-    const baseUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}`;
+    const baseUrl = getBaseUrl();
     const tokenResponse = await axios.post(
       "https://www.worldcubeassociation.org/oauth/token",
       {
