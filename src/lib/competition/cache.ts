@@ -4,9 +4,18 @@ import { CachedData, CompetitionsData } from "@/types/competition.types";
 const STORAGE_KEY = "competitions";
 
 /**
+ * Check if we're running in a browser environment
+ */
+const isBrowser = (): boolean => {
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
+};
+
+/**
  * Store competitions data in localStorage with expiry
  */
 export const setCompetitionsCache = (data: CompetitionsData): void => {
+  if (!isBrowser()) return;
+  
   const now = new Date();
   const item = {
     value: data,
@@ -26,6 +35,8 @@ export const setCompetitionsCache = (data: CompetitionsData): void => {
  * Returns null if cache is expired or doesn't exist
  */
 export const getCompetitionsCache = (): CachedData | null => {
+  if (!isBrowser()) return null;
+  
   const itemStr = localStorage.getItem(STORAGE_KEY);
   
   if (!itemStr) {
@@ -56,6 +67,8 @@ export const getCompetitionsCache = (): CachedData | null => {
  * Clear competitions cache from localStorage
  */
 export const clearCompetitionsCache = (): void => {
+  if (!isBrowser()) return;
+  
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (error) {

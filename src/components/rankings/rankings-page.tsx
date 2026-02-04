@@ -32,7 +32,9 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
         const results = await Promise.all(
           members.map((member) => fetchPersonData(member.wcaid)),
         );
-        setMemberResults(results.map((results) => results));
+        // Filter out null results (failed API calls)
+        const validResults = results.filter((result): result is MemberPersonResult => result !== null);
+        setMemberResults(validResults);
       } catch (error) {
         console.error("Error fetching member results:", error);
       } finally {
