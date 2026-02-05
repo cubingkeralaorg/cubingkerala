@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
 
   if (!code) {
-    return createErrorResponse("Authorization code not found", 400);
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   try {

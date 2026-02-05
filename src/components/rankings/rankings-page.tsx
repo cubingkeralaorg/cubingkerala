@@ -9,7 +9,7 @@ import { MemberPersonResult } from "@/types/api";
 import { sortMembersByResult } from "@/utils/wcaSorting";
 import { RankingsTable } from "./rankingsTable";
 import { FilterState, RankingsComponentProps } from "@/types/rankings.types";
-import { fetchPersonData } from "@/services/wca.api";
+import { fetchMultiplePersonsData } from "@/services/wca.api";
 
 export default function RankingsComponent({ members }: RankingsComponentProps) {
   const [memberResults, setMemberResults] = useState<MemberPersonResult[]>([]);
@@ -29,12 +29,10 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
       }
 
       try {
-        const results = await Promise.all(
-          members.map((member) => fetchPersonData(member.wcaid)),
+        const results = await fetchMultiplePersonsData(
+          members.map((member) => member.wcaid),
         );
-        // Filter out null results (failed API calls)
-        const validResults = results.filter((result): result is MemberPersonResult => result !== null);
-        setMemberResults(validResults);
+        setMemberResults(results);
       } catch (error) {
         console.error("Error fetching member results:", error);
       } finally {
