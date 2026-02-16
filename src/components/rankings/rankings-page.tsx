@@ -1,7 +1,6 @@
 "use client";
 
 import { FilterComponent } from "./filter";
-import axios from "axios";
 import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import RankingsLoading from "../../app/rankings/loading";
 import BlurIn from "../ui/blur-in";

@@ -4,9 +4,13 @@ import "./globals.css";
 import { Navbar, Footer } from "@/components/layout";
 import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
+import { DataPrefetcher } from "@/components/providers/DataPrefetcher";
 export const dynamic = "force-dynamic";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: "Cubing Kerala",
@@ -24,8 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-neutral-950`}>
+      <body className={`${inter.variable} font-sans bg-neutral-950`}>
         <Providers>
+          <DataPrefetcher />
           <Navbar />
           {children}
           <Toaster richColors />

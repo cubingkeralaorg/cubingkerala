@@ -64,8 +64,9 @@ test.describe('Navigation', () => {
       if (await menuButton.isVisible()) {
         await menuButton.click();
         
-        // Navigation should be visible after clicking
-        await expect(page.locator('nav')).toBeVisible();
+        // Mobile navigation should be visible after clicking
+        const mobileMenu = page.getByRole('navigation', { name: /mobile menu/i });
+        await expect(mobileMenu).toBeVisible();
       }
     });
 
@@ -77,8 +78,10 @@ test.describe('Navigation', () => {
       if (await menuButton.isVisible()) {
         await menuButton.click();
         
-        // Click a nav link
-        const navLink = page.locator('nav a').first();
+        // Target specifically the mobile menu navigation
+        const mobileMenu = page.getByRole('navigation', { name: /mobile menu/i });
+        const navLink = mobileMenu.locator('a').first();
+        
         if (await navLink.isVisible()) {
           await navLink.click();
         }

@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Competition } from "@/types/competition.types";
 import {
-  getCompetitionsCache,
   clearCompetitionsCache,
   formatLastUpdated,
 } from "@/lib/competition/cache";
@@ -66,18 +65,34 @@ export function useCompetitions(): UseCompetitionsReturn {
    * Load competitions from cache or fetch fresh data
    */
   const loadCompetitions = useCallback(async () => {
-    const cachedResult = getCompetitionsCache();
+    // We try to get "expired" cache too for SWR behavior
+    // Modification: Use localStorage directly or modify getCompetitionsCache to return stale
+    const itemStr = typeof window !== "undefined" ? localStorage.getItem("competitions") : null;
+    let cachedItem: any = null;
+    
+    if (itemStr) {
+      try {
+        cachedItem = JSON.parse(itemStr);
+      } catch (e) {}
+    }
 
-    if (cachedResult) {
-      // Use cached data
-      setUpcomingCompetitions(cachedResult.data?.upcomingCompetitions || []);
-      setPastCompetitions(cachedResult.data?.pastCompetitions || []);
-      setLastUpdated(formatLastUpdated(cachedResult.cachedAt));
+    if (cachedItem) {
+      // Show cached data immediately (SWR)
+      setUpcomingCompetitions(cachedItem.value?.upcomingCompetitions || []);
+      setPastCompetitions(cachedItem.value?.pastCompetitions || []);
+      setLastUpdated(formatLastUpdated(cachedItem.cachedAt));
       setLoading(false);
       setDataLoaded(true);
+
+      // If expired, or just to be fresh, revalidate in background
+      const now = Date.now();
+      if (now > cachedItem.expiry) {
+        console.log("Cache expired - revalidating in background...");
+        fetchAndUpdateCompetitions(false);
+      }
     } else {
-      // Cache expired or missing - fetch fresh data
-      console.log("Cache expired or missing - fetching fresh data");
+      // No cache at all - fetch fresh data
+      console.log("No cache found - fetching fresh data");
       setLoading(true);
       setDataLoaded(false);
       await fetchAndUpdateCompetitions(false);

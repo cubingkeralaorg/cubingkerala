@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
@@ -19,9 +19,23 @@ export const NavbarComponent = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Prevent background scroll when menu is open
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
+
   return (
     <div className="bg-neutral-950 text-stone-200 sticky top-0 z-50">
-      <div className="container mx-auto border-b-1 border-b-stone-800 relative flex justify-between items-center px-4 py-1 md:py-3">
+      <div className="container mx-auto border-b-1 border-b-stone-800 relative z-50 flex justify-between items-center px-4 py-1 md:py-3">
         <Link href="/" onClick={closeMenu} className="flex items-center">
           <Image
             src={LOGO_PATH}
