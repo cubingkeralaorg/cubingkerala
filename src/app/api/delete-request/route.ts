@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import {
   requireAuth,
   createSuccessResponse,

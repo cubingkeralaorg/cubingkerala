@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { RequestInfo } from "@/types/api";
 import { revalidatePath } from "next/cache";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import {
   requireAuth,
   createSuccessResponse,
