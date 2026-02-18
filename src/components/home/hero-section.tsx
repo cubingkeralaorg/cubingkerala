@@ -70,7 +70,7 @@ const CubingKeralaGetStarted = () => {
         cy={1}
         cr={1}
         className={cn(
-          "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] "
+          "[mask-image:linear-gradient(to_bottom_right,white,rgba(255,255,255,0.2),transparent)] "
         )}
       />
     </div>

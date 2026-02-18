@@ -32,7 +32,7 @@ export function CubingKeralaUnravel() {
 
   return (
     <div className="relative flex h-full w-full flex-col text-foreground items-center justify-center overflow-hidden">
-      <div className="container bg-card px-4 z-20 border border-border rounded-lg py-10 md:py-24">
+      <div className="container bg-neutral-500/[0.04] px-4 z-20 border border-border rounded-lg py-10 md:py-24">
         <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
           <div className="space-y-4">
             <div className="inline-block rounded-lg text-green-500 text-sm">

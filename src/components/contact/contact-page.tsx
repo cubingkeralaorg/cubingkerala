@@ -9,8 +9,8 @@ const handleContactWhatsappRedirect = () => {
 
 export default function ContactComponent() {
     return (
-        <div className="container mx-auto flex flex-col items-center w-full h-[calc(100dvh-58px)] overflow-hidden p-4">
-            <div className="flex flex-col bg-card items-center justify-center w-full flex-1 space-y-4 px-6 py-8 border border-border rounded-lg shadow-sm dark:shadow-lg">
+        <div className="container mx-auto flex flex-col items-center w-full min-h-screen overflow-hidden p-4">
+            <div className="flex flex-col items-center justify-center w-full flex-1 space-y-4 px-6 py-8 border border-border rounded-lg shadow-sm dark:shadow-lg bg-neutral-500/[0.04]">
                 <BlurIn
                     word="Contact Us"
                     className="text-4xl text-foreground font-bold tracking-tighter md:text-6xl"

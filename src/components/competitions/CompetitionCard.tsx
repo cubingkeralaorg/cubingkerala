@@ -59,7 +59,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
       className="bg-background relative hover:bg-secondary/50 transition-all ease-in duration-200 text-muted-foreground min-w-[320px] max-w-fit md:w-[380px] flex-shrink-0 border border-border rounded-lg"
     >
       {type === "past" && (
-        <Badge className="absolute right-3 bottom-3 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1">
+        <Badge className="absolute right-3 bottom-3 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1 border-none shadow-none">
           {getCompetitionStatus()}
         </Badge>
       )}

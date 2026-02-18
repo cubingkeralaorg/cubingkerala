@@ -8,14 +8,14 @@ export default function SearchComponent({ handleSearch }: { handleSearch: (searc
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
           type="search"
           onChange={handleInputChange}
           placeholder="Search Member"
-          className="w-full pl-10 pr-4 py-2 rounded-none border-none text-foreground shadow-sm focus:outline-none focus:border-border focus:ring-1 focus:ring-ring placeholder:text-muted-foreground"
+          className="w-full pl-10 pr-4 py-2 rounded-none border-none text-foreground placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:cursor-pointer"
         />
       </div>
     </div>

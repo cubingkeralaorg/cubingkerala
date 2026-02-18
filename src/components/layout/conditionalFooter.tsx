@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import CubingKeralaFooter from "./footer";
 
-const HIDE_FOOTER_ROUTES = ["/contact"];
+const HIDE_FOOTER_ROUTES: string[] = [];
 
 export function ConditionalFooter() {
   const pathname = usePathname();

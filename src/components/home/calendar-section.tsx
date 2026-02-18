@@ -10,7 +10,7 @@ export function CubingKeralaCalendars() {
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-none text-foreground">
-      <div className="container z-20 bg-card px-4 border border-border rounded-lg py-10 md:py-24">
+      <div className="container z-20 bg-neutral-500/[0.04] px-4 border border-border rounded-lg py-10 md:py-24">
         <div className="flex flex-col items-center justify-center space-y-4 text-start md:text-center">
           <div className="space-y-4">
             <div className="inline-block rounded-lg text-sm text-green-500">

@@ -80,7 +80,11 @@ describe('memberUtils', () => {
     it('should capitalize first letter of role', () => {
       expect(capitalizeRole('member')).toBe('Member');
       expect(capitalizeRole('organiser')).toBe('Organiser');
-      expect(capitalizeRole('co-founder')).toBe('Co-founder');
+    });
+
+    it('should split underscored roles and capitalize each word', () => {
+      expect(capitalizeRole('co_founder')).toBe('Co Founder');
+      expect(capitalizeRole('team_lead')).toBe('Team Lead');
     });
 
     it('should handle already capitalized roles', () => {
@@ -184,27 +188,34 @@ describe('memberUtils', () => {
   });
 
   describe('getRoleBadgeColor', () => {
+    it('should return foreground for admin role', () => {
+      expect(getRoleBadgeColor('admin')).toBe('text-foreground');
+    });
+
+    it('should return purple for moderator role', () => {
+      expect(getRoleBadgeColor('moderator')).toBe('text-purple-500');
+    });
+
     it('should return blue for member role', () => {
-      expect(getRoleBadgeColor('member')).toBe('text-blue-300');
+      expect(getRoleBadgeColor('member')).toBe('text-blue-500');
     });
 
     it('should return green for organiser role', () => {
-      expect(getRoleBadgeColor('organiser')).toBe('text-green-400');
+      expect(getRoleBadgeColor('organiser')).toBe('text-green-500');
     });
 
     it('should return red for co-founder role', () => {
       expect(getRoleBadgeColor('co-founder')).toBe('text-red-500');
     });
 
-    it('should return white for unknown role', () => {
-      expect(getRoleBadgeColor('admin')).toBe('text-white');
-      expect(getRoleBadgeColor('unknown')).toBe('text-white');
-      expect(getRoleBadgeColor('')).toBe('text-white');
+    it('should return foreground for unknown role', () => {
+      expect(getRoleBadgeColor('unknown')).toBe('text-foreground');
+      expect(getRoleBadgeColor('')).toBe('text-foreground');
     });
 
     it('should be case sensitive', () => {
-      expect(getRoleBadgeColor('Member')).toBe('text-white');
-      expect(getRoleBadgeColor('ORGANISER')).toBe('text-white');
+      expect(getRoleBadgeColor('Member')).toBe('text-foreground');
+      expect(getRoleBadgeColor('ORGANISER')).toBe('text-foreground');
     });
   });
 });

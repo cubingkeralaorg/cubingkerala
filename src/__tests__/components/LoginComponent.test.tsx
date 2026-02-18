@@ -27,10 +27,6 @@ vi.mock('@/components/magicui/dot-pattern', () => ({
   default: () => <div data-testid="dot-pattern" />,
 }));
 
-vi.mock('@/components/ui/card', () => ({
-  Card: ({ children, className }: any) => <div className={className}>{children}</div>,
-  CardFooter: ({ children, className }: any) => <div className={className}>{children}</div>,
-}));
 
 vi.mock('../../app/login/loading', () => ({
   default: () => <div data-testid="page-loading">Page Loading</div>,
