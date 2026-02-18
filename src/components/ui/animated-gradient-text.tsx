@@ -12,7 +12,7 @@ export default function AnimatedGradientText({
   return (
     <div
       className={cn(
-        "group relative mx-auto flex max-w-fit rounded-2xl text-lg md:text-xl font-bold transition-shadow duration-500 ease-out [--bg-size:300%]",
+        "group relative mx-auto flex max-w-fit rounded-lg-2xl text-lg md:text-xl font-bold transition-shadow duration-500 ease-out [--bg-size:300%]",
         className,
       )}
     >

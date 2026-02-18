@@ -21,20 +21,20 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
   if (members.length === 0) {
     return (
       <Table className="w-full">
-        <TableHeader className="border-y hover:bg-transparent border-y-neutral-800">
+        <TableHeader className="border-y hover:bg-transparent border-y-border">
           <TableRow className="text-sm md:text-[15px] border-none">
-            <TableHead className="text-neutral-500">#</TableHead>
-            <TableHead className="text-neutral-500">Name</TableHead>
-            <TableHead className="text-neutral-500">WCA ID</TableHead>
-            <TableHead className="text-neutral-500">Role</TableHead>
-            <TableHead className="text-neutral-500">Competitions</TableHead>
-            <TableHead className="text-neutral-500">Medals</TableHead>
+            <TableHead className="text-muted-foreground">#</TableHead>
+            <TableHead className="text-muted-foreground">Name</TableHead>
+            <TableHead className="text-muted-foreground">WCA ID</TableHead>
+            <TableHead className="text-muted-foreground">Role</TableHead>
+            <TableHead className="text-muted-foreground">Competitions</TableHead>
+            <TableHead className="text-muted-foreground">Medals</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
             <TableCell
-              className="text-stone-600 px-4 hover:bg-neutral-900 py-4"
+              className="text-muted-foreground px-4 hover:bg-accent py-4"
               colSpan={6}
             >
               No results found
@@ -47,14 +47,14 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
 
   return (
     <Table className="w-full">
-      <TableHeader className="border-y hover:bg-transparent border-y-neutral-800">
+      <TableHeader className="border-y hover:bg-transparent border-y-border">
         <TableRow className="text-sm md:text-[15px] hover:bg-transparent border-none">
-          <TableHead className="text-neutral-500">#</TableHead>
-          <TableHead className="text-neutral-500">Name</TableHead>
-          <TableHead className="text-neutral-500">WCA ID</TableHead>
-          <TableHead className="text-neutral-500">Role</TableHead>
-          <TableHead className="text-neutral-500">Competitions</TableHead>
-          <TableHead className="text-neutral-500">Medals</TableHead>
+          <TableHead className="text-muted-foreground">#</TableHead>
+          <TableHead className="text-muted-foreground">Name</TableHead>
+          <TableHead className="text-muted-foreground">WCA ID</TableHead>
+          <TableHead className="text-muted-foreground">Role</TableHead>
+          <TableHead className="text-muted-foreground">Competitions</TableHead>
+          <TableHead className="text-muted-foreground">Medals</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -65,7 +65,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
 
           return (
             <TableRow
-              className="border-y-neutral-800 hover:bg-transparent text-sm md:text-[15px]"
+              className="border-border hover:bg-transparent text-sm md:text-[15px]"
               key={member.wcaid}
             >
               <TableCell className="cursor-default">{index + 1}</TableCell>
@@ -83,7 +83,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="inline-flex items-center px-3 py-1 rounded-md bg-neutral-800/60 text-neutral-300 text-xs font-mono border border-neutral-700/50 hover:text-blue-500">
+                  <span className="inline-flex items-center px-3 py-1 rounded-md bg-secondary/60 text-muted-foreground text-xs font-mono border border-border/50 hover:text-blue-500">
                     {member.wcaid}
                   </span>
                 </Link>

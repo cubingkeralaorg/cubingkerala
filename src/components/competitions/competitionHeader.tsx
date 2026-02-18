@@ -20,7 +20,7 @@ export function CompetitionHeader({
         word={name}
         className="text-4xl text-center font-bold tracking-tighter md:text-6xl"
       />
-      <p className="mt-2 md:mt-4 text-stone-400 text-center text-[15px]">
+      <p className="mt-2 md:mt-4 text-muted-foreground text-center text-[15px]">
         {formatCompetitionDateRange(startDate, endDate)}
       </p>
     </div>

@@ -59,7 +59,7 @@ export default function MemberInfoComponent({
   }
 
   return (
-    <div className="min-h-screen text-stone-200">
+    <div className="min-h-screen text-foreground">
       <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
         <MemberHeader
           name={member.name}

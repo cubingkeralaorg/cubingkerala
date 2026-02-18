@@ -38,99 +38,99 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
 
   return (
     <div className="flex items-center justify-center gap-3">
-      <Menubar className="rounded-md bg-neutral-900 border-none text-sm md:text-[15px]">
+      <Menubar className="rounded-md bg-card border border-border text-sm md:text-[15px]">
         <MenubarMenu>
-          <MenubarTrigger className="hover:bg-neutral-800 hover:text-neutral-100 cursor-pointer">
+          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
             {selectedFilter.event || "Select Event"}
           </MenubarTrigger>
-          <MenubarContent className="max-h-60 w-[220px] overflow-y-auto bg-neutral-900 text-stone-200 border-none rounded-none">
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("222")}>
+          <MenubarContent className="max-h-60 w-[220px] overflow-y-auto bg-card text-foreground border border-border rounded-md">
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("222")}>
               2x2x2
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-222`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("333")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("333")}>
               3x3x3
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-333`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("444")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("444")}>
               4x4x4
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-444`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("555")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("555")}>
               5x5x5
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-555`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("666")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("666")}>
               6x6x6
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-666`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("777")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("777")}>
               7x7x7
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-777`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("333bf")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("333bf")}>
               3x3x3 Blindfolded
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-333bf`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("333fm")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("333fm")}>
               3x3x3 Fewest Moves
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-333fm`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("333oh")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("333oh")}>
               3x3x3 One-Handed
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-333oh`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("skewb")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("skewb")}>
               Skewb
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-skewb`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("pyram")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("pyram")}>
               Pyraminx
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-pyram`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("minx")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("minx")}>
               Megaminx
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-minx`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("clock")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("clock")}>
               Clock
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-clock`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("sq1")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("sq1")}>
               Square-1
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-sq1`}></span>
               </MenubarShortcut>
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleEventSelect("333mbf")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("333mbf")}>
               3x3x3 Multi-Blind
-              <MenubarShortcut className="text-stone-200">
+              <MenubarShortcut className="text-foreground">
                 <span className={`cubing-icon event-333mbf`}></span>
               </MenubarShortcut>
             </MenubarItem>
@@ -138,12 +138,12 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
         </MenubarMenu>
         <span>|</span>
         <MenubarMenu>
-          <MenubarTrigger className="hover:bg-neutral-800 hover:text-neutral-100 cursor-pointer">{selectedFilter.round || "Select Round"}</MenubarTrigger>
-          <MenubarContent className="max-h-60 overflow-y-auto bg-neutral-900 text-stone-200 border-none rounded-none">
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleRoundSelect("single")}>
+          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">{selectedFilter.round || "Select Round"}</MenubarTrigger>
+          <MenubarContent className="max-h-60 overflow-y-auto bg-card text-foreground border border-border rounded-md">
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleRoundSelect("single")}>
               Single
             </MenubarItem>
-            <MenubarItem className="hover:bg-neutral-800 cursor-pointer" onClick={() => handleRoundSelect("average")}>
+            <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleRoundSelect("average")}>
               Average
             </MenubarItem>
           </MenubarContent>

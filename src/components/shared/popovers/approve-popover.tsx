@@ -19,7 +19,7 @@ const ApprovePopover = ({
     <Popover>
       <PopoverTrigger>
         <Button
-          className="bg-green-400 hover:bg-green-500 text-black rounded-md"
+          className="bg-green-500 hover:bg-green-600 text-foreground rounded-md"
           size="sm"
         >
           Approve
@@ -30,7 +30,7 @@ const ApprovePopover = ({
         <Button
           onClick={() => handleApprove(index)}
           size="sm"
-          className="mt-2 bg-green-400 hover:bg-green-500 text-black rounded-md block"
+          className="mt-2 bg-green-500 hover:bg-green-600 text-foreground rounded-md block"
         >
           Approve
         </Button>

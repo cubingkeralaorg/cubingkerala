@@ -19,7 +19,7 @@ const UpdatePopover = ({
     <Popover>
       <PopoverTrigger>
         <Button
-          className="bg-yellow-400 hover:bg-yellow-500 text-black rounded-sm"
+          className="bg-yellow-500 hover:bg-yellow-600 text-foreground rounded-sm"
           size="sm"
         >
           Update
@@ -30,7 +30,7 @@ const UpdatePopover = ({
         <Button
           onClick={() => handleUpdate(index)}
           size="sm"
-          className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-sm block"
+          className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-foreground rounded-sm block"
         >
           Update
         </Button>

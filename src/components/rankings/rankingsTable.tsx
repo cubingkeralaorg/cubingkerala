@@ -26,16 +26,16 @@ export function RankingsTable({
   getResult,
 }: RankingsTableProps) {
   return (
-    <div className="rounded-md border border-neutral-800">
+    <div className="rounded-md border border-border">
       <Table className="w-full rounded-md text-sm md:text-[15px]">
         <TableHeader>
-          <TableRow className="border-neutral-800 hover:bg-transparent">
-            <TableHead className="text-neutral-500">#</TableHead>
-            <TableHead className="text-neutral-500">Name</TableHead>
-            <TableHead className="text-neutral-500">Best</TableHead>
-            <TableHead className="text-neutral-500">NR</TableHead>
-            <TableHead className="text-neutral-500">CR</TableHead>
-            <TableHead className="text-neutral-500">WR</TableHead>
+          <TableRow className="border-border hover:bg-transparent">
+            <TableHead className="text-muted-foreground">#</TableHead>
+            <TableHead className="text-muted-foreground">Name</TableHead>
+            <TableHead className="text-muted-foreground">Best</TableHead>
+            <TableHead className="text-muted-foreground">NR</TableHead>
+            <TableHead className="text-muted-foreground">CR</TableHead>
+            <TableHead className="text-muted-foreground">WR</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -43,7 +43,7 @@ export function RankingsTable({
             const result = getResult(member);
             return (
               <TableRow
-                className="border-neutral-800 hover:bg-transparent"
+                className="border-border hover:bg-transparent"
                 key={member.id}
               >
                 <TableCell>{index + 1}</TableCell>

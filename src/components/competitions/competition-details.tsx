@@ -22,7 +22,7 @@ const CompetitionDetailsComponent = ({
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="w-full mx-auto text-stone-200 py-6 md:py-8 px-4 md:px-5">
+      <div className="w-full mx-auto text-foreground py-6 md:py-8 px-4 md:px-5">
         <div className="grid animate-fade-in gap-6">
           <CompetitionHeader
             name={compInfo.name}
@@ -58,7 +58,7 @@ const CompetitionDetailsComponent = ({
                       <p className="font-medium text-[17px] md:text-[18px]">
                         Competitor Limit
                       </p>
-                      <p className="text-stone-400 text-[15px] md:text-[16px]">
+                      <p className="text-muted-foreground text-[15px] md:text-[16px]">
                         {compInfo.competitor_limit}
                       </p>
                     </div>
@@ -70,7 +70,7 @@ const CompetitionDetailsComponent = ({
                     </h2>
                     <div
                       dangerouslySetInnerHTML={{ __html: formattedInformation }}
-                      className="text-stone-400 text-wrap text-[15px] md:text-[16px]"
+                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px]"
                     />
                   </div>
                 </div>
@@ -100,7 +100,7 @@ const CompetitionDetailsComponent = ({
                           ? formattedInformation.split("]")[0] + "]"
                           : formattedInformation,
                       }}
-                      className="text-stone-400 text-[15px] md:text-[16px]"
+                      className="text-muted-foreground text-[15px] md:text-[16px]"
                     />
                   </div>
                 </div>

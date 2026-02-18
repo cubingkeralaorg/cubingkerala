@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar } from "@/components/layout";
+import { ConditionalFooter } from "@/components/layout/conditionalFooter";
 import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
 import { DataPrefetcher } from "@/components/providers/DataPrefetcher";
@@ -28,13 +29,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans bg-neutral-950`}>
+      <body className={`${inter.variable} font-sans bg-background`}>
         <Providers>
           <DataPrefetcher />
           <Navbar />
           {children}
           <Toaster richColors />
-          <Footer />
+          <ConditionalFooter />
         </Providers>
       </body>
     </html>

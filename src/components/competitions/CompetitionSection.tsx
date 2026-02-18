@@ -18,7 +18,7 @@ const CompetitionSection: React.FC<CompetitionSectionProps> = ({
     <section>
       <h2
         style={{ zIndex: "10000" }}
-        className={`text-xl md:text-2xl font-bold ${titleColor} py-3 md:py-5 bg-neutral-950 text-start`}
+        className={`text-xl md:text-2xl font-bold ${titleColor} py-3 md:py-5 bg-background text-start`}
       >
         {title}
       </h2>
@@ -38,12 +38,12 @@ const CompetitionSection: React.FC<CompetitionSectionProps> = ({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       ) : (
-        <Card className="bg-neutral-950 w-full md:w-[380px] h-[150px] border border-neutral-800 rounded-md">
+        <Card className="bg-background w-full md:w-[380px] h-[150px] border border-border rounded-md">
           <CardContent className="p-4 h-fit flex flex-col justify-center">
-            <h3 className="text-[17px] font-bold text-stone-200">
+            <h3 className="text-[17px] font-bold text-foreground">
               {emptyMessage.title}
             </h3>
-            <h1 className="text-md md:text-lg text-neutral-400 font-normal">
+            <h1 className="text-md md:text-lg text-muted-foreground font-normal">
               {emptyMessage.subtitle}
             </h1>
           </CardContent>

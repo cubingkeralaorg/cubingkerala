@@ -22,7 +22,7 @@ const CubingKeralaGetStarted = () => {
   };
 
   return (
-    <div className="relative flex min-h-[90vh] w-full overflow-hidden text-stone-200">
+    <div className="relative flex min-h-[90vh] w-full overflow-hidden text-foreground">
       <div className="container px-6 flex flex-col justify-center items-center my-auto">
         <div className="grid h-full gap-10 sm:px-10 md:gap-16 md:grid-cols-1 pt-10 md:pt-5">
           <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw] mb-20">
@@ -36,29 +36,27 @@ const CubingKeralaGetStarted = () => {
               word="Rubik's Cube Community in Kerala."
               className="text-4xl text-start md:text-center font-bold tracking-tighter md:text-7xl"
             />
-            <p className="text-stone-400 pb-5 mx-auto text-[15px] md:text-lg text-start md:text-center md:pt-5">
+            <p className="text-muted-foreground pb-5 mx-auto text-[15px] md:text-lg text-start md:text-center md:pt-5">
               Join us for competitions and meetups that connect cubers of all
               skill levels. <br />{" "}
-              <strong className="text-white">Cubing Kerala</strong> is here to
+              <strong className="text-foreground font-bold">Cubing Kerala</strong> is here to
               help you learn and grow.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-5">
-              <div
+              <ShinyButton
                 onClick={() => handleRedirectToContactPage()}
-                className="w-full md:w-1/3"
+                className="w-full md:w-fit md:min-w-[200px] h-11 bg-primary hover:bg-primary/90 text-primary-foreground"
               >
-                <ShinyButton className="w-full py-2 rounded bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
-                  <div className="flex items-center justify-center gap-1 py-[2px] text-black">
-                    <span>Contact Us</span>
-                    <IoIosArrowForward />
-                  </div>
-                </ShinyButton>
-              </div>
+                <div className="flex items-center justify-center gap-1">
+                  <span>Contact Us</span>
+                  <IoIosArrowForward />
+                </div>
+              </ShinyButton>
               <RainbowButton
-                className="w-full md:w-fit text-green-400 rounded hover:text-green-500 gap-1"
+                className="w-full md:w-fit rounded-lg gap-2 text-green-600 dark:text-green-400"
                 onClick={handleRedirectToWhatsapp}
               >
-                <span>Join our Whatsapp group</span>
+                Join our Whatsapp group
                 <IoIosArrowForward />
               </RainbowButton>
             </div>

@@ -10,7 +10,7 @@ interface RoleSelectorProps {
 export function RoleSelector({ id, defaultValue }: RoleSelectorProps) {
   return (
     <select
-      className="bg-neutral-950 cursor-pointer text-stone-200"
+      className="bg-background cursor-pointer text-foreground"
       id={id}
       name="role"
       defaultValue={defaultValue || "member"}

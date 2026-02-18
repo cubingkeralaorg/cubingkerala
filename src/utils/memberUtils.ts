@@ -11,7 +11,10 @@ export const getTotalMedals = (memberDetails?: MemberPersonResult): number => {
 };
 
 export const capitalizeRole = (role: string): string => {
-  return role.charAt(0).toUpperCase() + role.slice(1);
+  return role
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export const sortMembersByName = <T extends { name: string }>(
@@ -22,9 +25,11 @@ export const sortMembersByName = <T extends { name: string }>(
 
 export const getRoleBadgeColor = (role: string): string => {
   const colors: Record<string, string> = {
-    member: "text-blue-300",
-    organiser: "text-green-400",
+    admin: "text-foreground",
+    moderator: "text-purple-500",
+    member: "text-blue-500",
+    organiser: "text-green-500",
     "co-founder": "text-red-500",
   };
-  return colors[role] || "text-white";
+  return colors[role] || "text-foreground";
 };

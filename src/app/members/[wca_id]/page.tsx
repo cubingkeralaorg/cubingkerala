@@ -27,8 +27,8 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
     return (
       <div className="flex items-center justify-center min-h-[50vh] w-full">
         <div className="text-center">
-          <p className="text-stone-400">404</p>
-          <h1 className="text-3xl font-bold text-stone-200">
+          <p className="text-muted-foreground">404</p>
+          <h1 className="text-3xl font-bold text-foreground">
             Member Not Found
           </h1>
         </div>

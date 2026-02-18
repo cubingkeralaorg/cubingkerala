@@ -11,5 +11,6 @@ export const NAV_LINKS: NavLink[] = [
   { href: "/contact", label: "Contact" },
 ];
 
-export const LOGO_PATH = "/logotransparent.png";
+export const LOGO_LIGHT = "/logotransparent-black.png";
+export const LOGO_DARK = "/logotransparent.png";
 export const ADMIN_USER_ID = 6996;

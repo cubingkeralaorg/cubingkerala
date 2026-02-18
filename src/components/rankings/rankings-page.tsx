@@ -68,7 +68,7 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
 
   return (
     <Suspense fallback={<RankingsLoading />}>
-      <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-stone-200">
+      <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
         <div className="animate-fade-in">
           <div className="flex align-center justify-between mb-4">
             <BlurIn

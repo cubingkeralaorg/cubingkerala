@@ -15,9 +15,9 @@ const RefreshButton: React.FC<RefreshButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-2 bg-neutral-800 ${
-        !isRefreshing ? "hover:bg-neutral-900" : ""
-      } text-stone-200 rounded flex items-center gap-1.5 text-xs transition-colors`}
+      className={`px-3 py-2 bg-secondary ${
+        !isRefreshing ? "hover:bg-accent" : ""
+      } text-foreground rounded-lg flex items-center gap-1.5 text-xs transition-colors`}
       disabled={isRefreshing}
     >
       <RefreshCw size={13} className={isRefreshing ? "animate-spin" : ""} />

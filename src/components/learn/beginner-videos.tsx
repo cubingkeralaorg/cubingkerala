@@ -33,11 +33,11 @@ export default function BeginnerVideosSection() {
     <div className="container mx-auto py-4 md:py-8 px-4 md:px-5 space-y-2 md:space-y-4">
       <BlurIn
         word="Beginner Level"
-        className="text-4xl text-start text-stone-200 font-bold tracking-tighter md:text-6xl"
+        className="text-4xl text-start text-foreground font-bold tracking-tighter md:text-6xl"
       />
       <div className="space-y-5">
         <div className="w-fit">
-          <h1 className="text-stone-400">
+          <h1 className="text-muted-foreground">
             Beginner level - Complete tutorials
           </h1>
           <hr className="w-full" />
@@ -46,9 +46,9 @@ export default function BeginnerVideosSection() {
           {beginnerVideos.map((video, index) => (
             <div
               key={index}
-              className="hover:bg-neutral-900 transition-all ease-in duration-200 rounded-md border border-neutral-800 p-2"
+              className="hover:bg-accent transition-all ease-in duration-200 rounded-md border border-border p-2"
             >
-              <h1 className="text-neutral-500 text-sm md:text-medium pb-2">
+              <h1 className="text-muted-foreground text-sm md:text-medium pb-2">
                 {video.title}
               </h1>
               <VideoCard
@@ -60,16 +60,16 @@ export default function BeginnerVideosSection() {
           ))}
         </div>
         <div className="w-fit">
-          <h1 className="text-stone-400">What&apos;s Next: Beginner CFOP</h1>
+          <h1 className="text-muted-foreground">What&apos;s Next: Beginner CFOP</h1>
           <hr className="w-full" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {beginnerExtraVideos.map((video, index) => (
             <div
               key={index}
-              className="hover:bg-neutral-900 transition-all ease-in duration-200 rounded-md border border-neutral-800 p-2"
+              className="hover:bg-accent transition-all ease-in duration-200 rounded-md border border-border p-2"
             >
-              <h1 className="text-neutral-500 text-sm md:text-medium pb-2">
+              <h1 className="text-muted-foreground text-sm md:text-medium pb-2">
                 {video.title}
               </h1>
               <VideoCard
@@ -81,21 +81,21 @@ export default function BeginnerVideosSection() {
           ))}
         </div>
         <div className="w-fit">
-          <h1 className="text-stone-400">Learning Resources</h1>
+          <h1 className="text-muted-foreground">Learning Resources</h1>
           <hr className="w-full" />
         </div>
         <div className="px-4">
-          <ul className="text-stone-400 space-y-1">
+          <ul className="text-muted-foreground space-y-1">
             {pdfs.map((pdf, index) => (
               <li key={index}>
                 <a
-                  className="hover:text-stone-200 transition-all ease-in-out duration-200"
+                  className="hover:text-foreground transition-all ease-in-out duration-200"
                   href={pdf.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   {pdf.name}{" "}
-                  <Badge className="text-[10px] px-1 py-0 bg-neutral-800 hover:bg-neutral-800 rounded-full text-stone-400">
+                  <Badge className="text-[10px] px-1 py-0 bg-secondary hover:bg-accent rounded-full text-muted-foreground">
                     PDF
                   </Badge>
                 </a>
@@ -110,7 +110,7 @@ export default function BeginnerVideosSection() {
 
 function VideoCard({ videoId, title }: { videoId: string; title: string }) {
   return (
-    <Card className="overflow-hidden border-black">
+    <Card className="overflow-hidden border-border">
       <div className="aspect-video w-full">
         <YouTubeEmbed
           videoid={videoId}

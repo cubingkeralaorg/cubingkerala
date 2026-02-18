@@ -21,20 +21,20 @@ export function MembersTable({
   if (members.length === 0) {
     return (
       <div className="overflow-x-auto">
-        <div className="w-full min-w-[500px] border border-neutral-800/50 rounded-md shadow-2xl overflow-hidden">
+        <div className="w-full min-w-[500px] border border-border/50 rounded-md shadow-sm dark:shadow-2xl overflow-hidden">
           <table className="w-full table-auto text-sm md:text-[15px]">
             <thead>
-              <tr className="border-b border-neutral-700/50">
-                <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+              <tr className="border-b border-border/50">
+                <th className="px-6 py-4 text-left font-semibold text-foreground">
                   Name
                 </th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+                <th className="px-6 py-4 text-left font-semibold text-foreground">
                   WCA ID
                 </th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+                <th className="px-6 py-4 text-left font-semibold text-foreground">
                   Role
                 </th>
-                <th className="px-6 py-4 text-right font-semibold text-neutral-200">
+                <th className="px-6 py-4 text-right font-semibold text-foreground">
                   Actions
                 </th>
               </tr>
@@ -42,7 +42,7 @@ export function MembersTable({
             <tbody>
               <tr>
                 <td
-                  className="text-neutral-500 px-6 py-12 text-center italic"
+                  className="text-muted-foreground px-6 py-12 text-center italic"
                   colSpan={4}
                 >
                   No members...
@@ -57,38 +57,38 @@ export function MembersTable({
 
   return (
     <div className="overflow-x-auto">
-      <div className="w-full min-w-[500px] border border-neutral-800/50 rounded-md shadow-2xl overflow-hidden">
+      <div className="w-full min-w-[500px] border border-border/50 rounded-md shadow-sm dark:shadow-2xl overflow-hidden">
         <table className="w-full table-auto text-sm md:text-[15px]">
           <thead>
-            <tr className="border-b border-neutral-700/50">
-              <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+            <tr className="border-b border-border/50">
+              <th className="px-6 py-4 text-left font-semibold text-foreground">
                 Name
               </th>
-              <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+              <th className="px-6 py-4 text-left font-semibold text-foreground">
                 WCA ID
               </th>
-              <th className="px-6 py-4 text-left font-semibold text-neutral-200">
+              <th className="px-6 py-4 text-left font-semibold text-foreground">
                 Role
               </th>
-              <th className="px-6 py-4 text-right font-semibold text-neutral-200">
+              <th className="px-6 py-4 text-right font-semibold text-foreground">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-800/50">
+          <tbody className="divide-y divide-border">
             {members.map((member, index) => (
               <tr
                 key={member.wcaid}
                 className="transition-all duration-200 group"
               >
-                <td className="px-6 py-4 text-nowrap font-medium text-neutral-100">
+                <td className="px-6 py-4 text-nowrap font-medium text-foreground">
                   {extractFirstName(member.name)}
                 </td>
                 <td className="px-6 py-4">
                   <Link
                     href={`https://www.worldcubeassociation.org/persons/${member.wcaid}`}
                   >
-                    <span className="inline-flex items-center px-3 py-1 rounded-md bg-neutral-800/60 text-neutral-300 text-xs font-mono border border-neutral-700/50 hover:text-blue-500">
+                    <span className="inline-flex items-center px-3 py-1 rounded-md bg-secondary/60 text-muted-foreground text-xs font-mono border border-border/50 hover:text-blue-500">
                       {member.wcaid}
                     </span>
                   </Link>

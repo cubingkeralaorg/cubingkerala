@@ -1,61 +1,31 @@
 "use client";
 
 import React from "react";
-import { motion, type AnimationProps } from "framer-motion";
-
 import { cn } from "@/lib/utils";
 
-const animationProps = {
-  initial: { "--x": "100%", scale: 1 },
-  animate: { "--x": "-100%", scale: 1 },
-  whileTap: { scale: 0.95 },
-  transition: {
-    repeat: Infinity,
-    repeatType: "loop",
-    repeatDelay: 1,
-    type: "spring",
-    stiffness: 20,
-    damping: 15,
-    mass: 2,
-    scale: {
-      type: "spring",
-      stiffness: 200,
-      damping: 5,
-      mass: 0.5,
-    },
-  },
-} as AnimationProps;
-interface ShinyButtonProps {
+interface ShinyButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  className?: string;
 }
+
 const ShinyButton = ({ children, className, ...props }: ShinyButtonProps) => {
   return (
-    <motion.button
-      {...animationProps}
+    <button
       {...props}
       className={cn(
-        "relative font-medium backdrop-blur-xl transition-shadow duration-300 ease-in-out hover:shadow dark:bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/10%)_0%,transparent_60%)] dark:hover:shadow-[0_0_20px_hsl(var(--primary)/10%)]",
-        className,
+        "relative rounded-lg bg-card border border-border text-foreground font-medium text-sm px-5 py-2 overflow-hidden transition-colors duration-200 hover:bg-accent active:scale-[0.98]",
+        className
       )}
     >
-      <span
-        className="relative block size-full text-[16px] tracking-wide text-[rgb(0,0,0,65%)] dark:font-light dark:text-[rgb(255,255,255,90%)]"
-        style={{
-          maskImage:
-            "linear-gradient(-75deg,hsl(var(--primary)) calc(var(--x) + 20%),transparent calc(var(--x) + 30%),hsl(var(--primary)) calc(var(--x) + 100%))",
-        }}
+      <span className="relative z-10">{children}</span>
+      {/* Shimmer layer: uses transform (GPU-accelerated) */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 will-change-transform"
+        aria-hidden="true"
       >
-        {children}
-      </span>
-      <span
-        style={{
-          mask: "linear-gradient(rgb(0,0,0), rgb(0,0,0)) content-box,linear-gradient(rgb(0,0,0), rgb(0,0,0))",
-          maskComposite: "exclude",
-        }}
-        className="absolute inset-0 z-10 block rounded-[inherit] bg-[linear-gradient(-75deg,hsl(var(--primary)/10%)_calc(var(--x)+20%),hsl(var(--primary)/50%)_calc(var(--x)+25%),hsl(var(--primary)/10%)_calc(var(--x)+100%))] p-px"
-      ></span>
-    </motion.button>
+        <div className="absolute top-0 left-0 h-full w-[200%] -translate-x-full animate-[shimmer-slide_3s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-foreground/5 to-transparent" />
+      </div>
+    </button>
   );
 };
 

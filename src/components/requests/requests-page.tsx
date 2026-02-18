@@ -35,7 +35,7 @@ export default function RequestsComponent({
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-stone-200">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-foreground">
       <BlurIn
         word="Requests"
         className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"

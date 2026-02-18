@@ -1,6 +1,5 @@
 'use client'
 
-import { Card, CardFooter } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { useState, useEffect, Suspense } from "react"
 import Image from "next/image"
@@ -29,19 +28,18 @@ export default function LoginComponent() {
 
   return (
     <Suspense fallback={<LoginLoadingForPage />}>
-      <div className=" text-stone-200 h-[75vh] md:h-[78vh] relative flex items-center justify-center">
+      <div className=" text-foreground h-[75vh] md:h-[78vh] relative flex items-center justify-center">
         <div className="flex flex-col mx-auto max-w-lg w-full animate-fade-in">
           <div className="space-y-1">
             <GradientText width={2} name="Cubing Kerala" />
-            <p className="text-neutral-500 text-sm md:text-medium text-center">Authenticate with World Cube Association</p>
+            <p className="text-muted-foreground text-sm md:text-medium text-center">Authenticate with World Cube Association</p>
           </div>
           <div>
             <div className="flex items-center justify-center h-[230px] w-full"><LoginLotttieComponent path="/login2.json" /></div>
-            <Card className="border-none rounded-none bg-neutral-950 text-stone-200">
-              <CardFooter className="flex items-center justify-center">
+            <div className="flex items-center justify-center py-4">
                 <RainbowButton
                   onClick={handleLogin}
-                  className="text-green-400 hover:text-green-500 font-semibold w-[80vw] md:w-2/3 h-10"
+                  className="font-semibold w-[80vw] md:w-2/3 h-11 gap-2"
                   disabled={loading}
                 >
                   {loading ? (
@@ -49,14 +47,13 @@ export default function LoginComponent() {
                       <LoginLoadingComponent />
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2">
+                    <>
                       <Image width={50} height={50} src="/WCALogo.svg" className="h-5 w-5" alt="wca-logo" />
-                      <span className="font-semibold">Login</span>
-                    </div>
+                      Login
+                    </>
                   )}
                 </RainbowButton>
-              </CardFooter>
-            </Card>
+            </div>
           </div>
         </div>
         <DotPattern
@@ -66,7 +63,7 @@ export default function LoginComponent() {
           cy={1}
           cr={1}
           className={cn(
-            "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
+            "opacity-50 [mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] ",
           )}
         />
       </div>

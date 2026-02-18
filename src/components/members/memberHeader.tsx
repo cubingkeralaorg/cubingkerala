@@ -29,13 +29,16 @@ export function MemberHeader({
         />
         <div className="space-x-2">
           <Badge
-            className={`${getRoleBadgeColor(role)} rounded bg-neutral-900 hover:bg-neutral-900 border-none`}
-            variant="secondary"
+            className={`${getRoleBadgeColor(role)} rounded-lg bg-secondary border border-border hover:bg-accent transition-colors duration-200`}
+            variant="outline"
           >
             <span>Cubing Kerala {capitalizeRole(role)}</span>
           </Badge>
           {delegateStatus && (
-            <Badge className="text-yellow-300 rounded bg-neutral-900 hover:bg-neutral-900 border-none">
+            <Badge
+              className="text-yellow-500 rounded-lg bg-secondary border border-border hover:bg-accent transition-colors duration-200"
+              variant="outline"
+            >
               WCA {capitalizeRole(delegateStatus)}
             </Badge>
           )}
@@ -48,7 +51,7 @@ export function MemberHeader({
             src={isDefaultAvatar ? "/user.png" : avatarUrl}
             alt="Profile Picture"
           />
-          <AvatarFallback className="rounded-md bg-neutral-900 text-stone-200">
+          <AvatarFallback className="rounded-md bg-card text-foreground">
             {name}
           </AvatarFallback>
         </Avatar>

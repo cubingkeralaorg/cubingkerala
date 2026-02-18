@@ -2,7 +2,6 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import ShinyButton from "../ui/shiny-button";
 import { FaFacebook } from "react-icons/fa";
 
 const social_links = [
@@ -32,8 +31,8 @@ export function CubingKeralaUnravel() {
   };
 
   return (
-    <div className="relative flex w-full flex-col text-stone-200 items-center justify-center overflow-hidden rounded-none">
-      <div className="container bg-neutral-900 px-4 z-20 border border-neutral-800 rounded-lg py-10 md:py-24">
+    <div className="relative flex h-full w-full flex-col text-foreground items-center justify-center overflow-hidden">
+      <div className="container bg-card px-4 z-20 border border-border rounded-lg py-10 md:py-24">
         <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
           <div className="space-y-4">
             <div className="inline-block rounded-lg text-green-500 text-sm">
@@ -42,7 +41,7 @@ export function CubingKeralaUnravel() {
             <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
               Unraveling the Cube, Connecting the Community
             </h2>
-            <p className="mx-auto text-stone-400 max-w-[700px] text-[15px] md:text-lg">
+            <p className="mx-auto text-muted-foreground max-w-[700px] text-[15px] md:text-lg">
               Cubing Kerala is a vibrant community of Rubik&apos;s Cube
               enthusiasts, founded in 2017 with the goal of promoting the art of
               cubing in the state. Over the years, we have organized numerous
@@ -54,7 +53,7 @@ export function CubingKeralaUnravel() {
             <div className="inline-block rounded-lg text-green-500 text-sm">
               Our Mission
             </div>
-            <p className="mx-auto max-w-[700px] text-stone-400 text-[15px] md:text-lg">
+            <p className="mx-auto max-w-[700px] text-muted-foreground text-[15px] md:text-lg">
               At Cubing Kerala, our mission is to cultivate a vibrant cubing
               community, promote the sport, and provide a platform for cubers to
               showcase their skills, connect with like- minded individuals, and
@@ -68,19 +67,16 @@ export function CubingKeralaUnravel() {
                 {social_links.map((social) => {
                   const Icon = social.icon;
                   return (
-                    <div
+                    <button
                       key={social.id}
                       onClick={() => handleSocialClick(social.url)}
+                      className="inline-flex items-center gap-2 text-[15px] font-medium text-foreground/70 hover:text-foreground border border-border hover:bg-accent px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer"
                     >
-                      <ShinyButton className="bg-neutral-800 px-2 py-1 rounded-lg hover:bg-neutral-700 transition-all duration-300 ease-in">
-                        <div className="flex gap-2 items-center cursor-pointer text-stone-400">
-                          <Icon />
-                          <span className="hidden md:block text-[15px]">
-                            {social.name}
-                          </span>
-                        </div>
-                      </ShinyButton>
-                    </div>
+                      <Icon />
+                      <span className="hidden md:block">
+                        {social.name}
+                      </span>
+                    </button>
                   );
                 })}
               </div>

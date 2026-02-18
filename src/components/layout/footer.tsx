@@ -16,17 +16,10 @@ const handleGithubRedirect = () => {
 
 const CubingKeralaFooter = () => {
     return (
-        <footer className="py-6 px-6 sm:px-6 text-stone-400 flex justify-center items-center">
-            <div className="space-y-1 w-full">
-                <p className="text-xs text-stone-600">Created by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-blue-400 transition-all duration-200 ease-in">allenjohn</span></p>
-                <div className='flex items-center justify-between'>
-                    <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
-                    <div onClick={() => handleGithubRedirect()} className='text-stone-400 transition-all duration-200 ease-in hover:text-blue-400 cursor-pointer text-xs hidden md:flex gap-1 items-center'>
-                        <FaGithub className='text-xs' />
-                        <span>github</span>
-                    </div>
-                    <FaGithub onClick={() => handleGithubRedirect()} className='text-stone-400 hover:text-blue-500 cursor-pointer text-xs md:hidden mr-1' />
-                </div>
+        <footer className="py-6 px-6 sm:px-6 text-muted-foreground flex justify-center items-center border-t border-border mt-auto">
+            <div className="space-y-1 w-full text-center">
+                <p className="text-xs text-muted-foreground/60">Created by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-primary transition-all duration-200 ease-in font-medium">allenjohn</span></p>
+                <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
             </div>
         </footer>
     )

@@ -29,7 +29,7 @@ export function LocationSection({
     <div className="flex items-center gap-2">
       <div className="space-y-1 md:max-w-[50vw]">
         <p className="font-medium text-[17px] md:text-[18px]">Location</p>
-        <p className="text-stone-400 text-[15px] text-wrap md:text-[16px]">
+        <p className="text-muted-foreground text-[15px] text-wrap md:text-[16px]">
           {getFullVenueAddress(venue, venueAddress)}
         </p>
         <div

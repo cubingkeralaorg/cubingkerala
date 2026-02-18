@@ -25,7 +25,7 @@ export function OrganizersList({ organizers }: OrganizersListProps) {
           >
             <p
               onClick={() => openOrganizerProfile(organizer.url)}
-              className={`font-medium text-normal text-stone-400 ${
+              className={`font-medium text-normal text-muted-foreground ${
                 organizer.wca_id
                   ? "hover:text-blue-500 cursor-pointer"
                   : "cursor-default"

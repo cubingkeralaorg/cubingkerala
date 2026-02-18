@@ -34,11 +34,11 @@ export function RegistrationDetails({
         <p className="font-medium text-[17px] md:text-[18px]">
           Registration period
         </p>
-        <p className="text-stone-400 text-[15px] md:text-[16px]">
+        <p className="text-muted-foreground text-[15px] md:text-[16px]">
           Online registration opened on{" "}
           {formatRegistrationDate(registrationOpen)}
         </p>
-        <p className="text-stone-400 text-[15px] md:text-[16px]">
+        <p className="text-muted-foreground text-[15px] md:text-[16px]">
           {isClosed
             ? `Registration closed on ${formatRegistrationDate(registrationClose)}`
             : `Registration will close on ${formatRegistrationDate(registrationClose)}`}

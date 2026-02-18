@@ -30,25 +30,25 @@ export function PersonalRecordsTable({
   personalRecords,
 }: PersonalRecordsTableProps) {
   return (
-    <div className="w-full max-w-screen-md mt-5 border rounded-md border-neutral-800">
+    <div className="w-full max-w-screen-md mt-5 border rounded-md border-border">
       <Table className="text-sm md:text-[15px] rounded-md">
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-neutral-800">
-            <TableHead className="text-neutral-500">Event</TableHead>
-            <TableHead className="text-neutral-500">NR</TableHead>
-            <TableHead className="text-neutral-500">CR</TableHead>
-            <TableHead className="text-neutral-500">WR</TableHead>
-            <TableHead className="text-neutral-500">Best</TableHead>
-            <TableHead className="text-neutral-500">Average</TableHead>
-            <TableHead className="text-neutral-500">WR</TableHead>
-            <TableHead className="text-neutral-500">CR</TableHead>
-            <TableHead className="text-neutral-500">NR</TableHead>
+          <TableRow className="hover:bg-transparent border-border">
+            <TableHead className="text-muted-foreground">Event</TableHead>
+            <TableHead className="text-muted-foreground">NR</TableHead>
+            <TableHead className="text-muted-foreground">CR</TableHead>
+            <TableHead className="text-muted-foreground">WR</TableHead>
+            <TableHead className="text-muted-foreground">Best</TableHead>
+            <TableHead className="text-muted-foreground">Average</TableHead>
+            <TableHead className="text-muted-foreground">WR</TableHead>
+            <TableHead className="text-muted-foreground">CR</TableHead>
+            <TableHead className="text-muted-foreground">NR</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {personalRecords.map((record, index) => (
             <TableRow
-              className="hover:bg-transparent border-y-neutral-800"
+              className="hover:bg-transparent border-border"
               key={index}
             >
               <TableCell>
@@ -59,7 +59,7 @@ export function PersonalRecordsTable({
                         className={`cubing-icon event-${record.event}`}
                       ></span>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-green-400 py-1 px-2 rounded-none text-black">
+                    <TooltipContent className="bg-green-500 py-1 px-2 rounded-none text-foreground">
                       <p>{record.event}</p>
                     </TooltipContent>
                   </Tooltip>

@@ -96,7 +96,7 @@ export default function MembersComponent({
 
   return (
     <Suspense fallback={<MembersLoading />}>
-      <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-stone-200 flex flex-col">
+      <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col">
         <div className="animate-fade-in">
           <div className="flex justify-between items-center gap-6 mb-4">
             <BlurIn
@@ -107,13 +107,13 @@ export default function MembersComponent({
               onClick={handleJoinCK}
               className="w-2/3 md:w-1/4 flex justify-end items-center"
             >
-              <ShinyButton className="rounded w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-neutral-200 hover:bg-neutral-300 transition-all duration-200 ease-in-out">
+              <ShinyButton className="rounded-lg w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-secondary border border-border hover:bg-accent/80 hover:border-foreground/20 transition-all duration-200 ease-in-out">
                 {isJoinCkLoading ? (
                   <div className="flex items-center justify-center h-6">
-                    <Loader className="animate-spin text-black" size={16} />
+                    <Loader className="animate-spin text-foreground" size={16} />
                   </div>
                 ) : (
-                  <span className="text-xs md:text-sm text-black font-semibold">
+                  <span className="text-xs md:text-sm text-foreground font-semibold">
                     Join Cubing Kerala
                   </span>
                 )}
@@ -122,7 +122,7 @@ export default function MembersComponent({
           </div>
 
           <div
-            className="rounded-md border border-neutral-800"
+            className="rounded-md border border-border"
             style={{ minHeight: "600px", overflow: "hidden" }}
           >
             <SearchComponent handleSearch={handleSearch} />

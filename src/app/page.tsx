@@ -89,7 +89,7 @@ export default function Home() {
             <LegendsSection />
           </motion.div>
         </section>
-        <section ref={ref4} className="mx-5">
+        <section ref={ref4} className="mx-5 pb-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{

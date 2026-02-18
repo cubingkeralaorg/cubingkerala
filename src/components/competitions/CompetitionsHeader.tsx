@@ -21,7 +21,7 @@ export function CompetitionsHeader({
           word="Competitions"
           className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-2 md:mb-4"
         />
-        <div className="text-xs text-gray-400 text-start ml-1">
+        <div className="text-xs text-muted-foreground text-start ml-1">
           Last updated: {lastUpdated}
         </div>
       </div>

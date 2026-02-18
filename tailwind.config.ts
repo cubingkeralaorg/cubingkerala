@@ -142,7 +142,8 @@ const config = {
     			rainbow: 'rainbow var(--speed, 2s) infinite linear',
     			gradient: 'gradient 8s linear infinite',
     			'shiny-text': 'shiny-text 8s infinite',
-    			grid: 'grid 15s linear infinite'
+    			grid: 'grid 15s linear infinite',
+			shimmer: 'shimmer 3s infinite'
     		}
     	},
     	animation: {

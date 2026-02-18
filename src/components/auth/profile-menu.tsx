@@ -22,12 +22,12 @@ export function Profile({ profileInfo, handleLogout }: {
                 <MenubarTrigger>
                     <AnimatedContactLink userInfo={profileInfo?.me.wca_id} text="Logout" />
                 </MenubarTrigger>
-                <MenubarContent style={{zIndex: '10000'}} className="bg-neutral-950 border-stone-800 rounded-md text-stone-200">
-                    <MenubarItem className="text-stone-400 hover:bg-none cursor-default">{profileInfo?.me.name}</MenubarItem>
+                <MenubarContent style={{zIndex: '10000'}} className="bg-background border-border rounded-md text-foreground">
+                    <MenubarItem className="text-muted-foreground hover:bg-none cursor-default">{profileInfo?.me.name}</MenubarItem>
                     {
-                        profileInfo?.me.wca_id == "2017JOHN14" ? <Link href={"/requests"}><MenubarItem className="hover:bg-neutral-900 cursor-pointer">Requsets</MenubarItem></Link> : null
+                        profileInfo?.me.wca_id == "2017JOHN14" ? <Link href={"/requests"}><MenubarItem className="hover:bg-accent cursor-pointer">Requsets</MenubarItem></Link> : null
                     }
-                    <MenubarItem onClick={handleLogout} className="hover-bg-red-500/10 hover:text-red-500 hover:bg-red-500/10 rounded-none cursor-pointer">Logout</MenubarItem>
+                    <MenubarItem onClick={handleLogout} className="hover-bg-red-500/10 hover:text-red-500 hover:bg-red-600/10 rounded-none cursor-pointer">Logout</MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
         </Menubar>

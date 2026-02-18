@@ -16,7 +16,7 @@ export function AnimatedShinyTextComponent({
     <div>
       <div
         className={cn(
-          "group rounded border border-black/5 bg-neutral-800 text-white transition-all duration-200 ease-in-out hover:cursor-pointer dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+          "group rounded-lg border border-border bg-card text-foreground transition-all duration-200 ease-in-out hover:cursor-pointer hover:bg-accent"
         )}
       >
         <AnimatedShinyText
@@ -24,9 +24,9 @@ export function AnimatedShinyTextComponent({
             text === "Logout"
               ? "hover:text-red-500"
               : text === "Login"
-              ? "hover:text-green-400"
-              : "hover:text-stone-300"
-          } text-stone-200 ease-out hover:duration-300`}
+              ? "hover:text-green-500"
+              : "hover:text-primary"
+          } text-foreground ease-out hover:duration-300`}
         >
           <span
             className={

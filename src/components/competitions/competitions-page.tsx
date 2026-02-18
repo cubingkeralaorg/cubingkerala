@@ -20,7 +20,7 @@ const CompetitionsPage = () => {
   }
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-stone-200 flex flex-col min-h-[calc(100vh-160px)]">
+    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col min-h-[calc(100vh-160px)]">
       <div className="animate-fade-in w-full">
         <CompetitionsHeader
           lastUpdated={lastUpdated}

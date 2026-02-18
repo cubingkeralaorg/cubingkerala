@@ -39,7 +39,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
 
   const getCompetitionStatus = () => {
     if (competition.cancelled_at) {
-      return <span className="text-red-400">Cancelled</span>;
+      return <span className="text-red-500">Cancelled</span>;
     }
 
     const today = new Date().toDateString();
@@ -50,13 +50,13 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
       return <span className="text-green-300">Ongoing</span>;
     }
 
-    return <span className="text-red-400">Completed</span>;
+    return <span className="text-red-500">Completed</span>;
   };
 
   return (
     <Card
       key={`${type}-${competition.id}-${index}`}
-      className="bg-neutral-950 relative hover:bg-neutral-900 transition-all ease-in duration-200 text-stone-400 min-w-[320px] max-w-fit md:w-[380px] flex-shrink-0 border border-neutral-800 rounded-md"
+      className="bg-background relative hover:bg-secondary/50 transition-all ease-in duration-200 text-muted-foreground min-w-[320px] max-w-fit md:w-[380px] flex-shrink-0 border border-border rounded-lg"
     >
       {type === "past" && (
         <Badge className="absolute right-3 bottom-3 text-[11px] md:text-xs bg-transparent hover:bg-transparent cursor-default px-1">
@@ -66,7 +66,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
 
       <Link prefetch={true} href={`/competitions/${competition.id}`}>
         <CardContent className="p-4 h-[150px] cursor-pointer">
-          <h3 className="text-[17px] font-bold text-stone-200 text-wrap line-clamp-2">
+          <h3 className="text-[17px] font-bold text-foreground text-wrap line-clamp-2">
             {competition.name}
           </h3>
           <p className="text-wrap w-full text-[15px] py-2">
@@ -81,7 +81,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
                   <TooltipTrigger>
                     <span className={`cubing-icon event-${event} pr-3`}></span>
                   </TooltipTrigger>
-                  <TooltipContent className="bg-green-400 text-black py-1 px-2 rounded-none">
+                  <TooltipContent className="bg-green-500 text-foreground py-1 px-2 rounded-none">
                     <p>{event}</p>
                   </TooltipContent>
                 </Tooltip>

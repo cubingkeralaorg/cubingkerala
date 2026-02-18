@@ -12,10 +12,10 @@ export function AnimatedShinyTextLearnignComingSoon() {
       <Link href={"/learn"}>
           <div
             className={cn(
-              "group rounded border border-white/10 bg-neutral-900 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-800 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800",
+              "group rounded-lg border border-border bg-card text-base text-foreground transition-all ease-in hover:cursor-pointer hover:bg-accent",
             )}
           >
-            <AnimatedShinyText className="inline-flex text-xs items-center text-stone-200 justify-center px-2 md:px-4 py-1 transition ease-out hover:text-neutral-100 hover:duration-300 hover:dark:text-neutral-400">
+            <AnimatedShinyText className="inline-flex text-xs items-center text-foreground justify-center px-2 md:px-4 py-1 transition ease-out hover:text-foreground hover:duration-300">
               <span>✨ Learn to solve a Rubik&apos;s Cube</span>
               <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
             </AnimatedShinyText>
