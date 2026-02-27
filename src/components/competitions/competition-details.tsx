@@ -22,7 +22,7 @@ const CompetitionDetailsComponent = ({
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="w-full mx-auto text-foreground py-6 md:py-8 px-4 md:px-5">
+      <div className="container mx-auto text-foreground py-6 md:py-8 px-4 md:px-5">
         <div className="grid animate-fade-in gap-6">
           <CompetitionHeader
             name={compInfo.name}

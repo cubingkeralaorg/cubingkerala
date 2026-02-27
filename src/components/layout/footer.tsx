@@ -16,11 +16,9 @@ const handleGithubRedirect = () => {
 
 const CubingKeralaFooter = () => {
     return (
-        <footer className="py-6 px-6 sm:px-6 text-muted-foreground flex justify-center items-center border-t border-border mt-auto">
-            <div className="space-y-1 w-full text-center">
-                <p className="text-xs text-muted-foreground/60">Created by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-primary transition-all duration-200 ease-in font-medium">allenjohn</span></p>
-                <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
-            </div>
+        <footer className="py-6 px-6 text-muted-foreground flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 border-t border-border mt-auto">
+            <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
+            <p className="text-xs text-muted-foreground/60">Designed & Developed with ❤️ by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-primary transition-all duration-200 ease-in font-medium">Allen John</span></p>
         </footer>
     )
 }
