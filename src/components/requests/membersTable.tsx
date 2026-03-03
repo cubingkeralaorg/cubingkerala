@@ -20,9 +20,9 @@ export function MembersTable({
 }: MembersTableProps) {
   if (members.length === 0) {
     return (
-      <div className="overflow-x-auto">
-        <div className="w-full min-w-[500px] border border-border/50 rounded-md shadow-sm dark:shadow-2xl overflow-hidden">
-          <table className="w-full table-auto text-sm md:text-[15px]">
+      <div className="rounded-md border border-border/50 overflow-hidden shadow-sm dark:shadow-2xl">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full table-auto text-sm md:text-[15px] min-w-[800px]">
             <thead>
               <tr className="border-b border-border/50">
                 <th className="px-6 py-4 text-left font-semibold text-foreground">
@@ -56,9 +56,9 @@ export function MembersTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <div className="w-full min-w-[500px] border border-border/50 rounded-md shadow-sm dark:shadow-2xl overflow-hidden">
-        <table className="w-full table-auto text-sm md:text-[15px]">
+    <div className="rounded-md border border-border/50 overflow-hidden shadow-sm dark:shadow-2xl">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full table-auto text-sm md:text-[15px] min-w-[800px]">
           <thead>
             <tr className="border-b border-border/50">
               <th className="px-6 py-4 text-left font-semibold text-foreground">
@@ -99,8 +99,8 @@ export function MembersTable({
                     defaultValue={member.role}
                   />
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
+                <td className="px-6 py-4 text-right text-nowrap">
+                  <div className="flex items-center justify-end gap-2">
                     <DeleteMemberPopover
                       handleMemberDelete={onDelete}
                       index={index}

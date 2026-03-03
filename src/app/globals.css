@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow-x: hidden;
+}
+
 body {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar {

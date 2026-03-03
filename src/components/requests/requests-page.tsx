@@ -41,22 +41,26 @@ export default function RequestsComponent({
         className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
       />
 
-      <RequestsTable
-        requests={requestsData}
-        onApprove={handleApprove}
-        onDelete={handleRequestDelete}
-      />
+      <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        <RequestsTable
+          requests={requestsData}
+          onApprove={handleApprove}
+          onDelete={handleRequestDelete}
+        />
+      </div>
 
       <BlurIn
         word="Members"
         className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
       />
 
-      <MembersTable
-        members={membersData}
-        onUpdate={handleUpdate}
-        onDelete={handleMemberDelete}
-      />
+      <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        <MembersTable
+          members={membersData}
+          onUpdate={handleUpdate}
+          onDelete={handleMemberDelete}
+        />
+      </div>
     </div>
   );
 }
