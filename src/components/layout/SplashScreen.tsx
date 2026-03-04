@@ -7,14 +7,27 @@ import LoginLoadingComponent from "@/components/auth/login-loading";
 
 export function SplashScreen({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1400);
+    const hasLoaded = sessionStorage.getItem("cubingKeralaHasLoaded");
 
-    return () => clearTimeout(timer);
+    if (hasLoaded) {
+      setIsInitialLoad(false);
+      setIsLoading(false);
+    } else {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+        sessionStorage.setItem("cubingKeralaHasLoaded", "true");
+      }, 1400);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
+
+  if (!isInitialLoad) {
+    return <div className="min-h-screen flex flex-col">{children}</div>;
+  }
 
   return (
     <>

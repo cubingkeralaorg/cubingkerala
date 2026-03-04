@@ -33,6 +33,7 @@ vi.mock('@/components/auth/login-loading', () => ({
 describe('SplashScreen', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    sessionStorage.clear();
   });
 
   afterEach(() => {
