@@ -52,6 +52,7 @@ export function SplashScreen({ children }: { children: React.ReactNode }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
         transition={{ duration: 0.4, delay: 0.1 }}
+        className="min-h-screen flex flex-col"
       >
         {children}
       </motion.div>

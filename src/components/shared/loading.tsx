@@ -5,7 +5,7 @@ import LoginLoadingComponent from '../auth/login-loading'
 
 const LoadingComponent = ({ width }: { width?: number }) => {
   return (
-    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+    <div className="flex-1 flex justify-center items-center">
       <LoginLoadingComponent />
     </div>
   )
