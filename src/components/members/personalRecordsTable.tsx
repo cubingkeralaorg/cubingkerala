@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
 import { formatEventResult } from "@/utils/wcaFormatters";
 import "@cubing/icons";
 
@@ -59,7 +60,7 @@ export function PersonalRecordsTable({
                         className={`cubing-icon event-${record.event}`}
                       ></span>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-green-500 py-1 px-2 rounded-none text-foreground">
+                    <TooltipContent>
                       <p>{record.event}</p>
                     </TooltipContent>
                   </Tooltip>

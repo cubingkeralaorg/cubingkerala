@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@radix-ui/react-tooltip";
+} from "@/components/ui/tooltip";
 import "@cubing/icons";
 
 interface EventsListProps {
@@ -29,16 +29,18 @@ export function EventsList({
         <p className="font-medium text-[17px] md:text-[18px]">{title}</p>
         <div className="text-sm md:text-[16px] text-muted-foreground">
           {eventsToShow.map((event) => (
-            <TooltipProvider key={event}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <span className={`cubing-icon event-${event} pr-3`}></span>
-                </TooltipTrigger>
-                <TooltipContent className="bg-green-500 rounded-none text-xs py-1 px-2 text-foreground">
-                  <p>{event}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <span key={event} className="inline-flex pr-3">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className={`cubing-icon event-${event}`}></span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{event}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </span>
           ))}
         </div>
       </div>

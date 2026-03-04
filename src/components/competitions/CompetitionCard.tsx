@@ -4,12 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
+
 import "@cubing/icons";
 import { CompetitionCardProps } from "@/types/competition.types";
 import { parseLocalDate } from "@/utils/dateUtils";
@@ -75,18 +71,7 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
           </p>
           <div className="text-xs text-wrap max-w-[300px]">
             {competition?.event_ids.map((event: string, eventIndex: number) => (
-              <TooltipProvider
-                key={`${competition.id}-${event}-${eventIndex}`}
-              >
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className={`cubing-icon event-${event} pr-3`}></span>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-green-500 text-foreground py-1 px-2 rounded-none">
-                    <p>{event}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <span key={`${competition.id}-${event}-${eventIndex}`} className={`cubing-icon event-${event} pr-3`}></span>
             ))}
           </div>
         </CardContent>
