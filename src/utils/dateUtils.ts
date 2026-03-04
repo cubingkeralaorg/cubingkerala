@@ -1,4 +1,15 @@
 /**
+ * Parse a "YYYY-MM-DD" date string as a local date (not UTC).
+ * new Date("2026-03-14") is parsed as UTC midnight, which shifts
+ * to the previous day in negative-offset timezones. This helper
+ * avoids that by constructing the date with local year/month/day.
+ */
+export const parseLocalDate = (dateStr: string): Date => {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+/**
  * Format date range for competition display
  */
 export const formatCompetitionDateRange = (
@@ -6,17 +17,17 @@ export const formatCompetitionDateRange = (
   endDate: string,
 ): string => {
   if (startDate === endDate) {
-    return new Date(endDate).toLocaleDateString("en-US", {
+    return parseLocalDate(endDate).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
   }
 
-  return `${new Date(startDate).toLocaleDateString("en-US", {
+  return `${parseLocalDate(startDate).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-  })} - ${new Date(endDate).toLocaleDateString("en-US", {
+  })} - ${parseLocalDate(endDate).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -43,8 +54,8 @@ export const isCompetitionOngoing = (
 ): boolean => {
   const today = new Date().toDateString();
   return (
-    new Date(startDate).toDateString() === today ||
-    new Date(endDate).toDateString() === today
+    parseLocalDate(startDate).toDateString() === today ||
+    parseLocalDate(endDate).toDateString() === today
   );
 };
 
@@ -52,7 +63,7 @@ export const isCompetitionOngoing = (
  * Check if competition is in the future
  */
 export const isCompetitionUpcoming = (endDate: string): boolean => {
-  return new Date(endDate) > new Date();
+  return parseLocalDate(endDate) > new Date();
 };
 
 /**

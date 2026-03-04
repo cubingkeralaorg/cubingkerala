@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import "@cubing/icons";
 import { CompetitionCardProps } from "@/types/competition.types";
+import { parseLocalDate } from "@/utils/dateUtils";
 
 const CompetitionCard: React.FC<CompetitionCardProps> = ({
   competition,
@@ -20,17 +21,17 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
 }) => {
   const formatDateRange = (startDate: string, endDate: string) => {
     if (startDate === endDate) {
-      return new Date(startDate).toLocaleDateString("en-US", {
+      return parseLocalDate(startDate).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
       });
     }
 
-    return `${new Date(startDate).toLocaleDateString("en-US", {
+    return `${parseLocalDate(startDate).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-    })} - ${new Date(endDate).toLocaleDateString("en-US", {
+    })} - ${parseLocalDate(endDate).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -43,8 +44,8 @@ const CompetitionCard: React.FC<CompetitionCardProps> = ({
     }
 
     const today = new Date().toDateString();
-    const startDate = new Date(competition.start_date).toDateString();
-    const endDate = new Date(competition.end_date).toDateString();
+    const startDate = parseLocalDate(competition.start_date).toDateString();
+    const endDate = parseLocalDate(competition.end_date).toDateString();
 
     if (startDate === today || endDate === today) {
       return <span className="text-green-300">Ongoing</span>;
