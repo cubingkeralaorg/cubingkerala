@@ -40,6 +40,7 @@ export type {
 
 // Results API types
 export type {
+  CompetitionResultEntry,
   MemberCompetitionResult,
   MemberEventResult,
   MemberCompetitionDetails,

@@ -3,19 +3,24 @@
 import React, { Suspense } from "react";
 import Loading from "@/app/competitions/loading";
 import { useCompetitionDetails } from "@/hooks/useCompetitionDetails";
-import { EventDetails } from "@/types/api";
+import { EventDetails, CompetitionResultEntry } from "@/types/api";
 import { CompetitionHeader } from "./competitionHeader";
 import { LocationSection } from "./localSection";
 import { EventsList } from "./eventList";
 import { OrganizersList } from "./organizerList";
 import { RegistrationDetails } from "./registrationDetails";
+import { CompetitionResults } from "./competitionResults";
+import { CiLink } from "react-icons/ci";
+import { openCompetitionPage } from "@/utils/competitionNavigation";
 
 interface CompetitionDetailsComponentProps {
   compInfo: EventDetails;
+  results?: CompetitionResultEntry[];
 }
 
 const CompetitionDetailsComponent = ({
   compInfo,
+  results = [],
 }: CompetitionDetailsComponentProps) => {
   const { showMap, setShowMap, formattedInformation, coordinates } =
     useCompetitionDetails(compInfo);
@@ -108,6 +113,16 @@ const CompetitionDetailsComponent = ({
                 <OrganizersList organizers={compInfo.organizers} />
               </div>
             </div>
+          </div>
+
+          {results.length > 0 && <CompetitionResults results={results} />}
+
+          <div
+            onClick={() => openCompetitionPage(compInfo.id)}
+            className="flex mt-10 justify-center gap-1 text-[15px] md:text-[16px] text-green-500 hover:text-green-600 cursor-pointer"
+          >
+            <p>More details on World Cube Association</p>
+            <CiLink />
           </div>
         </div>
       </div>

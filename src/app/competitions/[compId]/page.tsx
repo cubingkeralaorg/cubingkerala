@@ -19,10 +19,22 @@ interface CompetitionDetailsProps {
 
 const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
   try {
-    const competitionResponse = await axios.get(
-      `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}`,
+    const [competitionResponse, resultsResponse] = await Promise.all([
+      axios.get(
+        `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}`,
+      ),
+      axios
+        .get(
+          `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}/results`,
+        )
+        .catch(() => ({ data: [] })),
+    ]);
+    return (
+      <CompetitionDetails
+        compInfo={competitionResponse.data}
+        results={resultsResponse.data}
+      />
     );
-    return <CompetitionDetails compInfo={competitionResponse.data} />;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       notFound();

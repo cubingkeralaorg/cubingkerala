@@ -1,12 +1,10 @@
 "use client";
 
-import { CiLink } from "react-icons/ci";
 import { RegistrationStatus } from "./registrationStatus";
 import {
   formatRegistrationDate,
   isRegistrationClosed,
 } from "@/utils/dateUtils";
-import { openCompetitionPage } from "@/utils/competitionNavigation";
 
 interface RegistrationDetailsProps {
   competitionId: string;
@@ -51,13 +49,6 @@ export function RegistrationDetails({
           endDate={endDate}
           cancelledAt={cancelledAt}
         />
-      </div>
-      <div
-        onClick={() => openCompetitionPage(competitionId)}
-        className="flex mt-10 gap-1 text-[15px] md:text-[16px] text-green-500 hover:text-green-600 cursor-pointer"
-      >
-        <p>More details on World Cube Association</p>
-        <CiLink />
       </div>
     </div>
   );
