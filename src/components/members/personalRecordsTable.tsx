@@ -55,7 +55,7 @@ export function PersonalRecordsTable({
               <TableCell>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger className="cursor-default">
                       <span
                         className={`cubing-icon event-${record.event}`}
                       ></span>
