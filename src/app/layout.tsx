@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout";
 import { ConditionalFooter } from "@/components/layout/conditionalFooter";
+import { SplashScreen } from "@/components/layout/SplashScreen";
 import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
 import { DataPrefetcher } from "@/components/providers/DataPrefetcher";
@@ -32,12 +33,15 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans bg-background`}>
         <Providers>
           <DataPrefetcher />
-          <Navbar />
-          {children}
-          <Toaster richColors />
-          <ConditionalFooter />
+          <SplashScreen>
+            <Navbar />
+            {children}
+            <Toaster richColors />
+            <ConditionalFooter />
+          </SplashScreen>
         </Providers>
       </body>
     </html>
   );
 }
+

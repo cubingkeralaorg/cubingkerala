@@ -11,31 +11,11 @@ export default function Home() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const [ref1, isVisible1] = useOnScreen({ threshold: 0.1 });
-  const [ref2, isVisible2] = useOnScreen({ threshold: 0.1 });
-  const [ref3, isVisible3] = useOnScreen({ threshold: 0.1 });
-  const [ref4, isVisible4] = useOnScreen({ threshold: 0.1 });
-
-  // Track which sections have been animated (once animated, stay animated)
   const [hasAnimated1, setHasAnimated1] = useState(false);
-  const [hasAnimated2, setHasAnimated2] = useState(false);
-  const [hasAnimated3, setHasAnimated3] = useState(false);
-  const [hasAnimated4, setHasAnimated4] = useState(false);
 
   useEffect(() => {
     if (isVisible1 && !hasAnimated1) setHasAnimated1(true);
-    if (isVisible2 && !hasAnimated2) setHasAnimated2(true);
-    if (isVisible3 && !hasAnimated3) setHasAnimated3(true);
-    if (isVisible4 && !hasAnimated4) setHasAnimated4(true);
-  }, [
-    isVisible1,
-    isVisible2,
-    isVisible3,
-    isVisible4,
-    hasAnimated1,
-    hasAnimated2,
-    hasAnimated3,
-    hasAnimated4,
-  ]);
+  }, [isVisible1, hasAnimated1]);
 
   useEffect(() => {
     scrollTo(0, 0);
@@ -65,43 +45,17 @@ export default function Home() {
             <HeroSection />
           </motion.div>
         </section>
-        <section ref={ref2} className="mx-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: hasAnimated2 ? 1 : 0,
-              y: hasAnimated2 ? 0 : 20,
-            }}
-            transition={{ duration: 1 }}
-          >
-            <CalendarSection />
-          </motion.div>
+        <section className="mx-5">
+          <CalendarSection />
         </section>
-        <section ref={ref3} className="mx-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: hasAnimated3 ? 1 : 0,
-              y: hasAnimated3 ? 0 : 20,
-            }}
-            transition={{ duration: 1 }}
-          >
-            <LegendsSection />
-          </motion.div>
+        <section className="mx-5">
+          <LegendsSection />
         </section>
-        <section ref={ref4} className="mx-5 pb-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: hasAnimated4 ? 1 : 0,
-              y: hasAnimated4 ? 0 : 20,
-            }}
-            transition={{ duration: 1 }}
-          >
-            <UnravelSection />
-          </motion.div>
+        <section className="mx-5 pb-5">
+          <UnravelSection />
         </section>
       </main>
     </div>
   );
 }
+
