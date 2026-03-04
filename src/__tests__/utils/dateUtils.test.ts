@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
+  parseLocalDate,
   formatCompetitionDateRange,
   formatRegistrationDate,
   isCompetitionOngoing,
@@ -10,8 +11,7 @@ import {
 describe('dateUtils', () => {
   describe('formatCompetitionDateRange', () => {
     it('should format single day competition', () => {
-      // Using mid-day times to avoid timezone boundary issues
-      const date = '2024-03-15T12:00:00';
+      const date = '2024-03-15';
       const result = formatCompetitionDateRange(date, date);
 
       expect(result).toContain('Mar');
@@ -20,8 +20,8 @@ describe('dateUtils', () => {
     });
 
     it('should format multi-day competition with range', () => {
-      const startDate = '2024-03-15T12:00:00';
-      const endDate = '2024-03-17T12:00:00';
+      const startDate = '2024-03-15';
+      const endDate = '2024-03-17';
       const result = formatCompetitionDateRange(startDate, endDate);
 
       // Multi-day should have a dash
@@ -30,8 +30,8 @@ describe('dateUtils', () => {
     });
 
     it('should handle cross-month competitions', () => {
-      const startDate = '2024-03-30T12:00:00';
-      const endDate = '2024-04-02T12:00:00';
+      const startDate = '2024-03-30';
+      const endDate = '2024-04-02';
       const result = formatCompetitionDateRange(startDate, endDate);
 
       expect(result).toContain('Mar');
@@ -40,8 +40,8 @@ describe('dateUtils', () => {
     });
 
     it('should handle cross-year competitions', () => {
-      const startDate = '2024-12-30T12:00:00';
-      const endDate = '2025-01-02T12:00:00';
+      const startDate = '2024-12-30';
+      const endDate = '2025-01-02';
       const result = formatCompetitionDateRange(startDate, endDate);
 
       expect(result).toContain('Dec');
@@ -50,8 +50,8 @@ describe('dateUtils', () => {
     });
 
     it('should return different format for same vs different dates', () => {
-      const sameDay = formatCompetitionDateRange('2024-03-15T12:00:00', '2024-03-15T12:00:00');
-      const differentDays = formatCompetitionDateRange('2024-03-15T12:00:00', '2024-03-17T12:00:00');
+      const sameDay = formatCompetitionDateRange('2024-03-15', '2024-03-15');
+      const differentDays = formatCompetitionDateRange('2024-03-15', '2024-03-17');
 
       // Same day doesn't have a dash, different days do
       expect(sameDay.includes('-')).toBe(false);
