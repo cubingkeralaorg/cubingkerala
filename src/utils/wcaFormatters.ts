@@ -54,7 +54,8 @@ export const formatResult = (
 
 export const formatEventResult = (
   best: number | undefined,
-  eventId: string
+  eventId: string,
+  type: "single" | "average" = "single"
 ): string | null => {
   if (!best) return null;
   
@@ -63,7 +64,8 @@ export const formatEventResult = (
   }
   
   if (eventId === "333fm") {
-    return best.toString();
+    if (type === "single") return best.toString();
+    else return convertMillisecondsToTime(best);
   }
   
   return convertMillisecondsToTime(best);

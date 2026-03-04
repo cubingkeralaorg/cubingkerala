@@ -89,6 +89,7 @@ export function PersonalRecordsTable({
                   ? formatEventResult(
                       record.ranking?.average?.best,
                       record.event,
+                      "average"
                     )
                   : null}
               </TableCell>

@@ -3,7 +3,7 @@
 import React from "react";
 import "@cubing/icons";
 import { CompetitionResultEntry } from "@/types/api";
-import { convertMillisecondsToTime } from "@/utils/wcaFormatters";
+import { formatEventResult } from "@/utils/wcaFormatters";
 import {
   Table,
   TableHeader,
@@ -17,10 +17,9 @@ interface CompetitionResultsProps {
   results: CompetitionResultEntry[];
 }
 
-function formatTime(value: number, eventId: string): string {
+function formatTime(value: number, eventId: string, type: "single" | "average" = "single"): string {
   if (value <= 0) return "DNF";
-  if (eventId === "333fm") return value.toString();
-  return convertMillisecondsToTime(value);
+  return formatEventResult(value, eventId, type) || "";
 }
 
 // WCA round type priority — higher number = later round
@@ -111,10 +110,10 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
                         {result.name}
                       </TableCell>
                       <TableCell className="font-semibold text-nowrap">
-                        {formatTime(result.best, eventId)}
+                        {formatTime(result.best, eventId, "single")}
                       </TableCell>
                       <TableCell className="font-semibold text-nowrap">
-                        {formatTime(result.average, eventId)}
+                        {formatTime(result.average, eventId, "average")}
                       </TableCell>
                     </TableRow>
                   ))}

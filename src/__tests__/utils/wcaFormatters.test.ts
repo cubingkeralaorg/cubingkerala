@@ -157,9 +157,14 @@ describe('wcaFormatters', () => {
     });
 
     describe('Fewest Moves', () => {
-      it('should return move count as string', () => {
+      it('should return move count as string for single', () => {
         expect(formatEventResult(28, '333fm')).toBe('28');
         expect(formatEventResult(31, '333fm')).toBe('31');
+      });
+
+      it('should format average results normally', () => {
+        expect(formatEventResult(2800, '333fm', 'average')).toBe('28.00');
+        expect(formatEventResult(3133, '333fm', 'average')).toBe('31.33');
       });
     });
 
