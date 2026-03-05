@@ -6,13 +6,13 @@ import { Sun, Moon } from "lucide-react";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const isDark = mounted && theme === "dark";
+  const isDark = mounted && (theme === "dark" || resolvedTheme === "dark");
 
   return (
     <button
