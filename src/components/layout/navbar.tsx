@@ -40,7 +40,7 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <div className={`bg-background/80 backdrop-blur-md text-foreground sticky top-0 ${isMenuOpen ? 'z-[10000]' : 'z-50'}`}>
+    <div className={`bg-background/80 backdrop-blur-md text-foreground ${isMenuOpen ? 'fixed inset-x-0 top-0 z-[10000]' : 'sticky top-0 z-50'}`}>
       <div className="container mx-auto border-b border-border relative flex justify-between items-center px-4 py-1 md:py-3">
         {/* Left Side: Logo and Navigation Links */}
         <div className="flex items-center space-x-8">
