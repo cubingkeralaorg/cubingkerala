@@ -32,16 +32,12 @@ interface CubingKeralaFooterProps {
 const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     if (compact) {
         return (
-            <footer className="rounded-2xl border border-border/70 bg-background/90 px-4 py-2 text-muted-foreground">
-                <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala</p>
-                    <button
-                        onClick={handleGithubRedirect}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground/80 hover:text-foreground hover:bg-accent transition-all"
-                        aria-label="Open GitHub"
-                    >
-                        <FaGithub size={16} />
-                    </button>
+            <footer className="rounded-2xl border border-border/70 bg-background/90 px-4 py-3 text-muted-foreground">
+                <div className="flex flex-col items-start justify-start gap-1 text-left">
+                    <p className="text-xs">&copy; 2026 Cubing Kerala. All rights reserved.</p>
+                    <p className="text-xs text-muted-foreground/80">
+                        Designed & Developed with ❤️ by <span onClick={handleLinkRedirect} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>
+                    </p>
                 </div>
             </footer>
         )
