@@ -13,8 +13,8 @@ const ApprovePopover = ({
   handleApprove,
   index,
 }: {
-  handleApprove: (index: number) => Promise<void> | void;
-  index: number;
+  handleApprove: (index: string) => Promise<void> | void;
+  index: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

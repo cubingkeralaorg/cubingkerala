@@ -9,8 +9,8 @@ import Link from "next/link";
 
 interface RequestsTableProps {
   requests: Request[];
-  onApprove: (index: number) => void;
-  onDelete: (index: number) => void;
+  onApprove: (wcaid: string) => void;
+  onDelete: (wcaid: string) => void;
 }
 
 export function RequestsTable({
@@ -76,16 +76,16 @@ export function RequestsTable({
                 </td>
                 <td className="px-6 py-4">
                   <RoleSelector
-                    id={`role-${index}`}
+                    id={`role-${request.wcaid}`}
                     defaultValue={request.role}
                   />
                 </td>
                 <td className="px-6 py-4 text-right text-nowrap">
                   <div className="flex items-center justify-end gap-2">
-                    <ApprovePopover handleApprove={onApprove} index={index} />
+                    <ApprovePopover handleApprove={onApprove} index={request.wcaid} />
                     <DeleteRequestPopover
                       handleRequestDelete={onDelete}
-                      index={index}
+                      index={request.wcaid}
                     />
                   </div>
                 </td>

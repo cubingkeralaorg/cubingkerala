@@ -13,8 +13,8 @@ const UpdatePopover = ({
   handleUpdate,
   index,
 }: {
-  handleUpdate: (index: number) => Promise<void> | void;
-  index: number;
+  handleUpdate: (index: string) => Promise<void> | void;
+  index: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

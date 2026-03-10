@@ -9,8 +9,8 @@ import Link from "next/link";
 
 interface MembersTableProps {
   members: Request[];
-  onUpdate: (index: number) => void;
-  onDelete: (index: number) => void;
+  onUpdate: (wcaid: string) => void;
+  onDelete: (wcaid: string) => void;
 }
 
 export function MembersTable({
@@ -76,16 +76,16 @@ export function MembersTable({
                 </td>
                 <td className="px-6 py-4">
                   <RoleSelector
-                    id={`role-${index}`}
+                    id={`role-${member.wcaid}`}
                     defaultValue={member.role}
                   />
                 </td>
                 <td className="px-6 py-4 text-right text-nowrap">
                   <div className="flex items-center justify-end gap-2">
-                    <UpdatePopover handleUpdate={onUpdate} index={index} />
+                    <UpdatePopover handleUpdate={onUpdate} index={member.wcaid} />
                     <DeleteMemberPopover
                       handleMemberDelete={onDelete}
-                      index={index}
+                      index={member.wcaid}
                     />
                   </div>
                 </td>

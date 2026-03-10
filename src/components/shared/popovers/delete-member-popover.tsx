@@ -13,8 +13,8 @@ const DeleteMemberPopover = ({
   handleMemberDelete,
   index,
 }: {
-  handleMemberDelete: (index: number) => Promise<void> | void;
-  index: number;
+  handleMemberDelete: (index: string) => Promise<void> | void;
+  index: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

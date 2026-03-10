@@ -47,9 +47,12 @@ export function useRequests(
     }, 2000);
   };
 
-  const handleApprove = async (index: number) => {
-    const updatedRequest = { ...requestsData[index] };
-    updatedRequest.role = getRoleValue(`role-${index}`);
+  const handleApprove = async (wcaid: string) => {
+    const request = requestsData.find((r) => r.wcaid === wcaid);
+    if (!request) return;
+
+    const updatedRequest = { ...request };
+    updatedRequest.role = getRoleValue(`role-${wcaid}`);
 
     try {
       const data = await approveRequest(updatedRequest);
@@ -62,9 +65,12 @@ export function useRequests(
     }
   };
 
-  const handleUpdate = async (index: number) => {
-    const updatedMember = { ...membersData[index] };
-    updatedMember.role = getRoleValue(`role-${index}`);
+  const handleUpdate = async (wcaid: string) => {
+    const member = membersData.find((m) => m.wcaid === wcaid);
+    if (!member) return;
+
+    const updatedMember = { ...member };
+    updatedMember.role = getRoleValue(`role-${wcaid}`);
 
     try {
       await updateMember(updatedMember);
@@ -77,9 +83,9 @@ export function useRequests(
     }
   };
 
-  const handleMemberDelete = async (index: number) => {
+  const handleMemberDelete = async (wcaid: string) => {
     try {
-      const data = await deleteMember(membersData[index].wcaid);
+      const data = await deleteMember(wcaid);
       toast.success(data.message);
       refreshPage();
     } catch (error) {
@@ -89,9 +95,9 @@ export function useRequests(
     }
   };
 
-  const handleRequestDelete = async (index: number) => {
+  const handleRequestDelete = async (wcaid: string) => {
     try {
-      const data = await deleteRequest(requestsData[index].wcaid);
+      const data = await deleteRequest(wcaid);
       toast.success(data.message);
       refreshPage();
     } catch (error) {
