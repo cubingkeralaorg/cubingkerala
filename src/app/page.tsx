@@ -73,24 +73,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-5">
-          <div className="container bg-neutral-500/[0.04] px-4 border border-border rounded-lg py-10 md:py-24">
-            <div className="space-y-4 sm:px-10 text-start md:text-center flex flex-col items-start md:items-center">
-              <div className="inline-block rounded-lg text-sm text-green-500">
-                Learning Path
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">
-                Learn & Improve Faster
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground text-[15px] md:text-lg lg:whitespace-nowrap">
-                Build fundamentals, sharpen advanced techniques, and prepare for competition solving.
-              </p>
-              <div onClick={() => router.push("/learn")} className="w-fit">
-                <AnimatedContactLink userInfo={null} text="Learn" />
-              </div>
-            </div>
-          </div>
-        </section>
         <section className="mx-5 pb-5">
           <UnravelSection />
         </section>

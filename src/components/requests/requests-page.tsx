@@ -28,7 +28,7 @@ export default function RequestsComponent({
 
   if (isLoading) {
     return (
-      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+      <div className="flex-1 flex w-full min-h-[100dvh] md:min-h-screen justify-center items-center pb-32 md:pb-0">
         <LoadingComponent />
       </div>
     );

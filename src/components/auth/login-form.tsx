@@ -28,7 +28,7 @@ export default function LoginComponent() {
 
   return (
     <Suspense fallback={<LoginLoadingForPage />}>
-      <div className=" text-foreground h-[75vh] md:h-[78vh] relative flex items-center justify-center">
+      <div className=" text-foreground min-h-[85vh] md:min-h-[85vh] relative flex items-center justify-center py-10">
         <div className="flex flex-col mx-auto max-w-lg w-full animate-fade-in">
           <div className="space-y-1">
             <GradientText width={2} name="Cubing Kerala" />
