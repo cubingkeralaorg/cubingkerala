@@ -32,16 +32,15 @@ interface CubingKeralaFooterProps {
 const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     if (compact) {
         return (
-            <footer className="rounded-2xl border border-border/70 bg-background/90 px-4 py-4 text-muted-foreground">
+            <footer className="rounded-2xl border border-border/70 bg-background/90 px-4 py-2 text-muted-foreground">
                 <div className="flex items-center justify-between gap-3">
                     <p className="text-xs">&copy; {new Date().getFullYear()} Cubing Kerala</p>
                     <button
                         onClick={handleGithubRedirect}
-                        className="inline-flex items-center gap-1.5 text-xs text-foreground/80 hover:text-foreground transition-colors"
-                        aria-label="GitHub repository"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-foreground/80 hover:text-foreground hover:bg-accent transition-all"
+                        aria-label="Open GitHub"
                     >
-                        <FaGithub size={14} />
-                        GitHub
+                        <FaGithub size={16} />
                     </button>
                 </div>
             </footer>

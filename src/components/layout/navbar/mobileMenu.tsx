@@ -49,7 +49,7 @@ export function MobileMenu({
             : "opacity-0 -translate-y-5 pointer-events-none"
         }`}
       >
-        <div className="mx-3 flex-1 rounded-2xl border border-border/70 bg-background/95 shadow-md backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="mx-3 my-3 flex-1 rounded-2xl border border-border/70 bg-background/95 shadow-md backdrop-blur supports-[backdrop-filter]:bg-background/80">
           <div className="flex h-full flex-col gap-4 px-5 pt-4">
           <div className={`flex flex-col gap-1 transition-all duration-500 delay-75 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
             <NavLinks
@@ -80,7 +80,7 @@ export function MobileMenu({
         </div>
         </div>
 
-        <div className={`mt-auto mb-2 px-3 transition-all duration-500 delay-200 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
+        <div className={`mt-auto mb-3 px-3 transition-all duration-500 delay-200 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
           <CubingKeralaFooter compact />
         </div>
       </nav>
