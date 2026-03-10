@@ -1,38 +1,50 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const ApprovePopover = ({
   handleApprove,
   index,
 }: {
-  handleApprove: (index: number) => void;
+  handleApprove: (index: number) => Promise<void> | void;
   index: number;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleApprove(index);
+      setIsOpen(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <Button
-          className="bg-green-500 hover:bg-green-600 text-foreground rounded-md"
-          size="sm"
-        >
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="default" size="sm">
           Approve
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        Are you sure you want to approve this request?
+      <PopoverContent className="w-auto p-4 space-y-2">
+        <p className="text-sm">Are you sure you want to approve this request?</p>
         <Button
-          onClick={() => handleApprove(index)}
+          onClick={onClick}
           size="sm"
-          className="mt-2 bg-green-500 hover:bg-green-600 text-foreground rounded-md block"
+          className="w-full"
+          disabled={isLoading}
         >
-          Approve
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Approve"}
         </Button>
       </PopoverContent>
     </Popover>

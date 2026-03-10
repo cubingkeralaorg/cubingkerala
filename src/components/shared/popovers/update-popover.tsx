@@ -1,38 +1,51 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const UpdatePopover = ({
   handleUpdate,
   index,
 }: {
-  handleUpdate: (index: number) => void;
+  handleUpdate: (index: number) => Promise<void> | void;
   index: number;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleUpdate(index);
+      setIsOpen(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <Button
-          className="bg-yellow-500 hover:bg-yellow-600 text-foreground rounded-sm"
-          size="sm"
-        >
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="secondary" size="sm">
           Update
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        Are you sure you want to update this member?
+      <PopoverContent className="w-auto p-4 space-y-2">
+        <p className="text-sm">Are you sure you want to update this member?</p>
         <Button
-          onClick={() => handleUpdate(index)}
+          onClick={onClick}
+          variant="secondary"
           size="sm"
-          className="mt-2 bg-yellow-500 hover:bg-yellow-600 text-foreground rounded-sm block"
+          className="w-full"
+          disabled={isLoading}
         >
-          Update
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Update"}
         </Button>
       </PopoverContent>
     </Popover>

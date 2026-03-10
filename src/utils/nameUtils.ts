@@ -67,8 +67,8 @@ export function useRequests(
     updatedMember.role = getRoleValue(`role-${index}`);
 
     try {
-      const data = await updateMember(updatedMember);
-      toast.success(data.message);
+      await updateMember(updatedMember);
+      toast.success("Member updated successfully");
       refreshPage();
     } catch (error) {
       toast.error(

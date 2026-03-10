@@ -1,36 +1,51 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const DeleteRequestPopover = ({
   handleRequestDelete,
   index,
 }: {
-  handleRequestDelete: (index: number) => void;
+  handleRequestDelete: (index: number) => Promise<void> | void;
   index: number;
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onClick = async () => {
+    setIsLoading(true);
+    try {
+      await handleRequestDelete(index);
+      setIsOpen(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <Button variant={"destructive"} size="sm" className="mr-2 rounded-md">
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant={"destructive"} size="sm" className="mr-2">
           Delete
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        Are you sure you want to delete this member?
+      <PopoverContent className="w-auto p-4 space-y-2">
+        <p className="text-sm">Are you sure you want to delete this request?</p>
         <Button
-          onClick={() => handleRequestDelete(index)}
+          onClick={onClick}
           variant={"destructive"}
           size="sm"
-          className="mt-2 rounded-md block"
+          className="w-full"
+          disabled={isLoading}
         >
-          Delete
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"}
         </Button>
       </PopoverContent>
     </Popover>
