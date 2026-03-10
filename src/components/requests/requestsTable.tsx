@@ -28,7 +28,7 @@ export function RequestsTable({
         </div>
         <h3 className="text-lg font-medium text-foreground">No pending requests</h3>
         <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-          You're caught up! There are no new membership requests waiting for approval right now.
+          You&apos;re caught up! There are no new membership requests waiting for approval right now.
         </p>
       </div>
     );
