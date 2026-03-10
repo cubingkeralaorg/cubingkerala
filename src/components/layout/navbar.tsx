@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
@@ -15,23 +15,47 @@ import { FaGithub } from "react-icons/fa";
 
 export const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const scrollYRef = useRef(0);
   const { userInfo, isLoggedIn } = useAuth();
   const { handleLogout } = useLogout();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Prevent background scroll when menu is open
+  // Lock body scroll without shifting layout when the mobile menu is open.
   useEffect(() => {
-    if (typeof document === "undefined") return;
-    
+    if (typeof document === "undefined" || typeof window === "undefined") return;
+
+    const body = document.body;
+
     if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
+      scrollYRef.current = window.scrollY;
+      body.style.position = "fixed";
+      body.style.top = `-${scrollYRef.current}px`;
+      body.style.left = "0";
+      body.style.right = "0";
+      body.style.width = "100%";
+      body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      const restoreY = scrollYRef.current;
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      body.style.overflow = "";
+      if (restoreY > 0) {
+        window.scrollTo(0, restoreY);
+      }
     }
+
     return () => {
-      document.body.style.overflow = "unset";
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      body.style.width = "";
+      body.style.overflow = "";
     };
   }, [isMenuOpen]);
 
@@ -40,7 +64,7 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <div className={`bg-background/80 backdrop-blur-md text-foreground ${isMenuOpen ? 'fixed inset-x-0 top-0 z-[10000]' : 'sticky top-0 z-50'}`}>
+    <div className="bg-background/80 backdrop-blur-md text-foreground relative z-[10000]">
       <div className="container mx-auto border-b border-border relative flex justify-between items-center px-4 py-1 md:py-3">
         {/* Left Side: Logo and Navigation Links */}
         <div className="flex items-center space-x-8">
@@ -87,10 +111,24 @@ export const NavbarComponent = () => {
             
             <button
               onClick={toggleMenu}
-              className="block md:hidden text-foreground p-2 rounded-lg transition-colors z-50"
-              aria-label="Toggle menu"
+              className="group relative block md:hidden h-11 w-11 rounded-xl border border-border/80 bg-background/90 backdrop-blur-sm text-foreground transition-all duration-300 hover:bg-accent/50 hover:border-border"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu-panel"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              <span className="sr-only">Toggle navigation menu</span>
+              <Menu
+                size={22}
+                className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
+                  isMenuOpen ? "opacity-0 scale-75 rotate-45" : "opacity-100 scale-100 rotate-0"
+                }`}
+              />
+              <X
+                size={22}
+                className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
+                  isMenuOpen ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-75 -rotate-45"
+                }`}
+              />
             </button>
           </div>
         </div>

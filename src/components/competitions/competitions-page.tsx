@@ -16,7 +16,11 @@ const CompetitionsPage = () => {
   } = useCompetitions();
 
   if (loading) {
-    return <LoadingComponent />;
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center">
+        <LoadingComponent />
+      </div>
+    );
   }
 
   return (

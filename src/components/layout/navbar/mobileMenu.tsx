@@ -33,7 +33,7 @@ export function MobileMenu({
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[9998] bg-background/50 backdrop-blur-sm md:hidden transition-opacity duration-200 ${
+        className={`fixed inset-0 z-[9998] bg-background/60 backdrop-blur-md md:hidden transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -41,25 +41,28 @@ export function MobileMenu({
 
       {/* Menu panel */}
       <nav
+        id="mobile-menu-panel"
         aria-label="Mobile menu"
-        className={`fixed inset-0 z-[9999] bg-background flex flex-col pt-[58px] md:hidden overflow-y-auto transition-all duration-300 ease-out ${
+        className={`fixed inset-0 z-[9999] flex flex-col pt-[64px] md:hidden overflow-y-auto transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isOpen
             ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none"
+            : "opacity-0 -translate-y-5 pointer-events-none"
         }`}
       >
-        <div className="flex-1 flex flex-col gap-4 px-6 pt-4 pb-10">
-          <div className="flex flex-col gap-1">
+        <div className="mx-3 flex-1 rounded-2xl border border-border/70 bg-background/95 shadow-md backdrop-blur supports-[backdrop-filter]:bg-background/80">
+          <div className="flex h-full flex-col gap-4 px-5 pt-4">
+          <div className={`flex flex-col gap-1 transition-all duration-500 delay-75 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
             <NavLinks
               userId={userId}
               onClose={onClose}
+              className="w-full rounded-xl px-4 py-3 text-base"
             />
           </div>
 
-          <div className="flex items-center gap-3 pt-2">
+          <div className={`flex items-center gap-3 pt-2 transition-all duration-500 delay-100 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
             <button
               onClick={() => window.open("https://github.com/cubingkeralaorg/cubingkerala", "_blank")}
-              className="text-foreground/70 hover:text-foreground hover:bg-accent p-2 rounded-lg transition-all"
+              className="text-foreground/80 hover:text-foreground hover:bg-accent p-2 rounded-xl border border-border/70 transition-all"
               aria-label="GitHub repository"
             >
               <FaGithub size={22} />
@@ -67,7 +70,7 @@ export function MobileMenu({
             <ThemeSwitcher />
           </div>
 
-          <div className="pt-3 border-t border-border">
+          <div className={`mt-auto pt-3 pb-6 border-t border-border transition-all duration-500 delay-150 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
             <AuthButton
               isLoggedIn={isLoggedIn}
               onLogout={onLogout}
@@ -75,9 +78,10 @@ export function MobileMenu({
             />
           </div>
         </div>
+        </div>
 
-        <div className="mt-auto">
-          <CubingKeralaFooter />
+        <div className={`mt-auto mb-2 px-3 transition-all duration-500 delay-200 ease-out ${isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
+          <CubingKeralaFooter compact />
         </div>
       </nav>
     </>
