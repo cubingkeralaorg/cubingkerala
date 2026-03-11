@@ -9,7 +9,7 @@ import { GradientText } from "@/components/shared"
 import { RainbowButton } from "../ui/rainbow-button"
 import DotPattern from "../magicui/dot-pattern"
 import { cn } from "@/lib/utils"
-import LoginLoadingForPage from '../../app/login/loading'
+import LoadingComponent from "@/components/shared/loading";
 
 
 export default function LoginComponent() {
@@ -27,7 +27,7 @@ export default function LoginComponent() {
   }, []);
 
   return (
-    <Suspense fallback={<LoginLoadingForPage />}>
+    <Suspense fallback={<LoadingComponent />}>
       <div className=" text-foreground min-h-[85vh] md:min-h-[85vh] relative flex items-center justify-center py-10">
         <div className="flex flex-col mx-auto max-w-lg w-full animate-fade-in">
           <div className="space-y-1">

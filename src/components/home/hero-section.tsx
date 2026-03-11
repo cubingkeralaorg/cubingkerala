@@ -23,7 +23,7 @@ const CubingKeralaGetStarted = () => {
 
   return (
     <div className="relative flex min-h-[90vh] w-full overflow-hidden text-foreground">
-      <div className="container px-6 flex flex-col justify-center items-center my-auto">
+      <div className="container px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center my-auto">
         <div className="grid h-full gap-10 sm:px-10 md:gap-16 md:grid-cols-1 pt-10 md:pt-5">
           <div className="space-y-2 md:space-y-4 text-start md:text-center w-full md:w-[50vw] mb-20">
             <div className="my-5">

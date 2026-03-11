@@ -2,7 +2,7 @@
 
 import { FilterComponent } from "./filter";
 import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
-import RankingsLoading from "../../app/rankings/loading";
+import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
 import { MemberPersonResult } from "@/types/api";
 import { sortMembersByResult } from "@/utils/wcaSorting";
@@ -63,11 +63,11 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
   );
 
   if (loading) {
-    return <RankingsLoading />;
+    return <LoadingComponent />;
   }
 
   return (
-    <Suspense fallback={<RankingsLoading />}>
+    <Suspense fallback={<LoadingComponent />}>
       <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
         <div className="animate-fade-in">
           <div className="flex align-center justify-between mb-4">

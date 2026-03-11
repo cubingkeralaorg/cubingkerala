@@ -44,9 +44,9 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     }
 
     return (
-        <footer className="mt-auto border-t border-border bg-background">
-            <div className="container mx-auto px-4 md:px-6 py-10 md:py-12">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+        <footer className="mt-auto bg-background">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 border-t border-border py-10 md:py-12">
                     <div className="max-w-md">
                         <Link href="/" className="inline-flex items-center" aria-label="Cubing Kerala home">
                             <Image
@@ -96,8 +96,8 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                 </div>
             </div>
 
-            <div className="border-t border-border/70">
-                <div className="container mx-auto px-4 md:px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="border-t border-border/70 py-8 md:py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
                     <p className="text-xs text-muted-foreground/80">
                         Designed & Developed with ❤️ by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>

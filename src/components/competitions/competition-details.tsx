@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense } from "react";
-import Loading from "@/app/competitions/loading";
+import LoadingComponent from "@/components/shared/loading";
 import { useCompetitionDetails } from "@/hooks/useCompetitionDetails";
 import { EventDetails, CompetitionResultEntry } from "@/types/api";
 import { CompetitionHeader } from "./competitionHeader";
@@ -26,8 +26,8 @@ const CompetitionDetailsComponent = ({
     useCompetitionDetails(compInfo);
 
   return (
-    <Suspense fallback={<Loading />}>
-      <div className="container mx-auto text-foreground py-6 md:py-8 px-4 md:px-5">
+    <Suspense fallback={<LoadingComponent />}>
+      <div className="container mx-auto text-foreground py-8 md:py-10 px-4 sm:px-6 lg:px-8">
         <div className="grid animate-fade-in gap-6">
           <CompetitionHeader
             name={compInfo.name}
@@ -75,7 +75,7 @@ const CompetitionDetailsComponent = ({
                     </h2>
                     <div
                       dangerouslySetInnerHTML={{ __html: formattedInformation }}
-                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px]"
+                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px] pr-4 sm:pr-6"
                     />
                   </div>
                 </div>
@@ -98,14 +98,14 @@ const CompetitionDetailsComponent = ({
                   <h2 className="text-xl md:text-2xl font-bold mt-6">
                     Information
                   </h2>
-                  <div className="w-[90vw] text-wrap">
+                  <div className="w-full text-wrap pr-2">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: formattedInformation.includes("]")
                           ? formattedInformation.split("]")[0] + "]"
                           : formattedInformation,
                       }}
-                      className="text-muted-foreground text-[15px] md:text-[16px]"
+                      className="text-muted-foreground text-[15px] md:text-[16px] pr-4 sm:pr-6"
                     />
                   </div>
                 </div>

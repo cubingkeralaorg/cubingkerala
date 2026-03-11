@@ -17,14 +17,12 @@ const CompetitionsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen w-full items-center justify-center">
-        <LoadingComponent />
-      </div>
+      <LoadingComponent />
     );
   }
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col min-h-screen">
+    <div className="container mx-auto py-8 md:py-10 px-4 sm:px-6 lg:px-8 text-foreground flex flex-col min-h-screen">
       <div className="animate-fade-in w-full">
         <CompetitionsHeader
           lastUpdated={lastUpdated}

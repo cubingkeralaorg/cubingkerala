@@ -48,14 +48,14 @@ export default function Home() {
             <HeroSection />
           </motion.div>
         </section>
-        <section className="mx-5">
+        <section className="px-4 sm:px-6 lg:px-8">
           <CalendarSection />
         </section>
-        <section className="mx-5">
+        <section className="px-4 sm:px-6 lg:px-8">
           <LegendsSection />
         </section>
-        <section className="mx-5">
-          <div className="container bg-neutral-500/[0.04] px-4 border border-border rounded-lg py-10 md:py-24">
+        <section className="px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto bg-neutral-500/[0.04] px-4 md:px-8 border border-border rounded-lg py-10 md:py-24">
             <div className="space-y-4 sm:px-10 text-start md:text-center flex flex-col items-start md:items-center">
               <div className="inline-block rounded-lg text-sm text-green-500">
                 Community Directory
@@ -73,7 +73,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-5 pb-5">
+        <section className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-10">
           <UnravelSection />
         </section>
       </main>

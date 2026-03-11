@@ -3,7 +3,7 @@
 import SearchComponent from "@/components/shared/search";
 import { Suspense, useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
-import MembersLoading from "../../app/members/loading";
+import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
 import ShinyButton from "../ui/shiny-button";
 import { Loader } from "lucide-react";
@@ -91,11 +91,11 @@ export default function MembersComponent({
   };
 
   if (isLoading) {
-    return <MembersLoading />;
+    return <LoadingComponent />;
   }
 
   return (
-    <Suspense fallback={<MembersLoading />}>
+    <Suspense fallback={<LoadingComponent />}>
       <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col">
         <div className="animate-fade-in">
           <div className="flex justify-between items-center gap-6 mb-4">
