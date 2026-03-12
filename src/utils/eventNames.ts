@@ -2,12 +2,12 @@
  * Maps WCA event IDs to their full human-readable names.
  */
 export const EVENT_NAMES: Record<string, string> = {
-  "222": "2x2x2 Cube",
-  "333": "3x3x3 Cube",
-  "444": "4x4x4 Cube",
-  "555": "5x5x5 Cube",
-  "666": "6x6x6 Cube",
-  "777": "7x7x7 Cube",
+  "222": "2x2x2",
+  "333": "3x3x3",
+  "444": "4x4x4",
+  "555": "5x5x5",
+  "666": "6x6x6",
+  "777": "7x7x7",
   "333bf": "3x3x3 Blindfolded",
   "333fm": "3x3x3 Fewest Moves",
   "333oh": "3x3x3 One-Handed",
