@@ -10,6 +10,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import "@cubing/icons";
+import { getEventName } from "@/utils/eventNames";
 
 interface Filter {
   event: string;
@@ -41,7 +42,7 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
       <Menubar className="rounded-md bg-card border border-border text-sm md:text-[15px]">
         <MenubarMenu>
           <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
-            {selectedFilter.event || "Select Event"}
+            {getEventName(selectedFilter.event) || "Select Event"}
           </MenubarTrigger>
           <MenubarContent className="max-h-60 w-[220px] overflow-y-auto bg-card text-foreground border border-border rounded-md">
             <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("222")}>

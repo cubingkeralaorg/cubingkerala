@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import "@cubing/icons";
+import { getEventName } from "@/utils/eventNames";
 
 interface EventsListProps {
   eventIds: string[];
@@ -36,7 +37,7 @@ export function EventsList({
                     <span className={`cubing-icon event-${event}`}></span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{event}</p>
+                    <p>{getEventName(event)}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

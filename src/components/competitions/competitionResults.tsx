@@ -4,6 +4,7 @@ import React from "react";
 import "@cubing/icons";
 import { CompetitionResultEntry } from "@/types/api";
 import { formatEventResult } from "@/utils/wcaFormatters";
+import { getEventName } from "@/utils/eventNames";
 import {
   Table,
   TableHeader,
@@ -86,7 +87,7 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
           <div key={eventId}>
             <div className="flex items-center gap-2 mb-2 px-1">
               <span className={`cubing-icon event-${eventId}`}></span>
-              <h3 className="text-lg font-bold">{eventId}</h3>
+              <h3 className="text-lg font-bold">{getEventName(eventId)}</h3>
             </div>
 
             <div className="rounded-md border border-border">
