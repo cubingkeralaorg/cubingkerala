@@ -73,14 +73,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-10">
+        <section className="px-4 sm:px-6 lg:px-8">
           <UnravelSection />
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="px-4 sm:px-6 lg:px-8">
-          <div className="container mx-auto border-t border-border py-12 md:py-16">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-12">
+        <section id="contact" className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-10">
+          <div className="container mx-auto bg-neutral-500/[0.04] px-4 md:px-8 border border-border rounded-lg py-10 md:py-16">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-12 sm:px-10">
               <div className="space-y-2">
                 <p className="text-sm font-medium text-green-500">
                   Get in Touch
