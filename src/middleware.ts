@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
 
     if (!user) {
         if (pathname.startsWith('/requests')) {
-            return NextResponse.redirect(new URL("/login", request.url));
+            return NextResponse.redirect(new URL("/api/auth/login", request.url));
         }
         return NextResponse.next();
     }

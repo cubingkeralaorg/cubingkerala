@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import DotPattern from "@/components/magicui/dot-pattern";
-import { useRouter } from "next/navigation";
+
 import { RainbowButton } from "../ui/rainbow-button";
 import BlurIn from "../ui/blur-in";
 import { IoIosArrowForward } from "react-icons/io";
@@ -11,10 +11,10 @@ import { GradientText } from "@/components/shared";
 import { ComingSoonBadge } from "@/components/learn";
 
 const CubingKeralaGetStarted = () => {
-  const router = useRouter();
+
 
   const handleRedirectToContactPage = (): void => {
-    router.push("/contact");
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleRedirectToWhatsapp = (): void => {

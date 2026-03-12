@@ -22,7 +22,6 @@ const QUICK_LINKS = [
     { href: "/rankings", label: "Rankings" },
     { href: "/members", label: "Members" },
     { href: "/learn", label: "Learn" },
-    { href: "/contact", label: "Contact" },
 ] as const
 
 interface CubingKeralaFooterProps {

@@ -4,8 +4,6 @@ export async function GET() {
       { loc: 'https://www.cubingkerala.org/competitions', lastmod: '2024-10-11' },
       { loc: 'https://www.cubingkerala.org/members', lastmod: '2024-10-11' },
       { loc: 'https://www.cubingkerala.org/rankings', lastmod: '2024-10-11' },
-      { loc: 'https://www.cubingkerala.org/contact', lastmod: '2024-11-06' },
-      { loc: 'https://www.cubingkerala.org/login', lastmod: '2024-10-11' },
     ];
   
     // Generate XML content

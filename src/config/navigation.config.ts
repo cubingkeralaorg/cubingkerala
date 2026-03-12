@@ -8,7 +8,6 @@ export const NAV_LINKS: NavLink[] = [
   { href: "/rankings", label: "Rankings" },
   { href: "/members", label: "Members" },
   { href: "/learn", label: "Learn" },
-  { href: "/contact", label: "Contact" },
 ];
 
 export const LOGO_LIGHT = "/logotransparent-black.png";
