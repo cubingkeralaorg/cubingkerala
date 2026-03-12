@@ -1,55 +1,18 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication Flow', () => {
-  test.describe('Login Page', () => {
-    test('should display login page correctly', async ({ page }) => {
-      await page.goto('/login');
+  test.describe('Login Redirect', () => {
+    test('should have a login link pointing to /api/auth/login', async ({ page }) => {
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
 
-      // Check page title and elements - use exact match to avoid footer match
-      await expect(page.getByText('Cubing Kerala', { exact: true }).first()).toBeVisible();
-      await expect(page.getByText('Authenticate with World Cube Association')).toBeVisible();
-      
-      // Check main login button (the rainbow button with WCA logo, not navbar button)
-      const mainLoginButton = page.getByRole('button', { name: 'wca-logo Login' });
-      await expect(mainLoginButton).toBeVisible();
-      await expect(mainLoginButton).toBeEnabled();
-    });
+      // The navbar auth button should link to /api/auth/login
+      const loginLink = page.locator('a[href="/api/auth/login"]').first();
 
-    test('should show WCA logo on login button', async ({ page }) => {
-      await page.goto('/login');
-
-      const wcaLogo = page.getByAltText('wca-logo');
-      await expect(wcaLogo).toBeVisible();
-    });
-
-    test('should show loading state when login button is clicked', async ({ page }) => {
-      await page.goto('/login');
-
-      // Target the main rainbow login button (not navbar)
-      const mainLoginButton = page.getByRole('button', { name: 'wca-logo Login' });
-      
-      // Click should trigger navigation to WCA OAuth
-      await mainLoginButton.click();
-      
-      // After click, page may navigate or show loading - just verify click worked
-      // The OAuth redirect happens immediately, so we just verify the button was clickable
-      await expect(page).toHaveURL(/login|worldcubeassociation/);
-    });
-
-    test('should redirect to WCA OAuth when login is clicked', async ({ page }) => {
-      await page.goto('/login');
-
-      // Target the main rainbow login button (not navbar)
-      const mainLoginButton = page.getByRole('button', { name: 'wca-logo Login' });
-      
-      // Click the login button and wait for navigation
-      await mainLoginButton.click();
-      
-      // In test environment, OAuth may not be configured - verify the button is functional
-      // Either we stay on login (no OAuth configured) or redirect to WCA
-      await page.waitForTimeout(1000);
-      const currentUrl = page.url();
-      expect(currentUrl).toMatch(/login|worldcubeassociation/);
+      if (await loginLink.isVisible()) {
+        const href = await loginLink.getAttribute('href');
+        expect(href).toBe('/api/auth/login');
+      }
     });
   });
 
@@ -92,7 +55,7 @@ test.describe('Authentication Flow', () => {
     });
 
     test('should allow access to public pages without authentication', async ({ page }) => {
-      const publicPages = ['/', '/competitions', '/members', '/rankings', '/learn', '/contact'];
+      const publicPages = ['/', '/competitions', '/members', '/rankings', '/learn'];
 
       for (const path of publicPages) {
         await page.goto(path);

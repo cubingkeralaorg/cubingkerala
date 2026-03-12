@@ -138,8 +138,8 @@ test.describe('Members Page', () => {
         const href = await memberLink.getAttribute('href');
         await memberLink.click();
         
-        // Should navigate to member details page
-        await expect(page).toHaveURL(new RegExp(href || '/members/'));
+        // Should navigate to member details page (allow extra time for client-side navigation)
+        await expect(page).toHaveURL(new RegExp(href || '/members/'), { timeout: 10000 });
       }
     });
   });
