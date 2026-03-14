@@ -7,12 +7,13 @@ import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
 import ShinyButton from "../ui/shiny-button";
 import { Loader } from "lucide-react";
-import { MemberPersonResult, RequestInfo, UserInfo } from "@/types/api";
+import { CompetitorData, RequestInfo, UserInfo } from "@/types/api";
 import { getUserInfoFromCookie } from "@/utils/cookieUtils";
 import { sortMembersByName } from "@/utils/memberUtils";
 import { fetchMultiplePersonsData } from "@/services/wca.api";
 import { joinCubingKerala } from "@/services/member.api";
 import { MembersTable } from "./membersTable";
+import { MembersSkeleton } from "./membersSkeleton";
 
 interface MembersComponentProps {
   membersfromdb: RequestInfo[];
@@ -24,7 +25,7 @@ export default function MembersComponent({
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [membersList, setMembersList] = useState<RequestInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [membersDetails, setMembersDetails] = useState<MemberPersonResult[]>(
+  const [membersDetails, setMembersDetails] = useState<CompetitorData[]>(
     [],
   );
   const [isJoinCkLoading, setIsJoinCkLoading] = useState(false);
@@ -42,6 +43,7 @@ export default function MembersComponent({
       setMembersList(membersfromdb);
 
       const wcaIds = membersfromdb.map((member) => member.wcaid);
+      setIsLoading(true);
       fetchMultiplePersonsData(wcaIds)
         .then(setMembersDetails)
         .catch((error) => {
@@ -90,10 +92,6 @@ export default function MembersComponent({
     }
   };
 
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <Suspense fallback={<LoadingComponent />}>
       <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col">
@@ -126,10 +124,14 @@ export default function MembersComponent({
             style={{ minHeight: "600px", overflow: "hidden" }}
           >
             <SearchComponent handleSearch={handleSearch} />
-            <MembersTable
-              members={filteredAndSortedMembers}
-              membersDetails={membersDetails}
-            />
+            {isLoading ? (
+              <MembersSkeleton />
+            ) : (
+              <MembersTable
+                members={filteredAndSortedMembers}
+                membersDetails={membersDetails}
+              />
+            )}
           </div>
         </div>
       </div>

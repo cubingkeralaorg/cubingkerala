@@ -55,27 +55,3 @@ export interface MemberRecordDetails {
   };
 }
 
-export interface MemberPersonResult {
-  id: string;
-  name: string;
-  country: string;
-  slug: string;
-  numberOfChampionships: number;
-  numberOfCompetitions: number;
-  rank: {
-    singles: MemberRecordDetails[];
-    averages: MemberRecordDetails[];
-  };
-  results: MemberCompetitionDetails;
-  medals: {
-    gold: number;
-    silver: number;
-    bronze: number;
-  };
-  records: {
-    average: any[];
-    single: any[];
-  };
-  championshipIds: string[];
-  competitionIds: string[];
-}

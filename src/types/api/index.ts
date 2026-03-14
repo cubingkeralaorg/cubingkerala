@@ -46,5 +46,4 @@ export type {
   MemberCompetitionDetails,
   MemberRankDetails,
   MemberRecordDetails,
-  MemberPersonResult,
 } from './results';

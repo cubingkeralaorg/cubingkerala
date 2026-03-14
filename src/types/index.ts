@@ -1,7 +1,6 @@
 // Re-export API types
 export type {
   UserInfo,
-  MemberPersonResult,
   CompetitorData,
   RequestInfo,
   EventDetails

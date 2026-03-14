@@ -9,12 +9,12 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { MemberPersonResult, RequestInfo } from "@/types/api";
+import { CompetitorData, RequestInfo } from "@/types/api";
 import { getTotalMedals, capitalizeRole } from "@/utils/memberUtils";
 
 interface MembersTableProps {
   members: RequestInfo[];
-  membersDetails: MemberPersonResult[];
+  membersDetails: CompetitorData[];
 }
 
 export function MembersTable({ members, membersDetails }: MembersTableProps) {
@@ -23,12 +23,12 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
       <Table className="w-full">
         <TableHeader className="border-y hover:bg-transparent border-y-border">
           <TableRow className="text-sm md:text-[15px] border-none">
-            <TableHead className="text-muted-foreground">#</TableHead>
+            <TableHead className="text-muted-foreground w-[50px]">#</TableHead>
             <TableHead className="text-muted-foreground">Name</TableHead>
-            <TableHead className="text-muted-foreground">WCA ID</TableHead>
-            <TableHead className="text-muted-foreground">Role</TableHead>
-            <TableHead className="text-muted-foreground">Competitions</TableHead>
-            <TableHead className="text-muted-foreground">Medals</TableHead>
+            <TableHead className="text-muted-foreground w-[150px]">WCA ID</TableHead>
+            <TableHead className="text-muted-foreground w-[120px]">Role</TableHead>
+            <TableHead className="text-muted-foreground w-[120px]">Competitions</TableHead>
+            <TableHead className="text-muted-foreground w-[100px]">Medals</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -49,18 +49,18 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
     <Table className="w-full">
       <TableHeader className="border-y hover:bg-transparent border-y-border">
         <TableRow className="text-sm md:text-[15px] hover:bg-transparent border-none">
-          <TableHead className="text-muted-foreground">#</TableHead>
+          <TableHead className="text-muted-foreground w-[50px]">#</TableHead>
           <TableHead className="text-muted-foreground">Name</TableHead>
-          <TableHead className="text-muted-foreground">WCA ID</TableHead>
-          <TableHead className="text-muted-foreground">Role</TableHead>
-          <TableHead className="text-muted-foreground">Competitions</TableHead>
-          <TableHead className="text-muted-foreground">Medals</TableHead>
+          <TableHead className="text-muted-foreground w-[150px]">WCA ID</TableHead>
+          <TableHead className="text-muted-foreground w-[120px]">Role</TableHead>
+          <TableHead className="text-muted-foreground w-[120px]">Competitions</TableHead>
+          <TableHead className="text-muted-foreground w-[100px]">Medals</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {members.map((member, index) => {
           const memberDetails = membersDetails.find(
-            (details) => details.id === member.wcaid,
+            (details) => details.person.id === member.wcaid,
           );
 
           return (
@@ -92,7 +92,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
                 {capitalizeRole(member.role)}
               </TableCell>
               <TableCell className="cursor-default">
-                {memberDetails?.numberOfCompetitions || 0}
+                {memberDetails?.competition_count || 0}
               </TableCell>
               <TableCell className="cursor-default">
                 {getTotalMedals(memberDetails)}

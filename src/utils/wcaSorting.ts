@@ -1,15 +1,15 @@
-import { MemberPersonResult } from "@/types/api";
+import { CompetitorData } from "@/types/api";
 
 export const sortMembersByResult = (
-  members: MemberPersonResult[],
+  members: CompetitorData[],
   event: string,
   round: string,
-): MemberPersonResult[] => {
-  const roundType = round === "average" ? "averages" : "singles";
+): CompetitorData[] => {
+  const roundType = round === "average" ? "average" : "single";
 
   return [...members].sort((a, b) => {
-    const aEvent = a.rank[roundType]?.find((r) => r.eventId === event);
-    const bEvent = b.rank[roundType]?.find((r) => r.eventId === event);
+    const aEvent = a.personal_records[event]?.[roundType];
+    const bEvent = b.personal_records[event]?.[roundType];
     const aBest = aEvent?.best ?? Infinity;
     const bBest = bEvent?.best ?? Infinity;
     return aBest - bBest;

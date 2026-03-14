@@ -4,15 +4,16 @@ import { FilterComponent } from "./filter";
 import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
-import { MemberPersonResult } from "@/types/api";
+import { CompetitorData } from "@/types/api";
 import { sortMembersByResult } from "@/utils/wcaSorting";
 import { getEventName } from "@/utils/eventNames";
 import { RankingsTable } from "./rankingsTable";
+import { RankingsSkeleton } from "./rankingsSkeleton";
 import { FilterState, RankingsComponentProps } from "@/types/rankings.types";
 import { fetchMultiplePersonsData } from "@/services/wca.api";
 
 export default function RankingsComponent({ members }: RankingsComponentProps) {
-  const [memberResults, setMemberResults] = useState<MemberPersonResult[]>([]);
+  const [memberResults, setMemberResults] = useState<CompetitorData[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterState>({
     event: "333",
     round: "single",
@@ -28,6 +29,7 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
         return;
       }
 
+      setLoading(true);
       try {
         const results = await fetchMultiplePersonsData(
           members.map((member) => member.wcaid),
@@ -53,19 +55,13 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
   }, [memberResults, selectedFilter]);
 
   const getResult = useCallback(
-    (member: MemberPersonResult) => {
+    (member: CompetitorData) => {
       const roundType =
-        selectedFilter.round === "average" ? "averages" : "singles";
-      return member.rank[roundType]?.find(
-        (r) => r.eventId === selectedFilter.event,
-      );
+        selectedFilter.round === "average" ? "average" : "single";
+      return member.personal_records[selectedFilter.event]?.[roundType];
     },
     [selectedFilter],
   );
-
-  if (loading) {
-    return <LoadingComponent />;
-  }
 
   return (
     <Suspense fallback={<LoadingComponent />}>
@@ -87,12 +83,16 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
             <span>{selectedFilter.round}</span>
           </p>
 
-          <RankingsTable
-            sortedResults={sortedResults}
-            selectedEvent={selectedFilter.event}
-            selectedRound={selectedFilter.round}
-            getResult={getResult}
-          />
+          {loading ? (
+            <RankingsSkeleton />
+          ) : (
+            <RankingsTable
+              sortedResults={sortedResults}
+              selectedEvent={selectedFilter.event}
+              selectedRound={selectedFilter.round}
+              getResult={getResult}
+            />
+          )}
         </div>
       </div>
     </Suspense>

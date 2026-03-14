@@ -1,6 +1,6 @@
-import { MemberPersonResult } from "@/types/api";
+import { CompetitorData } from "@/types/api";
 
-export const getTotalMedals = (memberDetails?: MemberPersonResult): number => {
+export const getTotalMedals = (memberDetails?: CompetitorData): number => {
   if (!memberDetails) return 0;
 
   return (
