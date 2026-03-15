@@ -22,7 +22,7 @@ export function CompetitionsList({
   const allCompetitions = [...upcomingCompetitions, ...pastCompetitions];
 
   return (
-    <div className="mt-6 rounded-md border border-border overflow-hidden">
+    <div className="mt-0 rounded-md border border-border overflow-hidden">
       <SearchComponent 
         handleSearch={onSearchChange} 
         placeholder="Search Competitions" 

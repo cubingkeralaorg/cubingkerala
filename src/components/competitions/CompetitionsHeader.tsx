@@ -21,7 +21,7 @@ export function CompetitionsHeader({
       <div>
         <BlurIn
           word="Competitions"
-          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-2 md:mb-4"
+          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
         />
         <div className="text-xs text-muted-foreground text-start ml-1 flex items-center gap-2 h-4">
           <span>Last updated: {lastUpdated}</span>
