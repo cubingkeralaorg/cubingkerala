@@ -42,7 +42,10 @@ export async function GET(_req: NextRequest) {
       fetchJsonWithTimeout(`${base}&page=3`),
     ]);
 
-    const data = [...p1, ...p2, ...p3];
+    const data = [...p1, ...p2, ...p3].map((c: any) => ({
+      ...c,
+      has_results: !!c.results_posted_at,
+    }));
 
     const keralaCompetitions = data.filter(
       (competition: any) => competition.city && competition.city.includes("Kerala")

@@ -60,10 +60,46 @@ export const isCompetitionOngoing = (
 };
 
 /**
+ * Get detailed competition status with IST (UTC+5:30) awareness.
+ */
+export const getDetailedCompetitionStatus = (
+  startDate: string,
+  endDate: string,
+  hasResults: boolean = false
+): "Upcoming" | "Ongoing" | "Completed" => {
+  if (hasResults) return "Completed";
+
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const nowIST = new Date(now.getTime() + istOffset);
+  
+  const start = parseLocalDate(startDate);
+  const end = parseLocalDate(endDate);
+  
+  start.setHours(0, 0, 0, 0);
+  end.setHours(23, 59, 59, 999);
+
+  const todayIST = new Date(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate());
+  
+  if (todayIST < start) {
+    return "Upcoming";
+  }
+  
+  if (todayIST > end) {
+    return "Completed";
+  }
+  
+  return "Ongoing";
+};
+
+/**
  * Check if competition is in the future
  */
-export const isCompetitionUpcoming = (endDate: string): boolean => {
-  return parseLocalDate(endDate) > new Date();
+export const isCompetitionUpcoming = (startDate: string): boolean => {
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const nowIST = new Date(new Date().getTime() + istOffset);
+  const todayIST = new Date(nowIST.getUTCFullYear(), nowIST.getUTCMonth(), nowIST.getUTCDate());
+  return parseLocalDate(startDate) > todayIST;
 };
 
 /**

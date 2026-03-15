@@ -1,17 +1,15 @@
 "use client";
 
+import { getDetailedCompetitionStatus } from "@/utils/dateUtils";
+import { openCompetitionRegistration } from "@/utils/competitionNavigation";
 import { CiLink } from "react-icons/ci";
-import { isCompetitionUpcoming, isCompetitionOngoing } from "@/utils/dateUtils";
-import {
-  openCompetitionRegistration,
-  openCompetitionPage,
-} from "@/utils/competitionNavigation";
 
 interface RegistrationStatusProps {
   competitionId: string;
   startDate: string;
   endDate: string;
   cancelledAt: string | null;
+  hasResults?: boolean;
 }
 
 export function RegistrationStatus({
@@ -19,8 +17,11 @@ export function RegistrationStatus({
   startDate,
   endDate,
   cancelledAt,
+  hasResults = false,
 }: RegistrationStatusProps) {
-  if (isCompetitionUpcoming(endDate)) {
+  const status = getDetailedCompetitionStatus(startDate, endDate, hasResults);
+
+  if (status === "Upcoming") {
     return (
       <div className="flex gap-1 text-blue-500 hover:text-blue-600 w-fit">
         <p
@@ -34,43 +35,25 @@ export function RegistrationStatus({
     );
   }
 
-  if (isCompetitionOngoing(startDate, endDate)) {
+  if (status === "Ongoing") {
     return (
-      <div className="flex gap-1 text-blue-500 hover:text-blue-600 w-fit">
-        <p
-          onClick={() => openCompetitionPage(competitionId)}
-          className="cursor-pointer"
-        >
-          Competition is ongoing.
-        </p>
-        <CiLink />
+      <div className="text-green-600 font-medium">
+        Competition is ongoing.
       </div>
     );
   }
 
   if (cancelledAt) {
     return (
-      <div className="text-red-500 hover:text-red-600 flex gap-1 w-fit">
-        <p
-          onClick={() => openCompetitionPage(competitionId)}
-          className="cursor-pointer"
-        >
-          Competition was cancelled.
-        </p>
-        <CiLink />
+      <div className="text-red-500 font-medium">
+        Competition was cancelled.
       </div>
     );
   }
 
   return (
-    <div className="text-red-500 hover:text-red-600 flex gap-1 w-fit">
-      <p
-        onClick={() => openCompetitionPage(competitionId)}
-        className="cursor-pointer"
-      >
-        Competition is over. Check results here
-      </p>
-      <CiLink />
+    <div className="text-red-500 font-medium">
+      Competition is over. {hasResults ? "Results are available." : ""}
     </div>
   );
 }

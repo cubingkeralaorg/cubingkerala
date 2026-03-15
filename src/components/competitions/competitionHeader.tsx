@@ -7,6 +7,7 @@ interface CompetitionHeaderProps {
   name: string;
   startDate: string;
   endDate: string;
+  hasResults: boolean;
 }
 
 export function CompetitionHeader({

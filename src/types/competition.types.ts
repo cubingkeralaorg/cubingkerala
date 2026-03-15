@@ -5,7 +5,10 @@ export interface Competition {
   start_date: string;
   end_date: string;
   event_ids: string[];
+  venue: string;
+  country_iso2: string;
   cancelled_at?: string | null;
+  has_results: boolean;
 }
 
 export interface CompetitionsData {

@@ -1,5 +1,4 @@
-export { default as CompetitionCard } from './CompetitionCard';
-export { default as CompetitionSection } from './CompetitionSection';
+export { CompetitionTable } from './CompetitionTable';
 export { CompetitionsHeader } from './CompetitionsHeader';
 export { default as RefreshButton } from './RefreshButton';
 export { CompetitionHeader } from './competitionHeader';

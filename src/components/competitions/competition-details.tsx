@@ -33,6 +33,7 @@ const CompetitionDetailsComponent = ({
             name={compInfo.name}
             startDate={compInfo.start_date}
             endDate={compInfo.end_date}
+            hasResults={results.length > 0}
           />
 
           <div className="flex flex-wrap">
@@ -92,6 +93,7 @@ const CompetitionDetailsComponent = ({
                   startDate={compInfo.start_date}
                   endDate={compInfo.end_date}
                   cancelledAt={compInfo.cancelled_at}
+                  hasResults={results.length > 0}
                 />
 
                 <div className="block md:hidden space-y-2">

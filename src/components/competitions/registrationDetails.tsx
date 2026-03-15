@@ -13,6 +13,7 @@ interface RegistrationDetailsProps {
   startDate: string;
   endDate: string;
   cancelledAt: string | null;
+  hasResults: boolean;
 }
 
 export function RegistrationDetails({
@@ -22,6 +23,7 @@ export function RegistrationDetails({
   startDate,
   endDate,
   cancelledAt,
+  hasResults,
 }: RegistrationDetailsProps) {
   const isClosed = isRegistrationClosed(registrationClose);
 
@@ -48,6 +50,7 @@ export function RegistrationDetails({
           startDate={startDate}
           endDate={endDate}
           cancelledAt={cancelledAt}
+          hasResults={hasResults}
         />
       </div>
     </div>
