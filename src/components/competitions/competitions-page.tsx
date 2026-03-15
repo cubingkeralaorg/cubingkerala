@@ -45,6 +45,7 @@ const CompetitionsPage = () => {
           lastUpdated={lastUpdated}
           isRefreshing={isRefreshing}
           onRefresh={handleForceRefresh}
+          isLoading={loading}
         />
 
         <CompetitionsList

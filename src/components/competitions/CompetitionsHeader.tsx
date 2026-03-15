@@ -9,12 +9,14 @@ interface CompetitionsHeaderProps {
   lastUpdated: string;
   isRefreshing: boolean;
   onRefresh: () => void;
+  isLoading?: boolean;
 }
 
 export function CompetitionsHeader({
   lastUpdated,
   isRefreshing,
   onRefresh,
+  isLoading,
 }: CompetitionsHeaderProps) {
   return (
     <div className="flex align-center justify-between mb-4">
@@ -24,8 +26,10 @@ export function CompetitionsHeader({
           className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
         />
         <div className="text-xs text-muted-foreground text-start ml-1 flex items-center gap-2 h-4">
-          <span>Last updated: {lastUpdated}</span>
-          {isRefreshing && (
+          <span>
+            {isLoading ? "Fetching..." : `Last updated: ${lastUpdated}`}
+          </span>
+          {(isRefreshing || isLoading) && (
             <RefreshCw size={12} className="animate-spin text-primary" />
           )}
         </div>

@@ -19,7 +19,8 @@ export const fetchCompetitions = async (
 ): Promise<FetchCompetitionsResult> => {
   try {
     const timestamp = Date.now();
-    const res = await axios.get(`/api/get-competitions?_t=${timestamp}`, {
+    const refreshParam = bustCache ? "&refresh=true" : "";
+    const res = await axios.get(`/api/get-competitions?_t=${timestamp}${refreshParam}`, {
       headers: bustCache
         ? {
             "Cache-Control":

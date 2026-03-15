@@ -30,63 +30,88 @@ async function fetchJsonWithTimeout(url: string, init: RequestInit = {}, timeout
   }
 }
 
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    // 1. Fetch more competitions from India to better populate the DB
-    // Fetching 3 pages of 100 to get a good sample of recent/upcoming ones
-    console.log("Fetching competitions from WCA API...");
-    const base = "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
-    const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const results = await Promise.all(
-      pages.map(page => fetchJsonWithTimeout(`${base}&page=${page}`))
-    );
-    const allWcaCompetitions = results.flat();
-    console.log(`Fetched ${allWcaCompetitions.length} competitions from WCA API`);
+    const { searchParams } = new URL(req.url);
+    const forceRefresh = searchParams.get("refresh") === "true";
 
-    // 2. Filter Kerala competitions and upsert to DB
-    const keralaCompetitions = allWcaCompetitions.filter(
-      (c: any) => c.city && c.city.toLowerCase().includes("kerala")
-    );
-    console.log(`Found ${keralaCompetitions.length} Kerala competitions in WCA fetch`);
+    // 1. Fetch all Kerala competitions from database first
+    let allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
+    console.log(`Initial DB check: ${allKeralaFromDb.length} Kerala competitions found`);
 
-    if (keralaCompetitions.length > 0) {
-      const upsertPromises = keralaCompetitions.map((c: any) => {
-        // Use a safer upsert that doesn't crash if cancelled_at is missing from client
-        const data = {
-          name: c.name,
-          city: c.city,
-          start_date: c.start_date,
-          end_date: c.end_date,
-          event_ids: c.event_ids,
-          venue: c.venue || "",
-          country_iso2: c.country_iso2,
-          has_results: !!c.results_posted_at,
-          cancelled_at: c.cancelled_at ?? null,
-        };
+    // 2. Decide if we need to sync with WCA API
+    // We sync if forceRefresh is true OR if DB is empty
+    const shouldSync = forceRefresh || allKeralaFromDb.length === 0;
 
-        return db.competitions.upsert({
-          where: { id: c.id },
-          update: data as any,
-          create: { id: c.id, ...data } as any,
-        }).catch((err: any) => {
-          console.error(`Upsert failed for ${c.id}, retrying without cancelled_at`, err);
-          // Fallback for stale client
-          const { cancelled_at, ...safeData } = data;
-          return db.competitions.upsert({
-            where: { id: c.id },
-            update: safeData as any,
-            create: { id: c.id, ...safeData } as any,
-          });
+    if (shouldSync) {
+      console.log("Syncing with WCA API (1 page only)...");
+      const base = "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
+      
+      // We only fetch 1 page to get the latest/upcoming competitions
+      // This is usually enough to catch new Kerala competitions if they were recently announced
+      const allWcaCompetitions = await fetchJsonWithTimeout(`${base}&page=1`);
+      console.log(`Fetched ${allWcaCompetitions.length} competitions from WCA API (Page 1)`);
+
+      // Filter Kerala competitions
+      const keralaCompetitions = allWcaCompetitions.filter(
+        (c: any) => c.city && c.city.toLowerCase().includes("kerala")
+      );
+      console.log(`Found ${keralaCompetitions.length} Kerala competitions in WCA fetch`);
+
+      if (keralaCompetitions.length > 0) {
+        // Create a lookup map of existing competitions to avoid redundant upserts
+        const existingMap = new Map(allKeralaFromDb.map(c => [c.id, c]));
+
+        // Only upsert if it's new OR if critical metadata has changed
+        const targetedCompetitions = keralaCompetitions.filter((c: any) => {
+          const existing = existingMap.get(c.id);
+          if (!existing) return true; // New competition
+
+          // Check for changes in critical fields
+          const hasChanged = 
+            existing.name !== c.name ||
+            existing.city !== c.city ||
+            existing.venue !== (c.venue || "") ||
+            existing.has_results !== !!c.results_posted_at ||
+            existing.cancelled_at !== (c.cancelled_at ?? null) ||
+            JSON.stringify(existing.event_ids) !== JSON.stringify(c.event_ids);
+
+          return hasChanged;
         });
-      });
-      await Promise.all(upsertPromises);
-      console.log("Successfully upserted Kerala competitions to DB");
-    }
 
-    // 3. Fetch all Kerala competitions from database for the final response
-    // 3. Fetch all Kerala competitions from database using raw query to bypass stale client
-    const allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
-    console.log(`Fetched ${allKeralaFromDb.length} Kerala competitions from DB`);
+        if (targetedCompetitions.length > 0) {
+          console.log(`Syncing ${targetedCompetitions.length} changed/new competitions...`);
+          const upsertPromises = targetedCompetitions.map((c: any) => {
+            const data = {
+              name: c.name,
+              city: c.city,
+              start_date: c.start_date,
+              end_date: c.end_date,
+              event_ids: c.event_ids,
+              venue: c.venue || "",
+              country_iso2: c.country_iso2,
+              has_results: !!c.results_posted_at,
+              cancelled_at: c.cancelled_at ?? null,
+            };
+
+            return db.competitions.upsert({
+              where: { id: c.id },
+              update: data as any,
+              create: { id: c.id, ...data } as any,
+            }).catch((err: any) => {
+              console.error(`Upsert failed for ${c.id}`, err);
+            });
+          });
+          await Promise.all(upsertPromises);
+          console.log("Successfully updated changed competitions");
+          
+          // Refresh final list from DB
+          allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
+        } else {
+          console.log("No changes detected in Kerala competitions. Skipping database updates.");
+        }
+      }
+    }
 
     const now = new Date();
     now.setHours(0, 0, 0, 0);
@@ -104,7 +129,7 @@ export async function GET(_req: NextRequest) {
         upcomingCompetitions,
         pastCompetitions,
         lastFetch: new Date().toISOString(),
-        source: 'database',
+        source: shouldSync ? 'wca-api-sync' : 'database',
         count: allKeralaFromDb.length
       }),
       {

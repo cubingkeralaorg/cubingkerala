@@ -124,12 +124,12 @@ const config = {
     					'background-position': 'calc(100% + var(--shiny-width)) 0'
     				}
     			},
-    			grid: {
+    			shimmer: {
     				'0%': {
-    					transform: 'translateY(-50%)'
+    					'background-position': '-200% 0'
     				},
     				'100%': {
-    					transform: 'translateY(0)'
+    					'background-position': '200% 0'
     				}
     			}
     		},
@@ -142,7 +142,8 @@ const config = {
     			gradient: 'gradient 8s linear infinite',
     			'shiny-text': 'shiny-text 8s infinite',
     			grid: 'grid 15s linear infinite',
-			shimmer: 'shimmer 3s infinite'
+    			shimmer: 'shimmer 2s infinite linear',
+    			'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
     		}
     	},
     	animation: {
