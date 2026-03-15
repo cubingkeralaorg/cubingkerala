@@ -123,7 +123,10 @@ export default function MembersComponent({
             className="rounded-md border border-border"
             style={{ minHeight: "600px", overflow: "hidden" }}
           >
-            <SearchComponent handleSearch={handleSearch} />
+            <SearchComponent 
+              handleSearch={handleSearch} 
+              placeholder="Search Member" 
+            />
             {isLoading ? (
               <MembersSkeleton />
             ) : (

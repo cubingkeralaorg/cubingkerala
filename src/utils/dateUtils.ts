@@ -65,8 +65,10 @@ export const isCompetitionOngoing = (
 export const getDetailedCompetitionStatus = (
   startDate: string,
   endDate: string,
-  hasResults: boolean = false
-): "Upcoming" | "Ongoing" | "Completed" => {
+  hasResults: boolean = false,
+  cancelledAt: string | null = null
+): "Upcoming" | "Ongoing" | "Completed" | "Cancelled" => {
+  if (cancelledAt) return "Cancelled";
   if (hasResults) return "Completed";
 
   const now = new Date();

@@ -10,10 +10,17 @@ describe('SearchComponent', () => {
     mockHandleSearch = vi.fn();
   });
 
-  it('should render search input', () => {
+  it('should render search input with default placeholder', () => {
     render(<SearchComponent handleSearch={mockHandleSearch} />);
 
-    const input = screen.getByPlaceholderText('Search Member');
+    const input = screen.getByPlaceholderText('Search...');
+    expect(input).toBeInTheDocument();
+  });
+
+  it('should render search input with custom placeholder', () => {
+    render(<SearchComponent handleSearch={mockHandleSearch} placeholder="Custom Place" />);
+
+    const input = screen.getByPlaceholderText('Custom Place');
     expect(input).toBeInTheDocument();
   });
 
@@ -21,7 +28,7 @@ describe('SearchComponent', () => {
     const user = userEvent.setup();
     render(<SearchComponent handleSearch={mockHandleSearch} />);
 
-    const input = screen.getByPlaceholderText('Search Member');
+    const input = screen.getByPlaceholderText('Search...');
     await user.type(input, 'test');
 
     expect(mockHandleSearch).toHaveBeenCalled();
@@ -30,7 +37,7 @@ describe('SearchComponent', () => {
   it('should call handleSearch with correct value', () => {
     render(<SearchComponent handleSearch={mockHandleSearch} />);
 
-    const input = screen.getByPlaceholderText('Search Member');
+    const input = screen.getByPlaceholderText('Search...');
     fireEvent.change(input, { target: { value: 'John' } });
 
     expect(mockHandleSearch).toHaveBeenCalledWith('John');
@@ -46,7 +53,7 @@ describe('SearchComponent', () => {
   it('should handle empty search', () => {
     render(<SearchComponent handleSearch={mockHandleSearch} />);
 
-    const input = screen.getByPlaceholderText('Search Member');
+    const input = screen.getByPlaceholderText('Search...');
     // First type something, then clear it
     fireEvent.change(input, { target: { value: 'test' } });
     fireEvent.change(input, { target: { value: '' } });
@@ -61,7 +68,7 @@ describe('SearchComponent', () => {
   it('should have correct input type', () => {
     render(<SearchComponent handleSearch={mockHandleSearch} />);
 
-    const input = screen.getByPlaceholderText('Search Member');
+    const input = screen.getByPlaceholderText('Search...');
     expect(input).toHaveAttribute('type', 'search');
   });
 });

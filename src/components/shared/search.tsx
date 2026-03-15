@@ -2,7 +2,13 @@
 
 import { Input } from "@/components/ui/input"
 
-export default function SearchComponent({ handleSearch }: { handleSearch: (searchTerm: string) => void }) {
+export default function SearchComponent({
+  handleSearch,
+  placeholder = "Search...",
+}: {
+  handleSearch: (searchTerm: string) => void;
+  placeholder?: string;
+}) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleSearch(e.target.value);
   };
@@ -14,7 +20,7 @@ export default function SearchComponent({ handleSearch }: { handleSearch: (searc
         <Input
           type="search"
           onChange={handleInputChange}
-          placeholder="Search Member"
+          placeholder={placeholder}
           className="w-full pl-10 pr-4 py-2 rounded-none border-none text-foreground placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:cursor-pointer"
         />
       </div>

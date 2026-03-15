@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import db from "@/lib/db";
 
 // App Router route-segment config for Vercel Functions
-export const dynamic = "force-dynamic"; // disable caching at the framework layer [web:22]
-export const revalidate = 0; // no ISR revalidation [web:22]
-export const maxDuration = 30; // ensure Vercel allocates up to 30s for this function [web:21][web:25]
+export const dynamic = "force-dynamic"; 
+export const revalidate = 0; 
+export const maxDuration = 30; 
 
-// Helper to fetch with an AbortController timeout that leaves headroom < maxDuration
+// Helper to fetch with an AbortController timeout
 async function fetchJsonWithTimeout(url: string, init: RequestInit = {}, timeoutMs = 22000) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -31,40 +32,80 @@ async function fetchJsonWithTimeout(url: string, init: RequestInit = {}, timeout
 
 export async function GET(_req: NextRequest) {
   try {
-    // Paginate to avoid large payload/latency spikes in serverless runtime [web:20][web:12]
-    // WCA v0 competitions are paginated; default ~25 per page, use ?page=1..N [web:36]
-    const base =
-      "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
-    // Fetch first 3 pages quickly; increase if needed but keep under time budget [web:20]
-    const [p1, p2, p3] = await Promise.all([
-      fetchJsonWithTimeout(`${base}&page=1`),
-      fetchJsonWithTimeout(`${base}&page=2`),
-      fetchJsonWithTimeout(`${base}&page=3`),
-    ]);
-
-    const data = [...p1, ...p2, ...p3].map((c: any) => ({
-      ...c,
-      has_results: !!c.results_posted_at,
-    }));
-
-    const keralaCompetitions = data.filter(
-      (competition: any) => competition.city && competition.city.includes("Kerala")
+    // 1. Fetch more competitions from India to better populate the DB
+    // Fetching 3 pages of 100 to get a good sample of recent/upcoming ones
+    console.log("Fetching competitions from WCA API...");
+    const base = "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
+    const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const results = await Promise.all(
+      pages.map(page => fetchJsonWithTimeout(`${base}&page=${page}`))
     );
+    const allWcaCompetitions = results.flat();
+    console.log(`Fetched ${allWcaCompetitions.length} competitions from WCA API`);
+
+    // 2. Filter Kerala competitions and upsert to DB
+    const keralaCompetitions = allWcaCompetitions.filter(
+      (c: any) => c.city && c.city.toLowerCase().includes("kerala")
+    );
+    console.log(`Found ${keralaCompetitions.length} Kerala competitions in WCA fetch`);
+
+    if (keralaCompetitions.length > 0) {
+      const upsertPromises = keralaCompetitions.map((c: any) => {
+        // Use a safer upsert that doesn't crash if cancelled_at is missing from client
+        const data = {
+          name: c.name,
+          city: c.city,
+          start_date: c.start_date,
+          end_date: c.end_date,
+          event_ids: c.event_ids,
+          venue: c.venue || "",
+          country_iso2: c.country_iso2,
+          has_results: !!c.results_posted_at,
+          cancelled_at: c.cancelled_at ?? null,
+        };
+
+        return db.competitions.upsert({
+          where: { id: c.id },
+          update: data as any,
+          create: { id: c.id, ...data } as any,
+        }).catch((err: any) => {
+          console.error(`Upsert failed for ${c.id}, retrying without cancelled_at`, err);
+          // Fallback for stale client
+          const { cancelled_at, ...safeData } = data;
+          return db.competitions.upsert({
+            where: { id: c.id },
+            update: safeData as any,
+            create: { id: c.id, ...safeData } as any,
+          });
+        });
+      });
+      await Promise.all(upsertPromises);
+      console.log("Successfully upserted Kerala competitions to DB");
+    }
+
+    // 3. Fetch all Kerala competitions from database for the final response
+    // 3. Fetch all Kerala competitions from database using raw query to bypass stale client
+    const allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
+    console.log(`Fetched ${allKeralaFromDb.length} Kerala competitions from DB`);
 
     const now = new Date();
-    const upcomingCompetitions = keralaCompetitions
-      .filter((c: any) => new Date(c.start_date) > now)
-      .reverse();
-    const pastCompetitions = keralaCompetitions.filter(
-      (c: any) => new Date(c.start_date) <= now
-    );
+    now.setHours(0, 0, 0, 0);
+
+    const upcomingCompetitions = allKeralaFromDb
+      .filter((c: any) => new Date(c.start_date) >= now)
+      .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+      
+    const pastCompetitions = allKeralaFromDb
+      .filter((c: any) => new Date(c.start_date) < now)
+      .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
     return new NextResponse(
       JSON.stringify({
         upcomingCompetitions,
         pastCompetitions,
         lastFetch: new Date().toISOString(),
-        totalFetched: data.length,
+        source: 'database',
+        count: allKeralaFromDb.length
       }),
       {
         status: 200,
@@ -74,40 +115,50 @@ export async function GET(_req: NextRequest) {
           Pragma: "no-cache",
           Expires: "0",
           "X-Generated-At": new Date().toISOString(),
+          "X-DB-Count": allKeralaFromDb.length.toString(),
         },
       }
     );
   } catch (error: any) {
-    let errorMessage = "Failed to fetch competitions";
-    let statusCode = 500;
+    console.error("Error fetching competitions:", error);
+    
+    // In case of API failure, still try to return data from database
+    try {
+      const allKeralaFromDb = await db.competitions.findMany({
+        orderBy: {
+          start_date: 'desc'
+        }
+      });
 
-    if (error.name === "AbortError") {
-      errorMessage = "Request timeout - WCA API is taking too long to respond";
-      statusCode = 504;
-    } else if (error.code === "ECONNABORTED") {
-      errorMessage = "Request timeout - WCA API is taking too long to respond";
-      statusCode = 504;
-    } else if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
-      errorMessage = "Cannot connect to WCA API";
-      statusCode = 503;
-    } else if (error.message?.includes("status")) {
-      errorMessage = `WCA API error: ${error.message}`;
-      statusCode = 502;
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      const upcomingCompetitions = allKeralaFromDb
+        .filter((c: any) => new Date(c.start_date) >= now)
+        .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+        
+      const pastCompetitions = allKeralaFromDb
+        .filter((c: any) => new Date(c.start_date) < now)
+        .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+
+      return new NextResponse(
+        JSON.stringify({
+          upcomingCompetitions,
+          pastCompetitions,
+          lastFetch: new Date().toISOString(),
+          source: 'database-fallback',
+          error: error.message
+        }),
+        { status: 200 }
+      );
+    } catch (dbError) {
+      return new NextResponse(
+        JSON.stringify({
+          error: "Failed to fetch from both API and Database",
+          timestamp: new Date().toISOString(),
+        }),
+        { status: 500 }
+      );
     }
-
-    return new NextResponse(
-      JSON.stringify({
-        error: errorMessage,
-        details: process.env.NODE_ENV === "development" ? error.message : undefined,
-        timestamp: new Date().toISOString(),
-      }),
-      {
-        status: statusCode,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store, no-cache, must-revalidate",
-        },
-      }
-    );
   }
 }

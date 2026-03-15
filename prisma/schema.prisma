@@ -8,34 +8,48 @@ datasource db {
 }
 
 model Users {
-  wcaid       String @id @unique 
-  name        String
-  avatarUrl   String
-  country     String? 
-  gender      String? 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  wcaid     String   @id @unique
+  name      String
+  avatarUrl String
+  country   String?
+  gender    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Requests {
-  wcaid       String @id @unique 
-  name        String
-  avatarUrl   String
-  country     String? 
-  gender      String?
-  role        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  wcaid     String   @id @unique
+  name      String
+  avatarUrl String
+  country   String?
+  gender    String?
+  role      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Members {
- wcaid       String @id @unique 
-  name        String
-  avatarUrl   String
-  country     String? 
-  gender      String?
-  role        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  wcaid     String   @id @unique
+  name      String
+  avatarUrl String
+  country   String?
+  gender    String?
+  role      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+model Competitions {
+  id           String   @id @unique
+  name         String
+  city         String
+  start_date   String
+  end_date     String
+  event_ids    String[]
+  venue        String
+  country_iso2 String
+  has_results  Boolean  @default(false)
+  cancelled_at String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

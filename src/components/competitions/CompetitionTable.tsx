@@ -31,10 +31,10 @@ interface CompetitionTableProps {
 
 export function CompetitionTable({ competitions }: CompetitionTableProps) {
   return (
-    <div className="rounded-md border border-border overflow-x-auto">
+    <div className="overflow-x-auto">
       <Table className="w-full text-sm md:text-[15px]">
         <TableHeader>
-          <TableRow className="border-border">
+          <TableRow className="border-y border-y-border border-border">
             <TableHead className="text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap transition-none">Date</TableHead>
             <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Name</TableHead>
             <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Status</TableHead>
@@ -47,7 +47,8 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
             const status = getDetailedCompetitionStatus(
               competition.start_date,
               competition.end_date,
-              competition.has_results
+              competition.has_results,
+              competition.cancelled_at || null
             );
 
             return (
@@ -80,6 +81,11 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
                   {status === "Completed" && (
                     <Badge variant="outline" className="text-red-500 bg-red-500/5 py-0 px-2 border-none text-[11px] font-medium tracking-wide">
                       Completed
+                    </Badge>
+                  )}
+                  {status === "Cancelled" && (
+                    <Badge variant="outline" className="text-gray-500 bg-gray-500/5 py-0 px-2 border-none text-[11px] font-medium tracking-wide">
+                      Cancelled
                     </Badge>
                   )}
                 </TableCell>

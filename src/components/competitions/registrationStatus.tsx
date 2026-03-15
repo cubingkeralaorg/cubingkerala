@@ -19,7 +19,15 @@ export function RegistrationStatus({
   cancelledAt,
   hasResults = false,
 }: RegistrationStatusProps) {
-  const status = getDetailedCompetitionStatus(startDate, endDate, hasResults);
+  const status = getDetailedCompetitionStatus(startDate, endDate, hasResults, cancelledAt);
+  
+  if (status === "Cancelled") {
+    return (
+      <div className="text-red-500 font-medium">
+        Competition was cancelled.
+      </div>
+    );
+  }
 
   if (status === "Upcoming") {
     return (
@@ -43,13 +51,6 @@ export function RegistrationStatus({
     );
   }
 
-  if (cancelledAt) {
-    return (
-      <div className="text-red-500 font-medium">
-        Competition was cancelled.
-      </div>
-    );
-  }
 
   return (
     <div className="text-red-500 font-medium">
