@@ -71,7 +71,8 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
               <TableCell className="cursor-default">{index + 1}</TableCell>
               <TableCell className="text-nowrap">
                 <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                  <span className="cursor-pointer hover:text-blue-500">
+                  {/* @ts-ignore */}
+                  <span className={`cursor-pointer hover:text-blue-500 ${memberDetails?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}>
                     {member.name.split("(")[0]}
                   </span>
                 </Link>
@@ -92,10 +93,20 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
                 {capitalizeRole(member.role)}
               </TableCell>
               <TableCell className="cursor-default">
-                {memberDetails?.competition_count || 0}
+                {/* @ts-ignore */}
+                {memberDetails?.isUnavailable ? (
+                  <span className="text-muted-foreground">N/A</span>
+                ) : (
+                  memberDetails?.competition_count || 0
+                )}
               </TableCell>
               <TableCell className="cursor-default">
-                {getTotalMedals(memberDetails)}
+                {/* @ts-ignore */}
+                {memberDetails?.isUnavailable ? (
+                  <span className="text-muted-foreground">N/A</span>
+                ) : (
+                  getTotalMedals(memberDetails)
+                )}
               </TableCell>
             </TableRow>
           );

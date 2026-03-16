@@ -83,7 +83,7 @@ const getErrorMessage = (error: unknown): string => {
     return ERROR_MESSAGES.SERVER_ERROR;
   }
   
-  if (!navigator.onLine) {
+  if (typeof window !== "undefined" && !navigator.onLine) {
     return ERROR_MESSAGES.NO_CONNECTION;
   }
   

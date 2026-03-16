@@ -49,13 +49,21 @@ export function RankingsTable({
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="font-medium text-nowrap">
                   <Link href={`/members/${member.person.id}`}>
-                    <span className="cursor-pointer hover:text-blue-500">
+                    {/* @ts-ignore */}
+                    <span className={`cursor-pointer hover:text-blue-500 ${member.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}>
                       {member.person.name.split("(")[0]}
                     </span>
                   </Link>
                 </TableCell>
                 <TableCell className="font-semibold text-nowrap">
-                  {formatResult(result, selectedEvent, selectedRound)}
+                  {/* @ts-ignore */}
+                  {member.isUnavailable ? (
+                    <span className="text-xs text-red-500/70 font-normal">
+                      Data Unavailable
+                    </span>
+                  ) : (
+                    formatResult(result, selectedEvent, selectedRound)
+                  )}
                 </TableCell>
                 <TableCell>{result?.country_rank || ""}</TableCell>
                 <TableCell>{result?.continent_rank || ""}</TableCell>

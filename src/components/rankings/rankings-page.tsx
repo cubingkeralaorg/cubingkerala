@@ -10,7 +10,7 @@ import { getEventName } from "@/utils/eventNames";
 import { RankingsTable } from "./rankingsTable";
 import { RankingsSkeleton } from "./rankingsSkeleton";
 import { FilterState, RankingsComponentProps } from "@/types/rankings.types";
-import { fetchMultiplePersonsData } from "@/services/wca.api";
+import { fetchMultiplePersonsData, getCachedPersonData, getUnifiedCache } from "@/services/wca.api";
 
 export default function RankingsComponent({ members }: RankingsComponentProps) {
   const [memberResults, setMemberResults] = useState<CompetitorData[]>([]);
@@ -31,10 +31,79 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
 
       setLoading(true);
       try {
-        const results = await fetchMultiplePersonsData(
-          members.map((member) => member.wcaid),
-        );
-        setMemberResults(results);
+        const wcaIds = members.map((member) => member.wcaid);
+        
+        // 1. Perform synchronous cache check for instant load
+        const cachedResults: CompetitorData[] = [];
+        const missingWcaIds: string[] = [];
+        
+        const cache = getUnifiedCache();
+        const now = Date.now();
+
+        for (const wcaId of wcaIds) {
+          const cached = cache[wcaId];
+          if (cached && now < cached.expiry) {
+            cachedResults.push(cached.data);
+          } else {
+            missingWcaIds.push(wcaId);
+          }
+        }
+
+        // 2. Instant UI Update
+        if (cachedResults.length > 0) {
+          setMemberResults(cachedResults);
+          // Hide loading if we have data to display
+          setLoading(false);
+        } else if (wcaIds.length > 0) {
+          // Only show loading if we have NO data
+          setLoading(true);
+        } else {
+          setLoading(false);
+        }
+
+        // 3. Strictly Incremental Background Fetch
+        if (missingWcaIds.length > 0) {
+          await fetchMultiplePersonsData(wcaIds);
+        } else {
+          setLoading(false);
+        }
+
+        // 4. Merge all members (cached + fresh + placeholders)
+        const finalCache = getUnifiedCache();
+        const resultsWithPlaceholders: CompetitorData[] = [];
+        const now2 = Date.now();
+
+        for (const member of members) {
+          const cached = finalCache[member.wcaid];
+          if (cached && (now2 < cached.expiry || cached.data)) {
+            resultsWithPlaceholders.push(cached.data);
+          } else {
+            // Inject placeholder for missing/invalid WCA ID
+            resultsWithPlaceholders.push({
+              person: {
+                id: member.wcaid,
+                name: member.name,
+                wca_id: member.wcaid,
+                avatar: { url: "", pending_url: "", thumb_url: "", is_default: true },
+                gender: member.gender,
+                country_iso2: "IN", // Baseline
+                url: `https://www.worldcubeassociation.org/persons/${member.wcaid}`,
+                country: { id: "India", name: "India", continentId: "_Asia", iso2: "IN" },
+                delegate_status: null,
+                class: "person",
+                teams: []
+              },
+              competition_count: 0,
+              personal_records: {},
+              medals: { gold: 0, silver: 0, bronze: 0, total: 0 },
+              records: { national: 0, continental: 0, world: 0, total: 0 },
+              // @ts-ignore - custom flag for UI
+              isUnavailable: true
+            });
+          }
+        }
+        
+        setMemberResults(resultsWithPlaceholders);
       } catch (error) {
         console.error("Error fetching member results:", error);
       } finally {

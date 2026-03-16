@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import LoadingComponent from "@/components/shared/loading";
 import { CompetitorData, RequestInfo } from "@/types/api";
-import { fetchPersonFromWCA } from "@/services/wca.api";
+import { fetchPersonFromWCA, getCachedPersonData } from "@/services/wca.api";
 import { MemberHeader } from "./memberHeader";
 import { MemberStats } from "./memberStats";
 import { PersonalRecordsTable } from "./personalRecordsTable";
@@ -25,16 +25,22 @@ export default function MemberInfoComponent({
     window.scrollTo(0, 0);
 
     const loadMemberData = async () => {
+      // 1. Try to get from cache first
+      const cached = getCachedPersonData(member.wcaid);
+      if (cached) {
+        setMemberDataFromWCA(cached);
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. Fallback to fresh fetch
       try {
         const data = await fetchPersonFromWCA(member.wcaid);
         setMemberDataFromWCA(data);
       } catch (error) {
         console.error("Error fetching WCA member data:", error);
       } finally {
-        // Add slight delay for smooth transition
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
+        setIsLoading(false);
       }
     };
 
@@ -58,23 +64,40 @@ export default function MemberInfoComponent({
 
   return (
     <div className="min-h-screen text-foreground">
-      <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
-        <MemberHeader
-          name={member.name}
-          role={member.role}
-          delegateStatus={memberDataFromWCA?.person?.delegate_status ?? ""}
-          avatarUrl={memberDataFromWCA?.person?.avatar?.url ?? ""}
-        />
+      {/* @ts-ignore */}
+      {memberResult.isUnavailable ? (
+        <div className="flex items-center justify-center min-h-[60vh] w-full bg-background mt-10">
+          <div className="max-w-xl px-4 text-center animate-fade-in">
+            <p className="text-sm text-muted-foreground mb-1">
+              404
+            </p>
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
+              Data Unavailable
+            </h1>
+            <p className="text-sm md:text-lg text-muted-foreground leading-relaxed">
+              No results for this ID, cannot fetch results from WCA.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <main className="flex flex-col items-center py-6 md:py-8 px-4 md:px-6 cursor-default animate-fade-in">
+          <MemberHeader
+            name={member.name}
+            role={member.role}
+            delegateStatus={memberDataFromWCA?.person?.delegate_status ?? ""}
+            avatarUrl={memberDataFromWCA?.person?.avatar?.url ?? ""}
+          />
 
-        <MemberStats
-          country={member.country}
-          wcaid={member.wcaid}
-          competitionCount={memberResult.competition_count}
-          medals={memberResult.medals}
-        />
+          <MemberStats
+            country={member.country}
+            wcaid={member.wcaid}
+            competitionCount={memberResult.competition_count}
+            medals={memberResult.medals}
+          />
 
-        <PersonalRecordsTable personalRecords={personalRecordsArray} />
-      </main>
+          <PersonalRecordsTable personalRecords={personalRecordsArray} />
+        </main>
+      )}
     </div>
   );
 }
