@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { ErrorState } from "@/components/shared/error-state";
 
 export default function CompetitionsError({
   error,
@@ -14,22 +15,16 @@ export default function CompetitionsError({
   }, [error]);
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col items-center justify-center min-h-[calc(100vh-160px)]">
-      <div className="text-center space-y-4">
-        <h2 className="text-2xl font-bold text-red-500">
-          Something went wrong!
-        </h2>
-        <p className="text-muted-foreground max-w-md">
-          We couldn&apos;t load the competitions. This might be a temporary
-          issue with the WCA API.
-        </p>
-        <button
-          onClick={() => reset()}
-          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-foreground rounded-md transition-colors"
-        >
-          Try again
-        </button>
-      </div>
-    </div>
+    <ErrorState
+      title="Something went wrong!"
+      description="We couldn't load the competitions. This might be a temporary issue with the WCA API."
+    >
+      <button
+        onClick={() => reset()}
+        className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-foreground rounded-lg transition-all duration-200 font-medium active:scale-[0.98]"
+      >
+        Try again
+      </button>
+    </ErrorState>
   );
 }

@@ -12,7 +12,7 @@ import { RankingsSkeleton } from "./rankingsSkeleton";
 import { FilterState, RankingsComponentProps } from "@/types/rankings.types";
 import { fetchMultiplePersonsData, getCachedPersonData, getUnifiedCache } from "@/services/wca.api";
 
-export default function RankingsComponent({ members }: RankingsComponentProps) {
+export default function RankingsComponent({ members, initialWcaCache }: RankingsComponentProps) {
   const [memberResults, setMemberResults] = useState<CompetitorData[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterState>({
     event: "333",
@@ -33,42 +33,49 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
       try {
         const wcaIds = members.map((member) => member.wcaid);
         
-        // 1. Perform synchronous cache check for instant load
-        const cachedResults: CompetitorData[] = [];
-        const missingWcaIds: string[] = [];
+        // 1. Check for initial cache from server
+        let currentCache = getUnifiedCache();
         
-        const cache = getUnifiedCache();
+        if (initialWcaCache && Object.keys(initialWcaCache).length > 0) {
+          // Merge initial cache into local cache
+          const mergedCache = { ...currentCache, ...initialWcaCache };
+          localStorage.setItem("ck_members_wca_data", JSON.stringify(mergedCache));
+          currentCache = mergedCache;
+        }
+
         const now = Date.now();
+        const missingWcaIds = wcaIds.filter(id => {
+          const cached = currentCache[id];
+          return !cached || now >= cached.expiry;
+        });
 
-        for (const wcaId of wcaIds) {
-          const cached = cache[wcaId];
-          if (cached && now < cached.expiry) {
-            cachedResults.push(cached.data);
-          } else {
-            missingWcaIds.push(wcaId);
-          }
+        // 2. If everything is cached (either locally or from server), show immediately
+        if (missingWcaIds.length === 0) {
+          const results = wcaIds.map(id => currentCache[id].data);
+          setMemberResults(results);
+          setLoading(false);
+          return;
         }
 
-        // 2. Instant UI Update
-        if (cachedResults.length > 0) {
-          setMemberResults(cachedResults);
-          // Hide loading if we have data to display
-          setLoading(false);
-        } else if (wcaIds.length > 0) {
-          // Only show loading if we have NO data
-          setLoading(true);
-        } else {
-          setLoading(false);
+        // 3. Otherwise, show what we have and fetch missing
+        const partialResults = wcaIds
+          .map(id => currentCache[id]?.data)
+          .filter(Boolean);
+          
+        if (partialResults.length > 0) {
+           setMemberResults(partialResults);
+           // We might still want to show loading if the list is significantly incomplete
+           if (partialResults.length < wcaIds.length) {
+             setLoading(true);
+           } else {
+             setLoading(false);
+           }
         }
 
-        // 3. Strictly Incremental Background Fetch
-        if (missingWcaIds.length > 0) {
-          await fetchMultiplePersonsData(wcaIds);
-        } else {
-          setLoading(false);
-        }
-
-        // 4. Merge all members (cached + fresh + placeholders)
+        // Fetch missing data
+        await fetchMultiplePersonsData(wcaIds);
+        
+        // 4. Final merge (cached + fresh + placeholders)
         const finalCache = getUnifiedCache();
         const resultsWithPlaceholders: CompetitorData[] = [];
         const now2 = Date.now();
@@ -86,7 +93,7 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
                 wca_id: member.wcaid,
                 avatar: { url: "", pending_url: "", thumb_url: "", is_default: true },
                 gender: member.gender,
-                country_iso2: "IN", // Baseline
+                country_iso2: "IN",
                 url: `https://www.worldcubeassociation.org/persons/${member.wcaid}`,
                 country: { id: "India", name: "India", continentId: "_Asia", iso2: "IN" },
                 delegate_status: null,
@@ -97,7 +104,7 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
               personal_records: {},
               medals: { gold: 0, silver: 0, bronze: 0, total: 0 },
               records: { national: 0, continental: 0, world: 0, total: 0 },
-              // @ts-ignore - custom flag for UI
+              // @ts-ignore
               isUnavailable: true
             });
           }
@@ -112,7 +119,7 @@ export default function RankingsComponent({ members }: RankingsComponentProps) {
     };
 
     fetchMemberResults();
-  }, [members]);
+  }, [members, initialWcaCache]);
 
   const sortedResults = useMemo(() => {
     if (!memberResults.length) return [];

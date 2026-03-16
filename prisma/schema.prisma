@@ -49,7 +49,13 @@ model Competitions {
   venue        String
   country_iso2 String
   has_results  Boolean  @default(false)
-  cancelled_at String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  cancelled_at String?
+}
+
+model MemberWcaData {
+  wcaid     String   @id @unique
+  data      Json
+  updatedAt DateTime @updatedAt
 }

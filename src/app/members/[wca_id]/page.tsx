@@ -1,4 +1,5 @@
 import { MemberDetails } from "@/components/members";
+import { ErrorState } from "@/components/shared/error-state";
 import db from "@/lib/db";
 import { CompetitorData, RequestInfo } from "@/types/api";
 import axios from "axios";
@@ -25,19 +26,11 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
 
   if (!member) {
     return (
-      <div className="flex items-center justify-center min-h-[100vh] w-full bg-background -mt-20">
-        <div className="max-w-xl px-4 text-center animate-fade-in">
-          <p className="text-sm text-muted-foreground mb-1">
-            404
-          </p>
-          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-            Member Not Found
-          </h2>
-          <p className="text-sm md:text-lg text-muted-foreground/80 leading-relaxed">
-            The requested member does not exist in our database.
-          </p>
-        </div>
-      </div>
+      <ErrorState
+        code="404"
+        title="Member Not Found"
+        description="The requested member does not exist in our database."
+      />
     );
   }
 
