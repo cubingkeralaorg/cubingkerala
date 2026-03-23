@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
 import { LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
@@ -64,73 +63,76 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <div className="bg-background/80 backdrop-blur-md text-foreground relative z-[10000]">
-      <div className="container mx-auto border-b border-border relative flex justify-between items-center px-4 py-1 md:py-3">
+    <div className="sticky top-0 bg-background/80 backdrop-blur-lg text-foreground z-[10000]">
+      <div className="container mx-auto border-b border-border/40 flex justify-between items-center px-4 py-2 md:py-2.5">
         {/* Left Side: Logo and Navigation Links */}
-        <div className="flex items-center space-x-8">
+        <div className="flex items-center gap-8">
           <Link href="/" onClick={closeMenu} className="flex items-center">
             <Image
               src={LOGO_LIGHT}
               alt="Cubing Kerala Logo"
-              width={50}
-              height={50}
+              width={44}
+              height={44}
               priority
-              className="w-[50px] h-auto object-contain block dark:hidden"
+              className="w-[44px] h-auto object-contain block dark:hidden"
             />
             <Image
               src={LOGO_DARK}
               alt="Cubing Kerala Logo"
-              width={50}
-              height={50}
+              width={44}
+              height={44}
               priority
-              className="w-[50px] h-auto object-contain hidden dark:block"
+              className="w-[44px] h-auto object-contain hidden dark:block"
             />
           </Link>
-          <div className="hidden md:flex items-center space-x-2">
+          <nav className="hidden md:flex items-center gap-1">
             <NavLinks userId={userInfo?.me?.id} />
-          </div>
+          </nav>
         </div>
 
         {/* Right Side: GitHub, Theme Toggle, and Auth Button */}
-        <div className="flex items-center space-x-2 md:space-x-4">
-          <div className="hidden md:flex items-center space-x-2">
+        <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1">
             <button
               onClick={handleGithubRedirect}
-              className="text-foreground/70 hover:text-foreground hover:bg-accent transition-all duration-200 p-2 rounded-lg"
+              className="text-foreground/50 hover:text-foreground p-2 rounded-lg transition-colors duration-200"
               aria-label="GitHub repository"
             >
-              <FaGithub size={22} />
+              <FaGithub size={20} />
             </button>
             <ThemeSwitcher />
           </div>
 
-          <div className="flex items-center space-x-2">
-            <div className="hidden md:block">
-              <AuthButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-            </div>
-            
-            <button
-              onClick={toggleMenu}
-              className="group relative block md:hidden h-11 w-11 rounded-xl border border-border/80 bg-background/90 backdrop-blur-sm text-foreground transition-all duration-300 hover:bg-accent/50 hover:border-border"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu-panel"
-            >
-              <span className="sr-only">Toggle navigation menu</span>
-              <Menu
-                size={22}
-                className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
-                  isMenuOpen ? "opacity-0 scale-75 rotate-45" : "opacity-100 scale-100 rotate-0"
-                }`}
-              />
-              <X
-                size={22}
-                className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ${
-                  isMenuOpen ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-75 -rotate-45"
-                }`}
-              />
-            </button>
+          <div className="hidden md:block">
+            <AuthButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </div>
+
+          {/* Animated two-bar hamburger — no hover bg */}
+          <button
+            onClick={toggleMenu}
+            className="relative flex md:hidden h-10 w-10 items-center justify-center text-foreground"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu-panel"
+          >
+            <span className="sr-only">Toggle navigation menu</span>
+            <div className="relative w-[18px] h-[10px]">
+              <span
+                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  isMenuOpen
+                    ? "top-[4px] rotate-45"
+                    : "top-0"
+                }`}
+              />
+              <span
+                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  isMenuOpen
+                    ? "top-[4px] -rotate-45"
+                    : "top-[8px]"
+                }`}
+              />
+            </div>
+          </button>
         </div>
       </div>
 

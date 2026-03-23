@@ -23,10 +23,11 @@ export function AuthButton({
           onLogout();
           onClose?.();
         }}
-        className={`bg-secondary hover:bg-secondary/80 rounded-lg w-full text-foreground ${className}`}
+        variant="bordered"
+        className={`rounded-lg border-border/70 bg-transparent hover:bg-accent/50 w-full text-foreground transition-colors ${className}`}
         size="sm"
       >
-        <p className="text-[15px] text-red-500 font-medium">Logout</p>
+        <p className="text-[14px] text-red-500 font-medium">Logout</p>
       </Button>
     );
   }
@@ -34,10 +35,11 @@ export function AuthButton({
   return (
     <Link href="/api/auth/login" onClick={onClose} className="w-full">
       <Button
-        className={`bg-secondary hover:bg-secondary/80 px-5 w-full rounded-lg text-green-500 font-medium ${className}`}
+        variant="bordered"
+        className={`rounded-lg border-border/70 bg-transparent hover:bg-accent/50 px-5 w-full text-foreground transition-colors ${className}`}
         size="sm"
       >
-        <p className="text-[15px]">Login</p>
+        <p className="text-[14px] text-green-500 font-medium">Login</p>
       </Button>
     </Link>
   );

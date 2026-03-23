@@ -84,7 +84,7 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                         <div className="mt-4 flex items-center gap-3 md:justify-end">
                             <button
                                 onClick={handleGithubRedirect}
-                                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-foreground/80 hover:text-foreground hover:bg-accent transition-all"
+                                className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-all"
                                 aria-label="Open GitHub"
                             >
                                 <FaGithub size={16} />

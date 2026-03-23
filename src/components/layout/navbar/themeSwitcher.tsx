@@ -17,7 +17,7 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="group relative flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-secondary text-foreground/70 hover:text-foreground hover:bg-accent transition-all duration-200"
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-colors duration-200"
       aria-label="Toggle theme"
       type="button"
     >
