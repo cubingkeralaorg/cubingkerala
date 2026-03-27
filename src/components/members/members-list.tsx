@@ -61,7 +61,9 @@ export default function MembersComponent({
       for (const wcaId of wcaIds) {
         const cached = cache[wcaId];
         if (cached && now < cached.expiry) {
-          cachedDetails.push(cached.data);
+          if (cached.data) {
+            cachedDetails.push(cached.data);
+          }
         } else {
           missingWcaIds.push(wcaId);
         }

@@ -6,7 +6,7 @@ const CACHE_DURATION_PERSON = 7 * 24 * 60 * 60 * 1000; // 7 days for unified cac
 
 interface UnifiedCache {
   [wcaId: string]: {
-    data: CompetitorData;
+    data: CompetitorData | null;
     expiry: number;
     updatedAt: number;
   };
@@ -33,7 +33,7 @@ export const getUnifiedCache = (): UnifiedCache => {
 /**
  * Saves multiple persons' data to the unified cache at once
  */
-const saveBatchToUnifiedCache = (dataMap: { [wcaId: string]: CompetitorData }) => {
+const saveBatchToUnifiedCache = (dataMap: { [wcaId: string]: CompetitorData | null }) => {
   const isBrowser = typeof window !== "undefined" && typeof localStorage !== "undefined";
   if (!isBrowser) return;
 
@@ -103,6 +103,12 @@ export const fetchPersonData = async (
         continue;
       }
       
+      const isNotFound = axios.isAxiosError(error) && error.response?.status === 404;
+      if (isNotFound) {
+        console.warn(`WCA ID ${wcaId} not found.`);
+        return null;
+      }
+      
       console.error(`Error fetching data for WCA ID ${wcaId} (attempt ${attempt + 1}):`, error);
       if (attempt === retries) return null;
     }
@@ -139,7 +145,7 @@ export const fetchMultiplePersonsData = async (
   const cache = getUnifiedCache();
   const now = Date.now();
   
-  const allResultsMap: { [wcaId: string]: CompetitorData } = {};
+  const allResultsMap: { [wcaId: string]: CompetitorData | null } = {};
   const idsToFetch: string[] = [];
 
   // Categorize IDs
@@ -160,7 +166,7 @@ export const fetchMultiplePersonsData = async (
   });
 
   if (idsToFetch.length === 0) {
-    return Object.values(allResultsMap);
+    return Object.values(allResultsMap).filter(Boolean) as CompetitorData[];
   }
 
   console.log(`Incremental fetch: fetching ${idsToFetch.length} missing/stale members...`);
@@ -168,17 +174,15 @@ export const fetchMultiplePersonsData = async (
   // Fetch missing items in throttled batches
   const BATCH_SIZE = 4; // Smaller batch size to be safer
   const DELAY_BETWEEN_BATCHES = 2000;
-  const fetchedDataMap: { [wcaId: string]: CompetitorData } = {};
+  const fetchedDataMap: { [wcaId: string]: CompetitorData | null } = {};
 
   for (let i = 0; i < idsToFetch.length; i += BATCH_SIZE) {
     const batch = idsToFetch.slice(i, i + BATCH_SIZE);
     
     await Promise.all(batch.map(async (wcaId) => {
       const result = await fetchPersonData(wcaId, 2);
-      if (result) {
-        fetchedDataMap[wcaId] = result;
-        allResultsMap[wcaId] = result;
-      }
+      fetchedDataMap[wcaId] = result;
+      allResultsMap[wcaId] = result;
     }));
 
     // Save progressively to unified cache
@@ -189,7 +193,7 @@ export const fetchMultiplePersonsData = async (
     }
   }
 
-  return Object.values(allResultsMap);
+  return Object.values(allResultsMap).filter(Boolean) as CompetitorData[];
 };
 
 export const fetchPersonFromWCA = async (wcaId: string) => {
