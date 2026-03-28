@@ -73,11 +73,44 @@ export async function syncMemberWcaData(wcaIds: string[]) {
     const data = await fetchWcaPersonData(wcaId);
     if (data) {
       // @ts-ignore - Prisma model newly added
-      await db.memberWcaData.upsert({
+      const existing = await db.memberWcaData.findUnique({
         where: { wcaid: wcaId },
-        update: { data: data as any, updatedAt: new Date() },
-        create: { wcaid: wcaId, data: data as any },
       });
+
+      if (existing) {
+        // Compare specific fields, e.g. competition_count & personal_records
+        const existingData = existing.data as any;
+        const isCompsSame =
+          existingData?.competition_count === data.competition_count;
+        const isPRsSame =
+          JSON.stringify(existingData?.personal_records) ===
+          JSON.stringify(data.personal_records);
+
+        if (isCompsSame && isPRsSame) {
+          // Only update timestamp
+          // @ts-ignore
+          await db.memberWcaData.update({
+            where: { wcaid: wcaId },
+            data: { updatedAt: new Date() },
+          });
+          console.log(`[WcaSync] Skipped rewrite for ${wcaId} (No changes)`);
+        } else {
+          // Rewrite necessary
+          // @ts-ignore
+          await db.memberWcaData.update({
+            where: { wcaid: wcaId },
+            data: { data: data as any, updatedAt: new Date() },
+          });
+          console.log(`[WcaSync] Updated data for ${wcaId}`);
+        }
+      } else {
+        // Create new
+        // @ts-ignore
+        await db.memberWcaData.create({
+          data: { wcaid: wcaId, data: data as any },
+        });
+        console.log(`[WcaSync] Created data for ${wcaId}`);
+      }
     }
     // Small delay to be nice to WCA API
     await new Promise(resolve => setTimeout(resolve, 500));

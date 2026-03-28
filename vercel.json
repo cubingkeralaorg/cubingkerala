@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/sync-wca",
+      "schedule": "0 2 * * *"
+    }
+  ],
   "functions": {
     "app/api/get-competitions/route.js": {
       "maxDuration": 30
