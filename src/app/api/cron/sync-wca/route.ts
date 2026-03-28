@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { syncMemberWcaData } from "@/lib/wca.sync";
 import db from "@/lib/db";
 
-export const maxDuration = 300; // Allow it to run for up to 5 minutes on Vercel
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
