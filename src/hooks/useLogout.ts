@@ -9,14 +9,14 @@ export function useLogout() {
     try {
       await logoutUser();
       toast.success("Logged out successfully");
-      setTimeout(() => {
-        const theme = window.localStorage.getItem('theme');
-        window.localStorage.clear();
-        if (theme) {
-          window.localStorage.setItem('theme', theme);
-        }
-        window.location.reload();
-      }, 2000);
+      const theme = window.localStorage.getItem('theme');
+      window.localStorage.clear();
+      if (theme) {
+        window.localStorage.setItem('theme', theme);
+      }
+      
+      window.dispatchEvent(new Event("auth-change"));
+      router.refresh();
       router.replace("/");
     } catch (error) {
       console.error("Logout failed:", error);
