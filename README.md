@@ -26,7 +26,8 @@
 | **Join Request** | Submit a join request via WCA OAuth; approved by admins |
 | **Learn** | Resources and guides to get started with speedcubing |
 | **Contact** | Get in touch with the Cubing Kerala team |
-| **Dark / Light Mode** | Full theme support via `next-themes` |
+| **Dark / Light Mode** | Full theme support via `next-themes` with persistence |
+| **WCA Sync** | Background cron job to keep member data and competitions updated |
 | **Sitemap** | Auto-generated sitemap for SEO |
 
 ---
@@ -37,7 +38,7 @@
 |---|---|
 | **Framework** | [Next.js 14](https://nextjs.org) (App Router) |
 | **Language** | TypeScript |
-| **Styling** | Tailwind CSS · shadcn/ui · Radix UI primitives · NextUI |
+| **Styling** | Tailwind CSS · HeroUI · shadcn/ui · Radix UI primitives · NextUI |
 | **Animations** | Framer Motion · Lottie |
 | **Database** | PostgreSQL ([Neon](https://neon.tech) serverless) via Prisma ORM |
 | **Auth** | WCA OAuth 2.0 |
@@ -58,6 +59,10 @@
 | `Requests` | Pending join requests |
 | `Competitions` | Cached Kerala WCA competitions |
 | `MemberWcaData` | Cached WCA competition data per member (JSON) |
+| `SyncLogs` | (Optional) Logs for WCA sync operations |
+
+> [!NOTE]
+> For more detailed information about the database setup, connection strings, and backups, see [DATABASE.md](file:///Users/allenjohn/Desktop/cubingkerala/DATABASE.md).
 
 ---
 
@@ -117,17 +122,21 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 | `npm run build` | Create production build |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
-| `npm test` | Run unit tests (Vitest, watch mode) |
-| `npm run test:run` | Run unit tests once |
-| `npm run test:coverage` | Run tests with coverage report |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run test:watch` | Run unit tests in watch mode |
 | `npm run test:ui` | Open Vitest UI |
+| `npm run test:coverage` | Run tests with coverage report |
+| `npm run test:ci` | Run tests for CI environment |
 | `npm run e2e` | Run end-to-end tests (Playwright) |
+| `npm run test:e2e` | Alias for E2E tests |
 | `npm run e2e:ui` | Open Playwright UI |
 | `npm run e2e:debug` | Debug E2E tests |
+| `npm run e2e:report` | Show Playwright test report |
 | `npm run db:studio` | Open Prisma Studio (DB GUI) |
 | `npm run db:info` | Show database info |
 | `npm run db:check` | Check database connectivity |
 | `npm run db:backup` | Dump a database backup |
+| `npm run db:test` | Test database connection |
 
 ---
 
@@ -144,7 +153,8 @@ src/
 │   │   ├── delete-member/    # Admin: remove a member
 │   │   ├── get-competitions/ # Fetch & cache WCA competitions
 │   │   ├── get-member-wcaids/# Get member WCA IDs
-│   │   └── update-members/   # Sync member data from WCA
+│   │   ├── update-members/   # Sync member data from WCA
+│   │   └── cron/             # Background sync jobs (WCA sync)
 │   ├── competitions/         # Competition listing & detail pages
 │   ├── members/[wca_id]/     # Member profile pages
 │   ├── rankings/             # Rankings page
@@ -166,8 +176,9 @@ src/
 │   ├── layout/               # Navbar, footer, sidebar
 │   ├── shared/               # Shared/reusable components (ErrorState, etc.)
 │   ├── magicui/              # Magic UI animated components
-│   ├── providers/            # Context providers (theme, query)
+│   ├── providers/            # Context providers (theme, query, HeroUI)
 │   └── ui/                   # Base shadcn/ui primitives
+├── config/                   # Site configuration (nav, roles, etc.)
 ├── hooks/                    # Custom React hooks
 ├── lib/                      # Prisma client & shared libs
 ├── services/                 # API service layer (Axios)
