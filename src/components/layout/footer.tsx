@@ -9,7 +9,7 @@ import { ThemeSwitcher } from "./navbar/themeSwitcher";
 
 
 const handleLinkRedirect = () => {
-    window.open("https://allenjohn.vercel.app/", "_blank")
+    window.open("https://allenjohn.me", "_blank")
 }
 
 
