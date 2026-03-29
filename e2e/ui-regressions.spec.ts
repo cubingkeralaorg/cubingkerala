@@ -44,7 +44,7 @@ test.describe('UI Regression Coverage', () => {
     await page.waitForLoadState('networkidle');
 
     const footer = page.locator('footer').filter({ hasText: /all rights reserved\./i }).first();
-    const logo = footer.locator('img[alt="Cubing Kerala Logo"]').first();
+    const logo = footer.locator('img[alt="Cubing Kerala Logo"]:visible').first();
     const competitionsLink = footer.getByRole('link', { name: 'Competitions' }).first();
 
     await expect(logo).toBeVisible();
