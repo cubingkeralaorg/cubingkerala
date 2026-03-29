@@ -10,7 +10,11 @@ export function useLogout() {
       await logoutUser();
       toast.success("Logged out successfully");
       setTimeout(() => {
+        const theme = window.localStorage.getItem('theme');
         window.localStorage.clear();
+        if (theme) {
+          window.localStorage.setItem('theme', theme);
+        }
         window.location.reload();
       }, 2000);
       router.replace("/");
