@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { AnimatedContactLink } from "@/components/contact";
 import { HeroSection, CalendarSection, LegendsSection, UnravelSection } from "@/components/home";
 import { UserInfo } from "@/types/api";
+import { isMobileDevice } from "@/lib/utils";
 
 export default function Home() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
@@ -32,6 +33,20 @@ export default function Home() {
       }
     }
   }, []);
+
+  const handleWhatsAppContact = () => {
+    const url = process.env.NEXT_PUBLIC_WHATSAPP_CONTACT_URL;
+    if (!url) {
+      console.warn("WhatsApp contact URL is not configured in environment variables.");
+      return;
+    }
+
+    if (isMobileDevice()) {
+      window.location.assign(url);
+    } else {
+      window.open(url, '_blank');
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
@@ -94,7 +109,7 @@ export default function Home() {
               </div>
               <div className="flex-shrink-0">
                 <button
-                  onClick={() => window.open('http://wa.me/919633062991', '_blank')}
+                  onClick={handleWhatsAppContact}
                   className="inline-flex items-center gap-2.5 h-11 px-6 rounded-lg bg-foreground text-background font-medium text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
