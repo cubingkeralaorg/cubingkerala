@@ -118,14 +118,14 @@ export const NavbarComponent = () => {
             <span className="sr-only">Toggle navigation menu</span>
             <div className="relative w-[18px] h-[10px]">
               <span
-                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
                   isMenuOpen
                     ? "top-[4px] rotate-45"
                     : "top-0"
                 }`}
               />
               <span
-                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
                   isMenuOpen
                     ? "top-[4px] -rotate-45"
                     : "top-[8px]"

@@ -43,7 +43,7 @@ export function MobileMenu({
       <nav
         id="mobile-menu-panel"
         aria-label="Mobile menu"
-        className={`fixed inset-x-0 top-0 bottom-0 z-[9999] flex flex-col pt-[60px] md:hidden overflow-y-auto transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`fixed inset-x-0 top-0 bottom-0 z-[9999] flex flex-col pt-[60px] md:hidden overflow-y-auto transition-all duration-400 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
           isOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-3 pointer-events-none"
