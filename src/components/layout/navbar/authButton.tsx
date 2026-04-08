@@ -33,7 +33,7 @@ export function AuthButton({
   }
 
   return (
-    <Link href="/api/auth/login" onClick={onClose} className="w-full">
+    <Link href="/login" onClick={onClose} className="w-full">
       <Button
         variant="bordered"
         className={`rounded-lg border-border/70 bg-transparent hover:bg-accent/50 px-5 w-full text-foreground transition-colors ${className}`}

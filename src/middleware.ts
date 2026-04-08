@@ -9,8 +9,8 @@ export function middleware(request: NextRequest) {
                                   request.headers.get('accept')?.includes('text/html');
 
         if (isDirectNavigation) {
-            // Allow login route
-            if (pathname === '/api/auth/login') {
+            // Allow login routes
+            if (pathname === '/api/auth/login' || pathname === '/login') {
                 return NextResponse.next();
             }
 
@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
 
     if (!user) {
         if (pathname.startsWith('/requests')) {
-            return NextResponse.redirect(new URL("/api/auth/login", request.url));
+            return NextResponse.redirect(new URL("/login", request.url));
         }
         return NextResponse.next();
     }
