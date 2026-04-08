@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, isMobileDevice } from "@/lib/utils";
 import DotPattern from "@/components/magicui/dot-pattern";
 
 import { RainbowButton } from "../ui/rainbow-button";
@@ -18,7 +18,12 @@ const CubingKeralaGetStarted = () => {
   };
 
   const handleRedirectToWhatsapp = (): void => {
-    window.open("https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS", "_blank");
+    const url = "https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS";
+    if (isMobileDevice()) {
+      window.location.assign(url);
+    } else {
+      window.open(url, "_blank");
+    }
   };
 
   return (

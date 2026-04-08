@@ -3,6 +3,7 @@
 import { FaWhatsapp } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
+import { isMobileDevice } from "@/lib/utils";
 
 const social_links = [
   {
@@ -27,7 +28,15 @@ const social_links = [
 
 export function CubingKeralaUnravel() {
   const handleSocialClick = (url: string) => {
-    window.open(url, "_blank");
+    if (url.includes("whatsapp.com")) {
+      if (isMobileDevice()) {
+        window.location.assign(url);
+      } else {
+        window.open(url, "_blank");
+      }
+    } else {
+      window.open(url, "_blank");
+    }
   };
 
   return (
