@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function isMobileDevice() {
   if (typeof window === "undefined") return false;
-  return /Android|webOS|iPhone|iPad|IEMobile|Opera Mini/i.test(
+  return /Mobi|Android|iPhone|iPad|webOS|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
 }
