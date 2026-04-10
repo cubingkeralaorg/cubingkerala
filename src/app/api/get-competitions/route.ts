@@ -37,13 +37,21 @@ export async function GET(req: NextRequest) {
 
     // 1. Fetch all Kerala competitions from database first
     let allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
-    console.log(`Initial DB check: ${allKeralaFromDb.length} Kerala competitions found`);
-
+    
     // 2. Decide if we need to sync with WCA API
-    // We sync if forceRefresh is true OR if DB is empty
-    const shouldSync = forceRefresh || allKeralaFromDb.length === 0;
+    const lastUpdate = allKeralaFromDb.length > 0 
+      ? Math.max(...allKeralaFromDb.map(c => new Date(c.updatedAt).getTime()))
+      : 0;
+    
+    const threeHoursAgo = Date.now() - (3 * 60 * 60 * 1000);
+    const isStale = lastUpdate < threeHoursAgo;
+    
+    const shouldSync = forceRefresh || allKeralaFromDb.length === 0 || isStale;
 
     if (shouldSync) {
+      if (isStale && !forceRefresh && allKeralaFromDb.length > 0) {
+        console.log("Data is stale (older than 3h), performing background auto-sync...");
+      }
       console.log("Syncing with WCA API (1 page only)...");
       const base = "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
       

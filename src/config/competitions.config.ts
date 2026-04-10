@@ -1,5 +1,5 @@
-// Cache duration in milliseconds (10 minutes)
-export const CACHE_DURATION = 600 * 1000;
+// Cache duration in milliseconds (2 minutes)
+export const CACHE_DURATION = 120 * 1000;
 
 // API timeout duration
 export const API_TIMEOUT = 35000;
