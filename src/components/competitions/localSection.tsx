@@ -32,12 +32,23 @@ export function LocationSection({
         <p className="text-muted-foreground text-[15px] text-wrap md:text-[16px]">
           {getFullVenueAddress(venue, venueAddress)}
         </p>
-        <div
-          onClick={onToggleMap}
-          className="text-green-500 hover:text-green-600 w-fit cursor-pointer flex gap-1 mt-2 text-[15px] md:text-[16px]"
-        >
-          <p>Map</p>
-          <CiLink />
+        <div className="flex items-center gap-4 mt-2">
+          <div
+            onClick={onToggleMap}
+            className="text-green-500 hover:text-green-600 w-fit cursor-pointer flex gap-1 text-[15px] md:text-[16px]"
+          >
+            <p>Map</p>
+            <CiLink />
+          </div>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${coordinates[0]},${coordinates[1]}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600 w-fit cursor-pointer flex gap-1 text-[15px] md:text-[16px]"
+          >
+            <p>Google Maps</p>
+            <CiLink />
+          </a>
         </div>
         {showMap && (
           <div className="mt-2">

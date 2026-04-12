@@ -76,7 +76,7 @@ const CompetitionDetailsComponent = ({
                     </h2>
                     <div
                       dangerouslySetInnerHTML={{ __html: formattedInformation }}
-                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px] pr-4 sm:pr-6"
+                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_p:has(img)]:text-center [&_img]:inline-block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:m-2"
                     />
                   </div>
                 </div>
@@ -103,11 +103,9 @@ const CompetitionDetailsComponent = ({
                   <div className="w-full text-wrap pr-2">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: formattedInformation.includes("]")
-                          ? formattedInformation.split("]")[0] + "]"
-                          : formattedInformation,
+                        __html: formattedInformation,
                       }}
-                      className="text-muted-foreground text-[15px] md:text-[16px] pr-4 sm:pr-6"
+                      className="text-muted-foreground text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_p:has(img)]:text-center [&_img]:inline-block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:m-2"
                     />
                   </div>
                 </div>
