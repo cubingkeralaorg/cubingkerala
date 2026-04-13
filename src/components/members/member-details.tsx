@@ -5,7 +5,6 @@ import LoadingComponent from "@/components/shared/loading";
 import { CompetitorData, RequestInfo } from "@/types/api";
 import { fetchPersonFromWCA, getCachedPersonData } from "@/services/wca.api";
 import { MemberHeader } from "./memberHeader";
-import { MemberStats } from "./memberStats";
 import { PersonalRecordsTable } from "./personalRecordsTable";
 
 interface MemberInfoComponentProps {
@@ -88,13 +87,12 @@ export default function MemberInfoComponent({
             avatarUrl={memberDataFromWCA?.person?.avatar?.url ?? ""}
           />
 
-          <MemberStats
+          <PersonalRecordsTable 
+            personalRecords={personalRecordsArray}
             wcaid={member.wcaid}
             competitionCount={memberResult.competition_count}
             medals={memberResult.medals}
           />
-
-          <PersonalRecordsTable personalRecords={personalRecordsArray} />
         </main>
       )}
     </div>
