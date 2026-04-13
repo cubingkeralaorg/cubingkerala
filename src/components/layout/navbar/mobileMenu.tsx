@@ -42,7 +42,7 @@ export function MobileMenu({
     <nav
       id="mobile-menu-panel"
       aria-label="Mobile menu"
-      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
