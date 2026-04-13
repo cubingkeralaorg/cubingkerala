@@ -120,8 +120,9 @@ export function MobileMenu({
       </div>
 
       {/* Footer Area */}
-      <div className="w-full border-t border-border/20 pt-4 mt-auto">
+      <div className="w-full mt-auto">
         <div className="container mx-auto px-4">
+            <div className="w-full h-[1px] bg-border/40 mb-4" />
             <div className="flex items-center gap-2 px-1 mb-4">
               <button
                 onClick={() =>
