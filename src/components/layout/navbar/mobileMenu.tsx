@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { AuthButton } from "./authButton";
-import { NavLinks } from "./navLinks";
+import Link from "next/link";
+import Image from "next/image";
 import { ThemeSwitcher } from "./themeSwitcher";
 import { FaGithub } from "react-icons/fa";
+import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
+import { X } from "lucide-react";
 import CubingKeralaFooter from "../footer";
 
 interface MobileMenuProps {
@@ -29,51 +31,96 @@ export function MobileMenu({
     setPortalRoot(document.body);
   }, []);
 
+  const isAdmin = userId === ADMIN_USER_ID;
+
+  const links = [...NAV_LINKS];
+  if (isAdmin) {
+    links.push({ href: "/requests", label: "Requests" });
+  }
+
   const menuContent = (
-    <>
-      {/* Backdrop */}
-      <div
-        className={`fixed inset-0 z-[9998] bg-background/60 backdrop-blur-md md:hidden transition-opacity duration-400 ease-out ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={onClose}
-      />
+    <div
+      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isOpen ? "translate-x-0" : "translate-x-full"
+      }`}
+    >
+      {/* Top Header with Logo and Close Button */}
+      <div className="container mx-auto flex items-center justify-between px-4 py-4 h-[72px]">
+        <Link href="/" onClick={onClose} className="flex items-center">
+            <Image
+              src={LOGO_LIGHT}
+              alt="Cubing Kerala Logo"
+              width={44}
+              height={44}
+              priority
+              className="w-[44px] h-auto object-contain block dark:hidden"
+            />
+            <Image
+              src={LOGO_DARK}
+              alt="Cubing Kerala Logo"
+              width={44}
+              height={44}
+              priority
+              className="w-[44px] h-auto object-contain hidden dark:block"
+            />
+        </Link>
+        <button
+          onClick={onClose}
+          className="p-1.5 rounded-full text-foreground hover:bg-accent transition-colors"
+          aria-label="Close menu"
+        >
+          <X size={24} strokeWidth={1.5} />
+        </button>
+      </div>
 
-      {/* Menu panel — slides down from navbar */}
-      <nav
-        id="mobile-menu-panel"
-        aria-label="Mobile menu"
-        className={`fixed inset-x-0 top-0 bottom-0 z-[9999] flex flex-col pt-[60px] md:hidden overflow-y-auto transition-all duration-400 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
-          isOpen
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-3 pointer-events-none"
-        }`}
-      >
-        <div className="mx-3 mt-2 flex-1 rounded-2xl border border-border/50 bg-background/95 shadow-lg backdrop-blur-xl supports-[backdrop-filter]:bg-background/85">
-          <div className="flex h-full flex-col gap-2 px-4 py-4">
-            {/* Navigation links */}
-            <div
-              className={`flex flex-col gap-0.5 transition-all duration-400 delay-50 ease-out ${
-                isOpen
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-2"
-              }`}
-            >
-              <NavLinks
-                userId={userId}
-                onClose={onClose}
-                className="w-full rounded-xl px-3 py-2.5 text-[15px]"
-              />
+      {/* Main Links Area */}
+      <div className="flex-1 overflow-y-auto w-full">
+        <div className="container mx-auto px-4 flex flex-col">
+          <div>
+            <div className="w-full h-[1px] bg-border/40" />
+          </div>
+          
+          {links.map((link) => (
+            <div key={link.href}>
+              <Link
+                href={link.href}
+                onClick={onClose}
+                className="block py-4 text-[26px] font-[500] tracking-wide text-muted-foreground border-b border-border/40 hover:text-foreground transition-colors"
+              >
+                {link.label}
+              </Link>
             </div>
+          ))}
+          
+          {/* Auth Button */}
+          <div className="mt-2 mb-4">
+            {isLoggedIn ? (
+              <button
+                onClick={() => {
+                  onLogout();
+                  onClose();
+                }}
+                className="w-full text-left block py-4 text-[26px] font-[500] tracking-wide text-red-500 border-b border-border/40 hover:text-red-500/70 transition-colors"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                onClick={onClose}
+                className="block py-4 text-[26px] font-[500] tracking-wide text-green-500 border-b border-border/40 hover:text-green-500/70 transition-colors"
+              >
+                Login
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
 
-            {/* Utility row: GitHub + Theme */}
-            <div
-              className={`flex items-center gap-2 px-1 transition-all duration-400 delay-100 ease-out ${
-                isOpen
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-2"
-              }`}
-            >
+      {/* Footer Area */}
+      <div className="w-full border-t border-border/20 pt-4 mt-auto">
+        <div className="container mx-auto px-4">
+            <div className="flex items-center gap-2 px-1 mb-4">
               <button
                 onClick={() =>
                   window.open(
@@ -88,41 +135,16 @@ export function MobileMenu({
               </button>
               <ThemeSwitcher />
             </div>
-
-            {/* Auth button */}
-            <div
-              className={`transition-all duration-400 delay-150 py-2.5 ease-out ${
-                isOpen
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-2"
-              }`}
-            >
-              <AuthButton
-                isLoggedIn={isLoggedIn}
-                onLogout={onLogout}
-                onClose={onClose}
-              />
-            </div>
-          </div>
+            
+            <CubingKeralaFooter compact />
         </div>
-
-        {/* Compact footer pinned at screen bottom */}
-        <div
-          className={`mt-2 mb-3 px-3 transition-all duration-400 delay-200 ease-out ${
-            isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-          }`}
-        >
-          <CubingKeralaFooter compact />
-        </div>
-      </nav>
-    </>
+      </div>
+    </div>
   );
 
-  // Portal to document.body to escape the navbar's stacking context
   if (portalRoot) {
     return createPortal(menuContent, portalRoot);
   }
 
-  // SSR fallback
   return menuContent;
 }

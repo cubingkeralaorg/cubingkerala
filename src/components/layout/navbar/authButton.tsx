@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@heroui/react";
 import Link from "next/link";
 
 interface AuthButtonProps {
@@ -18,29 +17,25 @@ export function AuthButton({
 }: AuthButtonProps) {
   if (isLoggedIn) {
     return (
-      <Button
-        onPress={() => {
+      <button
+        onClick={() => {
           onLogout();
           onClose?.();
         }}
-        variant="bordered"
-        className={`rounded-lg border-border/70 bg-transparent hover:bg-accent/50 w-full text-foreground transition-colors ${className}`}
-        size="sm"
+        className={`text-[15px] font-[500] tracking-wide text-red-500 hover:text-red-500/70 px-3 py-2 transition-colors duration-200 ${className}`}
       >
-        <p className="text-[14px] text-red-500 font-medium">Logout</p>
-      </Button>
+        Logout
+      </button>
     );
   }
 
   return (
-    <Link href="/login" onClick={onClose} className="w-full">
-      <Button
-        variant="bordered"
-        className={`rounded-lg border-border/70 bg-transparent hover:bg-accent/50 px-5 w-full text-foreground transition-colors ${className}`}
-        size="sm"
-      >
-        <p className="text-[14px] text-green-500 font-medium">Login</p>
-      </Button>
+    <Link 
+      href="/login" 
+      onClick={onClose}
+      className={`text-[15px] font-[500] tracking-wide text-green-500 hover:text-green-500/70 px-3 py-2 transition-colors duration-200 ${className}`}
+    >
+      Login
     </Link>
   );
 }

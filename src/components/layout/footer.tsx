@@ -6,6 +6,8 @@ import { FaGithub } from "react-icons/fa";
 import { LOGO_DARK, LOGO_LIGHT } from "@/config/navigation.config";
 import Image from "next/image";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
+import { useAuth } from "@/hooks/useAuth";
+import { useLogout } from "@/hooks/useLogout";
 
 
 const handleLinkRedirect = () => {
@@ -29,9 +31,12 @@ interface CubingKeralaFooterProps {
 }
 
 const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
+    const { isLoggedIn } = useAuth();
+    const { handleLogout } = useLogout();
+    
     if (compact) {
         return (
-            <footer className="rounded-2xl border border-border/70 bg-background/90 px-4 py-3 text-muted-foreground">
+            <footer className="border-t border-border/70 bg-transparent py-4 text-muted-foreground w-full">
                 <div className="flex flex-col items-start justify-start gap-1 text-left">
                     <p className="text-xs">&copy; 2026 Cubing Kerala. All rights reserved.</p>
                     <p className="text-xs text-muted-foreground/80">
@@ -80,6 +85,23 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                {isLoggedIn ? (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-sm text-red-500 hover:text-red-500/70 transition-colors whitespace-nowrap"
+                                    >
+                                        Logout
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        className="text-sm text-green-500 hover:text-green-500/70 transition-colors whitespace-nowrap"
+                                    >
+                                        Login
+                                    </Link>
+                                )}
+                            </li>
                         </ul>
                         <div className="mt-4 flex items-center gap-3 md:justify-end">
                             <button
