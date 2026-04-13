@@ -18,7 +18,7 @@ export function NavLink({
   return (
     <Link
       href={href}
-      className={`text-[15px] font-[500] tracking-wide text-muted-foreground hover:text-foreground px-3 py-2 transition-colors duration-200 ${className}`}
+      className={`text-[15px] font-normal tracking-wide text-muted-foreground hover:text-foreground px-3 py-2 transition-colors duration-200 ${className}`}
       onClick={onClick}
     >
       {label}

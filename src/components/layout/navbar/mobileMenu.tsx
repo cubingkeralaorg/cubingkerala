@@ -87,7 +87,7 @@ export function MobileMenu({
               <Link
                 href={link.href}
                 onClick={onClose}
-                className="block py-4 text-[26px] font-[500] tracking-wide text-muted-foreground border-b border-border/40 hover:text-foreground transition-colors"
+                className="block py-4 text-[26px] font-normal tracking-wide text-muted-foreground border-b border-border/40 hover:text-foreground transition-colors"
               >
                 {link.label}
               </Link>
@@ -102,7 +102,7 @@ export function MobileMenu({
                   onLogout();
                   onClose();
                 }}
-                className="w-full text-left block py-4 text-[26px] font-[500] tracking-wide text-red-500 border-b border-border/40 hover:text-red-500/70 transition-colors"
+                className="w-full text-left block py-4 text-[26px] font-normal tracking-wide text-red-500 border-b border-border/40 hover:text-red-500/70 transition-colors"
               >
                 Logout
               </button>
@@ -110,7 +110,7 @@ export function MobileMenu({
               <Link
                 href="/login"
                 onClick={onClose}
-                className="block py-4 text-[26px] font-[500] tracking-wide text-green-500 border-b border-border/40 hover:text-green-500/70 transition-colors"
+                className="block py-4 text-[26px] font-normal tracking-wide text-green-500 border-b border-border/40 hover:text-green-500/70 transition-colors"
               >
                 Login
               </Link>
