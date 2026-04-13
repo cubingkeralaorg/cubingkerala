@@ -89,7 +89,6 @@ export default function MemberInfoComponent({
           />
 
           <MemberStats
-            country={member.country}
             wcaid={member.wcaid}
             competitionCount={memberResult.competition_count}
             medals={memberResult.medals}

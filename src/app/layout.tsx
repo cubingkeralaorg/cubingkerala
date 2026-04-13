@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Rubik } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout";
 import { ConditionalFooter } from "@/components/layout/conditionalFooter";
@@ -9,9 +9,9 @@ import { Providers } from "./providers/Providers";
 import { DataPrefetcher } from "@/components/providers/DataPrefetcher";
 export const dynamic = "force-dynamic";
 
-const inter = Inter({ 
+const font = Rubik({ 
   subsets: ["latin"],
-  variable: '--font-inter',
+  variable: '--font-sans',
 });
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans bg-background`}>
+      <body className={`${font.variable} font-sans bg-background`}>
         <Providers>
           <DataPrefetcher />
           <SplashScreen>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 
 interface MemberStatsProps {
-  country: string;
   wcaid: string;
   competitionCount: number;
   medals: {
@@ -14,17 +13,13 @@ interface MemberStatsProps {
 }
 
 export function MemberStats({
-  country,
   wcaid,
   competitionCount,
   medals,
 }: MemberStatsProps) {
   return (
     <div className="flex flex-wrap gap-4 md:gap-8 items-center w-full max-w-fit py-2 px-4 text-foreground justify-center my-4">
-      <div className="text-center">
-        <p className="text-xs text-muted-foreground font-medium">COUNTRY</p>
-        <p className="text-sm font-semibold">{country.toUpperCase()}</p>
-      </div>
+
       <div className="text-center">
         <p className="text-xs text-muted-foreground font-medium">WCA ID</p>
         <Link

@@ -72,7 +72,7 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
               <TableCell className="text-nowrap">
                 <Link prefetch={true} href={`/members/${member.wcaid}`}>
                   {/* @ts-ignore */}
-                  <span className={`cursor-pointer hover:text-blue-500 ${memberDetails?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}>
+                  <span className={`cursor-pointer hover:text-blue-500 font-medium ${memberDetails?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}>
                     {member.name.split("(")[0]}
                   </span>
                 </Link>
