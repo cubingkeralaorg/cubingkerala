@@ -20,11 +20,24 @@ export function MemberHeader({
 }: MemberHeaderProps) {
   const isDefaultAvatar = avatarUrl?.includes("missing_avatar_thumb");
 
+  const formatName = (fullName: string) => {
+    const match = fullName.match(/^(.*?)\s*(\(.*?\))(.*)$/);
+    if (!match) return fullName;
+
+    return (
+      <>
+        <span className="block md:inline">{match[1].trim()}</span>
+        <span className="block md:inline md:ml-2">{match[2]}</span>
+        {match[3] && <span className="block md:inline md:ml-1">{match[3]}</span>}
+      </>
+    );
+  };
+
   return (
     <>
       <div className="text-center space-y-0 md:space-y-1">
         <BlurIn
-          word={name}
+          word={formatName(name)}
           className="text-2xl text-center font-bold tracking-tighter md:text-4xl"
         />
         <div className="space-x-2">
