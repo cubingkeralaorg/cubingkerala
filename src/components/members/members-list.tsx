@@ -5,7 +5,6 @@ import { Suspense, useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
-import ShinyButton from "../ui/shiny-button";
 import { Loader } from "lucide-react";
 import { CompetitorData, RequestInfo, UserInfo } from "@/types/api";
 import { getUserInfoFromCookie } from "@/utils/cookieUtils";
@@ -111,21 +110,22 @@ export default function MembersComponent({
               word="Members"
               className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
             />
-            <div
-              onClick={handleJoinCK}
-              className="w-2/3 md:w-1/4 flex justify-end items-center"
-            >
-              <ShinyButton className="rounded-lg w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-secondary border border-border hover:bg-accent/80 hover:border-foreground/20 transition-all duration-200 ease-in-out">
+            <div className="w-2/3 md:w-1/4 flex justify-end items-center">
+              <button
+                onClick={handleJoinCK}
+                disabled={isJoinCkLoading}
+                className={`rounded-md w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-card border border-border hover:bg-accent hover:text-foreground transition-all duration-200 ease-in-out ${isJoinCkLoading ? "opacity-70 cursor-not-allowed delay-0" : ""}`}
+              >
                 {isJoinCkLoading ? (
-                  <div className="flex items-center justify-center h-6">
-                    <Loader className="animate-spin text-foreground" size={16} />
+                  <div className="flex items-center justify-center py-[2px] md:py-[1px]">
+                    <Loader className="animate-spin text-foreground" size={14} />
                   </div>
                 ) : (
                   <span className="text-xs md:text-sm text-foreground font-semibold">
                     Join Cubing Kerala
                   </span>
                 )}
-              </ShinyButton>
+              </button>
             </div>
           </div>
 
