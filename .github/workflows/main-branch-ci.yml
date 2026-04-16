@@ -92,6 +92,7 @@ jobs:
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           vercel-args: "--prod"
           github-comment: true
+          vercel-version: latest
 
       - name: Create deployment comment
         uses: actions/github-script@v7

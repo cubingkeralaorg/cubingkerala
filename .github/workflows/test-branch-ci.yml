@@ -90,6 +90,7 @@ jobs:
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           github-comment: false
+          vercel-version: latest
 
       - name: Comment Preview URL
         uses: actions/github-script@v7
