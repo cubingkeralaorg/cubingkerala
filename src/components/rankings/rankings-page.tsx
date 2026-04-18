@@ -77,20 +77,20 @@ export default function RankingsComponent({ members, initialWcaCache }: Rankings
     <Suspense fallback={<LoadingComponent />}>
       <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
         <div className="animate-fade-in">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
+          <div className="flex justify-between items-center mb-4 gap-3">
             <div>
               <BlurIn
                 word="Rankings"
-                className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
+                className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-1 md:mb-4"
               />
-              <p className="text-xs text-muted-foreground ml-1">
+              <p className="text-[10px] md:text-xs text-muted-foreground ml-1">
                 Showing results for{" "}
                 <span>{getEventName(selectedFilter.event)}</span>
                 {"  "}
                 <span>{selectedFilter.round}</span>
               </p>
             </div>
-            <div className="flex justify-start md:justify-end">
+            <div className="flex justify-end items-center mt-0">
               <FilterComponent onFilterChange={setSelectedFilter} />
             </div>
           </div>
