@@ -14,6 +14,8 @@ const font = Rubik({
   variable: '--font-sans',
 });
 
+import { EmailBanner } from "@/components/layout/EmailBanner";
+
 export const metadata: Metadata = {
   title: "Cubing Kerala",
   description:
@@ -35,6 +37,7 @@ export default function RootLayout({
           <DataPrefetcher />
           <SplashScreen>
             <Navbar />
+            <EmailBanner />
             {children}
             <Toaster richColors />
             <ConditionalFooter />

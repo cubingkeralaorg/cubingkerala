@@ -2,13 +2,25 @@
 
 import {HeroUIProvider} from '@heroui/react'
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 
 export function Providers({children}: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+      },
+    },
+  }));
+
   return (
-    <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
-      <HeroUIProvider className='max-w-screen-xl mx-auto flex flex-col min-h-screen justify-between'>
-        {children}
-      </HeroUIProvider>
-    </NextThemesProvider>
+    <QueryClientProvider client={queryClient}>
+      <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
+        <HeroUIProvider className='max-w-screen-xl mx-auto flex flex-col min-h-screen justify-between'>
+          {children}
+        </HeroUIProvider>
+      </NextThemesProvider>
+    </QueryClientProvider>
   )
 }

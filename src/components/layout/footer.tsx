@@ -8,6 +8,8 @@ import Image from "next/image";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { toast } from "sonner";
 
 
 const handleLinkRedirect = () => {
@@ -32,7 +34,17 @@ interface CubingKeralaFooterProps {
 
 const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     const { isLoggedIn } = useAuth();
+    const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
     const { handleLogout } = useLogout();
+    
+    const handleUnsubscribe = async () => {
+        try {
+            await updateProfile({ emailConsent: false });
+            toast.success("You have been unsubscribed from emails.");
+        } catch (error) {
+            toast.error("Failed to unsubscribe. Please try again.");
+        }
+    };
     
     if (compact) {
         return (
@@ -85,6 +97,17 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                                     </Link>
                                 </li>
                             ))}
+                            {isLoggedIn && profile?.emailConsent && (
+                                <li>
+                                    <button
+                                        onClick={handleUnsubscribe}
+                                        disabled={isUpdating}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                                    >
+                                        {isUpdating ? "Unsubscribing..." : "Unsubscribe from Emails"}
+                                    </button>
+                                </li>
+                            )}
                             <li>
                                 {isLoggedIn ? (
                                     <button
