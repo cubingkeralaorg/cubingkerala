@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const handleLinkRedirect = () => {
@@ -36,13 +37,29 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     const { isLoggedIn } = useAuth();
     const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
     const { handleLogout } = useLogout();
+    const [isEditingEmail, setIsEditingEmail] = React.useState(false);
+    const [newEmail, setNewEmail] = React.useState("");
     
-    const handleUnsubscribe = async () => {
+    const handleToggleSubscription = async (newConsent: boolean) => {
         try {
-            await updateProfile({ emailConsent: false });
-            toast.success("You have been unsubscribed from emails.");
+            await updateProfile({ emailConsent: newConsent });
+            toast.success(newConsent ? "You have been subscribed to emails." : "You have been unsubscribed from emails.");
         } catch (error) {
-            toast.error("Failed to unsubscribe. Please try again.");
+            toast.error("Failed to update preferences. Please try again.");
+        }
+    };
+
+    const handleUpdateEmail = async () => {
+        if (!newEmail || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(newEmail)) {
+            toast.error("Please enter a valid email address");
+            return;
+        }
+        try {
+            await updateProfile({ email: newEmail });
+            toast.success("Email updated successfully.");
+            setIsEditingEmail(false);
+        } catch (error) {
+            toast.error("Failed to update email. Please try again.");
         }
     };
     
@@ -97,17 +114,6 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                                     </Link>
                                 </li>
                             ))}
-                            {isLoggedIn && profile?.emailConsent && (
-                                <li>
-                                    <button
-                                        onClick={handleUnsubscribe}
-                                        disabled={isUpdating}
-                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                    >
-                                        {isUpdating ? "Unsubscribing..." : "Unsubscribe from Emails"}
-                                    </button>
-                                </li>
-                            )}
                             <li>
                                 {isLoggedIn ? (
                                     <button
@@ -126,15 +132,80 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                                 )}
                             </li>
                         </ul>
-                        <div className="mt-4 flex items-center gap-3 md:justify-end">
-                            <button
-                                onClick={handleGithubRedirect}
-                                className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-all"
-                                aria-label="Open GitHub"
-                            >
-                                <FaGithub size={16} />
-                            </button>
-                            <ThemeSwitcher />
+                        <div className="mt-4 flex flex-col items-start md:items-end gap-3">
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={handleGithubRedirect}
+                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-all"
+                                    aria-label="Open GitHub"
+                                >
+                                    <FaGithub size={16} />
+                                </button>
+                                <ThemeSwitcher />
+                            </div>
+                            {isLoggedIn && profile?.email && (
+                                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+                                    <button
+                                        onClick={() => handleToggleSubscription(!profile.emailConsent)}
+                                        disabled={isUpdating}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                                    >
+                                        {isUpdating 
+                                            ? "Updating..." 
+                                            : profile.emailConsent 
+                                                ? "Unsubscribe from Emails" 
+                                                : "Subscribe to Emails"}
+                                    </button>
+                                    
+                                    <AnimatePresence mode="wait">
+                                        {isEditingEmail ? (
+                                            <motion.div
+                                                key="edit-form"
+                                                initial={{ opacity: 0, x: 10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="flex items-center gap-2 mt-1 md:mt-0"
+                                            >
+                                                <input
+                                                    type="email"
+                                                    value={newEmail}
+                                                    onChange={(e) => setNewEmail(e.target.value)}
+                                                    placeholder="New email address"
+                                                    className="px-2 py-1 text-sm rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/50 w-full sm:min-w-[220px]"
+                                                />
+                                                <button
+                                                    onClick={handleUpdateEmail}
+                                                    disabled={isUpdating}
+                                                    className="text-sm bg-foreground text-background px-3 py-1 rounded hover:bg-foreground/90 transition-colors disabled:opacity-50 font-medium"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={() => setIsEditingEmail(false)}
+                                                    disabled={isUpdating}
+                                                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-1"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </motion.div>
+                                        ) : (
+                                            <motion.button
+                                                key="update-btn"
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 10 }}
+                                                transition={{ duration: 0.2 }}
+                                                onClick={() => { setIsEditingEmail(true); setNewEmail(profile.email || ""); }}
+                                                disabled={isUpdating}
+                                                className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                                            >
+                                                Update Email Address
+                                            </motion.button>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

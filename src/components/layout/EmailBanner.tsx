@@ -21,7 +21,7 @@ export const EmailBanner = () => {
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailInput || !/^\S+@\S+\.\S+$/.test(emailInput)) {
+    if (!emailInput || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailInput)) {
       toast.error("Please enter a valid email address");
       return;
     }
