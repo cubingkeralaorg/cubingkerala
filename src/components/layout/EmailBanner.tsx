@@ -84,7 +84,7 @@ export const EmailBanner = () => {
       <div className="w-full bg-background border-b border-border/40 py-3 px-4 z-50 relative">
         <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
           <div className="flex items-center gap-2 text-foreground/80">
-            <Bell size={16} className="text-foreground" />
+            <Bell size={16} className="text-foreground hidden sm:block" />
             <span>Can we send new competition alerts and important info to <strong>{profile.email}</strong>?</span>
           </div>
           <div className="flex items-center gap-2">

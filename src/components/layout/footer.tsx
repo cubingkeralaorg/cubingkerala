@@ -65,12 +65,91 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
     
     if (compact) {
         return (
-            <footer className="border-t border-border/70 bg-transparent py-4 text-muted-foreground w-full">
-                <div className="flex flex-col items-start justify-start gap-1 text-left">
-                    <p className="text-xs">&copy; 2026 Cubing Kerala. All rights reserved.</p>
-                    <p className="text-xs text-muted-foreground/80">
-                        Designed & Developed with ❤️ by <span onClick={handleLinkRedirect} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>
-                    </p>
+            <footer className="bg-transparent py-4 text-muted-foreground w-full">
+                <div className="flex flex-col items-start justify-start gap-4 text-left">
+                    <div className="flex items-center justify-between w-full">
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={handleGithubRedirect}
+                                className="text-foreground/50 hover:text-foreground p-2 rounded-lg transition-colors"
+                                aria-label="GitHub repository"
+                            >
+                                <FaGithub size={20} />
+                            </button>
+                            <ThemeSwitcher />
+                        </div>
+
+                        {isLoggedIn && profile?.email && (
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => handleToggleSubscription(!profile.emailConsent)}
+                                    disabled={isUpdating}
+                                    className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                                >
+                                    {isUpdating 
+                                        ? "Updating..." 
+                                        : profile.emailConsent 
+                                            ? "Unsubscribe" 
+                                            : "Subscribe"}
+                                </button>
+                                
+                                {!isEditingEmail && (
+                                    <button
+                                        onClick={() => { setIsEditingEmail(true); setNewEmail(profile.email || ""); }}
+                                        disabled={isUpdating}
+                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                                    >
+                                        Update Email
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {isLoggedIn && profile?.email && isEditingEmail && (
+                        <div className="w-full pt-1 pb-2">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key="edit-form-compact"
+                                    initial={{ opacity: 0, y: -5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -5 }}
+                                    className="flex flex-col gap-2 w-full"
+                                >
+                                    <input
+                                        type="email"
+                                        value={newEmail}
+                                        onChange={(e) => setNewEmail(e.target.value)}
+                                        placeholder="New email"
+                                        className="px-3 py-2 text-sm rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/50 w-full"
+                                    />
+                                    <div className="flex items-center gap-2 justify-end">
+                                        <button
+                                            onClick={handleUpdateEmail}
+                                            disabled={isUpdating}
+                                            className="text-sm bg-foreground text-background px-4 py-1.5 rounded hover:bg-foreground/90 transition-colors disabled:opacity-50 font-medium"
+                                        >
+                                            Save
+                                        </button>
+                                        <button
+                                            onClick={() => setIsEditingEmail(false)}
+                                            disabled={isUpdating}
+                                            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    )}
+                    
+                    <div className="border-t border-border/70 pt-8 flex flex-col items-start justify-start gap-2 w-full">
+                        <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
+                        <p className="text-xs text-muted-foreground/80">
+                            Designed & Developed with ❤️ by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>
+                        </p>
+                    </div>
                 </div>
             </footer>
         )

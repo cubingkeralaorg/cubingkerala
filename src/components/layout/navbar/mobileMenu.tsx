@@ -122,23 +122,6 @@ export function MobileMenu({
       {/* Footer Area */}
       <div className="w-full mt-auto">
         <div className="container mx-auto px-4">
-            <div className="w-full h-[1px] bg-border/40 mb-4" />
-            <div className="flex items-center gap-2 px-1 mb-4">
-              <button
-                onClick={() =>
-                  window.open(
-                    "https://github.com/cubingkeralaorg/cubingkerala",
-                    "_blank"
-                  )
-                }
-                className="text-foreground/50 hover:text-foreground p-2 rounded-lg transition-colors"
-                aria-label="GitHub repository"
-              >
-                <FaGithub size={20} />
-              </button>
-              <ThemeSwitcher />
-            </div>
-            
             <CubingKeralaFooter compact />
         </div>
       </div>
