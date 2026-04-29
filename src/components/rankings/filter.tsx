@@ -42,7 +42,9 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
       <Menubar className="rounded-md bg-card border border-border text-sm md:text-[15px]">
         <MenubarMenu>
           <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
-            {getEventName(selectedFilter.event) || "Select Event"}
+            <span className="truncate max-w-[70px] sm:max-w-[120px] md:max-w-none block">
+              {getEventName(selectedFilter.event) || "Select Event"}
+            </span>
           </MenubarTrigger>
           <MenubarContent className="max-h-60 w-[220px] overflow-y-auto bg-card text-foreground border border-border rounded-md">
             <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleEventSelect("222")}>
@@ -139,7 +141,11 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
         </MenubarMenu>
         <span>|</span>
         <MenubarMenu>
-          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">{selectedFilter.round || "Select Round"}</MenubarTrigger>
+          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
+            <span className="truncate max-w-[50px] sm:max-w-[80px] md:max-w-none block">
+              {selectedFilter.round || "Select Round"}
+            </span>
+          </MenubarTrigger>
           <MenubarContent className="max-h-60 overflow-y-auto bg-card text-foreground border border-border rounded-md">
             <MenubarItem className="hover:bg-accent cursor-pointer" onClick={() => handleRoundSelect("single")}>
               Single

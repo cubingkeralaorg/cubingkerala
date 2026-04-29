@@ -4,6 +4,7 @@ import { FilterComponent } from "./filter";
 import { Suspense, useEffect, useState, useCallback, useMemo } from "react";
 import LoadingComponent from "@/components/shared/loading";
 import BlurIn from "../ui/blur-in";
+import { RankingsSkeleton } from "./rankingsSkeleton";
 import { CompetitorData } from "@/types/api";
 import { sortMembersByResult } from "@/utils/wcaSorting";
 import { getEventName } from "@/utils/eventNames";
@@ -50,6 +51,13 @@ export default function RankingsComponent({ members, initialWcaCache }: Rankings
     event: "333",
     round: "single",
   });
+  const [isFiltering, setIsFiltering] = useState(false);
+
+  const handleFilterChange = useCallback((newFilter: FilterState) => {
+    setIsFiltering(true);
+    setSelectedFilter(newFilter);
+    setTimeout(() => setIsFiltering(false), 300);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -77,30 +85,32 @@ export default function RankingsComponent({ members, initialWcaCache }: Rankings
     <Suspense fallback={<LoadingComponent />}>
       <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
         <div className="animate-fade-in">
-          <div className="flex justify-between items-center mb-4 gap-3">
-            <div>
-              <BlurIn
-                word="Rankings"
-                className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-1 md:mb-4"
-              />
-              <p className="text-[10px] md:text-xs text-muted-foreground ml-1">
-                Showing results for{" "}
-                <span>{getEventName(selectedFilter.event)}</span>
-                {"  "}
-                <span>{selectedFilter.round}</span>
-              </p>
-            </div>
+          <div className="flex justify-between items-center mb-1 md:mb-2 gap-3">
+            <BlurIn
+              word="Rankings"
+              className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
+            />
             <div className="flex justify-end items-center mt-0">
-              <FilterComponent onFilterChange={setSelectedFilter} />
+              <FilterComponent onFilterChange={handleFilterChange} />
             </div>
           </div>
+          <p className="text-[10px] md:text-xs text-muted-foreground ml-1 mb-4 w-full">
+            Showing results for{" "}
+            <span>{getEventName(selectedFilter.event)}</span>
+            {"  "}
+            <span>{selectedFilter.round}</span>
+          </p>
 
-          <RankingsTable
-            sortedResults={sortedResults}
-            selectedEvent={selectedFilter.event}
-            selectedRound={selectedFilter.round}
-            getResult={getResult}
-          />
+          {isFiltering ? (
+            <RankingsSkeleton />
+          ) : (
+            <RankingsTable
+              sortedResults={sortedResults}
+              selectedEvent={selectedFilter.event}
+              selectedRound={selectedFilter.round}
+              getResult={getResult}
+            />
+          )}
         </div>
       </div>
     </Suspense>
