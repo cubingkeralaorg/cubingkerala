@@ -90,6 +90,8 @@ export default function MemberInfoComponent({
           <PersonalRecordsTable 
             personalRecords={personalRecordsArray}
             wcaid={member.wcaid}
+            country={memberDataFromWCA?.person?.country?.name || member.country}
+            countryIso2={memberDataFromWCA?.person?.country_iso2}
             competitionCount={memberResult.competition_count}
             medals={memberResult.medals}
           />
