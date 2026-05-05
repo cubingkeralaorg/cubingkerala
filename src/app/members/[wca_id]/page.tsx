@@ -2,7 +2,6 @@ import { MemberDetails } from "@/components/members";
 import { ErrorState } from "@/components/shared/error-state";
 import db from "@/lib/db";
 import { CompetitorData, RequestInfo } from "@/types/api";
-import axios from "axios";
 import { Metadata } from "next";
 import React from "react";
 export const dynamic = "force-dynamic";
@@ -35,13 +34,15 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
   }
 
   let memberResult;
-  try {
-    const response = await axios.get(
-      `https://www.worldcubeassociation.org/api/v0/persons/${params.wca_id}`,
-    );
-    memberResult = response.data;
-  } catch (error) {
-    console.error(`Error fetching WCA data for ${params.wca_id}:`, error);
+  // Fetch from the local database synchronized by the cron job
+  // @ts-ignore - Prisma model newly added
+  const wcaDataObj = await db.memberWcaData.findUnique({
+    where: { wcaid: params.wca_id }
+  });
+
+  if (wcaDataObj && wcaDataObj.data) {
+    memberResult = wcaDataObj.data;
+  } else {
     // Provide a fallback structure for invalid/missing WCA IDs
     memberResult = {
       person: {

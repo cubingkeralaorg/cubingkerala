@@ -1,6 +1,5 @@
 import axios, { AxiosError } from "axios";
 import { API_TIMEOUT, ERROR_MESSAGES } from "@/config/competitions.config";
-import { setCompetitionsCache } from "./cache";
 import { CompetitionsData } from "@/types/competition.types";
 
 interface FetchCompetitionsResult {
@@ -39,8 +38,7 @@ export const fetchCompetitions = async (
         lastFetch: Date.now(),
       };
 
-      // Cache the successful response
-      setCompetitionsCache(competitionsData);
+      // We no longer cache to localStorage
 
       return {
         success: true,

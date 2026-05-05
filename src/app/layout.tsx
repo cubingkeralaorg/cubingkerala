@@ -6,7 +6,6 @@ import { ConditionalFooter } from "@/components/layout/conditionalFooter";
 import { SplashScreen } from "@/components/layout/SplashScreen";
 import { Toaster } from "sonner";
 import { Providers } from "./providers/Providers";
-import { DataPrefetcher } from "@/components/providers/DataPrefetcher";
 export const dynamic = "force-dynamic";
 
 const font = Rubik({ 
@@ -34,7 +33,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${font.variable} font-sans bg-background`}>
         <Providers>
-          <DataPrefetcher />
           <SplashScreen>
             <Navbar />
             <EmailBanner />

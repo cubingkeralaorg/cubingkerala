@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { Competition } from "@/types/competition.types";
-import {
-  clearCompetitionsCache,
-  formatLastUpdated,
-} from "@/lib/competition/cache";
 import { fetchCompetitions } from "@/lib/competition/api";
 
 interface UseCompetitionsReturn {
@@ -62,48 +58,15 @@ export function useCompetitions(): UseCompetitionsReturn {
   );
 
   /**
-   * Load competitions from cache or fetch fresh data
+   * Load fresh competitions from API
    */
   const loadCompetitions = useCallback(async () => {
-    // We try to get "expired" cache too for SWR behavior
-    // Modification: Use localStorage directly or modify getCompetitionsCache to return stale
-    const itemStr = typeof window !== "undefined" ? localStorage.getItem("competitions") : null;
-    let cachedItem: any = null;
-    
-    if (itemStr) {
-      try {
-        cachedItem = JSON.parse(itemStr);
-      } catch (e) {}
-    }
-
-    if (cachedItem) {
-      // Show cached data immediately (SWR)
-      setUpcomingCompetitions(cachedItem.value?.upcomingCompetitions || []);
-      setPastCompetitions(cachedItem.value?.pastCompetitions || []);
-      setLastUpdated(formatLastUpdated(cachedItem.cachedAt));
-      setLoading(false);
-      setDataLoaded(true);
-
-      // If expired, or just to be fresh, revalidate in background
-      const now = Date.now();
-      if (now > cachedItem.expiry) {
-        console.log("Cache expired - revalidating in background...");
-        fetchAndUpdateCompetitions(false);
-      }
-    } else {
-      // No cache at all - fetch fresh data
-      console.log("No cache found - fetching fresh data");
-      setLoading(true);
-      setDataLoaded(false);
-      await fetchAndUpdateCompetitions(false);
-    }
+    setLoading(true);
+    setDataLoaded(false);
+    await fetchAndUpdateCompetitions(false);
   }, [fetchAndUpdateCompetitions]);
 
-  /**
-   * Force refresh competitions (clears cache)
-   */
   const handleForceRefresh = () => {
-    clearCompetitionsCache();
     fetchAndUpdateCompetitions(true);
   };
 

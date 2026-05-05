@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import LoadingComponent from "@/components/shared/loading";
 import { CompetitorData, RequestInfo } from "@/types/api";
-import { fetchPersonFromWCA, getCachedPersonData } from "@/services/wca.api";
+
 import { MemberHeader } from "./memberHeader";
 import { PersonalRecordsTable } from "./personalRecordsTable";
 
@@ -16,34 +16,10 @@ export default function MemberInfoComponent({
   member,
   memberResult,
 }: MemberInfoComponentProps) {
-  const [memberDataFromWCA, setMemberDataFromWCA] =
-    useState<CompetitorData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    const loadMemberData = async () => {
-      // 1. Try to get from cache first
-      const cached = getCachedPersonData(member.wcaid);
-      if (cached) {
-        setMemberDataFromWCA(cached);
-        setIsLoading(false);
-        return;
-      }
-
-      // 2. Fallback to fresh fetch
-      try {
-        const data = await fetchPersonFromWCA(member.wcaid);
-        setMemberDataFromWCA(data);
-      } catch (error) {
-        console.error("Error fetching WCA member data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadMemberData();
   }, [member.wcaid]);
 
   const personalRecordsArray = useMemo(() => {
@@ -83,15 +59,15 @@ export default function MemberInfoComponent({
           <MemberHeader
             name={member.name}
             role={member.role}
-            delegateStatus={memberDataFromWCA?.person?.delegate_status ?? ""}
-            avatarUrl={memberDataFromWCA?.person?.avatar?.url ?? ""}
+            delegateStatus={memberResult?.person?.delegate_status ?? ""}
+            avatarUrl={memberResult?.person?.avatar?.url ?? ""}
           />
 
           <PersonalRecordsTable 
             personalRecords={personalRecordsArray}
             wcaid={member.wcaid}
-            country={memberDataFromWCA?.person?.country?.name || member.country}
-            countryIso2={memberDataFromWCA?.person?.country_iso2}
+            country={memberResult?.person?.country?.name || member.country}
+            countryIso2={memberResult?.person?.country_iso2}
             competitionCount={memberResult.competition_count}
             medals={memberResult.medals}
           />
