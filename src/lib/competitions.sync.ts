@@ -39,6 +39,12 @@ export async function syncCompetitions() {
   );
   console.log(`Found ${keralaCompetitions.length} Kerala competitions in WCA fetch`);
 
+  await db.systemMetadata.upsert({
+    where: { key: "last_competition_sync" },
+    update: { value: new Date().toISOString() },
+    create: { key: "last_competition_sync", value: new Date().toISOString() },
+  });
+
   if (keralaCompetitions.length > 0) {
     const allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
     // Create a lookup map of existing competitions to avoid redundant upserts

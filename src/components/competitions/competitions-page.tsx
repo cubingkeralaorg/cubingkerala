@@ -10,9 +10,10 @@ import { Competition } from "@/types/competition.types";
 interface CompetitionsPageProps {
   initialUpcoming?: Competition[];
   initialPast?: Competition[];
+  initialLastUpdated?: string;
 }
 
-const CompetitionsPage = ({ initialUpcoming = [], initialPast = [] }: CompetitionsPageProps) => {
+const CompetitionsPage = ({ initialUpcoming = [], initialPast = [], initialLastUpdated = "" }: CompetitionsPageProps) => {
   const {
     upcomingCompetitions,
     pastCompetitions,
@@ -20,7 +21,7 @@ const CompetitionsPage = ({ initialUpcoming = [], initialPast = [] }: Competitio
     lastUpdated,
     isRefreshing,
     handleForceRefresh,
-  } = useCompetitions(initialUpcoming, initialPast);
+  } = useCompetitions(initialUpcoming, initialPast, initialLastUpdated);
 
   const [searchQuery, setSearchQuery] = useState("");
 

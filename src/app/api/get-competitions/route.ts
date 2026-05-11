@@ -37,11 +37,16 @@ export async function GET(req: NextRequest) {
       .filter((c: any) => new Date(c.start_date) < now)
       .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
+    const syncMeta = await db.systemMetadata.findUnique({
+      where: { key: "last_competition_sync" }
+    });
+    const lastSyncTime = syncMeta ? new Date(syncMeta.value).toISOString() : new Date().toISOString();
+
     return new NextResponse(
       JSON.stringify({
         upcomingCompetitions,
         pastCompetitions,
-        lastFetch: new Date().toISOString(),
+        lastFetch: lastSyncTime,
         source: shouldSync ? 'wca-api-sync' : 'database',
         count: allKeralaFromDb.length
       }),
@@ -79,11 +84,16 @@ export async function GET(req: NextRequest) {
         .filter((c: any) => new Date(c.start_date) < now)
         .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
+      const syncMetaFallback = await db.systemMetadata.findUnique({
+        where: { key: "last_competition_sync" }
+      });
+      const lastSyncTimeFallback = syncMetaFallback ? new Date(syncMetaFallback.value).toISOString() : new Date().toISOString();
+
       return new NextResponse(
         JSON.stringify({
           upcomingCompetitions,
           pastCompetitions,
-          lastFetch: new Date().toISOString(),
+          lastFetch: lastSyncTimeFallback,
           source: 'database-fallback',
           error: error.message
         }),

@@ -43,7 +43,7 @@ export const fetchCompetitions = async (
       return {
         success: true,
         data: competitionsData,
-        timestamp: new Date().toLocaleString("en-US", {
+        timestamp: new Date(res.data.lastFetch).toLocaleString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),

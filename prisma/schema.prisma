@@ -61,3 +61,9 @@ model MemberWcaData {
   data      Json
   updatedAt DateTime @updatedAt
 }
+
+model SystemMetadata {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

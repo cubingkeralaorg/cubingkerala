@@ -31,7 +31,7 @@ export function RegistrationStatus({
 
   if (status === "Upcoming") {
     return (
-      <div className="flex gap-1 text-blue-500 hover:text-blue-600 w-fit">
+      <div className="flex gap-1 text-green-500 hover:text-green-600 w-fit">
         <p
           onClick={() => openCompetitionRegistration(competitionId)}
           className="cursor-pointer"

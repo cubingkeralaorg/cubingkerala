@@ -26,7 +26,7 @@ export function CompetitionsHeader({
         />
         <div className="text-xs text-muted-foreground text-start ml-1 flex items-center gap-2 h-4">
           <span>
-            {isLoading ? "Fetching competitions..." : `Last updated: ${lastUpdated}`}
+            {isLoading ? "Fetching competitions..." : lastUpdated ? `Last updated: ${lastUpdated}` : ""}
           </span>
         </div>
       </div>

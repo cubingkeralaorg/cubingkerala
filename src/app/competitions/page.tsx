@@ -26,10 +26,23 @@ const Competitions = async () => {
     .filter((c: any) => new Date(c.start_date) < now)
     .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
+  const syncMeta = await db.systemMetadata.findUnique({
+    where: { key: "last_competition_sync" }
+  });
+
+  let initialLastUpdated = "";
+  if (syncMeta && syncMeta.value) {
+    initialLastUpdated = new Date(syncMeta.value).toLocaleString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  }
+
   return (
     <CompetitionsPage 
       initialUpcoming={upcomingCompetitions} 
-      initialPast={pastCompetitions} 
+      initialPast={pastCompetitions}
+      initialLastUpdated={initialLastUpdated}
     />
   );
 };

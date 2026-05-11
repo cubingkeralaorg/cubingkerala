@@ -76,7 +76,7 @@ const CompetitionDetailsComponent = ({
                     </h2>
                     <div
                       dangerouslySetInnerHTML={{ __html: formattedInformation }}
-                      className="text-muted-foreground text-wrap text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_p:has(img)]:text-center [&_img]:inline-block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:m-2"
+                      className="text-start text-muted-foreground text-wrap text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_p:has(img)]:!text-left [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_img]:block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:my-4 [&_img]:ml-0 [&_img]:mr-auto"
                     />
                   </div>
                 </div>
@@ -105,7 +105,7 @@ const CompetitionDetailsComponent = ({
                       dangerouslySetInnerHTML={{
                         __html: formattedInformation,
                       }}
-                      className="text-muted-foreground text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_p:has(img)]:text-center [&_img]:inline-block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:m-2"
+                      className="text-start text-muted-foreground text-[15px] md:text-[16px] pr-4 sm:pr-6 [&_ul]:list-disc [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:ml-5 [&_li]:mt-1 [&_p]:mb-3 [&_p:last-child]:mb-0 [&_p:has(img)]:!text-left [&_strong]:font-bold [&_h1]:font-bold [&_h1]:text-lg [&_h2]:font-bold [&_h2]:text-base [&_h3]:font-bold [&_h3]:text-base [&_a]:text-blue-500 [&_a]:underline [&_img]:block [&_img]:max-w-full [&_img]:h-auto [&_img]:object-contain [&_img]:my-4 [&_img]:ml-0 [&_img]:mr-auto"
                     />
                   </div>
                 </div>
@@ -119,7 +119,7 @@ const CompetitionDetailsComponent = ({
 
           <div
             onClick={() => openCompetitionPage(compInfo.id)}
-            className="flex mt-10 justify-center gap-1 text-[15px] md:text-[16px] text-green-500 hover:text-green-600 cursor-pointer"
+            className="flex gap-1 text-[15px] md:text-[16px] text-blue-500 hover:text-blue-600 cursor-pointer"
           >
             <p>More details on World Cube Association</p>
             <CiLink />

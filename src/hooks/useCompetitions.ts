@@ -13,7 +13,8 @@ interface UseCompetitionsReturn {
 
 export function useCompetitions(
   initialUpcoming: Competition[] = [],
-  initialPast: Competition[] = []
+  initialPast: Competition[] = [],
+  initialLastUpdated: string = ""
 ): UseCompetitionsReturn {
   const [upcomingCompetitions, setUpcomingCompetitions] = useState<Competition[]>(initialUpcoming);
   const [pastCompetitions, setPastCompetitions] = useState<Competition[]>(initialPast);
@@ -21,7 +22,7 @@ export function useCompetitions(
   const hasInitialData = initialUpcoming.length > 0 || initialPast.length > 0;
   
   const [loading, setLoading] = useState(!hasInitialData);
-  const [lastUpdated, setLastUpdated] = useState<string>("");
+  const [lastUpdated, setLastUpdated] = useState<string>(initialLastUpdated);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(hasInitialData);
 
