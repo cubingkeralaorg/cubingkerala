@@ -11,15 +11,19 @@ interface UseCompetitionsReturn {
   handleForceRefresh: () => void;
 }
 
-export function useCompetitions(): UseCompetitionsReturn {
-  const [upcomingCompetitions, setUpcomingCompetitions] = useState<
-    Competition[]
-  >([]);
-  const [pastCompetitions, setPastCompetitions] = useState<Competition[]>([]);
-  const [loading, setLoading] = useState(true);
+export function useCompetitions(
+  initialUpcoming: Competition[] = [],
+  initialPast: Competition[] = []
+): UseCompetitionsReturn {
+  const [upcomingCompetitions, setUpcomingCompetitions] = useState<Competition[]>(initialUpcoming);
+  const [pastCompetitions, setPastCompetitions] = useState<Competition[]>(initialPast);
+  
+  const hasInitialData = initialUpcoming.length > 0 || initialPast.length > 0;
+  
+  const [loading, setLoading] = useState(!hasInitialData);
   const [lastUpdated, setLastUpdated] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(hasInitialData);
 
   /**
    * Fetch competitions from API and update state
@@ -72,29 +76,10 @@ export function useCompetitions(): UseCompetitionsReturn {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadCompetitions();
-
-    // Re-check cache when page becomes visible or focused
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        console.log("Page visible - checking cache");
-        loadCompetitions();
-      }
-    };
-
-    const handleFocus = () => {
-      console.log("Page focused - checking cache");
+    if (!hasInitialData) {
       loadCompetitions();
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("focus", handleFocus);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [loadCompetitions]);
+    }
+  }, [hasInitialData, loadCompetitions]);
 
   return {
     upcomingCompetitions,

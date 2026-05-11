@@ -44,6 +44,15 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
         </TableHeader>
         <TableBody>
           {competitions.map((competition) => {
+            if (competition.id === "upcoming-header" || competition.id === "past-header") {
+              return (
+                <TableRow key={competition.id} className="bg-muted/30 hover:bg-muted/30 border-b border-border">
+                  <TableCell colSpan={5} className="text-sm py-3 text-muted-foreground">
+                    {competition.id === "upcoming-header" ? "Upcoming Competitions" : "Past Competitions"}
+                  </TableCell>
+                </TableRow>
+              );
+            }
             const status = getDetailedCompetitionStatus(
               competition.start_date,
               competition.end_date,

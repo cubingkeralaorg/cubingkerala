@@ -5,8 +5,14 @@ import { CompetitionsList } from "./competitionList";
 import { CompetitionsHeader } from "./CompetitionsHeader";
 import LoadingComponent from "@/components/shared/loading";
 import { useCompetitions } from "@/hooks/useCompetitions";
+import { Competition } from "@/types/competition.types";
 
-const CompetitionsPage = () => {
+interface CompetitionsPageProps {
+  initialUpcoming?: Competition[];
+  initialPast?: Competition[];
+}
+
+const CompetitionsPage = ({ initialUpcoming = [], initialPast = [] }: CompetitionsPageProps) => {
   const {
     upcomingCompetitions,
     pastCompetitions,
@@ -14,7 +20,7 @@ const CompetitionsPage = () => {
     lastUpdated,
     isRefreshing,
     handleForceRefresh,
-  } = useCompetitions();
+  } = useCompetitions(initialUpcoming, initialPast);
 
   const [searchQuery, setSearchQuery] = useState("");
 

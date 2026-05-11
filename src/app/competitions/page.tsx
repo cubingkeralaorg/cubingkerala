@@ -1,6 +1,8 @@
 import { CompetitionsPage } from "@/components/competitions";
 import { Metadata } from "next";
 import React from "react";
+import db from "@/lib/db";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -11,7 +13,25 @@ export const metadata: Metadata = {
 };
 
 const Competitions = async () => {
-  return <CompetitionsPage />;
+  let allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
+  
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  const upcomingCompetitions = allKeralaFromDb
+    .filter((c: any) => new Date(c.start_date) >= now)
+    .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+    
+  const pastCompetitions = allKeralaFromDb
+    .filter((c: any) => new Date(c.start_date) < now)
+    .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+
+  return (
+    <CompetitionsPage 
+      initialUpcoming={upcomingCompetitions} 
+      initialPast={pastCompetitions} 
+    />
+  );
 };
 
 export default Competitions;
