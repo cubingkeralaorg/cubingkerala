@@ -1,8 +1,8 @@
-import cookie from "cookie";
+import { parse } from "cookie";
 import { UserInfo } from "@/types/api";
 
 export const getUserInfoFromCookie = (): UserInfo | null => {
-  const cookies = cookie.parse(document.cookie);
+  const cookies = parse(document.cookie);
   const userInfoFromCookie = cookies.userInfo;
 
   if (userInfoFromCookie) {

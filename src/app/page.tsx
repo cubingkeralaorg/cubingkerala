@@ -2,7 +2,7 @@
 
 import { useOnScreen } from "@/utils/animation";
 import { useEffect, useState } from "react";
-import cookie from "cookie";
+import { parse } from "cookie";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { AnimatedContactLink } from "@/components/contact";
@@ -25,11 +25,15 @@ export default function Home() {
     scrollTo(0, 0);
 
     if (typeof window !== "undefined") {
-      const cookies = cookie.parse(document.cookie);
+      const cookies = parse(document.cookie);
       const userInfo = cookies.userInfo;
 
       if (userInfo) {
-        setUserInfo(JSON.parse(userInfo));
+        try {
+          setUserInfo(JSON.parse(userInfo));
+        } catch (e) {
+          console.error("Failed to parse userInfo cookie", e);
+        }
       }
     }
   }, []);
