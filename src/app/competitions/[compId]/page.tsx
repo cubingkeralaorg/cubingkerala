@@ -11,21 +11,20 @@ export const metadata: Metadata = {
     "Details of a competition in the Rubik's Cube community in Kerala",
 };
 
-interface CompetitionDetailsProps {
-  params: {
-    compId: string;
-  };
-}
-
-const CompetitionsDetails = async ({ params }: CompetitionDetailsProps) => {
+const CompetitionsDetails = async ({
+  params,
+}: {
+  params: Promise<{ compId: string }>;
+}) => {
+  const { compId } = await params;
   try {
     const [competitionResponse, resultsResponse] = await Promise.all([
       axios.get(
-        `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}`,
+        `https://www.worldcubeassociation.org/api/v0/competitions/${compId}`,
       ),
       axios
         .get(
-          `https://www.worldcubeassociation.org/api/v0/competitions/${params.compId}/results`,
+          `https://www.worldcubeassociation.org/api/v0/competitions/${compId}/results`,
         )
         .catch(() => ({ data: [] })),
     ]);
