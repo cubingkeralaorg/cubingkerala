@@ -70,9 +70,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "@testing-library/jest-dom": "^6.1.5",
-    "@testing-library/react": "^14.1.0",
-    "@testing-library/user-event": "^14.5.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/cookie": "^0.6.0",
     "@types/leaflet": "^1.9.12",
     "@types/node": "^20",
