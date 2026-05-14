@@ -61,7 +61,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Upload test coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v6
         if: always()
         with:
           files: ./coverage/coverage-final.json

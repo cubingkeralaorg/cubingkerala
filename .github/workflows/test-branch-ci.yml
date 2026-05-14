@@ -61,7 +61,7 @@ jobs:
           DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Upload test coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v6
         if: always()
         with:
           files: ./coverage/coverage-final.json
