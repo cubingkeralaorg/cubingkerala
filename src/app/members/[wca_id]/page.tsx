@@ -16,10 +16,11 @@ export const metadata: Metadata = {
   ],
 };
 
-const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
+const MemberInfo = async ({ params }: { params: Promise<{ wca_id: string }> }) => {
+  const { wca_id } = await params;
   const member = await db.members.findUnique({
     where: {
-      wcaid: params.wca_id,
+      wcaid: wca_id,
     },
   });
 
@@ -37,7 +38,7 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
   // Fetch from the local database synchronized by the cron job
   // @ts-ignore - Prisma model newly added
   const wcaDataObj = await db.memberWcaData.findUnique({
-    where: { wcaid: params.wca_id }
+    where: { wcaid: wca_id }
   });
 
   if (wcaDataObj && wcaDataObj.data) {
@@ -46,13 +47,13 @@ const MemberInfo = async ({ params }: { params: { wca_id: string } }) => {
     // Provide a fallback structure for invalid/missing WCA IDs
     memberResult = {
       person: {
-        id: params.wca_id,
+        id: wca_id,
         name: member.name,
-        wca_id: params.wca_id,
+        wca_id: wca_id,
         avatar: { url: "", pending_url: "", thumb_url: "", is_default: true },
         gender: member.gender,
         country_iso2: "IN",
-        url: `https://www.worldcubeassociation.org/persons/${params.wca_id}`,
+        url: `https://www.worldcubeassociation.org/persons/${wca_id}`,
         country: { id: "India", name: "India", continentId: "_Asia", iso2: "IN" },
         delegate_status: null,
         class: "person",
