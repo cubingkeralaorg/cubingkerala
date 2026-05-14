@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SearchComponent from '@/components/shared/search';
 
 describe('SearchComponent', () => {
-  let mockHandleSearch: ReturnType<typeof vi.fn>;
+  let mockHandleSearch: Mock<(searchTerm: string) => void>;
 
   beforeEach(() => {
     mockHandleSearch = vi.fn();
