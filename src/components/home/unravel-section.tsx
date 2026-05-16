@@ -28,7 +28,17 @@ const social_links = [
 
 export function CubingKeralaUnravel() {
   const handleSocialClick = (url: string) => {
-    if (url.includes("whatsapp.com")) {
+    let isWhatsappUrl = false;
+    try {
+      const parsedUrl = new URL(url);
+      const hostname = parsedUrl.hostname.toLowerCase();
+      isWhatsappUrl =
+        hostname === "whatsapp.com" || hostname.endsWith(".whatsapp.com");
+    } catch {
+      isWhatsappUrl = false;
+    }
+
+    if (isWhatsappUrl) {
       if (isMobileDevice()) {
         window.location.assign(url);
       } else {
