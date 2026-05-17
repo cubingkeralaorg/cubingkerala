@@ -14,9 +14,21 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      # Prisma reads DATABASE_URL; map from test DB secret (fallback for repos with only DATABASE_URL)
+      DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST || secrets.DATABASE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Verify database URL secret
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::DATABASE_URL is empty. Add a GitHub Actions secret named POSTGRES_URL_TEST (recommended) or DATABASE_URL."
+            echo "Settings → Secrets and variables → Actions → New repository secret"
+            echo "Use a separate Neon branch/database for CI test runs, not production."
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,18 +49,12 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
-        env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Run database migrations
         run: npx prisma db push --skip-generate
-        env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Run unit & integration tests
         run: npm run test:ci
-        env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
@@ -57,8 +63,6 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e -- --reporter=github
         timeout-minutes: 15
-        env:
-          DATABASE_URL: ${{ secrets.POSTGRES_URL_TEST }}
 
       - name: Upload test coverage
         uses: codecov/codecov-action@v3
