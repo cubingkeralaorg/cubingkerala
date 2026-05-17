@@ -27,7 +27,9 @@ vi.mock('sonner', () => ({
 }));
 
 vi.mock('next/image', () => ({
-  default: () => <img alt="mock-image" />
+  default: function MockImage({ src, alt, ...props }: { src?: string; alt?: string }) {
+    return <span role="img" aria-label={alt} data-src={src} {...props} />;
+  },
 }));
 
 vi.mock('next/link', () => ({
