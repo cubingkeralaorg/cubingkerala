@@ -5,6 +5,15 @@
 <h1 align="center">Cubing Kerala</h1>
 
 <p align="center">
+  <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/main-branch-ci.yml">
+    <img src="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/main-branch-ci.yml/badge.svg" alt="CI/CD Status" />
+  </a>
+  <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/codeql.yml">
+    <img src="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/codeql.yml/badge.svg" alt="CodeQL Status" />
+  </a>
+</p>
+
+<p align="center">
   The official platform for Kerala's Rubik's Cube community — competitions, rankings, members, and more.
 </p>
 
@@ -20,7 +29,7 @@
 
 | Feature | Description |
 |---|---|
-| **Competitions** | Browse upcoming & past WCA competitions in Kerala with detailed results |
+| **Competitions** | Browse upcoming & past WCA competitions in Kerala, served instantly from the database |
 | **Rankings** | Live member rankings, cached intelligently for instant load |
 | **Members** | Community directory — WCA-authenticated profiles with avatars and roles |
 | **Join Request** | Submit a join request via WCA OAuth; approved by admins |
@@ -57,7 +66,7 @@
 | `Users` | Authenticated WCA users |
 | `Members` | Approved Cubing Kerala members |
 | `Requests` | Pending join requests |
-| `Competitions` | Cached Kerala WCA competitions |
+| `Competitions` | Kerala WCA competitions synced from the WCA API |
 | `MemberWcaData` | Cached WCA competition data per member (JSON) |
 | `SyncLogs` | (Optional) Logs for WCA sync operations |
 
@@ -151,7 +160,7 @@ src/
 │   │   ├── approve-requests/ # Admin: approve join requests
 │   │   ├── delete-request/   # Admin: reject a request
 │   │   ├── delete-member/    # Admin: remove a member
-│   │   ├── get-competitions/ # Fetch & cache WCA competitions
+│   │   ├── get-competitions/ # Serve cached WCA competitions from DB
 │   │   ├── get-member-wcaids/# Get member WCA IDs
 │   │   ├── update-members/   # Sync member data from WCA
 │   │   └── cron/             # Background sync jobs (WCA sync)
