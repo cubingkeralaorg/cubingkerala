@@ -95,7 +95,7 @@ jobs:
           vercel-version: latest
 
       - name: Create deployment comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         if: success()
         with:
           script: |
