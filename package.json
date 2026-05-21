@@ -83,7 +83,7 @@
     "@vitest/coverage-v8": "^4.1.6",
     "@vitest/ui": "^4.1.6",
     "eslint": "^8",
-    "eslint-config-next": "^15.5.18",
+    "eslint-config-next": "^16.2.6",
     "jsdom": "^23.0.1",
     "postcss": "^8.5.14",
     "prisma": "^5.19.1",
