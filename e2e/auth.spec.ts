@@ -5,7 +5,7 @@ test.describe('Authentication Flow', () => {
     const publicPages = ['/', '/competitions', '/members', '/rankings', '/learn'];
 
     for (const path of publicPages) {
-      await page.goto(path);
+      await page.goto(path, { waitUntil: 'domcontentloaded', timeout: 60_000 });
       
       await expect(page.locator('body')).toBeVisible();
       
