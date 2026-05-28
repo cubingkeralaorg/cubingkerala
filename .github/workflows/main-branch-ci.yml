@@ -14,6 +14,26 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cubingkerala_test
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+      CLIENT_ID: ci-test-client
+      CLIENT_SECRET: ci-test-secret
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cubingkerala_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -37,18 +57,12 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Run database migrations
         run: npx prisma db push --skip-generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Run unit & integration tests
         run: npm run test:ci
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
@@ -57,14 +71,14 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e -- --reporter=github
         timeout-minutes: 15
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Upload test coverage
         uses: codecov/codecov-action@v6
         if: always()
+        continue-on-error: true
         with:
           files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v7
@@ -95,7 +109,7 @@ jobs:
           vercel-version: latest
 
       - name: Create deployment comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         if: success()
         with:
           script: |

@@ -1,0 +1,6 @@
+# Cubing Kerala — agent defaults
+# Full checklist: AGENTS.md
+# Always-on rules: .cursor/rules/
+
+Before committing: run `npm ci`, `npm run lint`, `npx tsc --noEmit`, `npm run test:ci` (see AGENTS.md).
+Never read or commit `.env`, `.env.local`, or other secret files.

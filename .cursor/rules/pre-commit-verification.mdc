@@ -1,0 +1,16 @@
+---
+description: Run CI-equivalent checks before committing
+alwaysApply: true
+---
+
+# Pre-commit verification
+
+Before proposing or creating a commit:
+
+1. `npm ci` → `npm run lint` → `npx tsc --noEmit`
+2. `npx prisma generate` (with a valid `DATABASE_URL` for local/CI test DB only)
+3. `npm run test:ci`
+
+Match [`.github/workflows/main-branch-ci.yml`](.github/workflows/main-branch-ci.yml). Do not commit if any step fails.
+
+After `package.json` / lockfile changes, re-run the full stack. Treat Next.js, Tailwind, and ESLint **major** upgrades as separate migrations—not drive-by bumps.
