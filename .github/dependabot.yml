@@ -26,6 +26,14 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@next/third-parties"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-leaflet"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "sonner"
+        update-types: ["version-update:semver-major"]
     groups:
       vitest:
         patterns:
