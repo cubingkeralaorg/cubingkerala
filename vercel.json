@@ -11,7 +11,7 @@
       "maxDuration": 30
     },
     "app/api/cron/sync-wca/route.js": {
-      "maxDuration": 300
+      "maxDuration": 60
     },
     "app/api/**/*": {
       "maxDuration": 30

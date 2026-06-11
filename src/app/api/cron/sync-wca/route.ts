@@ -4,7 +4,8 @@ import { syncCompetitions } from "@/lib/competitions.sync";
 import db from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+/** Vercel Pro max; full roster sync is chunked across cron runs. */
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   // Security check: Verify Vercel Cron Secret if hosted on Vercel
@@ -22,9 +23,10 @@ export async function GET(request: Request) {
 
     console.log(`[Cron] Triggered WCA Sync for ${wcaIds.length} members`);
     
-    // We await this so Vercel doesn't kill the function early.
-    // maxDuration is 300s (5 minutes), which should be enough for a few hundred members at 500ms delay.
-    await syncMemberWcaData(wcaIds);
+    await syncMemberWcaData(wcaIds, {
+      timeBudgetMs: 50_000,
+      rotateOffset: true,
+    });
 
     console.log(`[Cron] Triggered Competitions Sync`);
     const compSyncResult = await syncCompetitions();

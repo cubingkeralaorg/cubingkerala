@@ -5,15 +5,19 @@ import { CompetitorData } from "@/types/api";
 /** Align with daily cron; stale rows refresh on the next page load. */
 export const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
 
-const SYNC_ON_READ_LIMIT = 20;
 const SYNC_CONCURRENCY = 5;
 const WCA_API_BATCH_DELAY_MS = 500;
+const WCA_SYNC_OFFSET_KEY = "wca_sync_offset";
 
 export type WcaCacheEntry = {
   data: CompetitorData;
   expiry: number;
   updatedAt: number;
 };
+
+export function isLiveWcaSyncEnabled(): boolean {
+  return process.env.CI !== "true";
+}
 
 export function isWcaCacheFresh(updatedAt: Date | string): boolean {
   return Date.now() - new Date(updatedAt).getTime() < CACHE_DURATION_MS;
@@ -83,6 +87,13 @@ async function upsertMemberWcaDataRecord(
 export async function syncSingleMemberWcaData(
   wcaId: string,
 ): Promise<CompetitorData | null> {
+  if (!isLiveWcaSyncEnabled()) {
+    const existing = await db.memberWcaData.findUnique({
+      where: { wcaid: wcaId },
+    });
+    return existing ? (existing.data as unknown as CompetitorData) : null;
+  }
+
   const data = await fetchWcaPersonData(wcaId);
   if (!data) return null;
 
@@ -99,6 +110,24 @@ function toCacheEntry(data: CompetitorData, updatedAt: Date): WcaCacheEntry {
   };
 }
 
+async function getWcaSyncOffset(): Promise<number> {
+  const row = await db.systemMetadata.findUnique({
+    where: { key: WCA_SYNC_OFFSET_KEY },
+  });
+  if (!row) return 0;
+
+  const offset = Number.parseInt(row.value, 10);
+  return Number.isFinite(offset) && offset >= 0 ? offset : 0;
+}
+
+async function setWcaSyncOffset(offset: number): Promise<void> {
+  await db.systemMetadata.upsert({
+    where: { key: WCA_SYNC_OFFSET_KEY },
+    create: { key: WCA_SYNC_OFFSET_KEY, value: String(offset) },
+    update: { value: String(offset) },
+  });
+}
+
 /**
  * Returns WCA data for one member, refreshing from WCA when cache is missing or stale.
  */
@@ -113,6 +142,10 @@ export async function getMemberWcaData(
     return existing.data as unknown as CompetitorData;
   }
 
+  if (!isLiveWcaSyncEnabled()) {
+    return existing ? (existing.data as unknown as CompetitorData) : null;
+  }
+
   const fresh = await syncSingleMemberWcaData(wcaId);
   if (fresh) return fresh;
 
@@ -121,7 +154,7 @@ export async function getMemberWcaData(
 
 /**
  * Returns a unified cache object for the given WCA IDs.
- * Refreshes stale or missing rows (sync on read for small sets; background sync otherwise).
+ * Stale or missing rows are refreshed in the background without blocking the page.
  */
 export async function getUnifiedWcaCacheForMembers(wcaIds: string[]) {
   const cachedData = await db.memberWcaData.findMany({
@@ -151,21 +184,7 @@ export async function getUnifiedWcaCacheForMembers(wcaIds: string[]) {
     }
   }
 
-  if (staleOrMissingIds.length === 0) {
-    return cacheMap;
-  }
-
-  const applySyncedData = (wcaId: string, data: CompetitorData) => {
-    const now = new Date();
-    cacheMap[wcaId] = toCacheEntry(data, now);
-  };
-
-  if (staleOrMissingIds.length <= SYNC_ON_READ_LIMIT) {
-    for (const wcaId of staleOrMissingIds) {
-      const data = await syncSingleMemberWcaData(wcaId);
-      if (data) applySyncedData(wcaId, data);
-    }
-  } else {
+  if (staleOrMissingIds.length > 0 && isLiveWcaSyncEnabled()) {
     after(async () => {
       await syncMemberWcaData(staleOrMissingIds);
     });
@@ -174,22 +193,62 @@ export async function getUnifiedWcaCacheForMembers(wcaIds: string[]) {
   return cacheMap;
 }
 
+type SyncMemberWcaDataOptions = {
+  timeBudgetMs?: number;
+  rotateOffset?: boolean;
+};
+
 /**
  * Refreshes MemberWcaData for many members (cron and background sync).
  */
-export async function syncMemberWcaData(wcaIds: string[]) {
-  console.log(`[WcaSync] Starting sync for ${wcaIds.length} members...`);
+export async function syncMemberWcaData(
+  wcaIds: string[],
+  options: SyncMemberWcaDataOptions = {},
+) {
+  if (!isLiveWcaSyncEnabled() || wcaIds.length === 0) {
+    return;
+  }
 
-  for (let i = 0; i < wcaIds.length; i += SYNC_CONCURRENCY) {
-    const batch = wcaIds.slice(i, i + SYNC_CONCURRENCY);
+  const { timeBudgetMs, rotateOffset = false } = options;
+  const sortedIds = [...wcaIds].sort();
+  let idsToSync = sortedIds;
+  let nextOffset = 0;
+
+  if (rotateOffset) {
+    const offset = await getWcaSyncOffset();
+    idsToSync = sortedIds.map(
+      (_, index) => sortedIds[(offset + index) % sortedIds.length],
+    );
+    nextOffset = (offset + sortedIds.length) % sortedIds.length;
+  }
+
+  console.log(`[WcaSync] Starting sync for ${idsToSync.length} members...`);
+
+  const startedAt = Date.now();
+  let syncedCount = 0;
+
+  for (let i = 0; i < idsToSync.length; i += SYNC_CONCURRENCY) {
+    if (timeBudgetMs && Date.now() - startedAt >= timeBudgetMs) {
+      console.log(
+        `[WcaSync] Stopping early after ${syncedCount} members (time budget reached).`,
+      );
+      break;
+    }
+
+    const batch = idsToSync.slice(i, i + SYNC_CONCURRENCY);
     await Promise.all(batch.map((wcaId) => syncSingleMemberWcaData(wcaId)));
+    syncedCount += batch.length;
 
-    if (i + SYNC_CONCURRENCY < wcaIds.length) {
+    if (i + SYNC_CONCURRENCY < idsToSync.length) {
       await new Promise((resolve) =>
         setTimeout(resolve, WCA_API_BATCH_DELAY_MS),
       );
     }
   }
 
-  console.log(`[WcaSync] Sync complete.`);
+  if (rotateOffset && sortedIds.length > 0) {
+    await setWcaSyncOffset(nextOffset);
+  }
+
+  console.log(`[WcaSync] Sync complete (${syncedCount} members processed).`);
 }

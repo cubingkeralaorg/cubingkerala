@@ -7,6 +7,10 @@ const mockDb = vi.hoisted(() => ({
     update: vi.fn(),
     create: vi.fn(),
   },
+  systemMetadata: {
+    findUnique: vi.fn(),
+    upsert: vi.fn(),
+  },
 }));
 
 vi.mock("@/lib/db", () => ({
@@ -23,7 +27,9 @@ import {
   CACHE_DURATION_MS,
   getMemberWcaData,
   getUnifiedWcaCacheForMembers,
+  isLiveWcaSyncEnabled,
   isWcaCacheFresh,
+  syncMemberWcaData,
   syncSingleMemberWcaData,
 } from "@/lib/wca.sync";
 
@@ -55,11 +61,13 @@ const sampleWcaData = {
 describe("wca.sync", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllEnvs();
     global.fetch = vi.fn();
   });
 
   afterEach(() => {
     vi.resetAllMocks();
+    vi.unstubAllEnvs();
   });
 
   describe("isWcaCacheFresh", () => {
@@ -71,6 +79,17 @@ describe("wca.sync", () => {
     it("returns false when updated before cache duration", () => {
       const stale = new Date(Date.now() - CACHE_DURATION_MS - 1);
       expect(isWcaCacheFresh(stale)).toBe(false);
+    });
+  });
+
+  describe("isLiveWcaSyncEnabled", () => {
+    it("is disabled in CI", () => {
+      vi.stubEnv("CI", "true");
+      expect(isLiveWcaSyncEnabled()).toBe(false);
+    });
+
+    it("is enabled outside CI", () => {
+      expect(isLiveWcaSyncEnabled()).toBe(true);
     });
   });
 
@@ -100,6 +119,19 @@ describe("wca.sync", () => {
 
       expect(result).toBeNull();
       expect(mockDb.memberWcaData.create).not.toHaveBeenCalled();
+    });
+
+    it("does not call WCA in CI", async () => {
+      vi.stubEnv("CI", "true");
+      mockDb.memberWcaData.findUnique.mockResolvedValue({
+        wcaid: "2023TEST01",
+        data: sampleWcaData,
+      });
+
+      const result = await syncSingleMemberWcaData("2023TEST01");
+
+      expect(result).toEqual(sampleWcaData);
+      expect(global.fetch).not.toHaveBeenCalled();
     });
   });
 
@@ -135,10 +167,24 @@ describe("wca.sync", () => {
       expect(result).toEqual(updated);
       expect(global.fetch).toHaveBeenCalled();
     });
+
+    it("returns cached stale data in CI without calling WCA", async () => {
+      vi.stubEnv("CI", "true");
+      mockDb.memberWcaData.findUnique.mockResolvedValue({
+        wcaid: "2023TEST01",
+        data: sampleWcaData,
+        updatedAt: new Date(Date.now() - CACHE_DURATION_MS - 1),
+      });
+
+      const result = await getMemberWcaData("2023TEST01");
+
+      expect(result).toEqual(sampleWcaData);
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
   });
 
   describe("getUnifiedWcaCacheForMembers", () => {
-    it("syncs stale members on read when the set is small", async () => {
+    it("schedules background sync for stale members", async () => {
       const staleDate = new Date(Date.now() - CACHE_DURATION_MS - 1);
       mockDb.memberWcaData.findMany.mockResolvedValue([
         {
@@ -147,38 +193,58 @@ describe("wca.sync", () => {
           updatedAt: staleDate,
         },
       ]);
-      mockDb.memberWcaData.findUnique.mockResolvedValue({
-        wcaid: "2023TEST01",
-        data: sampleWcaData,
-        updatedAt: staleDate,
-      });
-      const refreshed = { ...sampleWcaData, competition_count: 7 };
-      vi.mocked(global.fetch).mockResolvedValue({
-        ok: true,
-        json: async () => refreshed,
-      } as Response);
-      mockDb.memberWcaData.update.mockResolvedValue({});
 
       const cache = await getUnifiedWcaCacheForMembers(["2023TEST01"]);
 
-      expect(cache["2023TEST01"].data.competition_count).toBe(7);
-      expect(mockAfter).not.toHaveBeenCalled();
+      expect(cache["2023TEST01"].data).toEqual(sampleWcaData);
+      expect(mockAfter).toHaveBeenCalledTimes(1);
+      expect(global.fetch).not.toHaveBeenCalled();
     });
 
-    it("schedules background sync when many members are stale", async () => {
+    it("does not schedule background sync in CI", async () => {
+      vi.stubEnv("CI", "true");
       const staleDate = new Date(Date.now() - CACHE_DURATION_MS - 1);
-      const staleIds = Array.from({ length: 21 }, (_, i) => `2023TEST${i}`);
-      mockDb.memberWcaData.findMany.mockResolvedValue(
-        staleIds.map((wcaid) => ({
-          wcaid,
+      mockDb.memberWcaData.findMany.mockResolvedValue([
+        {
+          wcaid: "2023TEST01",
           data: sampleWcaData,
           updatedAt: staleDate,
-        })),
-      );
+        },
+      ]);
 
-      await getUnifiedWcaCacheForMembers(staleIds);
+      await getUnifiedWcaCacheForMembers(["2023TEST01"]);
 
-      expect(mockAfter).toHaveBeenCalledTimes(1);
+      expect(mockAfter).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("syncMemberWcaData", () => {
+    it("stores rotated offset when rotateOffset is enabled", async () => {
+      vi.mocked(global.fetch).mockResolvedValue({
+        ok: true,
+        json: async () => sampleWcaData,
+      } as Response);
+      mockDb.memberWcaData.findUnique.mockResolvedValue(null);
+      mockDb.memberWcaData.create.mockResolvedValue({});
+      mockDb.systemMetadata.findUnique.mockResolvedValue({ value: "0" });
+      mockDb.systemMetadata.upsert.mockResolvedValue({});
+
+      await syncMemberWcaData(["2023TEST02", "2023TEST01"], {
+        rotateOffset: true,
+      });
+
+      expect(mockDb.systemMetadata.upsert).toHaveBeenCalledWith({
+        where: { key: "wca_sync_offset" },
+        create: { key: "wca_sync_offset", value: "0" },
+        update: { value: "0" },
+      });
+    });
+
+    it("no-ops in CI", async () => {
+      vi.stubEnv("CI", "true");
+
+      await syncMemberWcaData(["2023TEST01"]);
+
       expect(global.fetch).not.toHaveBeenCalled();
     });
   });
