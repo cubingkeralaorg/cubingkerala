@@ -1,7 +1,8 @@
 import db from "@/lib/db";
+import { syncSingleMemberWcaData } from "@/lib/wca.sync";
 import { RequestInfo } from "@/types/api";
 import { revalidatePath } from "next/cache";
-import { NextRequest } from "next/server";
+import { after, NextRequest } from "next/server";
 import {
   requireAuth,
   createSuccessResponse,
@@ -49,6 +50,10 @@ export async function POST(request: NextRequest) {
       where: {
         wcaid: updatedRequest.wcaid,
       },
+    });
+
+    after(async () => {
+      await syncSingleMemberWcaData(updatedRequest.wcaid);
     });
 
     // Revalidate the path to ensure fresh data

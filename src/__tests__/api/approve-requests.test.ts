@@ -12,16 +12,33 @@ const mockDb = vi.hoisted(() => ({
 }));
 
 const mockRevalidatePath = vi.hoisted(() => vi.fn());
+const mockSyncSingleMemberWcaData = vi.hoisted(() =>
+  vi.fn().mockResolvedValue(null),
+);
 
 // Mock the database
 vi.mock('@/lib/db', () => ({
   default: mockDb,
 }));
 
+vi.mock('@/lib/wca.sync', () => ({
+  syncSingleMemberWcaData: mockSyncSingleMemberWcaData,
+}));
+
 // Mock next/cache
 vi.mock('next/cache', () => ({
   revalidatePath: mockRevalidatePath,
 }));
+
+vi.mock('next/server', async () => {
+  const actual = await vi.importActual<typeof import('next/server')>('next/server');
+  return {
+    ...actual,
+    after: (callback: () => void | Promise<void>) => {
+      void callback();
+    },
+  };
+});
 
 import { POST } from '@/app/api/approve-requests/route';
 
@@ -172,6 +189,9 @@ describe('POST /api/approve-requests', () => {
         where: { wcaid: mockRequestInfo.wcaid },
       });
       expect(mockRevalidatePath).toHaveBeenCalledWith('/');
+      expect(mockSyncSingleMemberWcaData).toHaveBeenCalledWith(
+        mockRequestInfo.wcaid,
+      );
     });
 
     it('should handle different roles correctly', async () => {

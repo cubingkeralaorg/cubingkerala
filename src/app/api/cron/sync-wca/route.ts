@@ -4,6 +4,7 @@ import { syncCompetitions } from "@/lib/competitions.sync";
 import db from "@/lib/db";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 export async function GET(request: Request) {
   // Security check: Verify Vercel Cron Secret if hosted on Vercel

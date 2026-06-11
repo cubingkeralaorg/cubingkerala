@@ -10,6 +10,9 @@
     "app/api/get-competitions/route.js": {
       "maxDuration": 30
     },
+    "app/api/cron/sync-wca/route.js": {
+      "maxDuration": 300
+    },
     "app/api/**/*": {
       "maxDuration": 30
     }

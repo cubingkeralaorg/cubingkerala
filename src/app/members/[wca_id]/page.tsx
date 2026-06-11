@@ -1,6 +1,7 @@
 import { MemberDetails } from "@/components/members";
 import { ErrorState } from "@/components/shared/error-state";
 import db from "@/lib/db";
+import { getMemberWcaData } from "@/lib/wca.sync";
 import { CompetitorData, RequestInfo } from "@/types/api";
 import { Metadata } from "next";
 import React from "react";
@@ -34,15 +35,11 @@ const MemberInfo = async ({ params }: { params: Promise<{ wca_id: string }> }) =
     );
   }
 
-  let memberResult;
-  // Fetch from the local database synchronized by the cron job
-  // @ts-ignore - Prisma model newly added
-  const wcaDataObj = await db.memberWcaData.findUnique({
-    where: { wcaid: wca_id }
-  });
+  const wcaData = await getMemberWcaData(wca_id);
 
-  if (wcaDataObj && wcaDataObj.data) {
-    memberResult = wcaDataObj.data;
+  let memberResult;
+  if (wcaData) {
+    memberResult = wcaData;
   } else {
     // Provide a fallback structure for invalid/missing WCA IDs
     memberResult = {
