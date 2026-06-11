@@ -16,7 +16,7 @@ export type WcaCacheEntry = {
 };
 
 export function isLiveWcaSyncEnabled(): boolean {
-  return process.env.CI !== "true";
+  return process.env.SKIP_WCA_LIVE_SYNC !== "true";
 }
 
 export function isWcaCacheFresh(updatedAt: Date | string): boolean {

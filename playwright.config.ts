@@ -66,5 +66,9 @@ export default defineConfig({
     timeout: 60000, // Reduced from 120000 for faster startup
     stdout: "ignore",
     stderr: "pipe",
+    env: {
+      ...process.env,
+      SKIP_WCA_LIVE_SYNC: "true",
+    },
   },
 });

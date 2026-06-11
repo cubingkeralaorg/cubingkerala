@@ -83,12 +83,12 @@ describe("wca.sync", () => {
   });
 
   describe("isLiveWcaSyncEnabled", () => {
-    it("is disabled in CI", () => {
-      vi.stubEnv("CI", "true");
+    it("is disabled when SKIP_WCA_LIVE_SYNC is set", () => {
+      vi.stubEnv("SKIP_WCA_LIVE_SYNC", "true");
       expect(isLiveWcaSyncEnabled()).toBe(false);
     });
 
-    it("is enabled outside CI", () => {
+    it("is enabled by default", () => {
       expect(isLiveWcaSyncEnabled()).toBe(true);
     });
   });
@@ -121,8 +121,8 @@ describe("wca.sync", () => {
       expect(mockDb.memberWcaData.create).not.toHaveBeenCalled();
     });
 
-    it("does not call WCA in CI", async () => {
-      vi.stubEnv("CI", "true");
+    it("does not call WCA when live sync is skipped", async () => {
+      vi.stubEnv("SKIP_WCA_LIVE_SYNC", "true");
       mockDb.memberWcaData.findUnique.mockResolvedValue({
         wcaid: "2023TEST01",
         data: sampleWcaData,
@@ -168,8 +168,8 @@ describe("wca.sync", () => {
       expect(global.fetch).toHaveBeenCalled();
     });
 
-    it("returns cached stale data in CI without calling WCA", async () => {
-      vi.stubEnv("CI", "true");
+    it("returns cached stale data when live sync is skipped", async () => {
+      vi.stubEnv("SKIP_WCA_LIVE_SYNC", "true");
       mockDb.memberWcaData.findUnique.mockResolvedValue({
         wcaid: "2023TEST01",
         data: sampleWcaData,
@@ -201,8 +201,8 @@ describe("wca.sync", () => {
       expect(global.fetch).not.toHaveBeenCalled();
     });
 
-    it("does not schedule background sync in CI", async () => {
-      vi.stubEnv("CI", "true");
+    it("does not schedule background sync when live sync is skipped", async () => {
+      vi.stubEnv("SKIP_WCA_LIVE_SYNC", "true");
       const staleDate = new Date(Date.now() - CACHE_DURATION_MS - 1);
       mockDb.memberWcaData.findMany.mockResolvedValue([
         {
@@ -240,8 +240,8 @@ describe("wca.sync", () => {
       });
     });
 
-    it("no-ops in CI", async () => {
-      vi.stubEnv("CI", "true");
+    it("no-ops when live sync is skipped", async () => {
+      vi.stubEnv("SKIP_WCA_LIVE_SYNC", "true");
 
       await syncMemberWcaData(["2023TEST01"]);
 
