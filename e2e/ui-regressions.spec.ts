@@ -1,11 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('UI Regression Coverage', () => {
-  test('competitions loader uses full viewport height', async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.removeItem('competitions');
-    });
-
+  test('competitions loading state uses full viewport height', async ({ page }) => {
     await page.route('**/api/get-competitions**', async (route) => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       await route.fulfill({
@@ -14,21 +10,22 @@ test.describe('UI Regression Coverage', () => {
         body: JSON.stringify({
           upcomingCompetitions: [],
           pastCompetitions: [],
+          lastFetch: Date.now(),
         }),
       });
     });
 
     await page.goto('/competitions');
+    await expect(page.getByRole('heading', { name: 'Competitions' })).toBeVisible({
+      timeout: 15_000,
+    });
+    await page.getByRole('button', { name: 'Refresh' }).click();
 
-    const loadingGraphic = page.locator('div[class*="w-[150px]"]').first();
-    await expect(loadingGraphic).toBeVisible();
+    await expect(page.getByText('Fetching competitions...')).toBeVisible();
 
-    const loaderContainer = page
-      .locator('div.min-h-screen')
-      .filter({ has: loadingGraphic })
-      .first();
-
+    const loaderContainer = page.locator('div.min-h-screen').first();
     await expect(loaderContainer).toBeVisible();
+    await expect(loaderContainer.locator('table').first()).toBeVisible();
 
     const [viewportHeight, minHeight] = await Promise.all([
       page.evaluate(() => window.innerHeight),
