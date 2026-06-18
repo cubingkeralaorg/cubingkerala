@@ -64,9 +64,16 @@ jobs:
       - name: Run unit & integration tests
         run: npm run test:ci
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
-        timeout-minutes: 5
+        run: npx playwright install chromium
+        timeout-minutes: 10
 
       - name: Run E2E tests
         run: npm run test:e2e -- --reporter=github
