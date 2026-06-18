@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { getRoleBadgeColor, capitalizeRole } from "@/utils/memberUtils";
 import BlurIn from "../ui/blur-in";
+import { FadeUp, StaggerReveal } from "../ui/fade-up";
 
 interface MemberHeaderProps {
   name: string;
@@ -28,19 +29,21 @@ export function MemberHeader({
       <>
         <span className="block md:inline">{match[1].trim()}</span>
         <span className="block md:inline md:ml-2">{match[2]}</span>
-        {match[3] && <span className="block md:inline md:ml-1">{match[3]}</span>}
+        {match[3] && (
+          <span className="block md:inline md:ml-1">{match[3]}</span>
+        )}
       </>
     );
   };
 
   return (
-    <>
+    <StaggerReveal className="flex flex-col items-center">
       <div className="text-center space-y-0 md:space-y-1">
         <BlurIn
           word={formatName(name)}
           className="text-2xl text-center font-bold tracking-tighter md:text-4xl"
         />
-        <div className="space-x-2">
+        <FadeUp className="space-x-2">
           <Badge
             className={`${getRoleBadgeColor(role)} rounded-lg bg-secondary border border-border hover:bg-accent transition-colors duration-200`}
             variant="outline"
@@ -55,9 +58,9 @@ export function MemberHeader({
               WCA {capitalizeRole(delegateStatus)}
             </Badge>
           )}
-        </div>
+        </FadeUp>
       </div>
-      <div className="w-full max-w-[200px] h-[200px] my-4">
+      <FadeUp className="w-full max-w-[200px] h-[200px] my-4">
         <Avatar className="w-full h-full rounded-md">
           <AvatarImage
             className="object-cover"
@@ -68,7 +71,7 @@ export function MemberHeader({
             {name}
           </AvatarFallback>
         </Avatar>
-      </div>
-    </>
+      </FadeUp>
+    </StaggerReveal>
   );
 }

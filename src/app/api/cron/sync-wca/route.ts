@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { syncMemberWcaData } from "@/lib/wca.sync";
 import { syncCompetitions } from "@/lib/competitions.sync";
 import db from "@/lib/db";
@@ -30,6 +31,10 @@ export async function GET(request: Request) {
 
     console.log(`[Cron] Triggered Competitions Sync`);
     const compSyncResult = await syncCompetitions();
+    if (compSyncResult.status === "updated") {
+      revalidateTag("competitions");
+    }
+    revalidateTag("wca-data");
 
     return NextResponse.json({ success: true, syncedMembers: wcaIds.length, compSyncResult });
   } catch (error) {

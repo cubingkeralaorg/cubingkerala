@@ -9,15 +9,26 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { CompetitorData, RequestInfo } from "@/types/api";
-import { getTotalMedals, capitalizeRole } from "@/utils/memberUtils";
+import { RequestInfo } from "@/types/api";
+import { capitalizeRole, getTotalMedalsFromSummary } from "@/utils/memberUtils";
+import { MemberWcaSummary } from "@/types/wca";
+import { useMemo } from "react";
+import {
+  AnimatedTableBody,
+  AnimatedTableRow,
+} from "@/components/ui/reveal-table";
 
 interface MembersTableProps {
   members: RequestInfo[];
-  membersDetails: CompetitorData[];
+  wcaSummaries: Record<string, MemberWcaSummary>;
 }
 
-export function MembersTable({ members, membersDetails }: MembersTableProps) {
+export function MembersTable({ members, wcaSummaries }: MembersTableProps) {
+  const summaryByWcaId = useMemo(
+    () => new Map(Object.entries(wcaSummaries)),
+    [wcaSummaries],
+  );
+
   if (members.length === 0) {
     return (
       <Table className="w-full">
@@ -57,22 +68,21 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
           <TableHead className="text-muted-foreground w-[100px]">Medals</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <AnimatedTableBody>
         {members.map((member, index) => {
-          const memberDetails = membersDetails.find(
-            (details) => details.person.id === member.wcaid,
-          );
+          const summary = summaryByWcaId.get(member.wcaid);
 
           return (
-            <TableRow
+            <AnimatedTableRow
               className="border-border hover:bg-transparent text-sm md:text-[15px]"
               key={member.wcaid}
             >
               <TableCell className="cursor-default">{index + 1}</TableCell>
               <TableCell className="text-nowrap">
                 <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                  {/* @ts-ignore */}
-                  <span className={`cursor-pointer hover:text-blue-500 font-medium ${memberDetails?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}>
+                  <span
+                    className={`cursor-pointer hover:text-blue-500 font-medium ${summary?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}
+                  >
                     {member.name.split("(")[0]}
                   </span>
                 </Link>
@@ -93,25 +103,23 @@ export function MembersTable({ members, membersDetails }: MembersTableProps) {
                 {capitalizeRole(member.role)}
               </TableCell>
               <TableCell className="cursor-default">
-                {/* @ts-ignore */}
-                {memberDetails?.isUnavailable ? (
+                {summary?.isUnavailable ? (
                   <span className="text-muted-foreground">N/A</span>
                 ) : (
-                  memberDetails?.competition_count || 0
+                  summary?.competition_count || 0
                 )}
               </TableCell>
               <TableCell className="cursor-default">
-                {/* @ts-ignore */}
-                {memberDetails?.isUnavailable ? (
+                {summary?.isUnavailable ? (
                   <span className="text-muted-foreground">N/A</span>
                 ) : (
-                  getTotalMedals(memberDetails)
+                  getTotalMedalsFromSummary(summary)
                 )}
               </TableCell>
-            </TableRow>
+            </AnimatedTableRow>
           );
         })}
-      </TableBody>
+      </AnimatedTableBody>
     </Table>
   );
 }

@@ -1,13 +1,7 @@
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AnimatedContactLink } from "@/components/contact";
 
 export function CubingKeralaCalendars() {
-  const router = useRouter();
-
-  const handleRedirectToCompetitions = () => {
-    router.push("/competitions");
-  };
-
   return (
     <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-none text-foreground">
       <div className="container mx-auto px-4 md:px-8 z-20 bg-neutral-500/[0.04] border border-border rounded-lg py-10 md:py-24">
@@ -25,9 +19,9 @@ export function CubingKeralaCalendars() {
             </p>
           </div>
           <div className="flex items-center justify-start sm:justify-center md:justify-center w-full">
-            <div onClick={() => handleRedirectToCompetitions()}>
+            <Link href="/competitions" className="w-fit">
               <AnimatedContactLink userInfo={null} text="Competitions" />
-            </div>
+            </Link>
           </div>
         </div>
       </div>

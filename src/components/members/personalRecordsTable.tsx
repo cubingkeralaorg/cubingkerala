@@ -18,6 +18,10 @@ import {
 
 import { formatEventResult } from "@/utils/wcaFormatters";
 import "@cubing/icons";
+import {
+  AnimatedTableBody,
+  AnimatedTableRow,
+} from "@/components/ui/reveal-table";
 
 interface PersonalRecord {
   event: string;
@@ -112,9 +116,9 @@ export function PersonalRecordsTable({
             <TableHead className="text-muted-foreground">NR</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <AnimatedTableBody>
           {personalRecords.map((record, index) => (
-            <TableRow
+            <AnimatedTableRow
               className="hover:bg-transparent border-border"
               key={index}
             >
@@ -170,9 +174,9 @@ export function PersonalRecordsTable({
               <TableCell>
                 {record.ranking?.average?.country_rank ?? null}
               </TableCell>
-            </TableRow>
+            </AnimatedTableRow>
           ))}
-        </TableBody>
+        </AnimatedTableBody>
       </Table>
       </div>
     </div>

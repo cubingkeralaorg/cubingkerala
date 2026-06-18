@@ -12,6 +12,7 @@ import { RegistrationDetails } from "./registrationDetails";
 import { CompetitionResults } from "./competitionResults";
 import { CiLink } from "react-icons/ci";
 import { openCompetitionPage } from "@/utils/competitionNavigation";
+import { FadeUp, PageReveal } from "../ui/fade-up";
 
 interface CompetitionDetailsComponentProps {
   compInfo: EventDetails;
@@ -28,14 +29,17 @@ const CompetitionDetailsComponent = ({
   return (
     <Suspense fallback={<LoadingComponent />}>
       <div className="container mx-auto text-foreground py-8 md:py-10 px-4 sm:px-6 lg:px-8">
-        <div className="grid animate-fade-in gap-6">
-          <CompetitionHeader
-            name={compInfo.name}
-            startDate={compInfo.start_date}
-            endDate={compInfo.end_date}
-            hasResults={results.length > 0}
-          />
+        <PageReveal className="grid gap-6">
+          <FadeUp>
+            <CompetitionHeader
+              name={compInfo.name}
+              startDate={compInfo.start_date}
+              endDate={compInfo.end_date}
+              hasResults={results.length > 0}
+            />
+          </FadeUp>
 
+          <FadeUp>
           <div className="flex flex-wrap">
             {/* Left Column - Event Details */}
             <div className="w-full md:w-1/2">
@@ -114,9 +118,15 @@ const CompetitionDetailsComponent = ({
               </div>
             </div>
           </div>
+          </FadeUp>
 
-          {results.length > 0 && <CompetitionResults results={results} />}
+          {results.length > 0 && (
+            <FadeUp>
+              <CompetitionResults results={results} />
+            </FadeUp>
+          )}
 
+          <FadeUp>
           <div
             onClick={() => openCompetitionPage(compInfo.id)}
             className="flex gap-1 text-[15px] md:text-[16px] text-blue-500 hover:text-blue-600 cursor-pointer"
@@ -124,7 +134,8 @@ const CompetitionDetailsComponent = ({
             <p>More details on World Cube Association</p>
             <CiLink />
           </div>
-        </div>
+          </FadeUp>
+        </PageReveal>
       </div>
     </Suspense>
   );

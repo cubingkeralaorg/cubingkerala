@@ -49,11 +49,9 @@ export function useCompetitions(
 
       // Add delay for better UX when refreshing
       if (showLoading) {
-        setTimeout(() => {
-          setIsRefreshing(false);
-          setLoading(false);
-          setDataLoaded(true);
-        }, 1000);
+        setIsRefreshing(false);
+        setLoading(false);
+        setDataLoaded(true);
       } else {
         setLoading(false);
         setDataLoaded(true);

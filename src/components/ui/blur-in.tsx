@@ -1,39 +1,24 @@
 "use client";
 
-import { motion } from "framer-motion";
-
+import { FadeUp } from "./fade-up";
 import { cn } from "@/lib/utils";
 
-interface BlurIntProps {
+interface BlurInProps {
   word: React.ReactNode;
   className?: string;
-  variant?: {
-    hidden: { filter: string; opacity: number };
-    visible: { filter: string; opacity: number };
-  };
-  duration?: number;
 }
-const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
-  const defaultVariants = {
-    hidden: { filter: "blur(10px)", opacity: 0 },
-    visible: { filter: "blur(0px)", opacity: 1 },
-  };
-  const combinedVariants = variant || defaultVariants;
 
-  return (
-    <motion.h1
-      initial="hidden"
-      animate="visible"
-      transition={{ duration }}
-      variants={combinedVariants}
-      className={cn(
-        "font-display text-center text-4xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]",
-        className,
-      )}
-    >
-      {word}
-    </motion.h1>
-  );
-};
+/** Page title entrance — uses the shared FadeUp animation */
+const BlurIn = ({ word, className }: BlurInProps) => (
+  <FadeUp
+    as="h1"
+    className={cn(
+      "font-display tracking-[-0.02em] drop-shadow-sm",
+      className,
+    )}
+  >
+    {word}
+  </FadeUp>
+);
 
 export default BlurIn;

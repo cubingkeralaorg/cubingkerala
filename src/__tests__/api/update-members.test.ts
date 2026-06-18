@@ -9,6 +9,7 @@ const mockDb = vi.hoisted(() => ({
 }));
 
 const mockRevalidatePath = vi.hoisted(() => vi.fn());
+const mockRevalidateTag = vi.hoisted(() => vi.fn());
 
 // Mock the database
 vi.mock('@/lib/db', () => ({
@@ -18,6 +19,7 @@ vi.mock('@/lib/db', () => ({
 // Mock next/cache
 vi.mock('next/cache', () => ({
   revalidatePath: mockRevalidatePath,
+  revalidateTag: mockRevalidateTag,
 }));
 
 import { POST } from '@/app/api/update-members/route';

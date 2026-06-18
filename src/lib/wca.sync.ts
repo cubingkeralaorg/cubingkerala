@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import db from "./db";
-import { CompetitorData } from "@/types/api";
+import { CompetitorData, Medals, PersonalRecords } from "@/types/api";
+import { MemberWcaSummary, RankingsWcaEntry } from "@/types/wca";
 
 /** Align with daily cron; stale rows refresh on the next page load. */
 export const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
@@ -191,6 +192,88 @@ export async function getUnifiedWcaCacheForMembers(wcaIds: string[]) {
   }
 
   return cacheMap;
+}
+
+const EMPTY_MEDALS: Medals = { gold: 0, silver: 0, bronze: 0, total: 0 };
+
+async function loadMemberWcaRows(wcaIds: string[]) {
+  const cachedData = await db.memberWcaData.findMany({
+    where: { wcaid: { in: wcaIds } },
+  });
+
+  const staleOrMissingIds: string[] = [];
+  const dbDataMap = new Map(cachedData.map((d) => [d.wcaid, d]));
+
+  for (const wcaId of wcaIds) {
+    const dbEntry = dbDataMap.get(wcaId);
+    if (!dbEntry || !isWcaCacheFresh(dbEntry.updatedAt)) {
+      staleOrMissingIds.push(wcaId);
+    }
+  }
+
+  if (staleOrMissingIds.length > 0 && isLiveWcaSyncEnabled()) {
+    after(async () => {
+      await syncMemberWcaData(staleOrMissingIds);
+    });
+  }
+
+  return dbDataMap;
+}
+
+/**
+ * Returns slim WCA summaries for the members list (competition count + medals).
+ */
+export async function getWcaSummaryForMembers(
+  wcaIds: string[],
+): Promise<Record<string, MemberWcaSummary>> {
+  const dbDataMap = await loadMemberWcaRows(wcaIds);
+  const summaries: Record<string, MemberWcaSummary> = {};
+
+  for (const wcaId of wcaIds) {
+    const dbEntry = dbDataMap.get(wcaId);
+    if (dbEntry) {
+      const data = dbEntry.data as unknown as CompetitorData;
+      summaries[wcaId] = {
+        competition_count: data.competition_count ?? 0,
+        medals: data.medals ?? EMPTY_MEDALS,
+      };
+    } else {
+      summaries[wcaId] = {
+        competition_count: 0,
+        medals: EMPTY_MEDALS,
+        isUnavailable: true,
+      };
+    }
+  }
+
+  return summaries;
+}
+
+/**
+ * Returns slim personal_records payloads for the rankings list.
+ */
+export async function getRankingsWcaDataForMembers(
+  wcaIds: string[],
+): Promise<Record<string, RankingsWcaEntry>> {
+  const dbDataMap = await loadMemberWcaRows(wcaIds);
+  const entries: Record<string, RankingsWcaEntry> = {};
+
+  for (const wcaId of wcaIds) {
+    const dbEntry = dbDataMap.get(wcaId);
+    if (dbEntry) {
+      const data = dbEntry.data as unknown as CompetitorData;
+      entries[wcaId] = {
+        personal_records: data.personal_records ?? {},
+      };
+    } else {
+      entries[wcaId] = {
+        personal_records: {} as PersonalRecords,
+        isUnavailable: true,
+      };
+    }
+  }
+
+  return entries;
 }
 
 type SyncMemberWcaDataOptions = {

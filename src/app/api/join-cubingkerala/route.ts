@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import db from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { UserInfo } from "@/types/api";
 import {
   requireAuth,
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
 
     // Revalidate the path to ensure fresh data
     revalidatePath("/");
+    revalidateTag("members");
 
     return createSuccessResponse({
       message: "Request submitted successfully",

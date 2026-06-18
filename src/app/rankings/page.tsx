@@ -1,11 +1,11 @@
-import { RankingsPage } from "@/components/rankings";
-import db from "@/lib/db";
-import { RequestInfo } from "@/types/api";
+import { Suspense } from "react";
 import { Metadata } from "next";
-import React from "react";
-import { getUnifiedWcaCacheForMembers } from "@/lib/wca.sync";
+import { RankingsData } from "@/components/rankings/rankings-data";
+import { RankingsSkeleton } from "@/components/rankings/rankingsSkeleton";
+import BlurIn from "@/components/ui/blur-in";
+import { FadeUp, PageReveal } from "@/components/ui/fade-up";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Rankings | Cubing Kerala",
@@ -13,14 +13,26 @@ export const metadata: Metadata = {
     "Fastest Cuber in Kerala. The rankings of members within the Rubik's Cube community in Kerala.",
 };
 
-const Rankings = async () => {
-  const members = await db.members.findMany();
-  const wcaIds = members.map(m => m.wcaid).filter(Boolean);
-  
-  // Fetch server-cached WCA data
-  const initialWcaCache = await getUnifiedWcaCacheForMembers(wcaIds);
+function RankingsFallback() {
+  return (
+    <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
+      <PageReveal>
+        <BlurIn
+          word="Rankings"
+          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
+        />
+        <FadeUp>
+          <RankingsSkeleton />
+        </FadeUp>
+      </PageReveal>
+    </div>
+  );
+}
 
-  return <RankingsPage members={members as RequestInfo[]} initialWcaCache={initialWcaCache} />;
-};
-
-export default Rankings;
+export default function Rankings() {
+  return (
+    <Suspense fallback={<RankingsFallback />}>
+      <RankingsData />
+    </Suspense>
+  );
+}

@@ -1,15 +1,7 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AnimatedContactLink } from "@/components/contact";
 
 const CubingKeralaCubingLengends = () => {
-  const router = useRouter();
-
-  const handleRedirectToRankings = () => {
-    router.push("/rankings");
-  };
-
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden text-foreground">
       <div className="container mx-auto px-4 md:px-8 border bg-neutral-500/[0.04] border-border rounded-lg py-10 md:py-24">
@@ -26,9 +18,9 @@ const CubingKeralaCubingLengends = () => {
             </p>
           </div>
           <div className="flex items-center justify-start sm:justify-center md:justify-center w-full">
-            <div onClick={() => handleRedirectToRankings()}>
+            <Link href="/rankings" className="w-fit">
               <AnimatedContactLink userInfo={null} text="Rankings" />
-            </div>
+            </Link>
           </div>
         </div>
       </div>

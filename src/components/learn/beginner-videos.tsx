@@ -1,7 +1,10 @@
+"use client";
+
 import { YouTubeEmbed } from "@next/third-parties/google";
 import { Card } from "@/components/ui/card";
 import BlurIn from "../ui/blur-in";
 import { Badge } from "../ui/badge";
+import { FadeUp, RevealGrid, StaggerReveal } from "../ui/fade-up";
 
 export default function BeginnerVideosSection() {
   const beginnerVideos = [
@@ -30,64 +33,56 @@ export default function BeginnerVideosSection() {
   ];
 
   return (
-    <div className="container mx-auto py-4 md:py-8 px-4 md:px-5 space-y-2 md:space-y-4">
+    <StaggerReveal className="container mx-auto py-4 md:py-8 px-4 md:px-5 space-y-2 md:space-y-4">
       <BlurIn
         word="Beginner Level"
         className="text-4xl text-start text-foreground font-bold tracking-tighter md:text-6xl"
       />
       <div className="space-y-5">
-        <div className="w-fit">
+        <FadeUp className="w-fit">
           <h1 className="text-muted-foreground">
             Beginner level - Complete tutorials
           </h1>
           <hr className="w-full" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {beginnerVideos.map((video, index) => (
+        </FadeUp>
+        <RevealGrid className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {beginnerVideos.map((video) => (
             <div
-              key={index}
+              key={video.id}
               className="hover:bg-accent transition-all ease-in duration-200 rounded-md border border-border p-2"
             >
               <h1 className="text-muted-foreground text-sm md:text-medium pb-2">
                 {video.title}
               </h1>
-              <VideoCard
-                key={video.id}
-                videoId={video.id}
-                title={video.title}
-              />
+              <VideoCard videoId={video.id} title={video.title} />
             </div>
           ))}
-        </div>
-        <div className="w-fit">
+        </RevealGrid>
+        <FadeUp className="w-fit">
           <h1 className="text-muted-foreground">What&apos;s Next: Beginner CFOP</h1>
           <hr className="w-full" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {beginnerExtraVideos.map((video, index) => (
+        </FadeUp>
+        <RevealGrid className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {beginnerExtraVideos.map((video) => (
             <div
-              key={index}
+              key={video.id}
               className="hover:bg-accent transition-all ease-in duration-200 rounded-md border border-border p-2"
             >
               <h1 className="text-muted-foreground text-sm md:text-medium pb-2">
                 {video.title}
               </h1>
-              <VideoCard
-                key={video.id}
-                videoId={video.id}
-                title={video.title}
-              />
+              <VideoCard videoId={video.id} title={video.title} />
             </div>
           ))}
-        </div>
-        <div className="w-fit">
+        </RevealGrid>
+        <FadeUp className="w-fit">
           <h1 className="text-muted-foreground">Learning Resources</h1>
           <hr className="w-full" />
-        </div>
-        <div className="px-4">
+        </FadeUp>
+        <FadeUp className="px-4">
           <ul className="text-muted-foreground space-y-1">
-            {pdfs.map((pdf, index) => (
-              <li key={index}>
+            {pdfs.map((pdf) => (
+              <li key={pdf.url}>
                 <a
                   className="hover:text-foreground transition-all ease-in-out duration-200"
                   href={pdf.url}
@@ -102,9 +97,9 @@ export default function BeginnerVideosSection() {
               </li>
             ))}
           </ul>
-        </div>
+        </FadeUp>
       </div>
-    </div>
+    </StaggerReveal>
   );
 }
 

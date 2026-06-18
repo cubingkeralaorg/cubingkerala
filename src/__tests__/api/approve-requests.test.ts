@@ -12,6 +12,7 @@ const mockDb = vi.hoisted(() => ({
 }));
 
 const mockRevalidatePath = vi.hoisted(() => vi.fn());
+const mockRevalidateTag = vi.hoisted(() => vi.fn());
 const mockSyncSingleMemberWcaData = vi.hoisted(() =>
   vi.fn().mockResolvedValue(null),
 );
@@ -28,6 +29,7 @@ vi.mock('@/lib/wca.sync', () => ({
 // Mock next/cache
 vi.mock('next/cache', () => ({
   revalidatePath: mockRevalidatePath,
+  revalidateTag: mockRevalidateTag,
 }));
 
 vi.mock('next/server', async () => {

@@ -1,11 +1,10 @@
-import { MembersList } from "@/components/members";
-import db from "@/lib/db";
-import { RequestInfo } from "@/types/api";
+import { Suspense } from "react";
 import { Metadata } from "next";
-import React from "react";
-import { getUnifiedWcaCacheForMembers } from "@/lib/wca.sync";
+import { MembersData } from "@/components/members/members-data";
+import { MembersSkeleton } from "@/components/members/membersSkeleton";
+import { MembersPageShell } from "@/components/members/members-page-shell";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Members | Cubing Kerala",
@@ -15,18 +14,12 @@ export const metadata: Metadata = {
   },
 };
 
-const Members = async () => {
-  const members = await db.members.findMany();
-  const wcaIds = members.map(m => m.wcaid).filter(Boolean);
-  
-  const initialWcaCache = await getUnifiedWcaCacheForMembers(wcaIds);
-
+export default function Members() {
   return (
-    <MembersList 
-      membersfromdb={members as RequestInfo[]} 
-      initialWcaCache={initialWcaCache} 
-    />
+    <MembersPageShell>
+      <Suspense fallback={<MembersSkeleton />}>
+        <MembersData />
+      </Suspense>
+    </MembersPageShell>
   );
-};
-
-export default Members;
+}

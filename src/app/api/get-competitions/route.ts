@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
+import { revalidateTag } from "next/cache";
+import { fetchCompetitionsFromDb } from "@/lib/competitions.queries";
 
 // App Router route-segment config for Vercel Functions
-export const dynamic = "force-dynamic"; 
-export const revalidate = 0; 
-export const maxDuration = 30; 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const maxDuration = 30;
 
 import { syncCompetitions } from "@/lib/competitions.sync";
 
@@ -13,42 +15,36 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const forceRefresh = searchParams.get("refresh") === "true";
 
-    // 1. Fetch all Kerala competitions from database first
-    let allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
-    
-    const shouldSync = forceRefresh || allKeralaFromDb.length === 0;
+    let { upcomingCompetitions, pastCompetitions, initialLastUpdated } =
+      await fetchCompetitionsFromDb();
+
+    const shouldSync =
+      forceRefresh ||
+      (upcomingCompetitions.length === 0 && pastCompetitions.length === 0);
 
     if (shouldSync) {
       const syncResult = await syncCompetitions();
       if (syncResult.status === "updated") {
-        // Refresh final list from DB
-        allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
+        revalidateTag("competitions");
+        ({ upcomingCompetitions, pastCompetitions, initialLastUpdated } =
+          await fetchCompetitionsFromDb());
       }
     }
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-
-    const upcomingCompetitions = allKeralaFromDb
-      .filter((c: any) => new Date(c.start_date) >= now)
-      .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-      
-    const pastCompetitions = allKeralaFromDb
-      .filter((c: any) => new Date(c.start_date) < now)
-      .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
-
     const syncMeta = await db.systemMetadata.findUnique({
-      where: { key: "last_competition_sync" }
+      where: { key: "last_competition_sync" },
     });
-    const lastSyncTime = syncMeta ? new Date(syncMeta.value).toISOString() : new Date().toISOString();
+    const lastSyncTime = syncMeta
+      ? new Date(syncMeta.value).toISOString()
+      : new Date().toISOString();
 
     return new NextResponse(
       JSON.stringify({
         upcomingCompetitions,
         pastCompetitions,
         lastFetch: lastSyncTime,
-        source: shouldSync ? 'wca-api-sync' : 'database',
-        count: allKeralaFromDb.length
+        source: shouldSync ? "wca-api-sync" : "database",
+        count: upcomingCompetitions.length + pastCompetitions.length,
       }),
       {
         status: 200,
@@ -58,7 +54,9 @@ export async function GET(req: NextRequest) {
           Pragma: "no-cache",
           Expires: "0",
           "X-Generated-At": new Date().toISOString(),
-          "X-DB-Count": allKeralaFromDb.length.toString(),
+          "X-DB-Count": (
+            upcomingCompetitions.length + pastCompetitions.length
+          ).toString(),
         },
       }
     );
@@ -67,37 +65,28 @@ export async function GET(req: NextRequest) {
     
     // In case of API failure, still try to return data from database
     try {
-      const allKeralaFromDb = await db.competitions.findMany({
-        orderBy: {
-          start_date: 'desc'
-        }
-      });
-
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      const upcomingCompetitions = allKeralaFromDb
-        .filter((c: any) => new Date(c.start_date) >= now)
-        .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-        
-      const pastCompetitions = allKeralaFromDb
-        .filter((c: any) => new Date(c.start_date) < now)
-        .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+      const {
+        upcomingCompetitions,
+        pastCompetitions,
+        initialLastUpdated,
+      } = await fetchCompetitionsFromDb();
 
       const syncMetaFallback = await db.systemMetadata.findUnique({
-        where: { key: "last_competition_sync" }
+        where: { key: "last_competition_sync" },
       });
-      const lastSyncTimeFallback = syncMetaFallback ? new Date(syncMetaFallback.value).toISOString() : new Date().toISOString();
+      const lastSyncTimeFallback = syncMetaFallback
+        ? new Date(syncMetaFallback.value).toISOString()
+        : initialLastUpdated || new Date().toISOString();
 
       return new NextResponse(
         JSON.stringify({
           upcomingCompetitions,
           pastCompetitions,
           lastFetch: lastSyncTimeFallback,
-          source: 'database-fallback',
-          error: error.message
+          source: "database-fallback",
+          error: error.message,
         }),
-        { status: 200 }
+        { status: 200 },
       );
     } catch (dbError) {
       return new NextResponse(

@@ -6,6 +6,7 @@ import BlurIn from "../ui/blur-in";
 import { Request } from "@/types/request.types";
 import { RequestsTable } from "./requestsTable";
 import { MembersTable } from "./membersTable";
+import { FadeUp, PageReveal } from "../ui/fade-up";
 
 interface RequestsComponentProps {
   requests: Request[];
@@ -27,38 +28,42 @@ export default function RequestsComponent({
   } = useRequests(requests, members);
 
   if (isLoading) {
-    return (
-      <LoadingComponent />
-    );
+    return <LoadingComponent />;
   }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-foreground">
-      <BlurIn
-        word="Requests"
-        className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
-      />
-
-      <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-        <RequestsTable
-          requests={requestsData}
-          onApprove={handleApprove}
-          onDelete={handleRequestDelete}
+      <PageReveal>
+        <BlurIn
+          word="Requests"
+          className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
         />
-      </div>
 
-      <BlurIn
-        word="Members"
-        className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
-      />
+        <FadeUp>
+          <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+            <RequestsTable
+              requests={requestsData}
+              onApprove={handleApprove}
+              onDelete={handleRequestDelete}
+            />
+          </div>
+        </FadeUp>
 
-      <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-        <MembersTable
-          members={membersData}
-          onUpdate={handleUpdate}
-          onDelete={handleMemberDelete}
+        <BlurIn
+          word="Members"
+          className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
         />
-      </div>
+
+        <FadeUp>
+          <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+            <MembersTable
+              members={membersData}
+              onUpdate={handleUpdate}
+              onDelete={handleMemberDelete}
+            />
+          </div>
+        </FadeUp>
+      </PageReveal>
     </div>
   );
 }

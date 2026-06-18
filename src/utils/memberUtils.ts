@@ -1,4 +1,5 @@
-import { CompetitorData } from "@/types/api";
+import { CompetitorData, Medals } from "@/types/api";
+import { MemberWcaSummary } from "@/types/wca";
 
 export const getTotalMedals = (memberDetails?: CompetitorData): number => {
   if (!memberDetails) return 0;
@@ -7,6 +8,18 @@ export const getTotalMedals = (memberDetails?: CompetitorData): number => {
     (memberDetails.medals.gold || 0) +
     (memberDetails.medals.silver || 0) +
     (memberDetails.medals.bronze || 0)
+  );
+};
+
+export const getTotalMedalsFromSummary = (
+  summary?: MemberWcaSummary | { medals: Medals },
+): number => {
+  if (!summary) return 0;
+
+  return (
+    (summary.medals.gold || 0) +
+    (summary.medals.silver || 0) +
+    (summary.medals.bronze || 0)
   );
 };
 

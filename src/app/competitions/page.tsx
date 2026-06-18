@@ -1,10 +1,11 @@
-import { CompetitionsPage } from "@/components/competitions";
+import { Suspense } from "react";
 import { Metadata } from "next";
-import React from "react";
-import db from "@/lib/db";
+import { CompetitionSkeleton } from "@/components/competitions";
+import { CompetitionsData } from "@/components/competitions/competitions-data";
+import BlurIn from "@/components/ui/blur-in";
+import { FadeUp, PageReveal } from "@/components/ui/fade-up";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Competitions | Cubing Kerala",
@@ -12,39 +13,29 @@ export const metadata: Metadata = {
     "Upcoming and past competitions of Rubik's Cube community in Kerala",
 };
 
-const Competitions = async () => {
-  let allKeralaFromDb = await db.$queryRaw<any[]>`SELECT * FROM "Competitions" ORDER BY "start_date" DESC`;
-  
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-
-  const upcomingCompetitions = allKeralaFromDb
-    .filter((c: any) => new Date(c.start_date) >= now)
-    .sort((a: any, b: any) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
-    
-  const pastCompetitions = allKeralaFromDb
-    .filter((c: any) => new Date(c.start_date) < now)
-    .sort((a: any, b: any) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
-
-  const syncMeta = await db.systemMetadata.findUnique({
-    where: { key: "last_competition_sync" }
-  });
-
-  let initialLastUpdated = "";
-  if (syncMeta && syncMeta.value) {
-    initialLastUpdated = new Date(syncMeta.value).toLocaleString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
-
+function CompetitionsFallback() {
   return (
-    <CompetitionsPage 
-      initialUpcoming={upcomingCompetitions} 
-      initialPast={pastCompetitions}
-      initialLastUpdated={initialLastUpdated}
-    />
+    <div className="container mx-auto py-6 md:py-8 px-4 sm:px-6 lg:px-8 text-foreground flex flex-col min-h-screen">
+      <PageReveal className="w-full">
+        <BlurIn
+          word="Competitions"
+          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
+        />
+        <FadeUp className="text-xs text-muted-foreground text-start ml-1 h-4 mb-4">
+          Loading competitions...
+        </FadeUp>
+        <FadeUp>
+          <CompetitionSkeleton />
+        </FadeUp>
+      </PageReveal>
+    </div>
   );
-};
+}
 
-export default Competitions;
+export default function Competitions() {
+  return (
+    <Suspense fallback={<CompetitionsFallback />}>
+      <CompetitionsData />
+    </Suspense>
+  );
+}

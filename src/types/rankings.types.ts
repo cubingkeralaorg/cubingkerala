@@ -1,8 +1,9 @@
 import { RequestInfo } from "./api";
+import { RankingsWcaEntry } from "./wca";
 
 export interface RankingsComponentProps {
   members: RequestInfo[];
-  initialWcaCache?: Record<string, any>;
+  rankingsWcaData?: Record<string, RankingsWcaEntry>;
 }
 
 export interface FilterState {

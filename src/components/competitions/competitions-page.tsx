@@ -3,9 +3,9 @@
 import { useState, useMemo } from "react";
 import { CompetitionsList } from "./competitionList";
 import { CompetitionsHeader } from "./CompetitionsHeader";
-import LoadingComponent from "@/components/shared/loading";
 import { useCompetitions } from "@/hooks/useCompetitions";
 import { Competition } from "@/types/competition.types";
+import { FadeUp, PageReveal } from "../ui/fade-up";
 
 interface CompetitionsPageProps {
   initialUpcoming?: Competition[];
@@ -47,22 +47,26 @@ const CompetitionsPage = ({ initialUpcoming = [], initialPast = [], initialLastU
 
   return (
     <div className="container mx-auto py-6 md:py-8 px-4 sm:px-6 lg:px-8 text-foreground flex flex-col min-h-screen">
-      <div className="animate-fade-in w-full">
-        <CompetitionsHeader
-          lastUpdated={lastUpdated}
-          isRefreshing={isRefreshing}
-          onRefresh={handleForceRefresh}
-          isLoading={loading}
-        />
+      <PageReveal className="w-full">
+        <FadeUp>
+          <CompetitionsHeader
+            lastUpdated={lastUpdated}
+            isRefreshing={isRefreshing}
+            onRefresh={handleForceRefresh}
+            isLoading={loading}
+          />
+        </FadeUp>
 
-        <CompetitionsList
-          upcomingCompetitions={filteredUpcoming}
-          pastCompetitions={filteredPast}
-          isLoading={loading}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
-      </div>
+        <FadeUp>
+          <CompetitionsList
+            upcomingCompetitions={filteredUpcoming}
+            pastCompetitions={filteredPast}
+            isLoading={loading}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        </FadeUp>
+      </PageReveal>
     </div>
   );
 };

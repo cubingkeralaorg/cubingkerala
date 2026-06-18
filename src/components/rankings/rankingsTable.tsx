@@ -11,6 +11,10 @@ import {
 import Link from "next/link";
 import { CompetitorData } from "@/types/api";
 import { formatResult } from "@/utils/wcaFormatters";
+import {
+  AnimatedTableBody,
+  AnimatedTableRow,
+} from "@/components/ui/reveal-table";
 
 interface RankingsTableProps {
   sortedResults: CompetitorData[];
@@ -38,11 +42,11 @@ export function RankingsTable({
             <TableHead className="text-muted-foreground w-[60px]">WR</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <AnimatedTableBody>
           {sortedResults.map((member, index) => {
             const result = getResult(member);
             return (
-              <TableRow
+              <AnimatedTableRow
                 className="border-border hover:bg-transparent"
                 key={member.person.id}
               >
@@ -68,10 +72,10 @@ export function RankingsTable({
                 <TableCell>{result?.country_rank || ""}</TableCell>
                 <TableCell>{result?.continent_rank || ""}</TableCell>
                 <TableCell>{result?.world_rank || ""}</TableCell>
-              </TableRow>
+              </AnimatedTableRow>
             );
           })}
-        </TableBody>
+        </AnimatedTableBody>
       </Table>
     </div>
   );

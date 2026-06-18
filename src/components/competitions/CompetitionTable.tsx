@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
   TableHead,
-  TableBody,
   TableCell,
 } from "@/components/ui/table";
 import {
@@ -24,6 +23,10 @@ import {
 import { getEventName } from "@/utils/eventNames";
 import "@cubing/icons";
 import { Competition } from "@/types";
+import {
+  AnimatedTableBody,
+  AnimatedTableRow,
+} from "@/components/ui/reveal-table";
 
 interface CompetitionTableProps {
   competitions: Competition[];
@@ -33,23 +36,23 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
   return (
     <div className="overflow-x-auto">
       <Table className="w-full text-sm md:text-[15px]">
-        <TableBody>
+        <AnimatedTableBody>
           {competitions.map((competition) => {
             if (competition.id === "upcoming-header" || competition.id === "past-header") {
               return (
                 <React.Fragment key={competition.id}>
-                  <TableRow className="border-b border-t border-border">
+                  <AnimatedTableRow className="border-b border-t border-border">
                     <TableCell colSpan={5} className={`text-sm py-3 font-semibold ${competition.id === "upcoming-header" ? "text-green-500" : "text-red-500"}`}>
                       {competition.id === "upcoming-header" ? "Upcoming Competitions" : "Past Competitions"}
                     </TableCell>
-                  </TableRow>
-                  <TableRow className="border-y border-y-border border-border">
+                  </AnimatedTableRow>
+                  <AnimatedTableRow className="border-y border-y-border border-border">
                     <TableHead className="text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap transition-none">Date</TableHead>
                     <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Name</TableHead>
                     <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Status</TableHead>
                     <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Location</TableHead>
                     <TableHead className="text-muted-foreground whitespace-nowrap transition-none text-right">Events</TableHead>
-                  </TableRow>
+                  </AnimatedTableRow>
                 </React.Fragment>
               );
             }
@@ -61,7 +64,7 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
             );
 
             return (
-              <TableRow
+              <AnimatedTableRow
                 key={competition.id}
                 className="border-border"
               >
@@ -121,10 +124,10 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
                     </TooltipProvider>
                   </div>
                 </TableCell>
-              </TableRow>
+              </AnimatedTableRow>
             );
           })}
-        </TableBody>
+        </AnimatedTableBody>
       </Table>
     </div>
   );

@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { syncSingleMemberWcaData } from "@/lib/wca.sync";
 import { RequestInfo } from "@/types/api";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { after, NextRequest } from "next/server";
 import {
   requireAuth,
@@ -58,6 +58,8 @@ export async function POST(request: NextRequest) {
 
     // Revalidate the path to ensure fresh data
     revalidatePath("/");
+    revalidateTag("members");
+    revalidateTag("wca-data");
 
     return createSuccessResponse({ message: "Request updated successfully" });
   } catch (error) {
