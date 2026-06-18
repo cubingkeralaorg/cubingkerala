@@ -5,7 +5,14 @@ alwaysApply: true
 
 # Pre-commit verification
 
-Before proposing or creating a commit:
+**Git hooks (Husky)** run automatically:
+
+- **pre-commit** (`.husky/pre-commit`): lint-staged → `npm run lint` → `tsc --noEmit` → `npm run test:ci`
+- **pre-push** (`.husky/pre-push`): `npm run build`
+
+Manual full check: `npm run verify` (lint + tsc + test:ci). E2E stays in CI only (`npm run test:e2e`).
+
+Before proposing or creating a commit (or if hooks are bypassed with `--no-verify`):
 
 1. `npm ci` → `npm run lint` → `npx tsc --noEmit`
 2. `npx prisma generate` (with a valid `DATABASE_URL` for local/CI test DB only)
