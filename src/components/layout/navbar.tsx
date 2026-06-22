@@ -11,6 +11,7 @@ import { NavLinks } from "./navbar/navLinks";
 import { AuthButton } from "./navbar/authButton";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
 import { FaGithub } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const MobileMenu = dynamic(
   () => import("./navbar/mobileMenu").then((mod) => mod.MobileMenu),
@@ -112,7 +113,7 @@ export const NavbarComponent = () => {
             <AuthButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </div>
 
-          {/* Animated two-bar hamburger — no hover bg */}
+          {/* Hamburger → X */}
           <button
             onClick={toggleMenu}
             className="relative flex md:hidden h-10 w-10 items-center justify-center text-foreground"
@@ -121,9 +122,19 @@ export const NavbarComponent = () => {
             aria-controls="mobile-menu-panel"
           >
             <span className="sr-only">Toggle navigation menu</span>
-            <div className="relative w-[18px] h-[10px]">
-              <span className="absolute left-0 h-[2px] w-full rounded-full bg-current top-0" />
-              <span className="absolute left-0 h-[2px] w-full rounded-full bg-current top-[8px]" />
+            <div className="relative h-[14px] w-[18px]">
+              <span
+                className={cn(
+                  "absolute left-0 top-0 h-[2px] w-full rounded-full bg-current transition-transform duration-150 ease-out",
+                  isMenuOpen && "top-[6px] rotate-45",
+                )}
+              />
+              <span
+                className={cn(
+                  "absolute left-0 top-[12px] h-[2px] w-full rounded-full bg-current transition-transform duration-150 ease-out",
+                  isMenuOpen && "top-[6px] -rotate-45",
+                )}
+              />
             </div>
           </button>
         </div>

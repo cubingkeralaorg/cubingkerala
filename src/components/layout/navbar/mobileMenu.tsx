@@ -1,11 +1,18 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import Image from "next/image";
-import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
-import { X } from "lucide-react";
-import CubingKeralaFooter from "../footer";
+import { usePathname } from "next/navigation";
+import { FaGithub } from "react-icons/fa";
+import { NAV_LINKS, ADMIN_USER_ID } from "@/config/navigation.config";
+import { ThemeSwitcher } from "./themeSwitcher";
+import { AuthButton } from "./authButton";
+import { cn } from "@/lib/utils";
+
+/** Matches mobile navbar row: py-2 (16px) + 44px logo */
+const NAVBAR_OFFSET_PX = 60;
+const PANEL_MS = 150;
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -22,99 +29,119 @@ export function MobileMenu({
   onLogout,
   onClose,
 }: MobileMenuProps) {
-  const isAdmin = userId === ADMIN_USER_ID;
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(isOpen);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setMounted(true);
+      const frame = requestAnimationFrame(() => setActive(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    setActive(false);
+    const timer = window.setTimeout(() => setMounted(false), PANEL_MS);
+    return () => window.clearTimeout(timer);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
+
+  const handleGithubRedirect = useCallback(() => {
+    window.open("https://github.com/cubingkeralaorg/cubingkerala", "_blank");
+  }, []);
 
   const links = [...NAV_LINKS];
-  if (isAdmin) {
+  if (userId === ADMIN_USER_ID) {
     links.push({ href: "/requests", label: "Requests" });
   }
 
-  const menuContent = (
-    <nav
-      id="mobile-menu-panel"
-      aria-label="Mobile menu"
-      aria-hidden={!isOpen}
-      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-200 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)] ${
-        isOpen ? "translate-x-0" : "translate-x-full"
-      }`}
-    >
-      {/* Top Header — match navbar row height (py-2, h-10 controls) */}
-      <div className="container mx-auto flex items-center justify-between border-b border-border/40 px-4 py-2">
-        <Link href="/" onClick={onClose} className="flex items-center">
-          <Image
-            src={LOGO_LIGHT}
-            alt="Cubing Kerala Logo"
-            width={44}
-            height={44}
-            priority
-            className="w-[44px] h-auto object-contain block dark:hidden"
-          />
-          <Image
-            src={LOGO_DARK}
-            alt="Cubing Kerala Logo"
-            width={44}
-            height={44}
-            priority
-            className="w-[44px] h-auto object-contain hidden dark:block"
-          />
-        </Link>
-        <button
-          onClick={onClose}
-          className="flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-accent transition-colors"
-          aria-label="Close"
-        >
-          <X size={24} strokeWidth={1.5} />
-        </button>
-      </div>
+  if (!mounted) {
+    return null;
+  }
 
-      {/* Main Links Area */}
-      <div className="flex-1 overflow-y-auto w-full">
-        <div className="container mx-auto px-4 flex flex-col">
-          {links.map((link) => (
-            <div key={link.href}>
-              <Link
-                href={link.href}
-                onClick={onClose}
-                className="block py-4 text-[26px] font-normal tracking-wide text-muted-foreground border-b border-border/40 hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </Link>
-            </div>
-          ))}
+  return createPortal(
+    <>
+      <button
+        type="button"
+        aria-label="Close menu"
+        tabIndex={active ? 0 : -1}
+        onClick={onClose}
+        className={cn(
+          "fixed inset-0 z-[99990] md:hidden bg-black/20 transition-opacity duration-150",
+          active ? "opacity-100" : "opacity-0",
+        )}
+      />
 
-          {/* Auth Button */}
-          <div className="mt-2 mb-4">
-            {isLoggedIn ? (
-              <button
-                onClick={() => {
-                  onLogout();
-                  onClose();
-                }}
-                className="w-full text-left block py-4 text-[26px] font-normal tracking-wide text-red-500 border-b border-border/40 hover:text-red-500/70 transition-colors"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link
-                href="/login"
-                onClick={onClose}
-                className="block py-4 text-[26px] font-normal tracking-wide text-green-500 border-b border-border/40 hover:text-green-500/70 transition-colors"
-              >
-                Login
-              </Link>
-            )}
+      <nav
+        id="mobile-menu-panel"
+        aria-label="Mobile menu"
+        aria-hidden={!active}
+        style={{ top: NAVBAR_OFFSET_PX }}
+        className={cn(
+          "fixed left-0 right-0 z-[99999] md:hidden border-b border-border bg-background/98 backdrop-blur-sm shadow-sm",
+          "transition-[opacity,transform] duration-150 ease-out",
+          active
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-2 opacity-0 pointer-events-none",
+        )}
+      >
+        <ul className="container mx-auto flex flex-col px-2 py-1.5">
+          {links.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(`${link.href}/`));
+
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={onClose}
+                  className={cn(
+                    "block rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors",
+                    isActive
+                      ? "bg-accent text-foreground"
+                      : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        <div className="container mx-auto flex items-center justify-between border-t border-border/50 px-3 py-2">
+          <div className="flex items-center gap-0.5">
+            <button
+              type="button"
+              onClick={handleGithubRedirect}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-colors"
+              aria-label="GitHub repository"
+            >
+              <FaGithub size={18} />
+            </button>
+            <ThemeSwitcher />
           </div>
-        </div>
-      </div>
 
-      {/* Footer Area */}
-      <div className="w-full mt-auto">
-        <div className="container mx-auto px-4">
-          <CubingKeralaFooter compact />
+          <AuthButton
+            isLoggedIn={isLoggedIn}
+            onLogout={onLogout}
+            onClose={onClose}
+            className="px-2 py-1"
+          />
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>,
+    document.body,
   );
-
-  return createPortal(menuContent, document.body);
 }
