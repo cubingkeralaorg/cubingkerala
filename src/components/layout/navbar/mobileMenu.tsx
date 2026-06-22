@@ -32,17 +32,14 @@ export function MobileMenu({
   onClose,
 }: MobileMenuProps) {
   const pathname = usePathname();
-  const [visible, setVisible] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
       setAnimateIn(false);
-      const timer = window.setTimeout(() => setVisible(false), PANEL_MS);
-      return () => window.clearTimeout(timer);
+      return;
     }
 
-    setVisible(true);
     const frame = requestAnimationFrame(() => {
       requestAnimationFrame(() => setAnimateIn(true));
     });
@@ -69,7 +66,7 @@ export function MobileMenu({
     links.push({ href: "/requests", label: "Requests" });
   }
 
-  if (!visible) {
+  if (!isOpen) {
     return null;
   }
 
@@ -84,8 +81,8 @@ export function MobileMenu({
         "fixed inset-0 z-[100010] md:hidden bg-background",
         "transition-[opacity,transform] will-change-[opacity,transform]",
         animateIn
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none -translate-y-2 opacity-0",
+          ? "translate-y-0 opacity-100 visible"
+          : "pointer-events-none invisible -translate-y-2 opacity-0",
       )}
       style={transitionStyle}
     >

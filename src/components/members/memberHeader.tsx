@@ -2,6 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { getRoleBadgeColor, capitalizeRole } from "@/utils/memberUtils";
 import BlurIn from "../ui/blur-in";
 import { FadeUp, StaggerReveal } from "../ui/fade-up";
@@ -20,6 +26,7 @@ export function MemberHeader({
   avatarUrl,
 }: MemberHeaderProps) {
   const isDefaultAvatar = avatarUrl?.includes("missing_avatar_thumb");
+  const imageSrc = isDefaultAvatar ? "/user.png" : avatarUrl;
 
   const formatName = (fullName: string) => {
     const match = fullName.match(/^(.*?)\s*(\(.*?\))(.*)$/);
@@ -61,16 +68,43 @@ export function MemberHeader({
         </FadeUp>
       </div>
       <FadeUp className="w-full max-w-[200px] h-[200px] my-4">
-        <Avatar className="w-full h-full rounded-md">
-          <AvatarImage
-            className="object-cover"
-            src={isDefaultAvatar ? "/user.png" : avatarUrl}
-            alt="Profile Picture"
-          />
-          <AvatarFallback className="rounded-md bg-card text-foreground">
-            {name}
-          </AvatarFallback>
-        </Avatar>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button
+              type="button"
+              className="w-full h-full rounded-md cursor-pointer transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label={`View ${name}'s profile picture`}
+            >
+              <Avatar className="w-full h-full rounded-md">
+                <AvatarImage
+                  className="object-cover"
+                  src={imageSrc}
+                  alt="Profile Picture"
+                />
+                <AvatarFallback className="rounded-md bg-card text-foreground">
+                  {name}
+                </AvatarFallback>
+              </Avatar>
+            </button>
+          </DialogTrigger>
+          <DialogContent showClose={false} className="max-w-sm sm:max-w-md gap-0 p-2 sm:p-3">
+            <DialogTitle className="sr-only">
+              {name} — Profile Picture
+            </DialogTitle>
+            <div className="flex w-full items-center justify-center max-h-[70vh]">
+              <Avatar className="w-full h-auto min-h-[200px] max-h-[70vh] rounded-md">
+                <AvatarImage
+                  className="object-contain"
+                  src={imageSrc}
+                  alt={`${name}'s profile picture`}
+                />
+                <AvatarFallback className="rounded-md bg-card text-foreground">
+                  {name}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </DialogContent>
+        </Dialog>
       </FadeUp>
     </StaggerReveal>
   );
