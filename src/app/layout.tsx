@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${font.variable} font-sans bg-background`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${font.variable} font-sans bg-background`} suppressHydrationWarning>
         <Providers>
           <Navbar />
           <EmailBanner />

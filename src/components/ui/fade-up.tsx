@@ -9,21 +9,21 @@ import {
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-/** Refined ease — calm, professional deceleration */
-export const REVEAL_EASE = [0.22, 1, 0.36, 1] as const;
+/** Refined ease — soft deceleration, no abrupt stop */
+export const REVEAL_EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Primary content lift (headings, sections) */
-export const FADE_UP_Y = 6;
+export const FADE_UP_Y = 5;
 
 /** Table rows and grid tiles — even lighter */
-export const FADE_UP_ROW_Y = 4;
+export const FADE_UP_ROW_Y = 2;
 
 export const fadeUpItem: Variants = {
   hidden: { opacity: 0, y: FADE_UP_Y },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: REVEAL_EASE },
+    transition: { duration: 0.7, ease: REVEAL_EASE },
   },
 };
 
@@ -32,7 +32,23 @@ export const fadeUpRowItem: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: REVEAL_EASE },
+    transition: { duration: 0.55, ease: REVEAL_EASE },
+  },
+};
+
+/** Row shell — stagger timing only; borders stay static on `tr` */
+export const fadeUpTableRowItem: Variants = {
+  hidden: {},
+  visible: {},
+};
+
+/** Cell content — opacity + lift without tinting row borders */
+export const fadeUpTableCellItem: Variants = {
+  hidden: { opacity: 0, y: FADE_UP_ROW_Y },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: REVEAL_EASE },
   },
 };
 
@@ -59,8 +75,8 @@ interface StaggerRevealProps {
 export function StaggerReveal({
   children,
   className,
-  stagger = 0.05,
-  delay = 0.03,
+  stagger = 0.04,
+  delay = 0.02,
 }: StaggerRevealProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -157,7 +173,7 @@ export function PageReveal({
   className?: string;
 }) {
   return (
-    <StaggerReveal className={className} delay={0.02} stagger={0.045}>
+    <StaggerReveal className={className} delay={0.015} stagger={0.038}>
       {children}
     </StaggerReveal>
   );
@@ -167,7 +183,7 @@ export function PageReveal({
 export function RevealGrid({
   children,
   className,
-  stagger = 0.035,
+  stagger = 0.03,
 }: {
   children: ReactNode;
   className?: string;

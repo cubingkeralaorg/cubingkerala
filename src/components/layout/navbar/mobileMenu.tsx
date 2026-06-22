@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
-import { ThemeSwitcher } from "./themeSwitcher";
-import { FaGithub } from "react-icons/fa";
 import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
 import { X } from "lucide-react";
 import CubingKeralaFooter from "../footer";
@@ -25,12 +22,6 @@ export function MobileMenu({
   onLogout,
   onClose,
 }: MobileMenuProps) {
-  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setPortalRoot(document.body);
-  }, []);
-
   const isAdmin = userId === ADMIN_USER_ID;
 
   const links = [...NAV_LINKS];
@@ -42,33 +33,34 @@ export function MobileMenu({
     <nav
       id="mobile-menu-panel"
       aria-label="Mobile menu"
-      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
+      aria-hidden={!isOpen}
+      className={`fixed inset-0 z-[100000] flex flex-col bg-background/95 backdrop-blur-3xl md:hidden transition-transform duration-200 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)] ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      {/* Top Header with Logo and Close Button */}
-      <div className="container mx-auto flex items-center justify-between px-4 py-4 h-[72px]">
+      {/* Top Header — match navbar row height (py-2, h-10 controls) */}
+      <div className="container mx-auto flex items-center justify-between border-b border-border/40 px-4 py-2">
         <Link href="/" onClick={onClose} className="flex items-center">
-            <Image
-              src={LOGO_LIGHT}
-              alt="Cubing Kerala Logo"
-              width={44}
-              height={44}
-              priority
-              className="w-[44px] h-auto object-contain block dark:hidden"
-            />
-            <Image
-              src={LOGO_DARK}
-              alt="Cubing Kerala Logo"
-              width={44}
-              height={44}
-              priority
-              className="w-[44px] h-auto object-contain hidden dark:block"
-            />
+          <Image
+            src={LOGO_LIGHT}
+            alt="Cubing Kerala Logo"
+            width={44}
+            height={44}
+            priority
+            className="w-[44px] h-auto object-contain block dark:hidden"
+          />
+          <Image
+            src={LOGO_DARK}
+            alt="Cubing Kerala Logo"
+            width={44}
+            height={44}
+            priority
+            className="w-[44px] h-auto object-contain hidden dark:block"
+          />
         </Link>
         <button
           onClick={onClose}
-          className="p-1.5 rounded-full text-foreground hover:bg-accent transition-colors"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-accent transition-colors"
           aria-label="Close"
         >
           <X size={24} strokeWidth={1.5} />
@@ -78,10 +70,6 @@ export function MobileMenu({
       {/* Main Links Area */}
       <div className="flex-1 overflow-y-auto w-full">
         <div className="container mx-auto px-4 flex flex-col">
-          <div>
-            <div className="w-full h-[1px] bg-border/40" />
-          </div>
-          
           {links.map((link) => (
             <div key={link.href}>
               <Link
@@ -93,7 +81,7 @@ export function MobileMenu({
               </Link>
             </div>
           ))}
-          
+
           {/* Auth Button */}
           <div className="mt-2 mb-4">
             {isLoggedIn ? (
@@ -122,15 +110,11 @@ export function MobileMenu({
       {/* Footer Area */}
       <div className="w-full mt-auto">
         <div className="container mx-auto px-4">
-            <CubingKeralaFooter compact />
+          <CubingKeralaFooter compact />
         </div>
       </div>
     </nav>
   );
 
-  if (portalRoot) {
-    return createPortal(menuContent, portalRoot);
-  }
-
-  return menuContent;
+  return createPortal(menuContent, document.body);
 }

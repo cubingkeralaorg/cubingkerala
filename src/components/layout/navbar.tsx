@@ -2,15 +2,20 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
 import { LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
 import { NavLinks } from "./navbar/navLinks";
 import { AuthButton } from "./navbar/authButton";
-import { MobileMenu } from "./navbar/mobileMenu";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
 import { FaGithub } from "react-icons/fa";
+
+const MobileMenu = dynamic(
+  () => import("./navbar/mobileMenu").then((mod) => mod.MobileMenu),
+  { ssr: false },
+);
 
 export const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

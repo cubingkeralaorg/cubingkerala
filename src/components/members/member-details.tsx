@@ -65,7 +65,7 @@ export default function MemberInfoComponent({
               />
             </FadeUp>
 
-            <FadeUp className="w-full">
+            <FadeUp className="w-full flex justify-center">
               <PersonalRecordsTable
                 personalRecords={personalRecordsArray}
                 wcaid={member.wcaid}

@@ -1,16 +1,43 @@
 "use client";
 
-import { useContext, type ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useContext,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import {
-  fadeUpRowItem,
+  fadeUpTableCellItem,
+  fadeUpTableRowItem,
   StaggerContext,
 } from "@/components/ui/fade-up";
 
-const TABLE_ROW_STAGGER = 0.022;
-const TABLE_ROW_DELAY = 0.008;
+const TABLE_ROW_STAGGER = 0.02;
+const TABLE_ROW_DELAY = 0.01;
+
+function wrapCellContent(children: ReactNode) {
+  return Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+
+    const cell = child as ReactElement<{ children?: ReactNode }>;
+
+    return cloneElement(cell, {
+      children: (
+        <motion.span
+          variants={fadeUpTableCellItem}
+          className="block w-full will-change-[transform,opacity]"
+        >
+          {cell.props.children}
+        </motion.span>
+      ),
+    });
+  });
+}
 
 interface AnimatedTableBodyProps {
   children: ReactNode;
@@ -71,18 +98,18 @@ export function AnimatedTableRow({
 
   return (
     <motion.tr
-      variants={fadeUpRowItem}
+      variants={fadeUpTableRowItem}
       className={cn(
         "border-b border-border transition-[background-color] data-[state=selected]:bg-muted",
         className,
       )}
     >
-      {children}
+      {wrapCellContent(children)}
     </motion.tr>
   );
 }
 
-/** Wraps a table block so search + table enter together on streamed pages */
+/** Layout wrapper for streamed table sections (row stagger handles reveal) */
 export function RevealTableSection({
   children,
   className,
@@ -90,20 +117,5 @@ export function RevealTableSection({
   children: ReactNode;
   className?: string;
 }) {
-  const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }

@@ -34,7 +34,6 @@ interface CompetitionTableProps {
 
 export function CompetitionTable({ competitions }: CompetitionTableProps) {
   return (
-    <div className="overflow-x-auto">
       <Table className="w-full text-sm md:text-[15px]">
         <AnimatedTableBody>
           {competitions.map((competition) => {
@@ -129,6 +128,5 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
           })}
         </AnimatedTableBody>
       </Table>
-    </div>
   );
 }

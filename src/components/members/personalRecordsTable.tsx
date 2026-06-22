@@ -59,7 +59,7 @@ export function PersonalRecordsTable({
   medals,
 }: PersonalRecordsTableProps) {
   return (
-    <div className="w-full max-w-screen-md mt-5 flex flex-col gap-3">
+    <div className="w-full max-w-screen-md mx-auto mt-5 flex flex-col gap-3">
       {/* Stats Badges */}
       <div className="flex flex-wrap items-center justify-center gap-2 w-full">
         <div className="inline-flex items-center gap-1.5 py-1 px-3 border rounded-md border-border bg-card text-foreground text-sm shadow-sm">
