@@ -1,13 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
+import { createSuccessResponse } from "@/lib/api";
 
-export async function POST(req: NextRequest) {
-    const response = NextResponse.redirect(new URL('/', req.url));
+export async function POST(_req: NextRequest) {
+  const response = createSuccessResponse({ message: "Logged out successfully" });
 
-    // Clear the authToken cookie
-    response.cookies.set('authToken', '', { path: '/', maxAge: -1 });
+  response.cookies.set("authToken", "", {
+    path: "/",
+    maxAge: 0,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+  });
 
-    // Clear the userInfo cookie
-    response.cookies.set('userInfo', '', { path: '/', maxAge: -1 });
+  response.cookies.set("userInfo", "", {
+    path: "/",
+    maxAge: 0,
+    httpOnly: false,
+  });
 
-    return response;
+  revalidatePath("/");
+  return response;
 }
