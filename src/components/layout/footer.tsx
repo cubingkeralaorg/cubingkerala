@@ -181,7 +181,7 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
                         </p>
                     </div>
 
-                    <div className="md:ml-auto md:text-right md:pt-2">
+                    <div className="hidden md:block md:ml-auto md:text-right md:pt-2">
                         <ul className="list-none flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-x-5 md:gap-y-2 md:justify-end">
                             {QUICK_LINKS.map((link) => (
                                 <li key={link.href}>

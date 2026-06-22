@@ -69,7 +69,14 @@ export const NavbarComponent = () => {
   };
 
   return (
-    <div className="sticky top-0 bg-background/80 backdrop-blur-lg text-foreground z-[10000]">
+    <div
+      className={cn(
+        "sticky top-0 z-[10000] text-foreground",
+        isMenuOpen
+          ? "bg-background"
+          : "bg-background/80 backdrop-blur-lg md:bg-background/80 md:backdrop-blur-lg",
+      )}
+    >
       <div className="container mx-auto border-b border-border/40 flex justify-between items-center px-4 py-2 md:py-2.5">
         {/* Left Side: Logo and Navigation Links */}
         <div className="flex items-center gap-8">
@@ -113,28 +120,21 @@ export const NavbarComponent = () => {
             <AuthButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </div>
 
-          {/* Hamburger → X */}
           <button
             onClick={toggleMenu}
-            className="relative flex md:hidden h-10 w-10 items-center justify-center text-foreground"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className={cn(
+              "relative flex md:hidden h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200",
+              isMenuOpen && "pointer-events-none opacity-0",
+            )}
+            aria-label="Open menu"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu-panel"
           >
-            <span className="sr-only">Toggle navigation menu</span>
+            <span className="sr-only">Open navigation menu</span>
             <div className="relative h-[14px] w-[18px]">
-              <span
-                className={cn(
-                  "absolute left-0 top-0 h-[2px] w-full rounded-full bg-current transition-transform duration-150 ease-out",
-                  isMenuOpen && "top-[6px] rotate-45",
-                )}
-              />
-              <span
-                className={cn(
-                  "absolute left-0 top-[12px] h-[2px] w-full rounded-full bg-current transition-transform duration-150 ease-out",
-                  isMenuOpen && "top-[6px] -rotate-45",
-                )}
-              />
+              <span className="absolute left-0 top-0 h-[2px] w-full rounded-full bg-current" />
+              <span className="absolute left-0 top-[6px] h-[2px] w-full rounded-full bg-current" />
+              <span className="absolute left-0 top-[12px] h-[2px] w-full rounded-full bg-current" />
             </div>
           </button>
         </div>

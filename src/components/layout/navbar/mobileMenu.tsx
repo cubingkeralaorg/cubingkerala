@@ -2,17 +2,19 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { X } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import { NAV_LINKS, ADMIN_USER_ID } from "@/config/navigation.config";
+import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
 import { ThemeSwitcher } from "./themeSwitcher";
-import { AuthButton } from "./authButton";
 import { cn } from "@/lib/utils";
 
-/** Matches mobile navbar row: py-2 (16px) + 44px logo */
-const NAVBAR_OFFSET_PX = 60;
-const PANEL_MS = 150;
+const PANEL_MS = 320;
+const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+const AUTH_BUTTON_CLASS =
+  "flex w-full h-10 items-center justify-center rounded-lg border border-border bg-background px-4 text-[15px] font-medium transition-all duration-200 hover:bg-secondary hover:border-foreground/20 active:scale-[0.98]";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -30,19 +32,21 @@ export function MobileMenu({
   onClose,
 }: MobileMenuProps) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(isOpen);
-  const [active, setActive] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [animateIn, setAnimateIn] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      setMounted(true);
-      const frame = requestAnimationFrame(() => setActive(true));
-      return () => cancelAnimationFrame(frame);
+    if (!isOpen) {
+      setAnimateIn(false);
+      const timer = window.setTimeout(() => setVisible(false), PANEL_MS);
+      return () => window.clearTimeout(timer);
     }
 
-    setActive(false);
-    const timer = window.setTimeout(() => setMounted(false), PANEL_MS);
-    return () => window.clearTimeout(timer);
+    setVisible(true);
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setAnimateIn(true));
+    });
+    return () => cancelAnimationFrame(frame);
   }, [isOpen]);
 
   useEffect(() => {
@@ -65,37 +69,73 @@ export function MobileMenu({
     links.push({ href: "/requests", label: "Requests" });
   }
 
-  if (!mounted) {
+  if (!visible) {
     return null;
   }
 
-  return createPortal(
-    <>
-      <button
-        type="button"
-        aria-label="Close menu"
-        tabIndex={active ? 0 : -1}
-        onClick={onClose}
-        className={cn(
-          "fixed inset-0 z-[99990] md:hidden bg-black/20 transition-opacity duration-150",
-          active ? "opacity-100" : "opacity-0",
-        )}
-      />
+  const transitionStyle = {
+    transitionDuration: `${PANEL_MS}ms`,
+    transitionTimingFunction: EASE_OUT,
+  };
 
+  return createPortal(
+    <div
+      className={cn(
+        "fixed inset-0 z-[100010] md:hidden bg-background",
+        "transition-[opacity,transform] will-change-[opacity,transform]",
+        animateIn
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none -translate-y-2 opacity-0",
+      )}
+      style={transitionStyle}
+    >
       <nav
         id="mobile-menu-panel"
         aria-label="Mobile menu"
-        aria-hidden={!active}
-        style={{ top: NAVBAR_OFFSET_PX }}
-        className={cn(
-          "fixed left-0 right-0 z-[99999] md:hidden border-b border-border bg-background/98 backdrop-blur-sm shadow-sm",
-          "transition-[opacity,transform] duration-150 ease-out",
-          active
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-2 opacity-0 pointer-events-none",
-        )}
+        aria-hidden={!animateIn}
+        className="flex h-full min-h-[100dvh] flex-col"
       >
-        <ul className="container mx-auto flex flex-col px-2 py-1.5">
+        <div className="container mx-auto flex items-center justify-between px-4 py-2">
+          <Link href="/" onClick={onClose} className="flex items-center">
+            <Image
+              src={LOGO_LIGHT}
+              alt="Cubing Kerala Logo"
+              width={44}
+              height={44}
+              className="h-11 w-11 object-contain block dark:hidden"
+            />
+            <Image
+              src={LOGO_DARK}
+              alt="Cubing Kerala Logo"
+              width={44}
+              height={44}
+              className="h-11 w-11 object-contain hidden dark:block"
+            />
+          </Link>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handleGithubRedirect}
+              tabIndex={animateIn ? 0 : -1}
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-foreground"
+              aria-label="GitHub repository"
+            >
+              <FaGithub size={20} />
+            </button>
+            <ThemeSwitcher />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close menu"
+              className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-foreground transition-colors hover:bg-accent/80"
+            >
+              <X className="h-[18px] w-[18px]" strokeWidth={2.25} />
+            </button>
+          </div>
+        </div>
+
+        <ul className="container mx-auto flex-1 list-none overflow-y-auto px-4">
           {links.map((link) => {
             const isActive =
               pathname === link.href ||
@@ -106,42 +146,54 @@ export function MobileMenu({
                 <Link
                   href={link.href}
                   onClick={onClose}
+                  tabIndex={animateIn ? 0 : -1}
                   className={cn(
-                    "block rounded-md px-3 py-2.5 text-[15px] font-medium transition-colors",
+                    "block py-5 text-[17px] font-medium tracking-[-0.01em] transition-colors",
                     isActive
-                      ? "bg-accent text-foreground"
-                      : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
+                      ? "text-foreground"
+                      : "text-foreground/90 hover:text-foreground",
                   )}
                 >
                   {link.label}
                 </Link>
+                <div
+                  aria-hidden
+                  className="border-b border-dashed border-border"
+                />
               </li>
             );
           })}
         </ul>
 
-        <div className="container mx-auto flex items-center justify-between border-t border-border/50 px-3 py-2">
-          <div className="flex items-center gap-0.5">
+        <div className="container mx-auto border-t border-border/50 px-4 py-4">
+          {isLoggedIn ? (
             <button
               type="button"
-              onClick={handleGithubRedirect}
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-colors"
-              aria-label="GitHub repository"
+              onClick={() => {
+                onLogout();
+                onClose();
+              }}
+              tabIndex={animateIn ? 0 : -1}
+              className={cn(AUTH_BUTTON_CLASS, "text-red-500 hover:text-red-500/80")}
             >
-              <FaGithub size={18} />
+              Logout
             </button>
-            <ThemeSwitcher />
-          </div>
-
-          <AuthButton
-            isLoggedIn={isLoggedIn}
-            onLogout={onLogout}
-            onClose={onClose}
-            className="px-2 py-1"
-          />
+          ) : (
+            <Link
+              href="/login"
+              onClick={onClose}
+              tabIndex={animateIn ? 0 : -1}
+              className={cn(
+                AUTH_BUTTON_CLASS,
+                "text-green-600 dark:text-green-400",
+              )}
+            >
+              Login
+            </Link>
+          )}
         </div>
       </nav>
-    </>,
+    </div>,
     document.body,
   );
 }
