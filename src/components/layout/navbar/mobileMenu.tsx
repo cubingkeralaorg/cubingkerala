@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
+import { NAV_LINKS, ADMIN_USER_ID } from "@/config/navigation.config";
 import { ThemeSwitcher } from "./themeSwitcher";
 import { cn } from "@/lib/utils";
 
@@ -76,62 +75,53 @@ export function MobileMenu({
   };
 
   return createPortal(
-    <div
-      className={cn(
-        "fixed inset-0 z-[100010] md:hidden bg-background",
-        "transition-[opacity,transform] will-change-[opacity,transform]",
-        animateIn
-          ? "translate-y-0 opacity-100 visible"
-          : "pointer-events-none invisible -translate-y-2 opacity-0",
-      )}
-      style={transitionStyle}
-    >
+    <div className="fixed inset-0 z-[100010] flex flex-col md:hidden">
+      {/* Static header: transparent so the navbar logo shows through unchanged */}
+      <div className="container mx-auto flex shrink-0 items-center justify-between px-4 py-2">
+        <Link
+          href="/"
+          onClick={onClose}
+          aria-label="Cubing Kerala home"
+          className="flex items-center"
+        >
+          <span className="block h-[44px] w-[44px]" aria-hidden />
+        </Link>
+
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={handleGithubRedirect}
+            tabIndex={animateIn ? 0 : -1}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-foreground"
+            aria-label="GitHub repository"
+          >
+            <FaGithub size={20} />
+          </button>
+          <ThemeSwitcher />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-foreground transition-colors hover:bg-accent/80"
+          >
+            <X className="h-[18px] w-[18px]" strokeWidth={2.25} />
+          </button>
+        </div>
+      </div>
+
       <nav
         id="mobile-menu-panel"
         aria-label="Mobile menu"
         aria-hidden={!animateIn}
-        className="flex h-full min-h-[100dvh] flex-col"
+        className={cn(
+          "flex min-h-0 flex-1 flex-col bg-background",
+          "transition-[opacity,transform] will-change-[opacity,transform]",
+          animateIn
+            ? "translate-y-0 opacity-100 visible"
+            : "pointer-events-none invisible -translate-y-2 opacity-0",
+        )}
+        style={transitionStyle}
       >
-        <div className="container mx-auto flex items-center justify-between px-4 py-2">
-          <Link href="/" onClick={onClose} className="flex items-center">
-            <Image
-              src={LOGO_LIGHT}
-              alt="Cubing Kerala Logo"
-              width={44}
-              height={44}
-              className="h-11 w-11 object-contain block dark:hidden"
-            />
-            <Image
-              src={LOGO_DARK}
-              alt="Cubing Kerala Logo"
-              width={44}
-              height={44}
-              className="h-11 w-11 object-contain hidden dark:block"
-            />
-          </Link>
-
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={handleGithubRedirect}
-              tabIndex={animateIn ? 0 : -1}
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-foreground"
-              aria-label="GitHub repository"
-            >
-              <FaGithub size={20} />
-            </button>
-            <ThemeSwitcher />
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close menu"
-              className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-foreground transition-colors hover:bg-accent/80"
-            >
-              <X className="h-[18px] w-[18px]" strokeWidth={2.25} />
-            </button>
-          </div>
-        </div>
-
         <ul className="container mx-auto flex-1 list-none overflow-y-auto px-4">
           {links.map((link) => {
             const isActive =
