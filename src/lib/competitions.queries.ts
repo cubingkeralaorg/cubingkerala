@@ -31,7 +31,6 @@ export async function fetchCompetitionsFromDb() {
     db.competitions.findMany({
       where: { start_date: { lt: todayIso } },
       orderBy: { start_date: "desc" },
-      take: 50,
       select: competitionSelect,
     }),
     db.systemMetadata.findUnique({
