@@ -9,6 +9,23 @@ export const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
 const SYNC_CONCURRENCY = 5;
 const WCA_API_BATCH_DELAY_MS = 500;
 const WCA_SYNC_OFFSET_KEY = "wca_sync_offset";
+const WCA_API_ORIGIN = "https://www.worldcubeassociation.org";
+const WCA_PERSON_API_PATH = "/api/v0/persons/";
+/** Official WCA person IDs: 4-digit year + 4 letters + 2-digit suffix (e.g. 2023TEST01). */
+const WCA_ID_PATTERN = /^[0-9]{4}[A-Z]{4}[0-9]{2}$/;
+
+function buildWcaPersonApiUrl(wcaId: string): URL | null {
+  if (!WCA_ID_PATTERN.test(wcaId)) {
+    return null;
+  }
+
+  const url = new URL(`${WCA_PERSON_API_PATH}${wcaId}`, WCA_API_ORIGIN);
+  if (url.origin !== WCA_API_ORIGIN || url.pathname !== `${WCA_PERSON_API_PATH}${wcaId}`) {
+    return null;
+  }
+
+  return url;
+}
 
 export type WcaCacheEntry = {
   data: CompetitorData;
@@ -30,15 +47,17 @@ export function isWcaCacheFresh(updatedAt: Date | string): boolean {
 async function fetchWcaPersonData(
   wcaId: string,
 ): Promise<CompetitorData | null> {
+  const personUrl = buildWcaPersonApiUrl(wcaId);
+  if (!personUrl) {
+    return null;
+  }
+
   try {
-    const response = await fetch(
-      `https://www.worldcubeassociation.org/api/v0/persons/${wcaId}`,
-      { cache: "no-store" },
-    );
+    const response = await fetch(personUrl, { cache: "no-store" });
     if (!response.ok) return null;
     return await response.json();
   } catch (error) {
-    console.error(`[WcaSync] Error fetching WCA ID ${wcaId}:`, error);
+    console.error("[WcaSync] Error fetching WCA ID:", wcaId, error);
     return null;
   }
 }
