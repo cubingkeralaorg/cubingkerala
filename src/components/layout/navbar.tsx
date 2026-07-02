@@ -2,30 +2,39 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
+import { useDesktopNav } from "@/hooks/useDesktopNav";
 import { LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
 import { NavLinks } from "./navbar/navLinks";
 import { AuthButton } from "./navbar/authButton";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
+import { MobileMenu } from "./navbar/mobileMenu";
+import {
+  NAVBAR_CONTAINER_CLASS,
+  NAVBAR_LOGO_LINK_CLASS,
+  NAVBAR_ROW_CLASS,
+} from "./navbar/layout";
 import { FaGithub } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-
-const MobileMenu = dynamic(
-  () => import("./navbar/mobileMenu").then((mod) => mod.MobileMenu),
-  { ssr: false },
-);
 
 export const NavbarComponent = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const scrollYRef = useRef(0);
+  const isDesktopNav = useDesktopNav();
   const { userInfo, isLoggedIn } = useAuth();
   const { handleLogout } = useLogout();
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
+  const showMobileMenu = isMenuOpen && !isDesktopNav;
+
+  useEffect(() => {
+    if (isDesktopNav && isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  }, [isDesktopNav, isMenuOpen]);
 
   // Lock body scroll without shifting layout when the mobile menu is open.
   useEffect(() => {
@@ -33,7 +42,7 @@ export const NavbarComponent = () => {
 
     const body = document.body;
 
-    if (isMenuOpen) {
+    if (showMobileMenu) {
       scrollYRef.current = window.scrollY;
       body.style.position = "fixed";
       body.style.top = `-${scrollYRef.current}px`;
@@ -62,7 +71,7 @@ export const NavbarComponent = () => {
       body.style.width = "";
       body.style.overflow = "";
     };
-  }, [isMenuOpen]);
+  }, [showMobileMenu]);
 
   const handleGithubRedirect = () => {
     window.open("https://github.com/cubingkeralaorg/cubingkerala", "_blank");
@@ -74,20 +83,22 @@ export const NavbarComponent = () => {
         "sticky top-0 z-[10000] text-foreground",
         isMenuOpen
           ? "bg-background"
-          : "bg-background/80 backdrop-blur-lg md:bg-background/80 md:backdrop-blur-lg",
+          : "bg-background/80 backdrop-blur-lg",
       )}
     >
-      <div className="container mx-auto border-b border-border/40 flex justify-between items-center px-4 py-2 md:py-2.5">
+      <div className={NAVBAR_CONTAINER_CLASS}>
+        <div className="border-b border-border/40">
+          <div className={NAVBAR_ROW_CLASS}>
         {/* Left Side: Logo and Navigation Links */}
         <div className="flex items-center gap-8">
-          <Link href="/" onClick={closeMenu} className="flex items-center">
+          <Link href="/" onClick={closeMenu} className={NAVBAR_LOGO_LINK_CLASS}>
             <Image
               src={LOGO_LIGHT}
               alt="Cubing Kerala Logo"
               width={44}
               height={44}
               priority
-              className="w-[44px] h-auto object-contain block dark:hidden"
+              className="h-[44px] w-[44px] object-contain block dark:hidden"
             />
             <Image
               src={LOGO_DARK}
@@ -95,17 +106,17 @@ export const NavbarComponent = () => {
               width={44}
               height={44}
               priority
-              className="w-[44px] h-auto object-contain hidden dark:block"
+              className="h-[44px] w-[44px] object-contain hidden dark:block"
             />
           </Link>
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             <NavLinks userId={userInfo?.me?.id} />
           </nav>
         </div>
 
         {/* Right Side: GitHub, Theme Toggle, and Auth Button */}
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             <button
               onClick={handleGithubRedirect}
               className="text-foreground/50 hover:text-foreground p-2 rounded-lg transition-colors duration-200"
@@ -116,18 +127,19 @@ export const NavbarComponent = () => {
             <ThemeSwitcher />
           </div>
 
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <AuthButton isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </div>
 
           <button
+            type="button"
             onClick={toggleMenu}
             className={cn(
-              "relative flex md:hidden h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200",
+              "relative flex lg:hidden h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200",
               isMenuOpen && "pointer-events-none opacity-0",
             )}
             aria-label="Open menu"
-            aria-expanded={isMenuOpen}
+            aria-expanded={showMobileMenu}
             aria-controls="mobile-menu-panel"
           >
             <span className="sr-only">Open navigation menu</span>
@@ -138,10 +150,12 @@ export const NavbarComponent = () => {
             </div>
           </button>
         </div>
+          </div>
+        </div>
       </div>
 
       <MobileMenu
-        isOpen={isMenuOpen}
+        isOpen={showMobileMenu}
         userId={userInfo?.me?.id}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}

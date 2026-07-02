@@ -22,7 +22,7 @@ export function WhatsAppContactButton() {
   return (
     <button
       onClick={handleWhatsAppContact}
-      className="inline-flex items-center gap-2.5 h-11 px-6 rounded-lg bg-foreground text-background font-medium text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+      className="inline-flex items-center justify-center gap-2.5 min-h-11 h-auto px-4 sm:px-6 rounded-lg bg-foreground text-background font-medium text-sm sm:text-[15px] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

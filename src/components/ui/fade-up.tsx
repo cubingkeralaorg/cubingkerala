@@ -107,12 +107,30 @@ interface FadeUpProps {
   children: ReactNode;
   className?: string;
   as?: MotionTag;
+  duration?: number;
 }
 
-export function FadeUp({ children, className, as = "div" }: FadeUpProps) {
+function fadeUpVariants(duration: number): Variants {
+  return {
+    hidden: { opacity: 0, y: FADE_UP_Y },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration, ease: REVEAL_EASE },
+    },
+  };
+}
+
+export function FadeUp({
+  children,
+  className,
+  as = "div",
+  duration,
+}: FadeUpProps) {
   const shouldReduceMotion = useReducedMotion();
   const inStagger = useContext(StaggerContext);
   const MotionComponent = motionTags[as];
+  const variants = duration !== undefined ? fadeUpVariants(duration) : fadeUpItem;
 
   if (shouldReduceMotion) {
     const Tag = as;
@@ -120,11 +138,11 @@ export function FadeUp({ children, className, as = "div" }: FadeUpProps) {
   }
 
   const motionProps = inStagger
-    ? { variants: fadeUpItem }
+    ? { variants }
     : {
         initial: "hidden" as const,
         animate: "visible" as const,
-        variants: fadeUpItem,
+        variants,
       };
 
   return (

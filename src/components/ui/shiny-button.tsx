@@ -13,7 +13,7 @@ const ShinyButton = ({ children, className, ...props }: ShinyButtonProps) => {
     <button
       {...props}
       className={cn(
-        "relative rounded-lg bg-card border border-border text-foreground font-medium text-sm px-5 py-2 overflow-hidden transition-colors duration-200 hover:bg-accent active:scale-[0.98]",
+        "relative rounded-lg bg-card border border-border text-foreground font-medium text-sm px-4 sm:px-5 py-2 overflow-hidden transition-colors duration-200 hover:bg-accent active:scale-[0.98]",
         className
       )}
     >

@@ -26,11 +26,11 @@ export default function Home() {
           </section>
           <section className="px-4 sm:px-6 lg:px-8">
             <div className="container mx-auto bg-neutral-500/[0.04] px-4 md:px-8 border border-border rounded-lg py-10 md:py-24">
-              <div className="space-y-4 sm:px-10 text-start md:text-center flex flex-col items-start md:items-center">
+              <div className="space-y-4 sm:px-10 text-start lg:text-center flex flex-col items-start lg:items-center">
                 <div className="inline-block rounded-lg text-sm text-green-500">
                   Community Directory
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                   Meet Kerala Members
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground text-[15px] md:text-lg lg:whitespace-nowrap">
@@ -48,7 +48,7 @@ export default function Home() {
           </section>
           <section id="contact" className="px-4 sm:px-6 lg:px-8 pb-8 md:pb-10">
             <div className="container mx-auto bg-neutral-500/[0.04] px-4 md:px-8 border border-border rounded-lg py-10 md:py-16">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-12 sm:px-10">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-12 sm:px-10">
                 <div className="space-y-2">
                   <p className="text-sm font-medium text-green-500">
                     Get in Touch

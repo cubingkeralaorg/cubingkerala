@@ -52,12 +52,12 @@ export function CubingKeralaUnravel() {
   return (
     <div className="relative flex h-full w-full flex-col text-foreground items-center justify-center overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 bg-neutral-500/[0.04] z-20 border border-border rounded-lg py-10 md:py-24">
-        <div className="grid gap-10 sm:px-10 md:gap-16 md:grid-cols-2">
+        <div className="grid gap-10 sm:px-10 md:gap-12 lg:gap-16 lg:grid-cols-2">
           <div className="space-y-4">
             <div className="inline-block rounded-lg text-green-500 text-sm">
               About Cubing Kerala
             </div>
-            <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-7xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl xl:text-[3.4rem] 2xl:text-[3.75rem] lg:leading-tight">
               Unraveling the Cube, Connecting the Community
             </h2>
             <p className="mx-auto text-muted-foreground max-w-[700px] text-[15px] md:text-lg">
@@ -89,10 +89,10 @@ export function CubingKeralaUnravel() {
                     <button
                       key={social.id}
                       onClick={() => handleSocialClick(social.url)}
-                      className="inline-flex items-center gap-2 text-[15px] font-medium text-foreground/70 hover:text-foreground border border-border hover:bg-accent px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer"
+                      className="inline-flex items-center gap-2 text-sm sm:text-[15px] font-medium text-foreground/70 hover:text-foreground border border-border hover:bg-accent px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer"
                     >
                       <Icon />
-                      <span className="hidden md:block">
+                      <span className="hidden sm:inline">
                         {social.name}
                       </span>
                     </button>
