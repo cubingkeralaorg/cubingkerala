@@ -26,6 +26,36 @@ Do not commit until lint, typecheck, and `npm run test:ci` pass. Fix failures; d
 2. Prefer **patch/minor** updates; treat **major** bumps (Next.js, Tailwind, ESLint major) as separate migration tasks.
 3. If resolving Dependabot PRs, merge safe updates on `main` and close or rebase stale bot PRs rather than stacking conflicting lockfiles.
 
+## Dependabot auto-merge
+
+Workflow: [`.github/workflows/dependabot-auto-merge.yml`](.github/workflows/dependabot-auto-merge.yml). Config: [`.github/dependabot.yml`](.github/dependabot.yml).
+
+**What auto-merges:** only Dependabot PRs where every reported `update-type` is `version-update:semver-patch` (npm and GitHub Actions). Grouped PRs with any minor/major, or missing metadata, are skipped.
+
+**What never auto-merges:** semver-minor, semver-major, mixed/unknown grouped updates, draft PRs, non-Dependabot PRs. Critical package **majors** are also ignored in `dependabot.yml` so Dependabot should not open them.
+
+**What does not bypass safety:** the workflow does **not** auto-approve. It only runs `gh pr merge --auto --squash`. Merge still requires your branch protection (required checks, and reviews if you require them).
+
+### GitHub settings you must enable
+
+Do these in the repo UI (or org rulesets); they are not in git:
+
+1. **Settings → General → Pull Requests → Allow auto-merge** — on.
+2. **Branch protection / ruleset for `main`:**
+   - Require a pull request before merging.
+   - Require status checks to pass: at least `Main Branch CI/CD` / `test` (lint, `tsc`, unit/integration, e2e).
+   - Do **not** allow admins or bots to bypass required checks.
+   - Prefer squash merge (matches the workflow).
+3. **Reviews:** keep required reviews if you want a human gate on minors/majors. Patch auto-merge will then wait until someone approves (workflow does not approve). To fully hands-off **patches only**, either exempt `dependabot[bot]` from required reviews or leave reviews optional and rely on required CI.
+4. Confirm Dependabot version updates are enabled for the repo.
+
+### Manual Dependabot triage
+
+- **Patch, CI green:** should auto-merge once checks (and any required review) pass.
+- **Minor:** review manually; run full verify; merge one at a time.
+- **Major / ignored majors:** dedicated migration PR; do not stack lockfile PRs.
+- **Red CI or conflicts:** fix or close/rebase; do not force-merge.
+
 ## Security guardrails (required)
 
 | Do | Don't |
