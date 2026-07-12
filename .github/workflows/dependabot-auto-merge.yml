@@ -1,0 +1,60 @@
+# Enable GitHub auto-merge for Dependabot PRs that are patch-only.
+# Actual merge still waits on required status checks / branch protection.
+# See AGENTS.md → "Dependabot auto-merge".
+
+name: Dependabot auto-merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  enable-auto-merge:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.draft == false
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for patch-only updates
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          PACKAGE_ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          DEPENDENCY_NAMES: ${{ steps.metadata.outputs.dependency-names }}
+        run: |
+          set -euo pipefail
+
+          echo "package-ecosystem=${PACKAGE_ECOSYSTEM}"
+          echo "dependency-names=${DEPENDENCY_NAMES}"
+          echo "update-type=${UPDATE_TYPE}"
+
+          # Fail closed: no metadata → do not auto-merge.
+          if [ -z "${UPDATE_TYPE}" ]; then
+            echo "Skipping: missing update-type (mixed/unknown grouped update)."
+            exit 0
+          fi
+
+          # Never auto-merge majors or minors (npm or Actions).
+          # Grouped PRs may report comma-separated update-types; every entry must be patch.
+          IFS=',' read -r -a types <<< "${UPDATE_TYPE}"
+          for raw in "${types[@]}"; do
+            t="$(echo "${raw}" | xargs)"
+            if [ "${t}" != "version-update:semver-patch" ]; then
+              echo "Skipping: non-patch update-type '${t}'."
+              exit 0
+            fi
+          done
+
+          gh pr merge --auto --squash "${PR_URL}"
+          echo "Auto-merge enabled (squash). Merge waits on required checks."

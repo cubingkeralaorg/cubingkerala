@@ -1,4 +1,7 @@
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Auto-merge (patch only) is handled by .github/workflows/dependabot-auto-merge.yml.
+# Minors/majors stay manual. Critical package majors are ignored below.
 
 version: 2
 updates:
@@ -6,6 +9,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
     ignore:
       # Major upgrades need dedicated migrations (see open/closed Dependabot PRs)
       - dependency-name: "next"
@@ -55,3 +61,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
