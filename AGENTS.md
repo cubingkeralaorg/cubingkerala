@@ -76,6 +76,8 @@ On `cubingkeralaorg/cubingkerala` (not in git):
 
 If `SYNC_FORK_REPO` is unset, the job is skipped. If the token is missing, the step exits without failing the pipeline.
 
+A fork that is “N commits behind” is normal until sync succeeds — being behind does **not** cause the job to fail. A `403` / `denied to github-actions[bot]` means the PAT was not used (checkout credentials overrode it, or `SYNC_FORK_TOKEN` lacks Contents write on the fork).
+
 Treat fork `main` as a mirror only — do feature work on branches, not unique commits on fork `main`.
 
 ## Security guardrails (required)
