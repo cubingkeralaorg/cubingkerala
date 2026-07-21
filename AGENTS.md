@@ -56,6 +56,28 @@ Do these in the repo UI (or org rulesets); they are not in git:
 - **Major / ignored majors:** dedicated migration PR; do not stack lockfile PRs.
 - **Red CI or conflicts:** fix or close/rebase; do not force-merge.
 
+## Maintainer fork sync
+
+Workflow: [`.github/workflows/sync-maintainer-fork.yml`](.github/workflows/sync-maintainer-fork.yml).
+
+On every **push to `main`** on `cubingkeralaorg/cubingkerala` (including merged PRs), force-pushes that commit to the configured fork’s `main`. No schedule — merge/push only.
+
+### GitHub settings (upstream repo)
+
+On `cubingkeralaorg/cubingkerala` (not in git):
+
+1. **Settings → Secrets and variables → Actions → Variables**  
+   - `SYNC_FORK_REPO` = `allenjohn07/cubingkeralaorg` (or your fork `owner/name`)
+2. **Settings → Secrets and variables → Actions → Secrets**  
+   - `SYNC_FORK_TOKEN` = fine-grained PAT (or classic) with **Contents: Read and write** on the fork only  
+   - Create at GitHub → Settings → Developer settings → Personal access tokens  
+   - Prefer fine-grained, repository access = fork only, permission **Contents: Read and write**
+3. On the **fork**, do **not** require PR / block force-pushes on `main` for this token (or the sync push will fail). Upstream `main` protection stays as-is.
+
+If `SYNC_FORK_REPO` is unset, the job is skipped. If the token is missing, the step exits without failing the pipeline.
+
+Treat fork `main` as a mirror only — do feature work on branches, not unique commits on fork `main`.
+
 ## Security guardrails (required)
 
 | Do | Don't |
