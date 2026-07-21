@@ -23,6 +23,9 @@ jobs:
         with:
           fetch-depth: 1
           ref: main
+          # Do not persist GITHUB_TOKEN credentials — they override the PAT URL
+          # and cause: "Permission ... denied to github-actions[bot]" on the fork.
+          persist-credentials: false
 
       - name: Force-push main to fork
         env:
@@ -35,6 +38,9 @@ jobs:
             echo "SYNC_FORK_TOKEN secret is empty; skipping fork sync."
             exit 0
           fi
+
+          # Belt-and-suspenders: drop any leftover github.com auth headers.
+          git config --local --unset-all http.https://github.com/.extraheader || true
 
           echo "Syncing HEAD → ${FORK_REPO}:main"
           git push --force \
