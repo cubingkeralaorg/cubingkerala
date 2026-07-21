@@ -1,0 +1,43 @@
+# Mirror upstream main → maintainer fork after every merge/push to main.
+# Skips when SYNC_FORK_REPO / SYNC_FORK_TOKEN are not configured.
+# See AGENTS.md → "Maintainer fork sync".
+
+name: Sync maintainer fork
+
+on:
+  push:
+    branches: [main]
+
+# Cross-repo push uses a PAT; default GITHUB_TOKEN cannot write to another repo.
+permissions:
+  contents: read
+
+jobs:
+  sync-fork:
+    runs-on: ubuntu-latest
+    # Only run when a fork target is configured (repo variable).
+    if: ${{ vars.SYNC_FORK_REPO != '' }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Force-push main to fork
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_FORK_TOKEN }}
+          FORK_REPO: ${{ vars.SYNC_FORK_REPO }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "SYNC_FORK_TOKEN secret is empty; skipping fork sync."
+            exit 0
+          fi
+
+          echo "Syncing HEAD → ${FORK_REPO}:main"
+          git push --force \
+            "https://x-access-token:${GH_TOKEN}@github.com/${FORK_REPO}.git" \
+            "HEAD:refs/heads/main"
+          echo "Fork main updated."
