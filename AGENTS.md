@@ -69,9 +69,12 @@ On `cubingkeralaorg/cubingkerala` (not in git):
 1. **Settings → Secrets and variables → Actions → Variables**  
    - `SYNC_FORK_REPO` = `allenjohn07/cubingkeralaorg` (or your fork `owner/name`)
 2. **Settings → Secrets and variables → Actions → Secrets**  
-   - `SYNC_FORK_TOKEN` = fine-grained PAT (or classic) with **Contents: Read and write** on the fork only  
+   - `SYNC_FORK_TOKEN` = fine-grained PAT (or classic) with access to the fork only  
    - Create at GitHub → Settings → Developer settings → Personal access tokens  
-   - Prefer fine-grained, repository access = fork only, permission **Contents: Read and write**
+   - Prefer fine-grained, repository access = fork only, permissions:  
+     - **Contents:** Read and write  
+     - **Workflows:** Read and write (required — fork sync force-pushes commits that touch `.github/workflows/*`; without this you get `refusing to allow a Personal Access Token to create or update workflow ... without workflow scope`)  
+   - Classic PAT alternative: enable both **`repo`** and **`workflow`** scopes  
 3. On the **fork**, do **not** require PR / block force-pushes on `main` for this token (or the sync push will fail). Upstream `main` protection stays as-is.
 
 If `SYNC_FORK_REPO` is unset, the job is skipped. If the token is missing, the step exits without failing the pipeline.
