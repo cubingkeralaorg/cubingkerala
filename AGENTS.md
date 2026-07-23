@@ -36,6 +36,8 @@ Workflow: [`.github/workflows/dependabot-auto-merge.yml`](.github/workflows/depe
 
 **What does not bypass safety:** the workflow does **not** auto-approve. It only runs `gh pr merge --auto --squash`. Merge still requires your branch protection (required checks, and reviews if you require them).
 
+**Push workflows after auto-merge:** enabling auto-merge with `GITHUB_TOKEN` means the eventual merge is performed as `github-actions[bot]`. GitHub **does not** start other `on: push` workflows for that merge (anti-recursion). So maintainer-fork sync (and post-merge Main Branch CI on `main`) will not run for those commits unless something else triggers them — see the hourly / `workflow_dispatch` catch-up on the sync workflow below. Optional: set an `AUTO_MERGE_TOKEN` (user PAT with repo access on upstream) and point the auto-merge job at it so merges are attributed to a user and `push` workflows fire normally.
+
 ### GitHub settings you must enable
 
 Do these in the repo UI (or org rulesets); they are not in git:
@@ -60,7 +62,7 @@ Do these in the repo UI (or org rulesets); they are not in git:
 
 Workflow: [`.github/workflows/sync-maintainer-fork.yml`](.github/workflows/sync-maintainer-fork.yml).
 
-On every **push to `main`** on `cubingkeralaorg/cubingkerala` (including merged PRs), force-pushes that commit to the configured fork’s `main`. No schedule — merge/push only.
+On every **push to `main`** on `cubingkeralaorg/cubingkerala` (including human-merged PRs), force-pushes that commit to the configured fork’s `main`. Also runs **hourly** and via **workflow_dispatch**, because Dependabot auto-merges (via `GITHUB_TOKEN`) do not trigger `on: push` workflows — without the schedule, the fork stays “N commits behind” after patch auto-merges.
 
 ### GitHub settings (upstream repo)
 
