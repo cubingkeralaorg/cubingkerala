@@ -1,5 +1,6 @@
 # Mirror upstream main → maintainer fork after every merge/push to main.
-# Skips when SYNC_FORK_REPO / SYNC_FORK_TOKEN are not configured.
+# Also runs on a schedule / manual dispatch: Dependabot auto-merge uses
+# GITHUB_TOKEN, and GitHub does not fire push workflows for those merges.
 # See AGENTS.md → "Maintainer fork sync".
 
 name: Sync maintainer fork
@@ -7,6 +8,10 @@ name: Sync maintainer fork
 on:
   push:
     branches: [main]
+  # Catch-up when auto-merged Dependabot PRs skip push-triggered workflows.
+  schedule:
+    - cron: "15 * * * *" # hourly, offset from :00
+  workflow_dispatch:
 
 # Cross-repo push uses a PAT; default GITHUB_TOKEN cannot write to another repo.
 permissions:
