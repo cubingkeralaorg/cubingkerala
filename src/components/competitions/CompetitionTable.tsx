@@ -30,14 +30,21 @@ import {
 
 interface CompetitionTableProps {
   competitions: Competition[];
+  searchQuery?: string;
 }
 
-export function CompetitionTable({ competitions }: CompetitionTableProps) {
+export function CompetitionTable({
+  competitions,
+  searchQuery = "",
+}: CompetitionTableProps) {
   return (
       <Table className="w-full text-sm md:text-[15px]">
         <AnimatedTableBody>
-          {competitions.map((competition) => {
+          {competitions.map((competition, index) => {
             if (competition.id === "upcoming-header" || competition.id === "past-header") {
+              const nextId = competitions[index + 1]?.id;
+              const showColumnHeaders = nextId !== "upcoming-empty";
+
               return (
                 <React.Fragment key={competition.id}>
                   <AnimatedTableRow className="border-b border-t border-border">
@@ -45,16 +52,48 @@ export function CompetitionTable({ competitions }: CompetitionTableProps) {
                       {competition.id === "upcoming-header" ? "Upcoming Competitions" : "Past Competitions"}
                     </TableCell>
                   </AnimatedTableRow>
-                  <AnimatedTableRow className="border-y border-y-border border-border">
-                    <TableHead className="text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap transition-none">Date</TableHead>
-                    <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Name</TableHead>
-                    <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Status</TableHead>
-                    <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Location</TableHead>
-                    <TableHead className="text-muted-foreground whitespace-nowrap transition-none text-right">Events</TableHead>
-                  </AnimatedTableRow>
+                  {showColumnHeaders ? (
+                    <AnimatedTableRow className="border-y border-y-border border-border">
+                      <TableHead className="text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap transition-none">Date</TableHead>
+                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Name</TableHead>
+                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Status</TableHead>
+                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Location</TableHead>
+                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none text-right">Events</TableHead>
+                    </AnimatedTableRow>
+                  ) : null}
                 </React.Fragment>
               );
             }
+
+            if (competition.id === "upcoming-empty") {
+              const isSearch = searchQuery.trim().length > 0;
+              return (
+                <AnimatedTableRow
+                  key="upcoming-empty"
+                  className="border-border"
+                >
+                  <TableCell
+                    colSpan={5}
+                    className="py-6 text-sm text-muted-foreground"
+                  >
+                    {isSearch ? (
+                      <p>No upcoming competitions match your search.</p>
+                    ) : (
+                      <div className="space-y-1">
+                        <p className="font-medium text-foreground">
+                          No upcoming competitions right now
+                        </p>
+                        <p>
+                          Stay tuned — new Kerala competitions will show up here
+                          when they&apos;re announced.
+                        </p>
+                      </div>
+                    )}
+                  </TableCell>
+                </AnimatedTableRow>
+              );
+            }
+
             const status = getDetailedCompetitionStatus(
               competition.start_date,
               competition.end_date,
