@@ -8,13 +8,48 @@ import {
 } from "@/components/home";
 import { HomePageSections } from "@/components/home/home-page-sections";
 import { WhatsAppContactButton } from "@/components/home/whatsapp-contact-button";
+import { getCachedCompetitions } from "@/lib/cached-queries";
+import type { Competition } from "@/types/competition.types";
 
-export default function Home() {
+export const revalidate = 300;
+
+type FeaturedCompetition = {
+  competition: Competition;
+  kind: "upcoming" | "past";
+};
+
+async function getFeaturedCompetition(): Promise<FeaturedCompetition | null> {
+  try {
+    const { upcomingCompetitions, pastCompetitions } =
+      await getCachedCompetitions();
+
+    const next = upcomingCompetitions.find((comp) => !comp.cancelled_at);
+    if (next) {
+      return { competition: next, kind: "upcoming" };
+    }
+
+    const latestPast = pastCompetitions.find((comp) => !comp.cancelled_at);
+    if (latestPast) {
+      return { competition: latestPast, kind: "past" };
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function Home() {
+  const featured = await getFeaturedCompetition();
+
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <main className="flex-1 relative">
         <section className="w-full">
-          <HeroSection />
+          <HeroSection
+            competition={featured?.competition ?? null}
+            kind={featured?.kind ?? null}
+          />
         </section>
 
         <HomePageSections>

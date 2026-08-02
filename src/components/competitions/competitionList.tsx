@@ -20,11 +20,12 @@ export function CompetitionsList({
   searchQuery,
   onSearchChange,
 }: CompetitionsListProps) {
-  // Combine all competitions with headers
+  // Always show the upcoming block so an empty state is visible when none are scheduled.
   const allCompetitions = [
+    { id: "upcoming-header" } as Competition,
     ...(upcomingCompetitions.length > 0
-      ? [{ id: "upcoming-header" } as Competition, ...upcomingCompetitions]
-      : []),
+      ? upcomingCompetitions
+      : [{ id: "upcoming-empty" } as Competition]),
     ...(pastCompetitions.length > 0
       ? [{ id: "past-header" } as Competition, ...pastCompetitions]
       : []),
@@ -42,7 +43,10 @@ export function CompetitionsList({
         {isLoading ? (
           <CompetitionSkeleton />
         ) : (
-          <CompetitionTable competitions={allCompetitions} />
+          <CompetitionTable
+            competitions={allCompetitions}
+            searchQuery={searchQuery}
+          />
         )}
       </RevealTableSection>
     </StaggerReveal>
