@@ -42,7 +42,7 @@ export default function CubingKeralaGetStarted({
     if (isMobileDevice()) {
       window.location.assign(WHATSAPP_GROUP_URL);
     } else {
-      window.open(WHATSAPP_GROUP_URL, "_blank");
+      window.open(WHATSAPP_GROUP_URL, "_blank", "noopener,noreferrer");
     }
   };
 
