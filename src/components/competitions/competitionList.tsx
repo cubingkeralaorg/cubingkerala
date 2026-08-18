@@ -2,8 +2,6 @@ import { Competition } from "@/types/competition.types";
 import { CompetitionTable } from "./CompetitionTable";
 import { CompetitionSkeleton } from "./CompetitionSkeleton";
 import SearchComponent from "@/components/shared/search";
-import { FadeUp, StaggerReveal } from "../ui/fade-up";
-import { RevealTableSection } from "../ui/reveal-table";
 
 interface CompetitionsListProps {
   upcomingCompetitions: Competition[];
@@ -20,35 +18,24 @@ export function CompetitionsList({
   searchQuery,
   onSearchChange,
 }: CompetitionsListProps) {
-  // Always show the upcoming block so an empty state is visible when none are scheduled.
-  const allCompetitions = [
-    { id: "upcoming-header" } as Competition,
-    ...(upcomingCompetitions.length > 0
-      ? upcomingCompetitions
-      : [{ id: "upcoming-empty" } as Competition]),
-    ...(pastCompetitions.length > 0
-      ? [{ id: "past-header" } as Competition, ...pastCompetitions]
-      : []),
-  ];
-
   return (
-    <StaggerReveal className="mt-0 rounded-md border border-border overflow-hidden">
-      <FadeUp>
+    <div className="overflow-hidden rounded-md border border-border">
+      <div className="border-b border-border px-3 py-2">
         <SearchComponent
           handleSearch={onSearchChange}
-          placeholder="Search Competitions"
+          placeholder="Search competitions"
+          className="rounded-md border border-input bg-background shadow-none"
         />
-      </FadeUp>
-      <RevealTableSection>
-        {isLoading ? (
-          <CompetitionSkeleton />
-        ) : (
-          <CompetitionTable
-            competitions={allCompetitions}
-            searchQuery={searchQuery}
-          />
-        )}
-      </RevealTableSection>
-    </StaggerReveal>
+      </div>
+      {isLoading ? (
+        <CompetitionSkeleton />
+      ) : (
+        <CompetitionTable
+          upcoming={upcomingCompetitions}
+          past={pastCompetitions}
+          searchQuery={searchQuery}
+        />
+      )}
+    </div>
   );
 }

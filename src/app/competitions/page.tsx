@@ -2,8 +2,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import { CompetitionSkeleton } from "@/components/competitions";
 import { CompetitionsData } from "@/components/competitions/competitions-data";
-import BlurIn from "@/components/ui/blur-in";
-import { FadeUp, PageReveal } from "@/components/ui/fade-up";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 export const revalidate = 300;
 
@@ -15,19 +14,16 @@ export const metadata: Metadata = {
 
 function CompetitionsFallback() {
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 sm:px-6 lg:px-8 text-foreground flex flex-col min-h-screen">
-      <PageReveal className="w-full">
-        <BlurIn
-          word="Competitions"
-          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
-        />
-        <FadeUp className="text-xs text-muted-foreground text-start ml-1 h-4 mb-4">
-          Loading competitions...
-        </FadeUp>
-        <FadeUp>
-          <CompetitionSkeleton />
-        </FadeUp>
-      </PageReveal>
+    <div className={`ck-landing min-h-screen py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="mb-6 flex flex-col gap-2">
+        <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+          Competitions
+        </h1>
+        <p className="text-sm text-muted-foreground">Loading competitions...</p>
+      </div>
+      <div className="overflow-hidden rounded-md border border-border">
+        <CompetitionSkeleton />
+      </div>
     </div>
   );
 }

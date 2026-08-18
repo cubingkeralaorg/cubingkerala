@@ -1,13 +1,16 @@
 'use client'
 
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 export default function SearchComponent({
   handleSearch,
   placeholder = "Search...",
+  className,
 }: {
   handleSearch: (searchTerm: string) => void;
   placeholder?: string;
+  className?: string;
 }) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleSearch(e.target.value);
@@ -21,7 +24,10 @@ export default function SearchComponent({
           type="search"
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="w-full pl-10 pr-4 py-2 rounded-none border-none text-foreground placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:cursor-pointer"
+          className={cn(
+            "w-full pl-10 pr-4 py-2 rounded-none border-none text-foreground placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:cursor-pointer",
+            className,
+          )}
         />
       </div>
     </div>

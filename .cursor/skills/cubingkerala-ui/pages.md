@@ -14,3 +14,9 @@ browse-competitions fallback. Fetch via `getCachedCompetitions` (`revalidate =
 300`). Helper: `src/utils/featuredCompetition.ts`.
 
 Navbar wordmark: Cubing Kerala. Favicon: `src/app/icon.svg` (CK).
+
+## Competitions `/competitions`
+
+**Files:** `src/app/competitions/page.tsx`, `src/components/competitions/*`
+
+Landing-aligned page: static H1, refresh, search, grid table. No motion.

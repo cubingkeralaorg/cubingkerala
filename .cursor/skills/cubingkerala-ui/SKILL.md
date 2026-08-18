@@ -32,6 +32,12 @@ Do not bring back GradientText, DotPattern, ShinyButton, RainbowButton, a
 floating pill navbar, centered landing copy, `lg:text-7xl` headlines, the
 competitions dashboard table, or a Lottie on `/`.
 
+## Competitions `/competitions`
+
+Landing chrome (`.ck-landing`). No FadeUp / BlurIn / table reveal. Page title
+matches the home H1 scale. Data table is a rounded bordered grid (Date, Name,
+Status, Location, Events) with a search bar above it — no insert action.
+
 ## Other routes
 
 Keep bordered promo cards, green eyebrows, and `AnimatedContactLink` unless
