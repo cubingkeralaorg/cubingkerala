@@ -5,7 +5,7 @@ import { CompetitionsList } from "./competitionList";
 import { CompetitionsHeader } from "./CompetitionsHeader";
 import { useCompetitions } from "@/hooks/useCompetitions";
 import { Competition } from "@/types/competition.types";
-import { FadeUp, PageReveal } from "../ui/fade-up";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 interface CompetitionsPageProps {
   initialUpcoming?: Competition[];
@@ -13,7 +13,11 @@ interface CompetitionsPageProps {
   initialLastUpdated?: string;
 }
 
-const CompetitionsPage = ({ initialUpcoming = [], initialPast = [], initialLastUpdated = "" }: CompetitionsPageProps) => {
+const CompetitionsPage = ({
+  initialUpcoming = [],
+  initialPast = [],
+  initialLastUpdated = "",
+}: CompetitionsPageProps) => {
   const {
     upcomingCompetitions,
     pastCompetitions,
@@ -46,27 +50,20 @@ const CompetitionsPage = ({ initialUpcoming = [], initialPast = [], initialLastU
   }, [pastCompetitions, searchQuery]);
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 sm:px-6 lg:px-8 text-foreground flex flex-col min-h-screen">
-      <PageReveal className="w-full">
-        <FadeUp>
-          <CompetitionsHeader
-            lastUpdated={lastUpdated}
-            isRefreshing={isRefreshing}
-            onRefresh={handleForceRefresh}
-            isLoading={loading}
-          />
-        </FadeUp>
-
-        <FadeUp>
-          <CompetitionsList
-            upcomingCompetitions={filteredUpcoming}
-            pastCompetitions={filteredPast}
-            isLoading={loading}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-          />
-        </FadeUp>
-      </PageReveal>
+    <div className={`ck-landing min-h-screen py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <CompetitionsHeader
+        lastUpdated={lastUpdated}
+        isRefreshing={isRefreshing}
+        onRefresh={handleForceRefresh}
+        isLoading={loading}
+      />
+      <CompetitionsList
+        upcomingCompetitions={filteredUpcoming}
+        pastCompetitions={filteredPast}
+        isLoading={loading}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
     </div>
   );
 };

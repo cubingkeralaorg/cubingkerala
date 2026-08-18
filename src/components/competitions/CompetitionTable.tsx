@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Table,
   TableHeader,
   TableRow,
   TableHead,
+  TableBody,
   TableCell,
 } from "@/components/ui/table";
 import {
@@ -23,149 +23,179 @@ import {
 import { getEventName } from "@/utils/eventNames";
 import "@cubing/icons";
 import { Competition } from "@/types";
-import {
-  AnimatedTableBody,
-  AnimatedTableRow,
-} from "@/components/ui/reveal-table";
+import { cn } from "@/lib/utils";
 
 interface CompetitionTableProps {
-  competitions: Competition[];
+  upcoming: Competition[];
+  past: Competition[];
   searchQuery?: string;
 }
 
+const cellClass =
+  "border border-border px-4 py-2.5 align-middle";
+
+function SectionRow({ label }: { label: string }) {
+  return (
+    <TableRow className="hover:bg-transparent">
+      <TableCell
+        colSpan={5}
+        className={cn(cellClass, "py-2.5 text-sm font-medium text-foreground")}
+      >
+        {label}
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function CompetitionRow({ competition }: { competition: Competition }) {
+  const status = getDetailedCompetitionStatus(
+    competition.start_date,
+    competition.end_date,
+    competition.has_results,
+    competition.cancelled_at || null,
+  );
+
+  return (
+    <TableRow className="hover:bg-transparent">
+      <TableCell className={cn(cellClass, "whitespace-nowrap tabular-nums text-muted-foreground")}>
+        {formatCompetitionDateRange(competition.start_date, competition.end_date)}
+      </TableCell>
+      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+        <Link
+          href={`/competitions/${competition.id}`}
+          className="font-medium text-foreground hover:text-primary"
+        >
+          {competition.name}
+        </Link>
+      </TableCell>
+      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+        {status === "Upcoming" && (
+          <a
+            href={`https://www.worldcubeassociation.org/competitions/${competition.id}/register`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Badge
+              variant="outline"
+              className="border-none bg-primary/10 px-2 py-0 text-[11px] font-medium tracking-wide text-primary hover:bg-primary/15"
+            >
+              Register
+            </Badge>
+          </a>
+        )}
+        {status === "Ongoing" && (
+          <Badge
+            variant="outline"
+            className="border-none bg-secondary px-2 py-0 text-[11px] font-medium tracking-wide text-secondary-foreground"
+          >
+            Ongoing
+          </Badge>
+        )}
+        {status === "Completed" && (
+          <Badge
+            variant="outline"
+            className="border-none bg-muted px-2 py-0 text-[11px] font-medium tracking-wide text-muted-foreground"
+          >
+            Completed
+          </Badge>
+        )}
+        {status === "Cancelled" && (
+          <Badge
+            variant="outline"
+            className="border-none bg-muted px-2 py-0 text-[11px] font-medium tracking-wide text-muted-foreground"
+          >
+            Cancelled
+          </Badge>
+        )}
+      </TableCell>
+      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+        {competition.city}
+      </TableCell>
+      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+        <div className="flex items-center justify-end gap-1.5">
+          <TooltipProvider>
+            {competition.event_ids.map((event: string) => (
+              <Tooltip key={`${competition.id}-${event}`}>
+                <TooltipTrigger asChild>
+                  <span className={`cubing-icon event-${event} text-base`} />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{getEventName(event)}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export function CompetitionTable({
-  competitions,
+  upcoming,
+  past,
   searchQuery = "",
 }: CompetitionTableProps) {
+  const isSearch = searchQuery.trim().length > 0;
+
   return (
-      <Table className="w-full text-sm md:text-[15px]">
-        <AnimatedTableBody>
-          {competitions.map((competition, index) => {
-            if (competition.id === "upcoming-header" || competition.id === "past-header") {
-              const nextId = competitions[index + 1]?.id;
-              const showColumnHeaders = nextId !== "upcoming-empty";
-
-              return (
-                <React.Fragment key={competition.id}>
-                  <AnimatedTableRow className="border-b border-t border-border">
-                    <TableCell colSpan={5} className={`text-sm py-3 font-semibold ${competition.id === "upcoming-header" ? "text-green-500" : "text-red-500"}`}>
-                      {competition.id === "upcoming-header" ? "Upcoming Competitions" : "Past Competitions"}
-                    </TableCell>
-                  </AnimatedTableRow>
-                  {showColumnHeaders ? (
-                    <AnimatedTableRow className="border-y border-y-border border-border">
-                      <TableHead className="text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap transition-none">Date</TableHead>
-                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Name</TableHead>
-                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Status</TableHead>
-                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none">Location</TableHead>
-                      <TableHead className="text-muted-foreground whitespace-nowrap transition-none text-right">Events</TableHead>
-                    </AnimatedTableRow>
-                  ) : null}
-                </React.Fragment>
-              );
-            }
-
-            if (competition.id === "upcoming-empty") {
-              const isSearch = searchQuery.trim().length > 0;
-              return (
-                <AnimatedTableRow
-                  key="upcoming-empty"
-                  className="border-border"
-                >
-                  <TableCell
-                    colSpan={5}
-                    className="py-6 text-sm text-muted-foreground"
-                  >
-                    {isSearch ? (
-                      <p>No upcoming competitions match your search.</p>
-                    ) : (
-                      <div className="space-y-1">
-                        <p className="font-medium text-foreground">
-                          No upcoming competitions right now
-                        </p>
-                        <p>
-                          Stay tuned — new Kerala competitions will show up here
-                          when they&apos;re announced.
-                        </p>
-                      </div>
-                    )}
-                  </TableCell>
-                </AnimatedTableRow>
-              );
-            }
-
-            const status = getDetailedCompetitionStatus(
-              competition.start_date,
-              competition.end_date,
-              competition.has_results,
-              competition.cancelled_at || null
-            );
-
-            return (
-              <AnimatedTableRow
-                key={competition.id}
-                className="border-border"
-              >
-                <TableCell className="whitespace-nowrap transition-none">
-                  {formatCompetitionDateRange(competition.start_date, competition.end_date)}
-                </TableCell>
-                <TableCell className="whitespace-nowrap transition-none">
-                  <Link
-                    href={`/competitions/${competition.id}`}
-                    className="hover:text-blue-500 transition-colors font-medium text-foreground"
-                  >
-                    {competition.name}
-                  </Link>
-                </TableCell>
-                <TableCell className="whitespace-nowrap transition-none">
-                  {status === "Upcoming" && (
-                    <a href={`https://www.worldcubeassociation.org/competitions/${competition.id}/register`} target="_blank" rel="noopener noreferrer">
-                      <Badge variant="outline" className="text-green-500 bg-green-500/5 hover:bg-green-500/15 transition-colors py-0 px-2 border-none text-[11px] font-medium tracking-wide">
-                        Register
-                      </Badge>
-                    </a>
-                  )}
-                  {status === "Ongoing" && (
-                    <Badge variant="outline" className="text-blue-500 bg-blue-500/5 py-0 px-2 border-none text-[11px] font-medium tracking-wide">
-                      Ongoing
-                    </Badge>
-                  )}
-                  {status === "Completed" && (
-                    <Badge variant="outline" className="text-red-500 bg-red-500/5 py-0 px-2 border-none text-[11px] font-medium tracking-wide">
-                      Completed
-                    </Badge>
-                  )}
-                  {status === "Cancelled" && (
-                    <Badge variant="outline" className="text-gray-500 bg-gray-500/5 py-0 px-2 border-none text-[11px] font-medium tracking-wide">
-                      Cancelled
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell className="whitespace-nowrap transition-none">
-                  {competition.city}
-                </TableCell>
-                <TableCell className="whitespace-nowrap transition-none">
-                  <div className="flex items-center justify-end gap-1.5">
-                    <TooltipProvider>
-                      {competition.event_ids.map((event: string) => (
-                        <Tooltip key={`${competition.id}-${event}`}>
-                          <TooltipTrigger asChild>
-                            <span
-                              className={`cubing-icon event-${event} text-base`}
-                            ></span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{getEventName(event)}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </TooltipProvider>
-                  </div>
-                </TableCell>
-              </AnimatedTableRow>
-            );
-          })}
-        </AnimatedTableBody>
-      </Table>
+    <Table className="w-full border-collapse text-sm [&_tr]:border-0">
+      <TableHeader>
+        <TableRow className="hover:bg-transparent">
+          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap")}>
+            Date
+          </TableHead>
+          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+            Name
+          </TableHead>
+          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+            Status
+          </TableHead>
+          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+            Location
+          </TableHead>
+          <TableHead className={cn(cellClass, "h-10 text-right font-medium text-muted-foreground whitespace-nowrap")}>
+            Events
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <SectionRow label="Upcoming Competitions" />
+        {upcoming.length > 0 ? (
+          upcoming.map((competition) => (
+            <CompetitionRow key={competition.id} competition={competition} />
+          ))
+        ) : (
+          <TableRow className="hover:bg-transparent">
+            <TableCell
+              colSpan={5}
+              className={cn(cellClass, "py-6 text-sm text-muted-foreground")}
+            >
+              {isSearch ? (
+                <p>No upcoming competitions match your search.</p>
+              ) : (
+                <div className="space-y-1">
+                  <p className="font-medium text-foreground">
+                    No upcoming competitions right now
+                  </p>
+                  <p>
+                    Stay tuned — new Kerala competitions will show up here when
+                    they&apos;re announced.
+                  </p>
+                </div>
+              )}
+            </TableCell>
+          </TableRow>
+        )}
+        {past.length > 0 ? (
+          <>
+            <SectionRow label="Past Competitions" />
+            {past.map((competition) => (
+              <CompetitionRow key={competition.id} competition={competition} />
+            ))}
+          </>
+        ) : null}
+      </TableBody>
+    </Table>
   );
 }
