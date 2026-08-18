@@ -1,8 +1,9 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getDetailedCompetitionStatus } from "@/utils/dateUtils";
 import { openCompetitionRegistration } from "@/utils/competitionNavigation";
-import { CiLink } from "react-icons/ci";
 
 interface RegistrationStatusProps {
   competitionId: string;
@@ -19,42 +20,46 @@ export function RegistrationStatus({
   cancelledAt,
   hasResults = false,
 }: RegistrationStatusProps) {
-  const status = getDetailedCompetitionStatus(startDate, endDate, hasResults, cancelledAt);
-  
+  const status = getDetailedCompetitionStatus(
+    startDate,
+    endDate,
+    hasResults,
+    cancelledAt,
+  );
+
   if (status === "Cancelled") {
     return (
-      <div className="text-red-500 font-medium">
+      <p className="text-sm font-medium text-muted-foreground md:text-base">
         Competition was cancelled.
-      </div>
+      </p>
     );
   }
 
   if (status === "Upcoming") {
     return (
-      <div className="flex gap-1 text-green-500 hover:text-green-600 w-fit">
-        <p
-          onClick={() => openCompetitionRegistration(competitionId)}
-          className="cursor-pointer"
-        >
-          Register for this competition here
-        </p>
-        <CiLink />
-      </div>
+      <Button
+        variant="link"
+        className="h-auto w-fit px-0"
+        onClick={() => openCompetitionRegistration(competitionId)}
+      >
+        Register for this competition
+        <ArrowUpRight data-icon="inline-end" />
+      </Button>
     );
   }
 
   if (status === "Ongoing") {
     return (
-      <div className="text-green-600 font-medium">
+      <p className="text-sm font-medium text-muted-foreground md:text-base">
         Competition is ongoing.
-      </div>
+      </p>
     );
   }
 
-
   return (
-    <div className="text-red-500 font-medium">
-      Competition is over. {hasResults ? "Results are available." : ""}
-    </div>
+    <p className="text-sm font-medium text-muted-foreground md:text-base">
+      Competition is over.
+      {hasResults ? " Results are available." : ""}
+    </p>
   );
 }

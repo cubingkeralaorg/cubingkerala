@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 
 import {
   Table,
@@ -15,169 +14,135 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 import { formatEventResult } from "@/utils/wcaFormatters";
-import "@cubing/icons";
+import { getEventName } from "@/utils/eventNames";
+import { cn } from "@/lib/utils";
 import {
-  AnimatedTableBody,
-  AnimatedTableRow,
-} from "@/components/ui/reveal-table";
+  DATA_GRID_CELL,
+  DATA_GRID_HEAD,
+  DATA_GRID_ROW,
+  DATA_GRID_TABLE,
+  DATA_GRID_WRAP,
+} from "@/components/ui/data-grid";
+import "@cubing/icons";
 
 interface PersonalRecord {
   event: string;
-  ranking: any;
+  ranking: {
+    single?: {
+      country_rank?: number;
+      continent_rank?: number;
+      world_rank?: number;
+      best?: number;
+    };
+    average?: {
+      country_rank?: number;
+      continent_rank?: number;
+      world_rank?: number;
+      best?: number;
+    };
+  };
 }
 
 interface PersonalRecordsTableProps {
   personalRecords: PersonalRecord[];
-  wcaid: string;
-  competitionCount: number;
-  country?: string;
-  countryIso2?: string;
-  medals: {
-    gold: number;
-    silver: number;
-    bronze: number;
-  };
 }
-
-const getFlagEmoji = (countryCode: string) => {
-  if (!countryCode) return "";
-  const codePoints = countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-};
 
 export function PersonalRecordsTable({
   personalRecords,
-  wcaid,
-  competitionCount,
-  country,
-  countryIso2,
-  medals,
 }: PersonalRecordsTableProps) {
   return (
-    <div className="w-full max-w-screen-md mx-auto mt-5 flex flex-col gap-3">
-      {/* Stats Badges */}
-      <div className="flex flex-wrap items-center justify-center gap-2 w-full">
-        <div className="inline-flex items-center gap-1.5 py-1 px-3 border rounded-md border-border bg-card text-foreground text-sm shadow-sm">
-          <span className="text-muted-foreground">WCA ID:</span>
-          <Link
-            className="hover:text-blue-500 transition-colors font-semibold"
-            href={`https://www.worldcubeassociation.org/persons/${wcaid}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {wcaid}
-          </Link>
-        </div>
-        {(countryIso2 || country) && (
-          <div className="inline-flex items-center gap-1.5 py-1 px-3 border rounded-md border-border bg-card text-foreground text-sm shadow-sm" title={country}>
-            <span className="text-muted-foreground">Country:</span>
-            <span className="font-semibold flex items-center gap-1.5">
-              {country}
-              {countryIso2 && (
-                <span className="text-base leading-none">
-                  {getFlagEmoji(countryIso2)}
-                </span>
-              )}
-            </span>
-          </div>
-        )}
-        <div className="inline-flex items-center gap-1.5 py-1 px-3 border rounded-md border-border bg-card text-foreground text-sm shadow-sm">
-          <span className="text-muted-foreground">Competitions:</span>
-          <span className="font-semibold">{competitionCount}</span>
-        </div>
-        <div className="inline-flex items-center gap-1.5 py-1 px-3 border rounded-md border-border bg-card text-foreground text-sm shadow-sm">
-          <span className="text-muted-foreground">Medals:</span>
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-500"/><span className="font-semibold">{medals.gold}</span></div>
-            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-slate-400"/><span className="font-semibold">{medals.silver}</span></div>
-            <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-800"/><span className="font-semibold">{medals.bronze}</span></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Table Box */}
-      <div className="w-full border rounded-md border-border bg-card shadow-sm">
-        <Table className="text-sm md:text-[15px] rounded-md">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-border">
-            <TableHead className="text-muted-foreground">Event</TableHead>
-            <TableHead className="text-muted-foreground">NR</TableHead>
-            <TableHead className="text-muted-foreground">CR</TableHead>
-            <TableHead className="text-muted-foreground">WR</TableHead>
-            <TableHead className="text-muted-foreground">Best</TableHead>
-            <TableHead className="text-muted-foreground">Average</TableHead>
-            <TableHead className="text-muted-foreground">WR</TableHead>
-            <TableHead className="text-muted-foreground">CR</TableHead>
-            <TableHead className="text-muted-foreground">NR</TableHead>
-          </TableRow>
-        </TableHeader>
-        <AnimatedTableBody>
-          {personalRecords.map((record, index) => (
-            <AnimatedTableRow
-              className="hover:bg-transparent border-border"
-              key={index}
-            >
-              <TableCell>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger className="cursor-default">
-                      <span
-                        className={`cubing-icon event-${record.event}`}
-                      ></span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{record.event}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </TableCell>
-
-              {/* Single Rankings */}
-              <TableCell>
-                {record.ranking?.single?.country_rank ?? null}
-              </TableCell>
-              <TableCell>
-                {record.ranking?.single?.continent_rank ?? null}
-              </TableCell>
-              <TableCell>
-                {record.ranking?.single?.world_rank ?? null}
-              </TableCell>
-
-              {/* Single Best Time */}
-              <TableCell className="font-semibold text-nowrap">
-                {formatEventResult(record.ranking?.single?.best, record.event)}
-              </TableCell>
-
-              {/* Average Best Time */}
-              <TableCell className="font-semibold text-nowrap">
-                {record.event !== "333mbf"
-                  ? formatEventResult(
-                      record.ranking?.average?.best,
-                      record.event,
-                      "average"
-                    )
-                  : null}
-              </TableCell>
-
-              {/* Average Rankings */}
-              <TableCell>
-                {record.ranking?.average?.world_rank ?? null}
-              </TableCell>
-              <TableCell>
-                {record.ranking?.average?.continent_rank ?? null}
-              </TableCell>
-              <TableCell>
-                {record.ranking?.average?.country_rank ?? null}
-              </TableCell>
-            </AnimatedTableRow>
-          ))}
-        </AnimatedTableBody>
-      </Table>
+    <div className="flex w-full flex-col gap-3">
+      <h2 className="text-lg font-semibold tracking-tight">Personal records</h2>
+      <div className={DATA_GRID_WRAP}>
+        <Table className={DATA_GRID_TABLE}>
+          <TableHeader className="[&_tr]:border-0">
+            <TableRow className={DATA_GRID_ROW}>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                Event
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                NR
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                CR
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                WR
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                Best
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                Average
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                WR
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                CR
+              </TableHead>
+              <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                NR
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {personalRecords.map((record) => (
+              <TableRow key={record.event} className={DATA_GRID_ROW}>
+                <TableCell className={DATA_GRID_CELL}>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="cursor-default">
+                        <span className={`cubing-icon event-${record.event}`} />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{getEventName(record.event)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.single?.country_rank ?? null}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.single?.continent_rank ?? null}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.single?.world_rank ?? null}
+                </TableCell>
+                <TableCell
+                  className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums")}
+                >
+                  {formatEventResult(
+                    record.ranking?.single?.best,
+                    record.event,
+                  )}
+                </TableCell>
+                <TableCell
+                  className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums")}
+                >
+                  {record.event !== "333mbf"
+                    ? formatEventResult(
+                        record.ranking?.average?.best,
+                        record.event,
+                        "average",
+                      )
+                    : null}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.average?.world_rank ?? null}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.average?.continent_rank ?? null}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {record.ranking?.average?.country_rank ?? null}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

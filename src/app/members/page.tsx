@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { MembersData } from "@/components/members/members-data";
 import { MembersSkeleton } from "@/components/members/membersSkeleton";
 import { MembersPageShell } from "@/components/members/members-page-shell";
+import { DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
 export const revalidate = 300;
 
@@ -14,7 +15,13 @@ export const metadata: Metadata = {
 export default function Members() {
   return (
     <MembersPageShell>
-      <Suspense fallback={<MembersSkeleton />}>
+      <Suspense
+        fallback={
+          <div className={DATA_GRID_WRAP}>
+            <MembersSkeleton />
+          </div>
+        }
+      >
         <MembersData />
       </Suspense>
     </MembersPageShell>

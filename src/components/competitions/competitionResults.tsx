@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import "@cubing/icons";
 import { CompetitionResultEntry } from "@/types/api";
 import { formatEventResult } from "@/utils/wcaFormatters";
@@ -13,32 +12,43 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import {
+  DATA_GRID_CELL,
+  DATA_GRID_HEAD,
+  DATA_GRID_ROW,
+  DATA_GRID_TABLE,
+  DATA_GRID_WRAP,
+} from "@/components/ui/data-grid";
 
 interface CompetitionResultsProps {
   results: CompetitionResultEntry[];
 }
 
-function formatTime(value: number, eventId: string, type: "single" | "average" = "single"): string {
+function formatTime(
+  value: number,
+  eventId: string,
+  type: "single" | "average" = "single",
+): string {
   if (value <= 0) return "DNF";
   return formatEventResult(value, eventId, type) || "";
 }
 
-// WCA round type priority — higher number = later round
 const ROUND_TYPE_ORDER: Record<string, number> = {
-  "0": 0, // Qualification round
-  "h": 1, // Combined qualification
-  "1": 2, // First round
-  "d": 3, // Combined First round
-  "2": 4, // Second round
-  "e": 5, // Combined Second round
-  "3": 6, // Semi Final
-  "g": 7, // Combined Semi Final
-  "c": 8, // Combined Final
-  "f": 9, // Final
+  "0": 0,
+  h: 1,
+  "1": 2,
+  d: 3,
+  "2": 4,
+  e: 5,
+  "3": 6,
+  g: 7,
+  c: 8,
+  f: 9,
 };
 
 function getLastRoundResults(
-  results: CompetitionResultEntry[]
+  results: CompetitionResultEntry[],
 ): Record<string, CompetitionResultEntry[]> {
   const byEvent: Record<string, CompetitionResultEntry[]> = {};
   for (const result of results) {
@@ -78,42 +88,64 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
   if (eventIds.length === 0) return null;
 
   return (
-    <div className="w-full mt-10">
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-green-500 mb-8">
+    <div className="flex w-full flex-col gap-6">
+      <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
         Results
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {eventIds.map((eventId) => (
-          <div key={eventId}>
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span className={`cubing-icon event-${eventId}`}></span>
-              <h3 className="text-lg font-bold">{getEventName(eventId)}</h3>
+          <div key={eventId} className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <span className={`cubing-icon event-${eventId}`} />
+              <h3 className="text-lg font-semibold tracking-tight">
+                {getEventName(eventId)}
+              </h3>
             </div>
-
-            <div className="rounded-md border border-border">
-              <Table className="w-full rounded-md text-sm md:text-[15px]">
-                <TableHeader>
-                  <TableRow className="border-border hover:bg-transparent">
-                    <TableHead className="text-muted-foreground">#</TableHead>
-                    <TableHead className="text-muted-foreground w-full">Name</TableHead>
-                    <TableHead className="text-muted-foreground">Best</TableHead>
-                    <TableHead className="text-muted-foreground">Average</TableHead>
+            <div className={DATA_GRID_WRAP}>
+              <Table className={DATA_GRID_TABLE}>
+                <TableHeader className="[&_tr]:border-0">
+                  <TableRow className={DATA_GRID_ROW}>
+                    <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                      #
+                    </TableHead>
+                    <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                      Name
+                    </TableHead>
+                    <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                      Best
+                    </TableHead>
+                    <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+                      Average
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {grouped[eventId].map((result) => (
-                    <TableRow
-                      key={result.id}
-                      className="border-border hover:bg-transparent"
-                    >
-                      <TableCell>{result.pos}</TableCell>
-                      <TableCell className="font-medium text-nowrap">
+                    <TableRow key={result.id} className={DATA_GRID_ROW}>
+                      <TableCell
+                        className={cn(
+                          DATA_GRID_CELL,
+                          "tabular-nums text-muted-foreground",
+                        )}
+                      >
+                        {result.pos}
+                      </TableCell>
+                      <TableCell
+                        className={cn(
+                          DATA_GRID_CELL,
+                          "whitespace-nowrap font-medium",
+                        )}
+                      >
                         {result.name}
                       </TableCell>
-                      <TableCell className="font-semibold text-nowrap">
+                      <TableCell
+                        className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums")}
+                      >
                         {formatTime(result.best, eventId, "single")}
                       </TableCell>
-                      <TableCell className="font-semibold text-nowrap">
+                      <TableCell
+                        className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums")}
+                      >
                         {formatTime(result.average, eventId, "average")}
                       </TableCell>
                     </TableRow>
@@ -127,5 +159,3 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
     </div>
   );
 }
-
-

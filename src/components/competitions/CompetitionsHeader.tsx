@@ -21,7 +21,7 @@ export function CompetitionsHeader({
         <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
           Competitions
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
           {isLoading
             ? "Fetching competitions..."
             : lastUpdated

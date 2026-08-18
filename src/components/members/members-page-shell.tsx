@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
-import BlurIn from "../ui/blur-in";
 import { Loader } from "lucide-react";
 import { UserInfo } from "@/types/api";
 import { getUserInfoFromCookie } from "@/utils/cookieUtils";
 import { joinCubingKerala } from "@/services/member.api";
-import { FadeUp, PageReveal } from "../ui/fade-up";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { Button } from "@/components/ui/button";
 
 export function MembersPageShell({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isJoinCkLoading, setIsJoinCkLoading] = useState(false);
@@ -50,39 +50,31 @@ export function MembersPageShell({
   };
 
   return (
-    <div className="container mx-auto py-6 md:py-8 px-4 md:px-5 text-foreground flex flex-col">
-      <PageReveal>
-        <div className="flex justify-between items-center gap-6 mb-4">
-          <BlurIn
-            word="Members"
-            className="text-4xl text-start font-bold tracking-tighter md:text-6xl"
-          />
-          <FadeUp className="w-2/3 md:w-1/4 flex justify-end items-center">
-            <button
-              onClick={handleJoinCK}
-              disabled={isJoinCkLoading}
-              className={`rounded-md w-[150px] md:w-[200px] px-3 py-1 md:px-5 md:py-2 bg-card border border-border hover:bg-accent hover:text-foreground transition-all duration-200 ease-in-out ${isJoinCkLoading ? "opacity-70 cursor-not-allowed delay-0" : ""}`}
-            >
-              {isJoinCkLoading ? (
-                <div className="flex items-center justify-center py-[2px] md:py-[1px]">
-                  <Loader className="animate-spin text-foreground" size={14} />
-                </div>
-              ) : (
-                <span className="text-xs md:text-sm text-foreground font-semibold">
-                  Join Cubing Kerala
-                </span>
-              )}
-            </button>
-          </FadeUp>
+    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="mb-6 flex flex-col gap-2">
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+            Members
+          </h1>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleJoinCK}
+            disabled={isJoinCkLoading}
+          >
+            {isJoinCkLoading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              "Join Cubing Kerala"
+            )}
+          </Button>
         </div>
-
-        <div
-          className="rounded-md border border-border"
-          style={{ minHeight: "600px", overflow: "hidden" }}
-        >
-          {children}
-        </div>
-      </PageReveal>
+        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
+          Find cubers by name or WCA ID, and see who competes from Kerala.
+        </p>
+      </div>
+      {children}
     </div>
   );
 }

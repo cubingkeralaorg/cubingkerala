@@ -17,7 +17,7 @@ export function Providers({children}: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
-        <HeroUIProvider className='max-w-screen-xl mx-auto flex flex-col min-h-screen justify-between'>
+        <HeroUIProvider className="mx-auto flex min-h-dvh w-full max-w-screen-xl flex-col">
           {children}
         </HeroUIProvider>
       </NextThemesProvider>

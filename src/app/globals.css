@@ -4,11 +4,13 @@
 
 html {
   overflow-x: hidden;
+  min-height: 100dvh;
 }
 
 body {
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: 100dvh;
 }
 
 body::-webkit-scrollbar {

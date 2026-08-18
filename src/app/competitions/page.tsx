@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { CompetitionSkeleton } from "@/components/competitions";
 import { CompetitionsData } from "@/components/competitions/competitions-data";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
 export const revalidate = 300;
 
@@ -14,14 +15,16 @@ export const metadata: Metadata = {
 
 function CompetitionsFallback() {
   return (
-    <div className={`ck-landing min-h-screen py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
       <div className="mb-6 flex flex-col gap-2">
         <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
           Competitions
         </h1>
-        <p className="text-sm text-muted-foreground">Loading competitions...</p>
+        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
+          Loading competitions...
+        </p>
       </div>
-      <div className="overflow-hidden rounded-md border border-border">
+      <div className={DATA_GRID_WRAP}>
         <CompetitionSkeleton />
       </div>
     </div>
