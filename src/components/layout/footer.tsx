@@ -211,32 +211,22 @@ const CubingKeralaFooter = () => {
         <footer className="ck-landing border-t border-border/60 bg-background">
             <div className={NAVBAR_CONTAINER_CLASS}>
                 <div className="flex flex-col gap-6 py-8 lg:gap-5">
-                    <div className="hidden h-16 items-center justify-between lg:flex">
-                        <div className={cn("flex min-w-0 items-center", NAVBAR_BRAND_GAP_CLASS)}>
+                    <div className="flex flex-col gap-5 lg:h-16 lg:flex-row lg:items-center lg:justify-between">
+                        <div className={cn("flex flex-col lg:min-w-0 lg:flex-row lg:items-center", NAVBAR_BRAND_GAP_CLASS)}>
                             <Link href="/" className={NAVBAR_LOGO_LINK_CLASS}>
                                 Cubing Kerala
                             </Link>
                             <nav
-                                className={cn("flex items-center", NAVBAR_LINKS_GAP_CLASS)}
+                                className={cn(
+                                    "-ml-2.5 grid grid-cols-2 gap-x-2 gap-y-1 lg:ml-0 lg:flex lg:items-center",
+                                    NAVBAR_LINKS_GAP_CLASS,
+                                )}
                                 aria-label="Footer"
                             >
                                 <NavLinks userId={userInfo?.me?.id} />
                             </nav>
                         </div>
 
-                        <FooterActions />
-                    </div>
-
-                    <div className="flex flex-col gap-5 lg:hidden">
-                        <Link href="/" className={NAVBAR_LOGO_LINK_CLASS}>
-                            Cubing Kerala
-                        </Link>
-                        <nav
-                            className="-ml-2.5 grid grid-cols-2 gap-x-2 gap-y-1"
-                            aria-label="Footer"
-                        >
-                            <NavLinks userId={userInfo?.me?.id} />
-                        </nav>
                         <FooterActions />
                     </div>
 

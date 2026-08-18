@@ -137,7 +137,6 @@ export function MobileMenu({
       <nav
         id="mobile-menu-panel"
         aria-label="Mobile menu"
-        aria-hidden={!animateIn}
         className={cn(
           "flex min-h-0 flex-1 flex-col",
           "transition-[opacity,transform] will-change-[opacity,transform]",

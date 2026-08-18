@@ -28,7 +28,7 @@ export const NavbarComponent = () => {
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
-  const showMobileMenu = isMenuOpen && !isDesktopNav;
+  const showMobileMenu = isMenuOpen;
 
   useEffect(() => {
     if (isDesktopNav && isMenuOpen) {

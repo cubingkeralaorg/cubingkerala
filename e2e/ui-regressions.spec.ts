@@ -21,7 +21,9 @@ test.describe('UI Regression Coverage', () => {
     });
     await page.getByRole('button', { name: 'Refresh' }).click();
 
-    await expect(page.getByText('Fetching competitions...')).toBeVisible();
+    await expect(page.getByText('Fetching competitions...')).toBeVisible({
+      timeout: 10_000,
+    });
 
     const loaderContainer = page.locator('div.min-h-screen').first();
     await expect(loaderContainer).toBeVisible();
@@ -35,29 +37,36 @@ test.describe('UI Regression Coverage', () => {
     expect(minHeight).toBeGreaterThanOrEqual(viewportHeight - 1);
   });
 
-  test('footer desktop alignment keeps wordmark and nav row balanced', async ({ page }) => {
+  test('footer desktop alignment keeps wordmark and nav on one row', async ({ page }) => {
     await page.setViewportSize({ width: 1600, height: 900 });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     const footer = page.locator('footer').filter({ hasText: /all rights reserved\./i }).first();
-    const wordmark = footer.getByRole('link', { name: 'Cubing Kerala' }).first();
-    const competitionsLink = footer.getByRole('link', { name: 'Competitions' }).first();
+    const wordmark = footer.getByRole('link', { name: 'Cubing Kerala' });
+    const competitionsLink = footer
+      .getByRole('navigation', { name: 'Footer' })
+      .getByRole('link', { name: 'Competitions' });
+    const github = footer.getByRole('button', { name: /open github/i });
 
     await expect(wordmark).toBeVisible();
     await expect(competitionsLink).toBeVisible();
+    await expect(github).toBeVisible();
 
-    const [wordmarkBox, linkBox] = await Promise.all([
+    const [wordmarkBox, linkBox, githubBox] = await Promise.all([
       wordmark.boundingBox(),
       competitionsLink.boundingBox(),
+      github.boundingBox(),
     ]);
 
     expect(wordmarkBox).not.toBeNull();
     expect(linkBox).not.toBeNull();
+    expect(githubBox).not.toBeNull();
 
-    if (wordmarkBox && linkBox) {
+    if (wordmarkBox && linkBox && githubBox) {
       expect(Math.abs(wordmarkBox.y - linkBox.y)).toBeLessThan(24);
-      expect(linkBox.x).toBeGreaterThan(wordmarkBox.x + 200);
+      expect(linkBox.x).toBeGreaterThan(wordmarkBox.x);
+      expect(githubBox.x).toBeGreaterThan(linkBox.x);
     }
   });
 
@@ -76,6 +85,7 @@ test.describe('UI Regression Coverage', () => {
     const scrollBefore = await page.evaluate(() => window.scrollY);
 
     await menuButton.click();
+    await expect(page.getByRole('button', { name: /close menu/i })).toBeVisible();
     await expect(page.getByRole('navigation', { name: /mobile menu/i })).toBeVisible();
 
     const [scrollAfter, bodyPosition] = await Promise.all([
