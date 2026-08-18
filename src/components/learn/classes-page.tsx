@@ -1,28 +1,24 @@
-"use client";
-
-import React, { Suspense } from "react";
 import BeginnerVideosSection from "./beginner-videos";
 import IntermediateVideosSection from "./intermediate-videos";
 import AdvancedVideosSection from "./advanced-videos";
-import LoadingComponent from "@/components/shared/loading";
-import { FadeUp, PageReveal } from "../ui/fade-up";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
-const Learn = () => {
+export default function Learn() {
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <PageReveal className="py-2 md:py-1">
-        <FadeUp>
-          <BeginnerVideosSection />
-        </FadeUp>
-        <FadeUp>
-          <IntermediateVideosSection />
-        </FadeUp>
-        <FadeUp>
-          <AdvancedVideosSection />
-        </FadeUp>
-      </PageReveal>
-    </Suspense>
+    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="mb-10 flex flex-col gap-2">
+        <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+          Learn
+        </h1>
+        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
+          Beginner through advanced videos for solving and getting faster.
+        </p>
+      </div>
+      <div className="flex flex-col gap-16">
+        <BeginnerVideosSection />
+        <IntermediateVideosSection />
+        <AdvancedVideosSection />
+      </div>
+    </div>
   );
-};
-
-export default Learn;
+}

@@ -2,8 +2,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import { RankingsData } from "@/components/rankings/rankings-data";
 import { RankingsSkeleton } from "@/components/rankings/rankingsSkeleton";
-import BlurIn from "@/components/ui/blur-in";
-import { FadeUp, PageReveal } from "@/components/ui/fade-up";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 export const revalidate = 300;
 
@@ -15,16 +14,16 @@ export const metadata: Metadata = {
 
 function RankingsFallback() {
   return (
-    <div className="w-full mx-auto py-6 md:py-8 px-4 md:px-6 text-foreground">
-      <PageReveal>
-        <BlurIn
-          word="Rankings"
-          className="text-4xl text-start font-bold tracking-tighter md:text-6xl mb-4"
-        />
-        <FadeUp>
-          <RankingsSkeleton />
-        </FadeUp>
-      </PageReveal>
+    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="mb-6 flex flex-col gap-2">
+        <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
+          Rankings
+        </h1>
+        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
+          Loading rankings...
+        </p>
+      </div>
+      <RankingsSkeleton />
     </div>
   );
 }

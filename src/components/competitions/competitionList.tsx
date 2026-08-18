@@ -2,6 +2,7 @@ import { Competition } from "@/types/competition.types";
 import { CompetitionTable } from "./CompetitionTable";
 import { CompetitionSkeleton } from "./CompetitionSkeleton";
 import SearchComponent from "@/components/shared/search";
+import { DATA_GRID_TOOLBAR, DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
 interface CompetitionsListProps {
   upcomingCompetitions: Competition[];
@@ -19,8 +20,8 @@ export function CompetitionsList({
   onSearchChange,
 }: CompetitionsListProps) {
   return (
-    <div className="overflow-hidden rounded-md border border-border">
-      <div className="border-b border-border px-3 py-2">
+    <div className={DATA_GRID_WRAP}>
+      <div className={DATA_GRID_TOOLBAR}>
         <SearchComponent
           handleSearch={onSearchChange}
           placeholder="Search competitions"

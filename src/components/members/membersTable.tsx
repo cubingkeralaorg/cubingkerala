@@ -13,10 +13,13 @@ import { RequestInfo } from "@/types/api";
 import { capitalizeRole, getTotalMedalsFromSummary } from "@/utils/memberUtils";
 import { MemberWcaSummary } from "@/types/wca";
 import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 import {
-  AnimatedTableBody,
-  AnimatedTableRow,
-} from "@/components/ui/reveal-table";
+  DATA_GRID_CELL,
+  DATA_GRID_HEAD,
+  DATA_GRID_ROW,
+  DATA_GRID_TABLE,
+} from "@/components/ui/data-grid";
 
 interface MembersTableProps {
   members: RequestInfo[];
@@ -29,97 +32,95 @@ export function MembersTable({ members, wcaSummaries }: MembersTableProps) {
     [wcaSummaries],
   );
 
-  if (members.length === 0) {
-    return (
-      <Table className="w-full">
-        <TableHeader className="border-y hover:bg-transparent border-y-border">
-          <TableRow className="text-sm md:text-[15px] border-none">
-            <TableHead className="text-muted-foreground w-[50px]">#</TableHead>
-            <TableHead className="text-muted-foreground">Name</TableHead>
-            <TableHead className="text-muted-foreground w-[150px]">WCA ID</TableHead>
-            <TableHead className="text-muted-foreground w-[120px]">Role</TableHead>
-            <TableHead className="text-muted-foreground w-[120px]">Competitions</TableHead>
-            <TableHead className="text-muted-foreground w-[100px]">Medals</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
+  return (
+    <Table className={DATA_GRID_TABLE}>
+      <TableHeader className="[&_tr]:border-0">
+        <TableRow className={DATA_GRID_ROW}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[50px]")}>
+            #
+          </TableHead>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD)}>
+            Name
+          </TableHead>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[150px]")}>
+            WCA ID
+          </TableHead>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[120px]")}>
+            Role
+          </TableHead>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[120px]")}>
+            Competitions
+          </TableHead>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[100px]")}>
+            Medals
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {members.length === 0 ? (
+          <TableRow className={DATA_GRID_ROW}>
             <TableCell
-              className="text-muted-foreground px-4 hover:bg-accent py-4"
               colSpan={6}
+              className={cn(DATA_GRID_CELL, "py-6 text-muted-foreground")}
             >
               No results found
             </TableCell>
           </TableRow>
-        </TableBody>
-      </Table>
-    );
-  }
+        ) : (
+          members.map((member, index) => {
+            const summary = summaryByWcaId.get(member.wcaid);
+            const isUnavailable = Boolean(summary?.isUnavailable);
 
-  return (
-    <Table className="w-full">
-      <TableHeader className="border-y hover:bg-transparent border-y-border">
-        <TableRow className="text-sm md:text-[15px] hover:bg-transparent border-none">
-          <TableHead className="text-muted-foreground w-[50px]">#</TableHead>
-          <TableHead className="text-muted-foreground">Name</TableHead>
-          <TableHead className="text-muted-foreground w-[150px]">WCA ID</TableHead>
-          <TableHead className="text-muted-foreground w-[120px]">Role</TableHead>
-          <TableHead className="text-muted-foreground w-[120px]">Competitions</TableHead>
-          <TableHead className="text-muted-foreground w-[100px]">Medals</TableHead>
-        </TableRow>
-      </TableHeader>
-      <AnimatedTableBody>
-        {members.map((member, index) => {
-          const summary = summaryByWcaId.get(member.wcaid);
-
-          return (
-            <AnimatedTableRow
-              className="border-border hover:bg-transparent text-sm md:text-[15px]"
-              key={member.wcaid}
-            >
-              <TableCell className="cursor-default">{index + 1}</TableCell>
-              <TableCell className="text-nowrap">
-                <Link prefetch={true} href={`/members/${member.wcaid}`}>
-                  <span
-                    className={`cursor-pointer hover:text-blue-500 font-medium ${summary?.isUnavailable ? "text-muted-foreground opacity-70" : ""}`}
+            return (
+              <TableRow key={member.wcaid} className={DATA_GRID_ROW}>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums text-muted-foreground")}>
+                  {index + 1}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap font-medium")}>
+                  <Link
+                    prefetch={true}
+                    href={`/members/${member.wcaid}`}
+                    className={cn(
+                      "hover:text-primary",
+                      isUnavailable && "text-muted-foreground",
+                    )}
                   >
                     {member.name.split("(")[0]}
-                  </span>
-                </Link>
-              </TableCell>
-              <TableCell>
-                <Link
-                  prefetch={true}
-                  href={`https://www.worldcubeassociation.org/persons/${member.wcaid}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="inline-flex items-center px-3 py-1 rounded-md bg-secondary/60 text-muted-foreground text-xs font-mono border border-border/50 hover:text-blue-500">
+                  </Link>
+                </TableCell>
+                <TableCell className={DATA_GRID_CELL}>
+                  <Link
+                    prefetch={true}
+                    href={`https://www.worldcubeassociation.org/persons/${member.wcaid}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs text-muted-foreground hover:text-primary"
+                  >
                     {member.wcaid}
-                  </span>
-                </Link>
-              </TableCell>
-              <TableCell className="cursor-default text-nowrap">
-                {capitalizeRole(member.role)}
-              </TableCell>
-              <TableCell className="cursor-default">
-                {summary?.isUnavailable ? (
-                  <span className="text-muted-foreground">N/A</span>
-                ) : (
-                  summary?.competition_count || 0
-                )}
-              </TableCell>
-              <TableCell className="cursor-default">
-                {summary?.isUnavailable ? (
-                  <span className="text-muted-foreground">N/A</span>
-                ) : (
-                  getTotalMedalsFromSummary(summary)
-                )}
-              </TableCell>
-            </AnimatedTableRow>
-          );
-        })}
-      </AnimatedTableBody>
+                  </Link>
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
+                  {capitalizeRole(member.role)}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {isUnavailable ? (
+                    <span className="italic text-muted-foreground">N/A</span>
+                  ) : (
+                    summary?.competition_count || 0
+                  )}
+                </TableCell>
+                <TableCell className={cn(DATA_GRID_CELL, "tabular-nums")}>
+                  {isUnavailable ? (
+                    <span className="italic text-muted-foreground">N/A</span>
+                  ) : (
+                    getTotalMedalsFromSummary(summary)
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })
+        )}
+      </TableBody>
     </Table>
   );
 }

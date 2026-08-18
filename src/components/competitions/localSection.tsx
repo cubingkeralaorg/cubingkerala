@@ -1,13 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { LatLngTuple } from "leaflet";
-import { CiLink } from "react-icons/ci";
+import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getFullVenueAddress } from "@/utils/venuUtils";
+import { cn } from "@/lib/utils";
 
 const LeafletMap = dynamic(() => import("@/components/shared/map"), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
+  loading: () => (
+    <p className="px-4 py-8 text-sm text-muted-foreground">Loading map...</p>
+  ),
 });
 
 interface LocationSectionProps {
@@ -25,37 +30,55 @@ export function LocationSection({
   showMap,
   onToggleMap,
 }: LocationSectionProps) {
+  const [mapMounted, setMapMounted] = useState(false);
+
+  const handleToggleMap = () => {
+    if (!showMap) {
+      setMapMounted(true);
+    }
+    onToggleMap();
+  };
+
   return (
-    <div className="flex items-center gap-2">
-      <div className="space-y-1 md:max-w-[50vw]">
-        <p className="font-medium text-[17px] md:text-[18px]">Location</p>
-        <p className="text-muted-foreground text-[15px] text-wrap md:text-[16px]">
-          {getFullVenueAddress(venue, venueAddress)}
-        </p>
-        <div className="flex items-center gap-4 mt-2">
-          <div
-            onClick={onToggleMap}
-            className="text-green-500 hover:text-green-600 w-fit cursor-pointer flex gap-1 text-[15px] md:text-[16px]"
-          >
-            <p>Map</p>
-            <CiLink />
-          </div>
+    <div className="flex flex-col gap-2">
+      <p className="text-sm font-medium text-muted-foreground">Location</p>
+      <p className="text-muted-foreground md:text-base">
+        {getFullVenueAddress(venue, venueAddress)}
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button
+          type="button"
+          variant="link"
+          className="h-auto w-fit px-0"
+          onClick={handleToggleMap}
+        >
+          {showMap ? "Hide map" : "Show map"}
+        </Button>
+        <Button variant="link" className="h-auto w-fit px-0" asChild>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${coordinates[0]},${coordinates[1]}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 hover:text-blue-600 w-fit cursor-pointer flex gap-1 text-[15px] md:text-[16px]"
           >
-            <p>Google Maps</p>
-            <CiLink />
+            Google Maps
+            <ArrowUpRight data-icon="inline-end" />
           </a>
-        </div>
-        {showMap && (
-          <div className="mt-2">
-            <LeafletMap coordinates={coordinates} address={venueAddress} />
-          </div>
-        )}
+        </Button>
       </div>
+      {mapMounted && (
+        <div
+          className={cn(
+            "overflow-hidden rounded-md border border-border",
+            !showMap && "hidden",
+          )}
+        >
+          <LeafletMap
+            coordinates={coordinates}
+            address={venueAddress}
+            visible={showMap}
+          />
+        </div>
+      )}
     </div>
   );
 }

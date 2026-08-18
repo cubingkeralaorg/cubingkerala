@@ -26,11 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${font.variable} font-sans bg-background`} suppressHydrationWarning>
+      <body className={`${font.variable} min-h-dvh bg-background font-sans`} suppressHydrationWarning>
         <Providers>
           <Navbar />
           <EmailBanner />
-          {children}
+          <div className="flex-1">{children}</div>
           <Toaster richColors />
           <ConditionalFooter />
         </Providers>

@@ -6,8 +6,7 @@ import { RequestInfo } from "@/types/api";
 import { sortMembersByName } from "@/utils/memberUtils";
 import { MembersTable } from "./membersTable";
 import { MemberWcaSummary } from "@/types/wca";
-import { FadeUp, StaggerReveal } from "../ui/fade-up";
-import { RevealTableSection } from "../ui/reveal-table";
+import { DATA_GRID_TOOLBAR, DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
 interface MembersComponentProps {
   membersfromdb: RequestInfo[];
@@ -27,21 +26,19 @@ export default function MembersComponent({
     return sortMembersByName(filtered);
   }, [membersfromdb, searchTerm]);
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
-
   return (
-    <StaggerReveal>
-      <FadeUp>
-        <SearchComponent handleSearch={handleSearch} placeholder="Search Member" />
-      </FadeUp>
-      <RevealTableSection>
-        <MembersTable
-          members={filteredAndSortedMembers}
-          wcaSummaries={wcaSummaries}
+    <div className={DATA_GRID_WRAP}>
+      <div className={DATA_GRID_TOOLBAR}>
+        <SearchComponent
+          handleSearch={setSearchTerm}
+          placeholder="Search members"
+          className="rounded-md border border-input bg-background shadow-none"
         />
-      </RevealTableSection>
-    </StaggerReveal>
+      </div>
+      <MembersTable
+        members={filteredAndSortedMembers}
+        wcaSummaries={wcaSummaries}
+      />
+    </div>
   );
 }

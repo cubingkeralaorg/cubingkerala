@@ -38,6 +38,30 @@ Landing chrome (`.ck-landing`). No FadeUp / BlurIn / table reveal. Page title
 matches the home H1 scale. Data table is a rounded bordered grid (Date, Name,
 Status, Location, Events) with a search bar above it — no insert action.
 
+Competition detail `/competitions/[compId]`: start-aligned H1, date subtitle,
+two-column details (event left, registration/organizers right), shared grid
+for results. Links use primary. No motion.
+
+## Rankings `/rankings`
+
+Same landing chrome and grid table as competitions. Headings stay `#`, Name,
+Best, NR, CR, WR. Event/round filter in the header. No motion, no gray row fills.
+
+## Members `/members`
+
+Same landing chrome and grid table. Headings stay `#`, Name, WCA ID, Role,
+Competitions, Medals. Search in the table toolbar. Join Cubing Kerala stays in
+the page header. No motion, no gray row fills.
+
+Member detail `/members/[wca_id]`: start-aligned H1, role subtitle, avatar on
+the right, labeled stats, shared grid for personal records. No motion.
+
+## Learn `/learn`
+
+Landing chrome. Page H1 plus Beginner / Intermediate / Advanced sections.
+Video cards match destination cards (`shadow-none`). No FadeUp, BlurIn, or
+shiny coming-soon chrome on this page.
+
 ## Other routes
 
 Keep bordered promo cards, green eyebrows, and `AnimatedContactLink` unless

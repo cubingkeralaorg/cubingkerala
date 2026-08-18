@@ -24,6 +24,12 @@ import { getEventName } from "@/utils/eventNames";
 import "@cubing/icons";
 import { Competition } from "@/types";
 import { cn } from "@/lib/utils";
+import {
+  DATA_GRID_CELL,
+  DATA_GRID_HEAD,
+  DATA_GRID_ROW,
+  DATA_GRID_TABLE,
+} from "@/components/ui/data-grid";
 
 interface CompetitionTableProps {
   upcoming: Competition[];
@@ -31,15 +37,12 @@ interface CompetitionTableProps {
   searchQuery?: string;
 }
 
-const cellClass =
-  "border border-border px-4 py-2.5 align-middle";
-
 function SectionRow({ label }: { label: string }) {
   return (
-    <TableRow className="hover:bg-transparent">
+    <TableRow className={DATA_GRID_ROW}>
       <TableCell
         colSpan={5}
-        className={cn(cellClass, "py-2.5 text-sm font-medium text-foreground")}
+        className={cn(DATA_GRID_CELL, "text-sm font-medium text-foreground")}
       >
         {label}
       </TableCell>
@@ -56,11 +59,11 @@ function CompetitionRow({ competition }: { competition: Competition }) {
   );
 
   return (
-    <TableRow className="hover:bg-transparent">
-      <TableCell className={cn(cellClass, "whitespace-nowrap tabular-nums text-muted-foreground")}>
+    <TableRow className={DATA_GRID_ROW}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums text-muted-foreground")}>
         {formatCompetitionDateRange(competition.start_date, competition.end_date)}
       </TableCell>
-      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         <Link
           href={`/competitions/${competition.id}`}
           className="font-medium text-foreground hover:text-primary"
@@ -68,7 +71,7 @@ function CompetitionRow({ competition }: { competition: Competition }) {
           {competition.name}
         </Link>
       </TableCell>
-      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         {status === "Upcoming" && (
           <a
             href={`https://www.worldcubeassociation.org/competitions/${competition.id}/register`}
@@ -108,10 +111,10 @@ function CompetitionRow({ competition }: { competition: Competition }) {
           </Badge>
         )}
       </TableCell>
-      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         {competition.city}
       </TableCell>
-      <TableCell className={cn(cellClass, "whitespace-nowrap")}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         <div className="flex items-center justify-end gap-1.5">
           <TooltipProvider>
             {competition.event_ids.map((event: string) => (
@@ -139,22 +142,22 @@ export function CompetitionTable({
   const isSearch = searchQuery.trim().length > 0;
 
   return (
-    <Table className="w-full border-collapse text-sm [&_tr]:border-0">
-      <TableHeader>
-        <TableRow className="hover:bg-transparent">
-          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground w-[180px] md:w-[220px] whitespace-nowrap")}>
+    <Table className={DATA_GRID_TABLE}>
+      <TableHeader className="[&_tr]:border-0">
+        <TableRow className={DATA_GRID_ROW}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[180px] md:w-[220px] whitespace-nowrap")}>
             Date
           </TableHead>
-          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
             Name
           </TableHead>
-          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
             Status
           </TableHead>
-          <TableHead className={cn(cellClass, "h-10 font-medium text-muted-foreground whitespace-nowrap")}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
             Location
           </TableHead>
-          <TableHead className={cn(cellClass, "h-10 text-right font-medium text-muted-foreground whitespace-nowrap")}>
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "text-right whitespace-nowrap")}>
             Events
           </TableHead>
         </TableRow>
@@ -166,10 +169,10 @@ export function CompetitionTable({
             <CompetitionRow key={competition.id} competition={competition} />
           ))
         ) : (
-          <TableRow className="hover:bg-transparent">
+          <TableRow className={DATA_GRID_ROW}>
             <TableCell
               colSpan={5}
-              className={cn(cellClass, "py-6 text-sm text-muted-foreground")}
+              className={cn(DATA_GRID_CELL, "py-6 text-sm text-muted-foreground")}
             >
               {isSearch ? (
                 <p>No upcoming competitions match your search.</p>

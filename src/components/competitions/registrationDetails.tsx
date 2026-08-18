@@ -28,31 +28,29 @@ export function RegistrationDetails({
   const isClosed = isRegistrationClosed(registrationClose);
 
   return (
-    <div className="space-y-2">
-      <h2 className="text-xl md:text-2xl font-bold">Registration Details</h2>
-      <div>
-        <p className="font-medium text-[17px] md:text-[18px]">
+    <div className="flex flex-col gap-4">
+      <h2 className="text-lg font-semibold tracking-tight">Registration</h2>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-medium text-muted-foreground">
           Registration period
         </p>
-        <p className="text-muted-foreground text-[15px] md:text-[16px]">
+        <p className="text-muted-foreground md:text-base">
           Online registration opened on{" "}
           {formatRegistrationDate(registrationOpen)}
         </p>
-        <p className="text-muted-foreground text-[15px] md:text-[16px]">
+        <p className="text-muted-foreground md:text-base">
           {isClosed
             ? `Registration closed on ${formatRegistrationDate(registrationClose)}`
             : `Registration will close on ${formatRegistrationDate(registrationClose)}`}
         </p>
       </div>
-      <div className="my-2 text-[15px] md:text-[16px]">
-        <RegistrationStatus
-          competitionId={competitionId}
-          startDate={startDate}
-          endDate={endDate}
-          cancelledAt={cancelledAt}
-          hasResults={hasResults}
-        />
-      </div>
+      <RegistrationStatus
+        competitionId={competitionId}
+        startDate={startDate}
+        endDate={endDate}
+        cancelledAt={cancelledAt}
+        hasResults={hasResults}
+      />
     </div>
   );
 }

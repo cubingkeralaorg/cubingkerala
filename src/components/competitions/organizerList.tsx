@@ -15,26 +15,25 @@ interface OrganizersListProps {
 
 export function OrganizersList({ organizers }: OrganizersListProps) {
   return (
-    <div className="space-y-2">
-      <h2 className="text-xl md:text-2xl font-bold mt-4">Organizers</h2>
-      <div className="grid">
-        {organizers.map((organizer) => (
-          <div
-            key={organizer.id}
-            className="flex items-center gap-2 text-[15px] md:text-[16px]"
-          >
-            <p
+    <div className="flex flex-col gap-3">
+      <h2 className="text-lg font-semibold tracking-tight">Organizers</h2>
+      <div className="flex flex-col gap-1">
+        {organizers.map((organizer) =>
+          organizer.wca_id ? (
+            <button
+              key={organizer.id}
+              type="button"
               onClick={() => openOrganizerProfile(organizer.url)}
-              className={`font-medium text-normal text-muted-foreground ${
-                organizer.wca_id
-                  ? "hover:text-blue-500 cursor-pointer"
-                  : "cursor-default"
-              }`}
+              className="w-fit text-left text-muted-foreground hover:text-primary md:text-base"
             >
               {organizer.name}
+            </button>
+          ) : (
+            <p key={organizer.id} className="text-muted-foreground md:text-base">
+              {organizer.name}
             </p>
-          </div>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );
