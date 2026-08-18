@@ -4,7 +4,7 @@ import {
   LandingShell,
 } from "@/components/home";
 import { getCachedCompetitions } from "@/lib/cached-queries";
-import { selectFeaturedCompetition } from "@/utils/featuredCompetition";
+import { selectFeaturedCompetition } from "@/utils/featured-competition";
 
 export const revalidate = 300;
 

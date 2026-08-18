@@ -1,10 +1,10 @@
 import db from "@/lib/db";
-import { syncSingleMemberWcaData } from "@/lib/wca.sync";
+import { syncSingleMemberWcaData } from "@/lib/wca/sync";
 import { RequestInfo } from "@/types/api";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { after, NextRequest } from "next/server";
 import {
-  requireAuth,
+  requireAdmin,
   createSuccessResponse,
   createErrorResponse,
   handleApiError,
@@ -12,7 +12,7 @@ import {
 
 export async function POST(request: NextRequest) {
   // Check authentication
-  const authError = requireAuth(request);
+  const authError = requireAdmin(request);
   if (authError) return authError;
 
   try {

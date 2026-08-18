@@ -5,9 +5,9 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
 import { useDesktopNav } from "@/hooks/useDesktopNav";
-import { NavLinks } from "./navbar/navLinks";
-import { AuthButton } from "./navbar/authButton";
-import { MobileMenu } from "./navbar/mobileMenu";
+import { NavLinks } from "./navbar/nav-links";
+import { AuthButton } from "./navbar/auth-button";
+import { MobileMenu } from "./navbar/mobile-menu";
 import {
   NAVBAR_BRAND_GAP_CLASS,
   NAVBAR_CONTAINER_CLASS,
@@ -19,11 +19,11 @@ import {
 import { FaGithub } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
-export const NavbarComponent = () => {
+export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const scrollYRef = useRef(0);
   const isDesktopNav = useDesktopNav();
-  const { userInfo, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const { handleLogout } = useLogout();
 
   const toggleMenu = () => setIsMenuOpen((open) => !open);
@@ -91,7 +91,7 @@ export const NavbarComponent = () => {
           <div className={cn("flex items-center", NAVBAR_BRAND_GAP_CLASS)}>
             {wordmark}
             <nav className={cn("hidden items-center lg:flex", NAVBAR_LINKS_GAP_CLASS)}>
-              <NavLinks userId={userInfo?.me?.id} />
+              <NavLinks isAdmin={isAdmin} />
             </nav>
           </div>
 
@@ -133,7 +133,7 @@ export const NavbarComponent = () => {
 
       <MobileMenu
         isOpen={showMobileMenu}
-        userId={userInfo?.me?.id}
+        isAdmin={isAdmin}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
         onClose={closeMenu}

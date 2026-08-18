@@ -64,5 +64,4 @@ shiny coming-soon chrome on this page.
 
 ## Other routes
 
-Keep bordered promo cards, green eyebrows, and `AnimatedContactLink` unless
-asked to restyle.
+Keep bordered promo cards and green eyebrows unless asked to restyle.

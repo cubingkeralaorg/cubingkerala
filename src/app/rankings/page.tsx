@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { RankingsData } from "@/components/rankings/rankings-data";
-import { RankingsSkeleton } from "@/components/rankings/rankingsSkeleton";
+import { RankingsSkeleton } from "@/components/rankings/rankings-skeleton";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 export const revalidate = 300;

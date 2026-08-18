@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import { NextRequest } from "next/server";
 import {
-  requireAuth,
+  requireAdmin,
   createSuccessResponse,
   createErrorResponse,
   handleApiError,
@@ -11,7 +11,7 @@ import {
 
 export async function DELETE(request: NextRequest) {
   // Check authentication
-  const authError = requireAuth(request);
+  const authError = requireAdmin(request);
   if (authError) return authError;
 
   try {

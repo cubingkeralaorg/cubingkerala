@@ -1,10 +1,10 @@
 import { unstable_cache } from "next/cache";
 import db from "./db";
-import { fetchCompetitionsFromDb } from "./competitions.queries";
+import { fetchCompetitionsFromDb } from "./competitions/queries";
 import {
   getRankingsWcaDataForMembers,
   getWcaSummaryForMembers,
-} from "./wca.sync";
+} from "./wca/sync";
 
 export const CACHE_REVALIDATE_SECONDS = 300;
 

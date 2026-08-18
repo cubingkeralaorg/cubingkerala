@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { EventDetails } from "@/types/api";
-import { convertMarkdownToHTML } from "@/utils/markdownUtils";
+import { convertMarkdownToHTML } from "@/utils/markdown-utils";
 import { LatLngTuple } from "leaflet";
 
 export function useCompetitionDetails(compInfo: EventDetails) {

@@ -1,22 +1,20 @@
 "use client";
 
-import { useRequests } from "@/utils/nameUtils";
-import LoadingComponent from "@/components/shared/loading";
-import BlurIn from "../ui/blur-in";
+import { useRequests } from "@/hooks/useRequests";
+import Loading from "@/components/shared/loading";
 import { Request } from "@/types/request.types";
-import { RequestsTable } from "./requestsTable";
-import { MembersTable } from "./membersTable";
-import { FadeUp, PageReveal } from "../ui/fade-up";
+import { RequestsTable } from "./requests-table";
+import { MembersTable } from "./members-table";
 
-interface RequestsComponentProps {
+interface RequestsPageProps {
   requests: Request[];
   members: Request[];
 }
 
-export default function RequestsComponent({
+export default function RequestsPage({
   requests,
   members,
-}: RequestsComponentProps) {
+}: RequestsPageProps) {
   const {
     requestsData,
     membersData,
@@ -28,42 +26,34 @@ export default function RequestsComponent({
   } = useRequests(requests, members);
 
   if (isLoading) {
-    return <LoadingComponent />;
+    return <Loading />;
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-foreground">
-      <PageReveal>
-        <BlurIn
-          word="Requests"
-          className="text-4xl text-center font-bold tracking-tighter md:text-6xl mb-10"
+    <div className="container mx-auto px-4 py-8 text-foreground sm:px-6 lg:px-8">
+      <h1 className="mb-10 text-center text-4xl font-bold tracking-tighter md:text-6xl">
+        Requests
+      </h1>
+
+      <div className="-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <RequestsTable
+          requests={requestsData}
+          onApprove={handleApprove}
+          onDelete={handleRequestDelete}
         />
+      </div>
 
-        <FadeUp>
-          <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-            <RequestsTable
-              requests={requestsData}
-              onApprove={handleApprove}
-              onDelete={handleRequestDelete}
-            />
-          </div>
-        </FadeUp>
+      <h2 className="my-10 text-center text-4xl font-bold tracking-tighter md:text-6xl">
+        Members
+      </h2>
 
-        <BlurIn
-          word="Members"
-          className="text-4xl text-center font-bold tracking-tighter md:text-6xl my-10"
+      <div className="-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <MembersTable
+          members={membersData}
+          onUpdate={handleUpdate}
+          onDelete={handleMemberDelete}
         />
-
-        <FadeUp>
-          <div className="-mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-            <MembersTable
-              members={membersData}
-              onUpdate={handleUpdate}
-              onDelete={handleMemberDelete}
-            />
-          </div>
-        </FadeUp>
-      </PageReveal>
+      </div>
     </div>
   );
 }

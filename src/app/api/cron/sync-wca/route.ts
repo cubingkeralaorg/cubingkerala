@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import { syncMemberWcaData } from "@/lib/wca.sync";
-import { syncCompetitions } from "@/lib/competitions.sync";
+import { syncMemberWcaData } from "@/lib/wca/sync";
+import { syncCompetitions } from "@/lib/competitions/sync";
 import db from "@/lib/db";
 
 export const dynamic = "force-dynamic";

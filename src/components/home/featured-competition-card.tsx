@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Competition } from "@/types/competition.types";
-import { formatCompetitionDateRange } from "@/utils/dateUtils";
+import { formatCompetitionDateRange } from "@/utils/date-utils";
 import { BrowserWindow } from "./browser-window";
 
 type FeaturedCompetitionCardProps = {

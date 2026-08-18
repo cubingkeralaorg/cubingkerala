@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo } from "react";
 import { CompetitorData, RequestInfo } from "@/types/api";
-import { MemberHeader } from "./memberHeader";
-import { PersonalRecordsTable } from "./personalRecordsTable";
+import { MemberHeader } from "./member-header";
+import { PersonalRecordsTable } from "./personal-records-table";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 interface MemberInfoComponentProps {

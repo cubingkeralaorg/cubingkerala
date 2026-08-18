@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   verifyAuth,
   requireAuth,
+  requireAdmin,
 } from '@/lib/api/auth';
 import {
   createSuccessResponse,
@@ -103,6 +104,33 @@ describe('API Utilities', () => {
       expect(result).not.toBeNull();
       const data = await result?.json();
       expect(data.message).toBe('Unauthorized');
+    });
+  });
+
+  describe('requireAdmin', () => {
+    it('should return null when the user is the configured admin', () => {
+      const userInfo = { me: { wca_id: '2010TEST01', id: 1 } };
+      const request = {
+        cookies: {
+          get: vi.fn().mockReturnValue({ value: JSON.stringify(userInfo) }),
+        },
+      } as unknown as NextRequest;
+
+      expect(requireAdmin(request)).toBeNull();
+    });
+
+    it('should return 403 when authenticated but not admin', async () => {
+      const userInfo = { me: { wca_id: '2020TEST01', id: 99 } };
+      const request = {
+        cookies: {
+          get: vi.fn().mockReturnValue({ value: JSON.stringify(userInfo) }),
+        },
+      } as unknown as NextRequest;
+
+      const result = requireAdmin(request);
+      expect(result).not.toBeNull();
+      const data = await result?.json();
+      expect(data.message).toBe('Forbidden');
     });
   });
 

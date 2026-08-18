@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { CompetitionsList } from "./competitionList";
-import { CompetitionsHeader } from "./CompetitionsHeader";
+import { CompetitionsList } from "./competition-list";
+import { CompetitionsHeader } from "./competitions-header";
 import { useCompetitions } from "@/hooks/useCompetitions";
 import { Competition } from "@/types/competition.types";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";

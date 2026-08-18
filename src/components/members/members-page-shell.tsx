@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { UserInfo } from "@/types/api";
-import { getUserInfoFromCookie } from "@/utils/cookieUtils";
+import { getUserInfoFromCookie } from "@/utils/cookie-utils";
 import { joinCubingKerala } from "@/services/member.api";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 import { Button } from "@/components/ui/button";

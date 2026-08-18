@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Competition } from "@/types/competition.types";
-import { fetchCompetitions } from "@/lib/competition/api";
+import { fetchCompetitions } from "@/services/competitions.api";
 
 interface UseCompetitionsReturn {
   upcomingCompetitions: Competition[];
