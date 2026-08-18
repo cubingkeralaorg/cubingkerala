@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import CubingKeralaFooter from '@/components/layout/footer';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserProfile } from '@/hooks/useUserProfile';
-import { useLogout } from '@/hooks/useLogout';
 import { toast } from 'sonner';
 
 vi.mock('@/hooks/useAuth', () => ({
@@ -14,21 +13,11 @@ vi.mock('@/hooks/useUserProfile', () => ({
   useUserProfile: vi.fn(),
 }));
 
-vi.mock('@/hooks/useLogout', () => ({
-  useLogout: vi.fn(),
-}));
-
 vi.mock('sonner', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
     info: vi.fn(),
-  },
-}));
-
-vi.mock('next/image', () => ({
-  default: function MockImage({ src, alt, ...props }: { src?: string; alt?: string }) {
-    return <span role="img" aria-label={alt} data-src={src} {...props} />;
   },
 }));
 
@@ -38,7 +27,6 @@ vi.mock('next/link', () => ({
 
 describe('CubingKeralaFooter', () => {
   const mockUpdateProfile = vi.fn();
-  const mockHandleLogout = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -49,18 +37,15 @@ describe('CubingKeralaFooter', () => {
       updateProfile: mockUpdateProfile,
       isUpdating: false,
     });
-    (useLogout as any).mockReturnValue({ handleLogout: mockHandleLogout });
   });
 
-  it('renders login link when not logged in', () => {
+  it('does not render login or logout in the footer', () => {
     render(<CubingKeralaFooter />);
-    expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument();
-  });
+    expect(screen.queryByRole('link', { name: /login/i })).not.toBeInTheDocument();
 
-  it('renders logout button when logged in', () => {
     (useAuth as any).mockReturnValue({ isLoggedIn: true });
     render(<CubingKeralaFooter />);
-    expect(screen.getByRole('button', { name: /logout/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /logout/i })).not.toBeInTheDocument();
   });
 
   describe('Email Subscription UI', () => {

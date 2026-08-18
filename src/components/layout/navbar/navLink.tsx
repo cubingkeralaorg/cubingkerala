@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { NAVBAR_LINK_CLASS } from "./layout";
+import { cn } from "@/lib/utils";
 
 interface NavLinkProps {
   href: string;
@@ -18,7 +20,7 @@ export function NavLink({
   return (
     <Link
       href={href}
-      className={`text-[15px] font-normal tracking-wide text-muted-foreground hover:text-foreground px-3 py-2 transition-colors duration-200 ${className}`}
+      className={cn(NAVBAR_LINK_CLASS, className)}
       onClick={onClick}
     >
       {label}

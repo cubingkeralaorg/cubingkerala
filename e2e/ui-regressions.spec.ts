@@ -35,29 +35,29 @@ test.describe('UI Regression Coverage', () => {
     expect(minHeight).toBeGreaterThanOrEqual(viewportHeight - 1);
   });
 
-  test('footer desktop alignment keeps logo and nav row balanced', async ({ page }) => {
+  test('footer desktop alignment keeps wordmark and nav row balanced', async ({ page }) => {
     await page.setViewportSize({ width: 1600, height: 900 });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     const footer = page.locator('footer').filter({ hasText: /all rights reserved\./i }).first();
-    const logo = footer.locator('img[alt="Cubing Kerala Logo"]:visible').first();
+    const wordmark = footer.getByRole('link', { name: 'Cubing Kerala' }).first();
     const competitionsLink = footer.getByRole('link', { name: 'Competitions' }).first();
 
-    await expect(logo).toBeVisible();
+    await expect(wordmark).toBeVisible();
     await expect(competitionsLink).toBeVisible();
 
-    const [logoBox, linkBox] = await Promise.all([
-      logo.boundingBox(),
+    const [wordmarkBox, linkBox] = await Promise.all([
+      wordmark.boundingBox(),
       competitionsLink.boundingBox(),
     ]);
 
-    expect(logoBox).not.toBeNull();
+    expect(wordmarkBox).not.toBeNull();
     expect(linkBox).not.toBeNull();
 
-    if (logoBox && linkBox) {
-      expect(Math.abs(logoBox.y - linkBox.y)).toBeLessThan(24);
-      expect(linkBox.x).toBeGreaterThan(logoBox.x + 200);
+    if (wordmarkBox && linkBox) {
+      expect(Math.abs(wordmarkBox.y - linkBox.y)).toBeLessThan(24);
+      expect(linkBox.x).toBeGreaterThan(wordmarkBox.x + 200);
     }
   });
 

@@ -17,9 +17,6 @@ export const metadata: Metadata = {
   title: "Cubing Kerala",
   description:
     "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
-  icons: {
-    icon: "logoblack.png",
-  },
 };
 
 export default function RootLayout({

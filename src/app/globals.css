@@ -59,6 +59,13 @@ ul {
     --chart-5: 27 87% 67%;
   }
 
+  /* Landing-only tokens (Supabase-like green primary). Navbar/footer stay global. */
+  .ck-landing {
+    --primary: 154 55% 36%;
+    --primary-foreground: 0 0% 100%;
+    --ring: 154 55% 36%;
+  }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -79,6 +86,12 @@ ul {
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+  }
+
+  .dark .ck-landing {
+    --primary: 154 59% 53%;
+    --primary-foreground: 155 40% 8%;
+    --ring: 154 59% 53%;
   }
 }
 

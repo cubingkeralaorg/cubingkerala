@@ -59,6 +59,7 @@ vi.mock('framer-motion', () => ({
   useMotionValue: () => ({ get: () => 0, set: vi.fn() }),
   useTransform: () => ({ get: () => 0 }),
   useSpring: () => ({ get: () => 0 }),
+  useReducedMotion: () => false,
 }));
 
 // Mock ResizeObserver

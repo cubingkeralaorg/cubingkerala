@@ -3,14 +3,15 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowRight, X } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import { NAV_LINKS, ADMIN_USER_ID, LOGO_LIGHT, LOGO_DARK } from "@/config/navigation.config";
-import { ThemeSwitcher } from "./themeSwitcher";
+import { NAV_LINKS, ADMIN_USER_ID } from "@/config/navigation.config";
 import {
+  NAVBAR_BRAND_GAP_CLASS,
   NAVBAR_CONTAINER_CLASS,
+  NAVBAR_ICON_BUTTON_CLASS,
+  NAVBAR_LINKS_GAP_CLASS,
   NAVBAR_LOGO_LINK_CLASS,
   NAVBAR_ROW_CLASS,
 } from "./layout";
@@ -106,38 +107,21 @@ export function MobileMenu({
           onClick={() => {
             if (pathname === "/") onClose();
           }}
-          aria-label="Cubing Kerala home"
           className={NAVBAR_LOGO_LINK_CLASS}
         >
-          <Image
-            src={LOGO_LIGHT}
-            alt="Cubing Kerala Logo"
-            width={44}
-            height={44}
-            priority
-            className="h-[44px] w-[44px] object-contain block dark:hidden"
-          />
-          <Image
-            src={LOGO_DARK}
-            alt="Cubing Kerala Logo"
-            width={44}
-            height={44}
-            priority
-            className="h-[44px] w-[44px] object-contain hidden dark:block"
-          />
+          Cubing Kerala
         </Link>
 
-        <div className="flex items-center gap-1">
+        <div className={cn("flex items-center", NAVBAR_LINKS_GAP_CLASS)}>
           <button
             type="button"
             onClick={handleGithubRedirect}
             tabIndex={animateIn ? 0 : -1}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground/60 transition-colors hover:text-foreground"
+            className={NAVBAR_ICON_BUTTON_CLASS}
             aria-label="GitHub repository"
           >
-            <FaGithub size={20} />
+            <FaGithub className="size-4" />
           </button>
-          <ThemeSwitcher />
           <button
             type="button"
             onClick={onClose}

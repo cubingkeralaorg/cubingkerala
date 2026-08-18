@@ -9,9 +9,6 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Members | Cubing Kerala",
   description: "Members of Rubik's Cube community in Kerala",
-  icons: {
-    icon: "logoblack.png",
-  },
 };
 
 export default function Members() {

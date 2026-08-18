@@ -1,106 +1,73 @@
-"use client";
+import { FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
+import { ContactSection } from "./contact-section";
+import {
+  LANDING_SECTION_INNER_PY_CLASS,
+  LANDING_VIEWPORT_SECTION_CLASS,
+  SOCIAL_LINKS,
+  UNRAVEL_BLOCK_GAP_CLASS,
+} from "./constants";
+import { NAVBAR_LINK_CLASS } from "@/components/layout/navbar/layout";
 
-import { FaWhatsapp } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaFacebook } from "react-icons/fa";
-import { isMobileDevice } from "@/lib/utils";
-
-const social_links = [
-  {
-    id: "whatsapp",
-    name: "Whatsapp",
-    icon: FaWhatsapp,
-    url: "https://chat.whatsapp.com/BQmcKIG0eKjLlDQYsPLHdS",
-  },
-  {
-    id: "instagram",
-    name: "Instagram",
-    icon: FaInstagram,
-    url: "https://www.instagram.com/cubingkerala",
-  },
-  {
-    id: "facebook",
-    name: "Facebook",
-    icon: FaFacebook,
-    url: "https://www.facebook.com/cubingkeralaofficial",
-  },
-];
+const SOCIAL_ICONS = {
+  whatsapp: FaWhatsapp,
+  instagram: FaInstagram,
+  facebook: FaFacebook,
+} as const;
 
 export function CubingKeralaUnravel() {
-  const handleSocialClick = (url: string) => {
-    let isWhatsappUrl = false;
-    try {
-      const parsedUrl = new URL(url);
-      const hostname = parsedUrl.hostname.toLowerCase();
-      isWhatsappUrl =
-        hostname === "whatsapp.com" || hostname.endsWith(".whatsapp.com");
-    } catch {
-      isWhatsappUrl = false;
-    }
-
-    if (isWhatsappUrl) {
-      if (isMobileDevice()) {
-        window.location.assign(url);
-      } else {
-        window.open(url, "_blank");
-      }
-    } else {
-      window.open(url, "_blank");
-    }
-  };
-
   return (
-    <div className="relative flex h-full w-full flex-col text-foreground items-center justify-center overflow-hidden">
-      <div className="container mx-auto px-4 md:px-8 bg-neutral-500/[0.04] z-20 border border-border rounded-lg py-10 md:py-24">
-        <div className="grid gap-10 sm:px-10 md:gap-12 lg:gap-16 lg:grid-cols-2">
-          <div className="space-y-4">
-            <div className="inline-block rounded-lg text-green-500 text-sm">
-              About Cubing Kerala
-            </div>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl xl:text-[3.4rem] 2xl:text-[3.75rem] lg:leading-tight">
-              Unraveling the Cube, Connecting the Community
+    <section className={LANDING_VIEWPORT_SECTION_CLASS}>
+      <div
+        className={`container mx-auto flex w-full flex-col px-4 sm:px-6 lg:px-8 ${UNRAVEL_BLOCK_GAP_CLASS} ${LANDING_SECTION_INNER_PY_CLASS}`}
+      >
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+          <div className="flex flex-col items-start gap-6">
+            <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+              <span className="block">Unraveling the cube,</span>
+              <span className="mt-1 block">connecting Kerala.</span>
             </h2>
-            <p className="mx-auto text-muted-foreground max-w-[700px] text-[15px] md:text-lg">
-              Cubing Kerala is a vibrant community of Rubik&apos;s Cube
-              enthusiasts, founded in 2017 with the goal of promoting the art of
-              cubing in the state. Over the years, we have organized numerous
-              competitions, workshops, and social events, fostering a strong
-              network of cubers and encouraging the growth of the sport.
+            <p className="max-w-md text-muted-foreground md:text-lg">
+              Founded in 2017, Cubing Kerala runs WCA competitions, workshops,
+              and meetups across the state — a home for cubers from first
+              scramble to first podium.
             </p>
           </div>
-          <div className="flex flex-col items-start space-y-4">
-            <div className="inline-block rounded-lg text-green-500 text-sm">
-              Our Mission
+          <div className="flex max-w-md flex-col gap-8 lg:pt-1">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium text-muted-foreground">
+                Mission
+              </p>
+              <p className="text-muted-foreground md:text-lg">
+                Grow the sport in Kerala: more competitions, more cubers, and a
+                community that helps people learn, compete, and stay connected.
+              </p>
             </div>
-            <p className="mx-auto max-w-[700px] text-muted-foreground text-[15px] md:text-lg">
-              At Cubing Kerala, our mission is to cultivate a vibrant cubing
-              community, promote the sport, and provide a platform for cubers to
-              showcase their skills, connect with like- minded individuals, and
-              inspire the next generation of cubing enthusiasts.
-            </p>
-            <div className="w-full flex flex-col gap-5">
-              <div className="inline-block rounded-lg text-start text-green-500 text-sm mt-5">
-                Join us on socials
-              </div>
-              <div className="flex gap-2 items-center flex-wrap w-full justify-start text-sm">
-                {social_links.map((social) => {
-                  const Icon = social.icon;
+            <div className="flex flex-col gap-3">
+              <p className="text-sm font-medium text-muted-foreground">
+                Follow us on socials
+              </p>
+              <div className="-ml-2.5 flex flex-wrap items-center gap-1">
+                {SOCIAL_LINKS.map((social) => {
+                  const Icon = SOCIAL_ICONS[social.id];
                   return (
-                    <button
+                    <a
                       key={social.id}
-                      onClick={() => handleSocialClick(social.url)}
-                      className="inline-flex items-center gap-2 text-sm sm:text-[15px] font-medium text-foreground/70 hover:text-foreground border border-border hover:bg-accent px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer"
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`${NAVBAR_LINK_CLASS} gap-2`}
                     >
-                      <Icon />
-                      <span className="hidden sm:inline">{social.name}</span>
-                    </button>
+                      <Icon className="size-4" />
+                      {social.name}
+                    </a>
                   );
                 })}
               </div>
             </div>
           </div>
         </div>
+        <ContactSection />
       </div>
-    </div>
+    </section>
   );
 }

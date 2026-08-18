@@ -3,6 +3,8 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { NAVBAR_ICON_BUTTON_CLASS } from "./layout";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -17,23 +19,21 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-colors duration-200"
+      className={cn(NAVBAR_ICON_BUTTON_CLASS, "relative")}
       aria-label="Toggle theme"
       type="button"
     >
-      {/* Sun icon — visible in light mode */}
       <Sun
-        size={18}
-        className={`absolute transition-all duration-300 ${
-          isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
-        }`}
+        className={cn(
+          "size-4 transition-all duration-300",
+          isDark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100",
+        )}
       />
-      {/* Moon icon — visible in dark mode */}
       <Moon
-        size={18}
-        className={`absolute transition-all duration-300 ${
-          isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
-        }`}
+        className={cn(
+          "absolute size-4 transition-all duration-300",
+          isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0",
+        )}
       />
     </button>
   );
