@@ -1,4 +1,4 @@
-<h1 align="center">Cubing Kerala</h1>
+<h3 align="center">Cubing Kerala</h3>
 
 <p align="center">
   <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/main-branch-ci.yml">
