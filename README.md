@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="public/logotransparent.png" alt="Cubing Kerala" width="120" />
-</p>
-
 <h1 align="center">Cubing Kerala</h1>
 
 <p align="center">
@@ -71,7 +67,7 @@
 | `SyncLogs` | (Optional) Logs for WCA sync operations |
 
 > [!NOTE]
-> For more detailed information about the database setup, connection strings, and backups, see [DATABASE.md](file:///Users/allenjohn/Desktop/cubingkerala/DATABASE.md).
+> For more detailed information about the database setup, connection strings, and backups, see [DATABASE.md](DATABASE.md).
 
 ---
 
