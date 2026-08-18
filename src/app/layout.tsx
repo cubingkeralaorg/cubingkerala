@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
-import { Navbar } from "@/components/layout";
-import { ConditionalFooter } from "@/components/layout/conditionalFooter";
+import { Footer, Navbar } from "@/components/layout";
+import { EmailBanner } from "@/components/layout/email-banner";
 import { Toaster } from "sonner";
-import { Providers } from "./providers/Providers";
+import { Providers } from "./providers";
+import { isAdminAccount } from "@/config/admin";
 
-const font = Rubik({ 
+const font = Rubik({
   subsets: ["latin"],
-  variable: '--font-sans',
+  variable: "--font-sans",
 });
-
-import { EmailBanner } from "@/components/layout/EmailBanner";
 
 export const metadata: Metadata = {
   title: "Cubing Kerala",
@@ -19,23 +19,37 @@ export const metadata: Metadata = {
     "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
 };
 
-export default function RootLayout({
+async function getIsAdmin() {
+  const raw = (await cookies()).get("userInfo")?.value;
+  if (!raw) return false;
+  try {
+    return isAdminAccount(JSON.parse(raw)?.me);
+  } catch {
+    return false;
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isAdmin = await getIsAdmin();
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${font.variable} min-h-dvh bg-background font-sans`} suppressHydrationWarning>
+      <body
+        className={`${font.variable} min-h-dvh bg-background font-sans`}
+        suppressHydrationWarning
+      >
         <Providers>
-          <Navbar />
+          <Navbar isAdmin={isAdmin} />
           <EmailBanner />
-          <div className="flex-1">{children}</div>
+          <div className="flex flex-1 flex-col">{children}</div>
           <Toaster richColors />
-          <ConditionalFooter />
+          <Footer isAdmin={isAdmin} />
         </Providers>
       </body>
     </html>
   );
 }
-

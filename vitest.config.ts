@@ -8,6 +8,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/__tests__/setup.tsx'],
+    env: {
+      ADMIN_USER_ID: '1',
+      ADMIN_WCA_ID: '2010TEST01',
+    },
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['node_modules', 'e2e'],
     coverage: {

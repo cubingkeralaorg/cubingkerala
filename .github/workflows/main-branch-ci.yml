@@ -19,6 +19,8 @@ jobs:
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       CLIENT_ID: ci-test-client
       CLIENT_SECRET: ci-test-secret
+      ADMIN_USER_ID: "1"
+      ADMIN_WCA_ID: "2010TEST01"
     services:
       postgres:
         image: postgres:16

@@ -3,9 +3,9 @@
 import { FilterComponent } from "./filter";
 import { useCallback, useMemo, useState } from "react";
 import { CompetitorData } from "@/types/api";
-import { sortMembersByResult } from "@/utils/wcaSorting";
-import { getEventName } from "@/utils/eventNames";
-import { RankingsTable } from "./rankingsTable";
+import { sortMembersByResult } from "@/utils/wca-sorting";
+import { getEventName } from "@/utils/event-names";
+import { RankingsTable } from "./rankings-table";
 import { FilterState, RankingsComponentProps } from "@/types/rankings.types";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 

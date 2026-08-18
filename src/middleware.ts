@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ADMIN_USER_ID } from "./config/navigation.config";
+import { isAdminAccount } from "./config/admin";
 
 const VALID_ROUTES = [
     '/competitions',
@@ -65,7 +65,7 @@ export function middleware(request: NextRequest) {
     }
 
     if (pathname.startsWith('/requests')) {
-        if (userData.me.id === ADMIN_USER_ID || userData.me.wca_id === "2017JOHN14") {
+        if (isAdminAccount(userData.me)) {
             return NextResponse.next();
         }
         return NextResponse.redirect(new URL("/", request.url));

@@ -106,28 +106,3 @@ ul {
     @apply bg-background text-foreground antialiased;
   }
 }
-
-/* GPU-accelerated button animations (transform-based, no repaints) */
-@keyframes rainbow-slide {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes shimmer-slide {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  50% {
-    transform: translateX(0%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
-}

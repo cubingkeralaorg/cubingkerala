@@ -10,7 +10,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import "@cubing/icons";
-import { getEventName } from "@/utils/eventNames";
+import { getEventName } from "@/utils/event-names";
 
 interface Filter {
   event: string;

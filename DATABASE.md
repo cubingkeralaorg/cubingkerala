@@ -31,7 +31,9 @@
 
 #### Local Development
 - **Used by:** Your machine
-- **URL stored in:** `.env.local` (gitignored)
+- **URL stored in:** `.env.local` (gitignored). Prisma CLI is run via `npm run db:*`, which loads `.env.local` (or `.env` if that is the only file).
+
+You do not need both `.env` and `.env.local`. Keep **one** local secrets file: `.env.local`.
 
 ### Quick Access
 
@@ -46,8 +48,7 @@ psql "$DATABASE_URL"
 
 #### Get Connection String
 ```bash
-# Local
-cat .env.local | grep DATABASE_URL
+# Local: set DATABASE_URL in .env.local (gitignored). Do not print it into logs or chat.
 
 # Production (Vercel Dashboard)
 # https://vercel.com/dashboard → Project → Settings → Environment Variables

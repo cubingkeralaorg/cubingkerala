@@ -1,7 +1,7 @@
 import { MemberDetails } from "@/components/members";
 import { ErrorState } from "@/components/shared/error-state";
 import db from "@/lib/db";
-import { getMemberWcaData } from "@/lib/wca.sync";
+import { getMemberWcaData } from "@/lib/wca/sync";
 import { CompetitorData, RequestInfo } from "@/types/api";
 import { Metadata } from "next";
 import React from "react";

@@ -22,7 +22,7 @@ vi.mock('@/lib/db', () => ({
   default: mockDb,
 }));
 
-vi.mock('@/lib/wca.sync', () => ({
+vi.mock('@/lib/wca/sync', () => ({
   syncSingleMemberWcaData: mockSyncSingleMemberWcaData,
 }));
 
@@ -77,7 +77,7 @@ function createMockRequest(options: {
 
 const mockUserInfo = {
   me: {
-    wca_id: '2020ADMIN01',
+    wca_id: '2010TEST01',
     name: 'Admin User',
   },
 };

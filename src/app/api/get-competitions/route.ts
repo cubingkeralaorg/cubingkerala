@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { revalidateTag } from "next/cache";
-import { fetchCompetitionsFromDb } from "@/lib/competitions.queries";
+import { fetchCompetitionsFromDb } from "@/lib/competitions/queries";
 
 // App Router route-segment config for Vercel Functions
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const maxDuration = 30;
 
-import { syncCompetitions } from "@/lib/competitions.sync";
+import { syncCompetitions } from "@/lib/competitions/sync";
 
 export async function GET(req: NextRequest) {
   try {

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { MembersData } from "@/components/members/members-data";
-import { MembersSkeleton } from "@/components/members/membersSkeleton";
+import { MembersSkeleton } from "@/components/members/members-skeleton";
 import { MembersPageShell } from "@/components/members/members-page-shell";
 import { DATA_GRID_WRAP } from "@/components/ui/data-grid";
 

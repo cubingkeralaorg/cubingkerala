@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserInfo } from "@/types/api";
-import { getUserInfoFromCookie } from "@/utils/cookieUtils";
+import { getUserInfoFromCookie } from "@/utils/cookie-utils";
 
 export function useAuth() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);

@@ -11,7 +11,7 @@ Two full-viewport screens:
 
 Featured competition: next upcoming (not cancelled), else latest past, else
 browse-competitions fallback. Fetch via `getCachedCompetitions` (`revalidate =
-300`). Helper: `src/utils/featuredCompetition.ts`.
+300`). Helper: `src/utils/featured-competition.ts`.
 
 Navbar wordmark: Cubing Kerala. Favicon: `src/app/icon.svg` (CK).
 

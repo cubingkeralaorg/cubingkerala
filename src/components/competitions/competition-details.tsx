@@ -4,13 +4,13 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCompetitionDetails } from "@/hooks/useCompetitionDetails";
 import { EventDetails, CompetitionResultEntry } from "@/types/api";
-import { CompetitionHeader } from "./competitionHeader";
-import { LocationSection } from "./localSection";
-import { EventsList } from "./eventList";
-import { OrganizersList } from "./organizerList";
-import { RegistrationDetails } from "./registrationDetails";
-import { CompetitionResults } from "./competitionResults";
-import { openCompetitionPage } from "@/utils/competitionNavigation";
+import { CompetitionHeader } from "./competition-header";
+import { LocationSection } from "./location-section";
+import { EventsList } from "./event-list";
+import { OrganizersList } from "./organizer-list";
+import { RegistrationDetails } from "./registration-details";
+import { CompetitionResults } from "./competition-results";
+import { openCompetitionPage } from "@/utils/competition-navigation";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 interface CompetitionDetailsComponentProps {

@@ -1,4 +1,7 @@
+import { loadEnvConfig } from "@next/env";
 import { defineConfig, devices } from "@playwright/test";
+
+loadEnvConfig(process.cwd());
 
 export default defineConfig({
   testDir: "./e2e",
@@ -69,6 +72,8 @@ export default defineConfig({
     env: {
       ...process.env,
       SKIP_WCA_LIVE_SYNC: "true",
+      ADMIN_USER_ID: process.env.ADMIN_USER_ID ?? "1",
+      ADMIN_WCA_ID: process.env.ADMIN_WCA_ID ?? "2010TEST01",
     },
   },
 });

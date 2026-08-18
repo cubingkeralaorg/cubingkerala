@@ -1,14 +1,13 @@
-'use client'
+"use client";
 
-import React from 'react'
-import LoginLoadingComponent from '../auth/login-loading'
-
-const LoadingComponent = ({ width }: { width?: number }) => {
+export default function Loading() {
   return (
-    <div className="flex-1 flex w-full min-h-[100dvh] md:min-h-screen justify-center items-center pb-32 md:pb-0">
-      <LoginLoadingComponent />
+    <div className="flex w-full flex-1 items-center justify-center min-h-[calc(100dvh-8rem)]">
+      <div
+        role="status"
+        aria-label="Loading"
+        className="h-8 w-8 animate-spin rounded-full border-2 border-muted-foreground/30 border-t-foreground"
+      />
     </div>
-  )
+  );
 }
-
-export default LoadingComponent

@@ -1,5 +1,5 @@
-import LoadingComponent from "@/components/shared/loading";
+import LoadingSpinner from "@/components/shared/loading";
 
 export default function Loading() {
-  return <LoadingComponent />;
+  return <LoadingSpinner />;
 }

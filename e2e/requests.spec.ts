@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 test.describe('Requests Admin Page', () => {
   const mockUserInfo = {
     me: {
-      id: 6996, // Matches ADMIN_USER_ID
-      wca_id: '2017JOHN14', // Matches hardcoded admin check
+      id: Number(process.env.ADMIN_USER_ID ?? 1),
+      wca_id: process.env.ADMIN_WCA_ID ?? '2010TEST01',
       name: 'Admin User',
       avatar: { url: 'https://example.com/avatar.jpg' },
       country: { name: 'India' },

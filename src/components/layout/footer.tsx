@@ -4,8 +4,8 @@ import React from 'react'
 import Link from 'next/link'
 import { FaGithub, FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
 import { SOCIAL_LINKS } from "@/components/home/constants";
-import { ThemeSwitcher } from "./navbar/themeSwitcher";
-import { NavLinks } from "./navbar/navLinks";
+import { ThemeSwitcher } from "./navbar/theme-switcher";
+import { NavLinks } from "./navbar/nav-links";
 import {
     NAVBAR_BRAND_GAP_CLASS,
     NAVBAR_CONTAINER_CLASS,
@@ -178,8 +178,8 @@ function FooterActions() {
     )
 }
 
-const CubingKeralaFooter = () => {
-    const { isLoggedIn, userInfo } = useAuth();
+const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
+    const { isLoggedIn } = useAuth();
     const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
     const [isEditingEmail, setIsEditingEmail] = React.useState(false);
     const [newEmail, setNewEmail] = React.useState("");
@@ -223,7 +223,7 @@ const CubingKeralaFooter = () => {
                                 )}
                                 aria-label="Footer"
                             >
-                                <NavLinks userId={userInfo?.me?.id} />
+                                <NavLinks isAdmin={isAdmin} />
                             </nav>
                         </div>
 

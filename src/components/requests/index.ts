@@ -1,4 +1,4 @@
-export { MembersTable } from './membersTable';
-export { RequestsTable } from './requestsTable';
-export { RoleSelector } from './roleSelector';
+export { MembersTable } from './members-table';
+export { RequestsTable } from './requests-table';
+export { RoleSelector } from './role-selector';
 export { default as RequestsPage } from './requests-page';

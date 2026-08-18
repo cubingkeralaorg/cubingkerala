@@ -41,10 +41,10 @@
 
 | Category | Technology |
 |---|---|
-| **Framework** | [Next.js 14](https://nextjs.org) (App Router) |
+| **Framework** | [Next.js 15](https://nextjs.org) (App Router) |
 | **Language** | TypeScript |
-| **Styling** | Tailwind CSS · HeroUI · shadcn/ui · Radix UI primitives · NextUI |
-| **Animations** | Framer Motion · Lottie |
+| **Styling** | Tailwind CSS · shadcn/ui · Radix UI primitives |
+| **Animations** | Framer Motion (footer) |
 | **Database** | PostgreSQL ([Neon](https://neon.tech) serverless) via Prisma ORM |
 | **Auth** | WCA OAuth 2.0 |
 | **Data Fetching** | TanStack React Query · Axios |
@@ -64,7 +64,7 @@
 | `Requests` | Pending join requests |
 | `Competitions` | Kerala WCA competitions synced from the WCA API |
 | `MemberWcaData` | Cached WCA competition data per member (JSON) |
-| `SyncLogs` | (Optional) Logs for WCA sync operations |
+| `SystemMetadata` | Key/value store for sync cursors |
 
 > [!NOTE]
 > For more detailed information about the database setup, connection strings, and backups, see [DATABASE.md](DATABASE.md).
@@ -93,6 +93,7 @@ npm install
 # 3. Configure environment variables
 cp .env.example .env.local
 # Fill in DATABASE_URL, WCA OAuth credentials, and app URL
+# Use only .env.local locally. Next.js loads it; `npm run db:*` loads it for Prisma.
 
 # 4. Generate Prisma client & push schema
 npx prisma generate
@@ -112,10 +113,11 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 | `CLIENT_ID` | WCA OAuth Client ID |
 | `CLIENT_SECRET` | WCA OAuth Client Secret |
 | `NEXT_PUBLIC_BASE_URL` | App base URL (e.g. `http://localhost:3000`) |
+| `NEXT_PUBLIC_WHATSAPP_CONTACT_URL` | WhatsApp contact link |
+| `ADMIN_USER_ID` | WCA numeric user id for `/requests` (server-only) |
+| `ADMIN_WCA_ID` | WCA ID for `/requests` (server-only) |
+| `CRON_SECRET` | Optional bearer token for the WCA sync cron |
 | `POSTGRES_URL_TEST` | Test database URL (CI/CD) |
-| `VERCEL_TOKEN` | Vercel API token (deployment) |
-| `ORG_ID` | Vercel Organization ID |
-| `PROJECT_ID` | Vercel Project ID |
 
 ---
 
@@ -149,52 +151,42 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ```
 src/
-├── app/
-│   ├── api/                  # API routes
-│   │   ├── auth/             # WCA OAuth (login/callback/logout)
-│   │   ├── join-cubingkerala/# Submit join request
-│   │   ├── approve-requests/ # Admin: approve join requests
-│   │   ├── delete-request/   # Admin: reject a request
-│   │   ├── delete-member/    # Admin: remove a member
-│   │   ├── get-competitions/ # Serve cached WCA competitions from DB
-│   │   ├── get-member-wcaids/# Get member WCA IDs
-│   │   ├── update-members/   # Sync member data from WCA
-│   │   └── cron/             # Background sync jobs (WCA sync)
-│   ├── competitions/         # Competition listing & detail pages
-│   ├── members/[wca_id]/     # Member profile pages
-│   ├── rankings/             # Rankings page
-│   ├── requests/             # Join request management
-│   ├── learn/                # Learning resources
-│   ├── error/                # Global error page
-│   ├── sitemap/              # Sitemap generation
-│   ├── layout.tsx            # Root layout
-│   └── page.tsx              # Home page
+├── app/                      # Routes only (pages, layouts, API)
+│   ├── api/                  # HTTP handlers
+│   ├── competitions/
+│   ├── members/
+│   ├── rankings/
+│   ├── requests/
+│   ├── learn/
+│   ├── login/                # Starts WCA OAuth
+│   └── sitemap/
 ├── components/
-│   ├── home/                 # Home page sections
-│   ├── competitions/         # Competition UI components
-│   ├── members/              # Member card & profile components
-│   ├── rankings/             # Rankings table components
-│   ├── requests/             # Request management UI
-│   ├── learn/                # Learn page components
-│   ├── contact/              # Contact section
-│   ├── auth/                 # Auth buttons & guards
-│   ├── layout/               # Navbar, footer, sidebar
-│   ├── shared/               # Shared/reusable components (ErrorState, etc.)
-│   ├── magicui/              # Magic UI animated components
-│   ├── providers/            # Context providers (theme, query, HeroUI)
-│   └── ui/                   # Base shadcn/ui primitives
-├── config/                   # Site configuration (nav, roles, etc.)
-├── hooks/                    # Custom React hooks
-├── lib/                      # Prisma client & shared libs
-├── services/                 # API service layer (Axios)
-├── types/                    # TypeScript type definitions
-└── utils/                    # Helper & utility functions
+│   ├── home/                 # Landing sections
+│   ├── competitions/
+│   ├── members/
+│   ├── rankings/
+│   ├── requests/
+│   ├── learn/
+│   ├── layout/               # Navbar, footer, email banner
+│   ├── shared/               # Search, loading, map, popovers
+│   └── ui/                   # shadcn primitives
+├── config/                   # Nav, roles, competition constants
+├── hooks/                    # Client hooks
+├── lib/                      # Server: Prisma, caches, WCA sync
+│   ├── api/                  # Route helpers (auth, response, validation)
+│   ├── competitions/
+│   └── wca/
+├── services/                 # Browser calls to our API routes
+├── types/
+└── utils/                    # Pure helpers (dates, names, WCA formatting)
 
-e2e/                          # Playwright E2E tests
-prisma/                       # Database schema & migrations
-public/                       # Static assets (logo, images)
-scripts/                      # DB helper shell scripts
+e2e/                          # Playwright
+prisma/                       # Schema & migrations
+scripts/                      # Git hooks + local DB helpers
+CONTEXT.md                    # Domain glossary
 ```
+
+Feature files use **kebab-case**. `src/app/` stays thin: fetch data, render a feature module from `src/components/<feature>/`.
 
 ---
 
