@@ -2,49 +2,193 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { FaGithub } from "react-icons/fa";
-import { LOGO_DARK, LOGO_LIGHT } from "@/config/navigation.config";
-import Image from "next/image";
+import { FaGithub, FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
+import { SOCIAL_LINKS } from "@/components/home/constants";
 import { ThemeSwitcher } from "./navbar/themeSwitcher";
+import { NavLinks } from "./navbar/navLinks";
+import {
+    NAVBAR_BRAND_GAP_CLASS,
+    NAVBAR_CONTAINER_CLASS,
+    NAVBAR_ICON_BUTTON_CLASS,
+    NAVBAR_LINKS_GAP_CLASS,
+    NAVBAR_LOGO_LINK_CLASS,
+} from "./navbar/layout";
 import { useAuth } from "@/hooks/useAuth";
-import { useLogout } from "@/hooks/useLogout";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-
-
-const handleLinkRedirect = () => {
-    window.open("https://allenjohn.me", "_blank")
-}
-
+import { cn } from "@/lib/utils";
 
 const handleGithubRedirect = () => {
     window.open("https://github.com/cubingkeralaorg/cubingkerala", "_blank")
 }
 
-const QUICK_LINKS = [
-    { href: "/competitions", label: "Competitions" },
-    { href: "/rankings", label: "Rankings" },
-    { href: "/members", label: "Members" },
-    { href: "/learn", label: "Learn" },
-] as const
+const SOCIAL_ICONS = {
+    whatsapp: FaWhatsapp,
+    instagram: FaInstagram,
+    facebook: FaFacebook,
+} as const
 
-interface CubingKeralaFooterProps {
-    compact?: boolean
+function FooterMeta() {
+    return (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+            <span className="block sm:inline">
+                &copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.
+            </span>
+            <span aria-hidden="true" className="hidden px-1 text-border sm:inline">
+                &middot;
+            </span>
+            <span className="mt-1 block sm:mt-0 sm:inline">
+                Designed &amp; Developed with ❤️ by{" "}
+                <a
+                    href="https://allenjohn.me"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium transition-colors hover:text-foreground"
+                >
+                    Allen John
+                </a>
+            </span>
+        </p>
+    )
 }
 
-const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
-    const { isLoggedIn } = useAuth();
+interface EmailPreferencesProps {
+    profile: { email: string | null; emailConsent: boolean }
+    isUpdating: boolean
+    isEditingEmail: boolean
+    newEmail: string
+    setIsEditingEmail: (value: boolean) => void
+    setNewEmail: (value: string) => void
+    onToggleSubscription: (consent: boolean) => void
+    onUpdateEmail: () => void
+}
+
+function EmailPreferences({
+    profile,
+    isUpdating,
+    isEditingEmail,
+    newEmail,
+    setIsEditingEmail,
+    setNewEmail,
+    onToggleSubscription,
+    onUpdateEmail,
+}: EmailPreferencesProps) {
+    const subscribeLabel = profile.emailConsent
+        ? "Unsubscribe from Emails"
+        : "Subscribe to Emails"
+
+    return (
+        <div className="flex flex-col items-start gap-2 lg:items-end">
+            <div className="flex flex-wrap items-center gap-1">
+                <button
+                    type="button"
+                    onClick={() => onToggleSubscription(!profile.emailConsent)}
+                    disabled={isUpdating}
+                    className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                >
+                    {isUpdating ? "Updating..." : subscribeLabel}
+                </button>
+
+                {!isEditingEmail && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setIsEditingEmail(true)
+                            setNewEmail(profile.email || "")
+                        }}
+                        disabled={isUpdating}
+                        className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                    >
+                        Update Email Address
+                    </button>
+                )}
+            </div>
+
+            <AnimatePresence mode="wait">
+                {isEditingEmail && (
+                    <motion.div
+                        key="edit-form"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex w-full flex-col gap-2 sm:flex-row sm:items-center lg:justify-end"
+                    >
+                        <input
+                            type="email"
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
+                            placeholder="New email address"
+                            className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring sm:min-w-[220px]"
+                        />
+                        <div className="flex items-center gap-1">
+                            <button
+                                type="button"
+                                onClick={onUpdateEmail}
+                                disabled={isUpdating}
+                                className="inline-flex h-8 items-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsEditingEmail(false)}
+                                disabled={isUpdating}
+                                className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    )
+}
+
+function FooterActions() {
+    return (
+        <div className={cn("flex items-center", NAVBAR_LINKS_GAP_CLASS)}>
+            {SOCIAL_LINKS.map((social) => {
+                const Icon = SOCIAL_ICONS[social.id];
+                return (
+                    <a
+                        key={social.id}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={NAVBAR_ICON_BUTTON_CLASS}
+                        aria-label={social.name}
+                    >
+                        <Icon className="size-4" />
+                    </a>
+                );
+            })}
+            <button
+                type="button"
+                onClick={handleGithubRedirect}
+                className={NAVBAR_ICON_BUTTON_CLASS}
+                aria-label="Open GitHub"
+            >
+                <FaGithub className="size-4" />
+            </button>
+            <ThemeSwitcher />
+        </div>
+    )
+}
+
+const CubingKeralaFooter = () => {
+    const { isLoggedIn, userInfo } = useAuth();
     const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
-    const { handleLogout } = useLogout();
     const [isEditingEmail, setIsEditingEmail] = React.useState(false);
     const [newEmail, setNewEmail] = React.useState("");
-    
+
     const handleToggleSubscription = async (newConsent: boolean) => {
         try {
             await updateProfile({ emailConsent: newConsent });
             toast.success(newConsent ? "You have been subscribed to emails." : "You have been unsubscribed from emails.");
-        } catch (error) {
+        } catch {
             toast.error("Failed to update preferences. Please try again.");
         }
     };
@@ -58,244 +202,48 @@ const CubingKeralaFooter = ({ compact = false }: CubingKeralaFooterProps) => {
             await updateProfile({ email: newEmail });
             toast.success("Email updated successfully.");
             setIsEditingEmail(false);
-        } catch (error) {
+        } catch {
             toast.error("Failed to update email. Please try again.");
         }
     };
-    
-    if (compact) {
-        return (
-            <footer className="bg-transparent py-4 text-muted-foreground w-full">
-                <div className="flex flex-col items-start justify-start gap-4 text-left">
-                    <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-1">
-                            <button
-                                onClick={handleGithubRedirect}
-                                className="text-foreground/50 hover:text-foreground p-2 rounded-lg transition-colors"
-                                aria-label="GitHub repository"
-                            >
-                                <FaGithub size={20} />
-                            </button>
-                            <ThemeSwitcher />
-                        </div>
-
-                        {isLoggedIn && profile?.email && (
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => handleToggleSubscription(!profile.emailConsent)}
-                                    disabled={isUpdating}
-                                    className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                >
-                                    {isUpdating 
-                                        ? "Updating..." 
-                                        : profile.emailConsent 
-                                            ? "Unsubscribe" 
-                                            : "Subscribe"}
-                                </button>
-                                
-                                {!isEditingEmail && (
-                                    <button
-                                        onClick={() => { setIsEditingEmail(true); setNewEmail(profile.email || ""); }}
-                                        disabled={isUpdating}
-                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                    >
-                                        Update Email
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {isLoggedIn && profile?.email && isEditingEmail && (
-                        <div className="w-full pt-1 pb-2">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key="edit-form-compact"
-                                    initial={{ opacity: 0, y: -5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -5 }}
-                                    className="flex flex-col gap-2 w-full"
-                                >
-                                    <input
-                                        type="email"
-                                        value={newEmail}
-                                        onChange={(e) => setNewEmail(e.target.value)}
-                                        placeholder="New email"
-                                        className="px-3 py-2 text-sm rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/50 w-full"
-                                    />
-                                    <div className="flex items-center gap-2 justify-end">
-                                        <button
-                                            onClick={handleUpdateEmail}
-                                            disabled={isUpdating}
-                                            className="text-sm bg-foreground text-background px-4 py-1.5 rounded hover:bg-foreground/90 transition-colors disabled:opacity-50 font-medium"
-                                        >
-                                            Save
-                                        </button>
-                                        <button
-                                            onClick={() => setIsEditingEmail(false)}
-                                            disabled={isUpdating}
-                                            className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    )}
-                    
-                    <div className="border-t border-border/70 pt-8 flex flex-col items-start justify-start gap-2 w-full">
-                        <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
-                        <p className="text-xs text-muted-foreground/80">
-                            Designed & Developed with ❤️ by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>
-                        </p>
-                    </div>
-                </div>
-            </footer>
-        )
-    }
 
     return (
-        <footer className="mt-auto bg-background">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 border-t border-border py-10 md:py-12">
-                    <div className="max-w-md">
-                        <Link href="/" className="inline-flex items-center" aria-label="Cubing Kerala home">
-                            <Image
-                                src={LOGO_LIGHT}
-                                alt="Cubing Kerala Logo"
-                                width={42}
-                                height={42}
-                                className="w-[42px] h-auto block dark:hidden"
-                            />
-                            <Image
-                                src={LOGO_DARK}
-                                alt="Cubing Kerala Logo"
-                                width={42}
-                                height={42}
-                                className="w-[42px] h-auto hidden dark:block"
-                            />
-                        </Link>
-                        <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-                            Building Kerala&apos;s speedcubing community with competitions, rankings, resources, and support for every cuber.
-                        </p>
-                    </div>
-
-                    <div className="hidden md:block md:ml-auto md:text-right md:pt-2">
-                        <ul className="list-none flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-x-5 md:gap-y-2 md:justify-end">
-                            {QUICK_LINKS.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                            <li>
-                                {isLoggedIn ? (
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-sm text-red-500 hover:text-red-500/70 transition-colors whitespace-nowrap"
-                                    >
-                                        Logout
-                                    </button>
-                                ) : (
-                                    <Link
-                                        href="/login"
-                                        className="text-sm text-green-500 hover:text-green-500/70 transition-colors whitespace-nowrap"
-                                    >
-                                        Login
-                                    </Link>
+        <footer className="ck-landing border-t border-border/60 bg-background">
+            <div className={NAVBAR_CONTAINER_CLASS}>
+                <div className="flex flex-col gap-6 py-8 lg:gap-5">
+                    <div className="flex flex-col gap-5 lg:h-16 lg:flex-row lg:items-center lg:justify-between">
+                        <div className={cn("flex flex-col lg:min-w-0 lg:flex-row lg:items-center", NAVBAR_BRAND_GAP_CLASS)}>
+                            <Link href="/" className={NAVBAR_LOGO_LINK_CLASS}>
+                                Cubing Kerala
+                            </Link>
+                            <nav
+                                className={cn(
+                                    "-ml-2.5 grid grid-cols-2 gap-x-2 gap-y-1 lg:ml-0 lg:flex lg:items-center",
+                                    NAVBAR_LINKS_GAP_CLASS,
                                 )}
-                            </li>
-                        </ul>
-                        <div className="mt-4 flex flex-col items-start md:items-end gap-3">
-                            <div className="flex items-center gap-3">
-                                <button
-                                    onClick={handleGithubRedirect}
-                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-foreground/50 hover:text-foreground transition-all"
-                                    aria-label="Open GitHub"
-                                >
-                                    <FaGithub size={16} />
-                                </button>
-                                <ThemeSwitcher />
-                            </div>
-                            {isLoggedIn && profile?.email && (
-                                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                                    <button
-                                        onClick={() => handleToggleSubscription(!profile.emailConsent)}
-                                        disabled={isUpdating}
-                                        className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                    >
-                                        {isUpdating 
-                                            ? "Updating..." 
-                                            : profile.emailConsent 
-                                                ? "Unsubscribe from Emails" 
-                                                : "Subscribe to Emails"}
-                                    </button>
-                                    
-                                    <AnimatePresence mode="wait">
-                                        {isEditingEmail ? (
-                                            <motion.div
-                                                key="edit-form"
-                                                initial={{ opacity: 0, x: 10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: -10 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="flex items-center gap-2 mt-1 md:mt-0"
-                                            >
-                                                <input
-                                                    type="email"
-                                                    value={newEmail}
-                                                    onChange={(e) => setNewEmail(e.target.value)}
-                                                    placeholder="New email address"
-                                                    className="px-2 py-1 text-sm rounded border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/50 w-full sm:min-w-[220px]"
-                                                />
-                                                <button
-                                                    onClick={handleUpdateEmail}
-                                                    disabled={isUpdating}
-                                                    className="text-sm bg-foreground text-background px-3 py-1 rounded hover:bg-foreground/90 transition-colors disabled:opacity-50 font-medium"
-                                                >
-                                                    Save
-                                                </button>
-                                                <button
-                                                    onClick={() => setIsEditingEmail(false)}
-                                                    disabled={isUpdating}
-                                                    className="text-sm text-muted-foreground hover:text-foreground transition-colors px-1"
-                                                >
-                                                    Cancel
-                                                </button>
-                                            </motion.div>
-                                        ) : (
-                                            <motion.button
-                                                key="update-btn"
-                                                initial={{ opacity: 0, x: -10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: 10 }}
-                                                transition={{ duration: 0.2 }}
-                                                onClick={() => { setIsEditingEmail(true); setNewEmail(profile.email || ""); }}
-                                                disabled={isUpdating}
-                                                className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                                            >
-                                                Update Email Address
-                                            </motion.button>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            )}
+                                aria-label="Footer"
+                            >
+                                <NavLinks userId={userInfo?.me?.id} />
+                            </nav>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="border-t border-border/70 py-8 md:py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.</p>
-                    <p className="text-xs text-muted-foreground/80">
-                        Designed & Developed with ❤️ by <span onClick={() => handleLinkRedirect()} className="cursor-pointer hover:text-foreground transition-colors font-medium">Allen John</span>
-                    </p>
+                        <FooterActions />
+                    </div>
+
+                    {isLoggedIn && profile?.email && (
+                        <EmailPreferences
+                            profile={profile}
+                            isUpdating={isUpdating}
+                            isEditingEmail={isEditingEmail}
+                            newEmail={newEmail}
+                            setIsEditingEmail={setIsEditingEmail}
+                            setNewEmail={setNewEmail}
+                            onToggleSubscription={handleToggleSubscription}
+                            onUpdateEmail={handleUpdateEmail}
+                        />
+                    )}
+
+                    <FooterMeta />
                 </div>
             </div>
         </footer>

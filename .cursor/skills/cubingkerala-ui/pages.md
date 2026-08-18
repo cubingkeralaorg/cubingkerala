@@ -1,19 +1,16 @@
-# Page inventory & refresh notes
+# Page inventory
 
 ## Home `/`
 
 **Files:** `src/app/page.tsx`, `src/components/home/*`
 
-**Visual language:** Original site style (GradientText, DotPattern, bordered
-promo cards, green eyebrows, Shiny/Rainbow CTAs).
+Two full-viewport screens:
 
-**Featured competition logic:**
-1. Next upcoming (not cancelled)
-2. Else latest past (not cancelled)
-3. Else classic community hero copy
+1. Hero — community headline + featured meet browser card + destination cards
+2. Unravel — about + mission + socials, then Get in touch
 
-Hero when featured: green eyebrow + competition name as H1 + date/city/events +
-View competition/results + WhatsApp.
+Featured competition: next upcoming (not cancelled), else latest past, else
+browse-competitions fallback. Fetch via `getCachedCompetitions` (`revalidate =
+300`). Helper: `src/utils/featuredCompetition.ts`.
 
-Below-fold sections stay the original marketing cards (calendar, legends,
-members, about, contact).
+Navbar wordmark: Cubing Kerala. Favicon: `src/app/icon.svg` (CK).

@@ -11,10 +11,6 @@ export const metadata: Metadata = {
   title: "Member Info | Cubing Kerala",
   description:
     "Information about a member of the Rubik's Cube community in Kerala",
-  icons: [
-    { rel: "icon", url: "/logoblack.png" },
-    { rel: "cubingkerala-icon", url: "/logoblack.png" },
-  ],
 };
 
 const MemberInfo = async ({ params }: { params: Promise<{ wca_id: string }> }) => {

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface AuthButtonProps {
   isLoggedIn: boolean;
@@ -17,25 +19,27 @@ export function AuthButton({
 }: AuthButtonProps) {
   if (isLoggedIn) {
     return (
-      <button
+      <Button
+        size="sm"
+        className={cn(
+          "h-7 border-0 bg-red-700 px-2.5 text-white shadow-none hover:bg-red-800",
+          className,
+        )}
         onClick={() => {
           onLogout();
           onClose?.();
         }}
-        className={`text-[15px] font-normal tracking-wide text-red-500 hover:text-red-500/70 px-3 py-2 transition-colors duration-200 ${className}`}
       >
         Logout
-      </button>
+      </Button>
     );
   }
 
   return (
-    <Link 
-      href="/login" 
-      onClick={onClose}
-      className={`text-[15px] font-normal tracking-wide text-green-500 hover:text-green-500/70 px-3 py-2 transition-colors duration-200 ${className}`}
-    >
-      Login
-    </Link>
+    <Button size="sm" className={cn("h-7 px-2.5", className)} asChild>
+      <Link href="/login" onClick={onClose}>
+        Login
+      </Link>
+    </Button>
   );
 }

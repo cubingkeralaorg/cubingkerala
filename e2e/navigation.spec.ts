@@ -40,9 +40,8 @@ test.describe('Navigation', () => {
     
     if (await menuButton.isVisible()) {
       await menuButton.click();
-      
-      const mobileMenu = page.getByRole('navigation', { name: /mobile menu/i });
-      await expect(mobileMenu).toBeVisible();
+      await expect(page.getByRole('button', { name: /close menu/i })).toBeVisible();
+      await expect(page.getByRole('navigation', { name: /mobile menu/i })).toBeVisible();
     }
   });
 });
@@ -52,8 +51,12 @@ test.describe('Home Page', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const heading = page.getByRole('heading', { level: 1 });
+    const heading = page.getByRole('heading', {
+      level: 1,
+      name: /rubik's cube community/i,
+    });
     await expect(heading).toBeVisible();
+    await expect(page.getByRole('link', { name: /join whatsapp/i })).toBeVisible();
   });
 });
 
