@@ -38,10 +38,10 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
 
 
   return (
-    <div className="flex items-center justify-center gap-3">
-      <Menubar className="rounded-md bg-card border border-border text-sm md:text-[15px]">
+    <div className="flex shrink-0 items-center">
+      <Menubar className="h-8 rounded-md border border-border bg-card text-sm md:h-9 md:text-[15px]">
         <MenubarMenu>
-          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
+          <MenubarTrigger className="cursor-pointer px-2 hover:bg-accent hover:text-foreground md:px-3">
             <span className="truncate max-w-[70px] sm:max-w-[120px] md:max-w-none block">
               {getEventName(selectedFilter.event) || "Select Event"}
             </span>
@@ -141,7 +141,7 @@ export function FilterComponent({ onFilterChange }: FilterComponentProps) {
         </MenubarMenu>
         <span>|</span>
         <MenubarMenu>
-          <MenubarTrigger className="hover:bg-accent hover:text-foreground cursor-pointer">
+          <MenubarTrigger className="cursor-pointer px-2 hover:bg-accent hover:text-foreground md:px-3">
             <span className="truncate max-w-[50px] sm:max-w-[80px] md:max-w-none block">
               {selectedFilter.round || "Select Round"}
             </span>

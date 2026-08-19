@@ -1,8 +1,15 @@
 "use client";
 
-export default function Loading() {
+import { cn } from "@/lib/utils";
+
+export default function Loading({ className }: { className?: string }) {
   return (
-    <div className="flex w-full flex-1 items-center justify-center min-h-[calc(100dvh-8rem)]">
+    <div
+      className={cn(
+        "flex w-full flex-1 items-center justify-center min-h-[calc(100dvh-8rem)]",
+        className,
+      )}
+    >
       <div
         role="status"
         aria-label="Loading"

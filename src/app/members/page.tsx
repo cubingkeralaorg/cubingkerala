@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
+import Loading from "@/components/shared/loading";
 import { MembersData } from "@/components/members/members-data";
-import { MembersSkeleton } from "@/components/members/members-skeleton";
 import { MembersPageShell } from "@/components/members/members-page-shell";
-import { DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
 export const revalidate = 300;
 
@@ -15,13 +14,7 @@ export const metadata: Metadata = {
 export default function Members() {
   return (
     <MembersPageShell>
-      <Suspense
-        fallback={
-          <div className={DATA_GRID_WRAP}>
-            <MembersSkeleton />
-          </div>
-        }
-      >
+      <Suspense fallback={<Loading className="min-h-64 flex-none" />}>
         <MembersData />
       </Suspense>
     </MembersPageShell>
