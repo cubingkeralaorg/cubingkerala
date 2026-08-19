@@ -118,8 +118,8 @@ export default function RankingsComponent({
 
   return (
     <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex flex-col gap-2">
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="flex min-w-0 flex-col gap-2">
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
             Rankings
           </h1>

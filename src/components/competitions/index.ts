@@ -10,5 +10,4 @@ export { RegistrationDetails } from './registration-details';
 export { RegistrationStatus } from './registration-status';
 export { default as CompetitionsPage } from './competitions-page';
 export { default as CompetitionDetails } from './competition-details';
-export { CompetitionSkeleton } from './competition-skeleton';
 export { CompetitionResults } from './competition-results';

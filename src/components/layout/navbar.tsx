@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
 import { useDesktopNav } from "@/hooks/useDesktopNav";
@@ -21,57 +21,18 @@ import { cn } from "@/lib/utils";
 
 export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const scrollYRef = useRef(0);
   const isDesktopNav = useDesktopNav();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, ready } = useAuth();
   const { handleLogout } = useLogout();
+  const showAdminNav = isAdmin && (!ready || isLoggedIn);
 
-  const toggleMenu = () => setIsMenuOpen((open) => !open);
   const closeMenu = () => setIsMenuOpen(false);
-  const showMobileMenu = isMenuOpen;
 
   useEffect(() => {
     if (isDesktopNav && isMenuOpen) {
       setIsMenuOpen(false);
     }
   }, [isDesktopNav, isMenuOpen]);
-
-  useEffect(() => {
-    if (typeof document === "undefined" || typeof window === "undefined")
-      return;
-
-    const body = document.body;
-
-    if (showMobileMenu) {
-      scrollYRef.current = window.scrollY;
-      body.style.position = "fixed";
-      body.style.top = `-${scrollYRef.current}px`;
-      body.style.left = "0";
-      body.style.right = "0";
-      body.style.width = "100%";
-      body.style.overflow = "hidden";
-    } else {
-      const restoreY = scrollYRef.current;
-      body.style.position = "";
-      body.style.top = "";
-      body.style.left = "";
-      body.style.right = "";
-      body.style.width = "";
-      body.style.overflow = "";
-      if (restoreY > 0) {
-        window.scrollTo(0, restoreY);
-      }
-    }
-
-    return () => {
-      body.style.position = "";
-      body.style.top = "";
-      body.style.left = "";
-      body.style.right = "";
-      body.style.width = "";
-      body.style.overflow = "";
-    };
-  }, [showMobileMenu]);
 
   const wordmark = (
     <Link href="/" onClick={closeMenu} className={NAVBAR_LOGO_LINK_CLASS}>
@@ -91,7 +52,7 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
           <div className={cn("flex items-center", NAVBAR_BRAND_GAP_CLASS)}>
             {wordmark}
             <nav className={cn("hidden items-center lg:flex", NAVBAR_LINKS_GAP_CLASS)}>
-              <NavLinks isAdmin={isAdmin} />
+              <NavLinks isAdmin={showAdminNav} />
             </nav>
           </div>
 
@@ -111,13 +72,10 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
 
             <button
               type="button"
-              onClick={toggleMenu}
-              className={cn(
-                "relative flex h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200 lg:hidden",
-                isMenuOpen && "pointer-events-none opacity-0",
-              )}
+              onClick={() => setIsMenuOpen((open) => !open)}
+              className="relative flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
               aria-label="Open menu"
-              aria-expanded={showMobileMenu}
+              aria-expanded={isMenuOpen}
               aria-controls="mobile-menu-panel"
             >
               <span className="sr-only">Open navigation menu</span>
@@ -132,8 +90,8 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
       </div>
 
       <MobileMenu
-        isOpen={showMobileMenu}
-        isAdmin={isAdmin}
+        isOpen={isMenuOpen}
+        isAdmin={showAdminNav}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
         onClose={closeMenu}

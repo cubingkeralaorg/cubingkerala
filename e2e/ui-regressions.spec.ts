@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('UI Regression Coverage', () => {
-  test('competitions refresh shows loading copy and table', async ({ page }) => {
+  test('competitions refresh shows spinner without table', async ({ page }) => {
     await page.route('**/api/get-competitions**', async (route) => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       await route.fulfill({
@@ -24,7 +24,9 @@ test.describe('UI Regression Coverage', () => {
     await expect(page.getByText('Fetching competitions...')).toBeVisible({
       timeout: 10_000,
     });
-    await expect(page.locator('table').first()).toBeVisible();
+    await expect(page.getByRole('status', { name: /loading/i })).toBeVisible();
+    await expect(page.getByPlaceholder(/search competitions/i)).toHaveCount(0);
+    await expect(page.locator('table')).toHaveCount(0);
   });
 
   test('footer desktop alignment keeps wordmark and nav on one row', async ({ page }) => {
@@ -78,12 +80,8 @@ test.describe('UI Regression Coverage', () => {
     await expect(page.getByRole('button', { name: /close menu/i })).toBeVisible();
     await expect(page.getByRole('navigation', { name: /mobile menu/i })).toBeVisible();
 
-    const [scrollAfter, bodyPosition] = await Promise.all([
-      page.evaluate(() => window.scrollY),
-      page.evaluate(() => getComputedStyle(document.body).position),
-    ]);
+    const scrollAfter = await page.evaluate(() => window.scrollY);
 
     expect(scrollAfter).toBe(scrollBefore);
-    expect(bodyPosition).toBe('fixed');
   });
 });

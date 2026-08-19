@@ -179,10 +179,11 @@ function FooterActions() {
 }
 
 const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, ready } = useAuth();
     const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
     const [isEditingEmail, setIsEditingEmail] = React.useState(false);
     const [newEmail, setNewEmail] = React.useState("");
+    const showAdminNav = isAdmin && (!ready || isLoggedIn);
 
     const handleToggleSubscription = async (newConsent: boolean) => {
         try {
@@ -223,7 +224,7 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                                 )}
                                 aria-label="Footer"
                             >
-                                <NavLinks isAdmin={isAdmin} />
+                                <NavLinks isAdmin={showAdminNav} />
                             </nav>
                         </div>
 
