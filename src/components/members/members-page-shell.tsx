@@ -6,8 +6,8 @@ import { Loader } from "lucide-react";
 import { UserInfo } from "@/types/api";
 import { getUserInfoFromCookie } from "@/utils/cookie-utils";
 import { joinCubingKerala } from "@/services/member.api";
-import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 import { Button } from "@/components/ui/button";
+import { PageShell } from "@/components/shared/page-shell";
 
 export function MembersPageShell({
   children,
@@ -50,31 +50,26 @@ export function MembersPageShell({
   };
 
   return (
-    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
-      <div className="mb-6 flex flex-col gap-2">
-        <div className="flex items-start justify-between gap-4">
-          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
-            Members
-          </h1>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleJoinCK}
-            disabled={isJoinCkLoading}
-          >
-            {isJoinCkLoading ? (
-              <Loader className="animate-spin" />
-            ) : (
-              "Join Cubing Kerala"
-            )}
-          </Button>
-        </div>
-        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
-          Find cubers by name or WCA ID, and see who competes from Kerala.
-        </p>
-      </div>
+    <PageShell
+      title="Members"
+      description="Find cubers by name or WCA ID, and see who competes from Kerala."
+      actions={
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleJoinCK}
+          disabled={isJoinCkLoading}
+        >
+          {isJoinCkLoading ? (
+            <Loader className="animate-spin" />
+          ) : (
+            "Join Cubing Kerala"
+          )}
+        </Button>
+      }
+    >
       {children}
-    </div>
+    </PageShell>
   );
 }

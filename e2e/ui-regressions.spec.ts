@@ -19,6 +19,9 @@ test.describe('UI Regression Coverage', () => {
     await expect(page.getByRole('heading', { name: 'Competitions' })).toBeVisible({
       timeout: 15_000,
     });
+    await expect(page.getByRole('button', { name: 'Refresh' })).toBeVisible({
+      timeout: 15_000,
+    });
     await page.getByRole('button', { name: 'Refresh' }).click();
 
     await expect(page.getByText('Fetching competitions...')).toBeVisible({
