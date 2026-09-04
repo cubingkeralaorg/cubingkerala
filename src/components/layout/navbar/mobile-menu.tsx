@@ -16,7 +16,12 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ThemeSwitcher } from "./theme-switcher";
-import { NAVBAR_ICON_BUTTON_CLASS, NAVBAR_LOGO_LINK_CLASS } from "./layout";
+import {
+  NAVBAR_CONTAINER_CLASS,
+  NAVBAR_ICON_BUTTON_CLASS,
+  NAVBAR_LOGO_LINK_CLASS,
+  NAVBAR_ROW_CLASS,
+} from "./layout";
 import { cn } from "@/lib/utils";
 
 interface MobileMenuProps {
@@ -65,34 +70,41 @@ export function MobileMenu({
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
-        side="inset"
+        side="full"
         hideCloseButton
         onOpenAutoFocus={(event) => event.preventDefault()}
-        className="ck-landing flex flex-col gap-0 overflow-hidden"
+        className="ck-landing flex h-dvh flex-col gap-0 overflow-hidden"
       >
-        <SheetHeader className="flex flex-row items-center justify-between space-y-0 border-b border-border px-5 py-4 text-left">
-          <SheetTitle asChild>
-            <Link
-              href="/"
-              onClick={onClose}
-              className={cn(NAVBAR_LOGO_LINK_CLASS, "text-base")}
-            >
-              Cubing Kerala
-            </Link>
-          </SheetTitle>
-          <SheetDescription className="sr-only">
-            Site navigation
-          </SheetDescription>
-          <SheetClose className="rounded-md p-1 text-foreground outline-none transition-opacity hover:opacity-70">
-            <X className="h-5 w-5" strokeWidth={1.75} />
-            <span className="sr-only">Close menu</span>
-          </SheetClose>
+        <SheetHeader className="space-y-0 border-b border-border p-0 text-left">
+          <div className={NAVBAR_CONTAINER_CLASS}>
+            <div className={cn(NAVBAR_ROW_CLASS, "w-full")}>
+              <SheetTitle asChild>
+                <Link
+                  href="/"
+                  onClick={onClose}
+                  className={NAVBAR_LOGO_LINK_CLASS}
+                >
+                  Cubing Kerala
+                </Link>
+              </SheetTitle>
+              <SheetDescription className="sr-only">
+                Site navigation
+              </SheetDescription>
+              <SheetClose className="flex h-10 w-10 items-center justify-center rounded-md text-foreground outline-none transition-opacity hover:opacity-70">
+                <X className="h-5 w-5" strokeWidth={1.75} />
+                <span className="sr-only">Close menu</span>
+              </SheetClose>
+            </div>
+          </div>
         </SheetHeader>
 
         <nav
           id="mobile-menu-panel"
           aria-label="Mobile menu"
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5"
+          className={cn(
+            NAVBAR_CONTAINER_CLASS,
+            "flex min-h-0 flex-1 flex-col overflow-y-auto",
+          )}
         >
           {links.map((link) => (
             <Link
@@ -106,7 +118,12 @@ export function MobileMenu({
           ))}
         </nav>
 
-        <div className="flex flex-col gap-3 px-5 pb-5 pt-3">
+        <div
+          className={cn(
+            NAVBAR_CONTAINER_CLASS,
+            "flex flex-col gap-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3",
+          )}
+        >
           <div className="flex items-center justify-end gap-1">
             <a
               href={GITHUB_HREF}
