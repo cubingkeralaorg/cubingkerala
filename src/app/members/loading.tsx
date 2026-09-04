@@ -1,5 +1,10 @@
-import LoadingSpinner from "@/components/shared/loading";
+import { MembersPageShell } from "@/components/members/members-page-shell";
+import { PageContentLoading } from "@/components/shared/page-shell";
 
 export default function Loading() {
-  return <LoadingSpinner />;
+  return (
+    <MembersPageShell>
+      <PageContentLoading />
+    </MembersPageShell>
+  );
 }

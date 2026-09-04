@@ -1,6 +1,6 @@
 import { Competition } from "@/types/competition.types";
 import { CompetitionTable } from "./competition-table";
-import Loading from "@/components/shared/loading";
+import { PageContentLoading } from "@/components/shared/page-shell";
 import SearchComponent from "@/components/shared/search";
 import { DATA_GRID_TOOLBAR, DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
@@ -20,7 +20,7 @@ export function CompetitionsList({
   onSearchChange,
 }: CompetitionsListProps) {
   if (isLoading) {
-    return <Loading className="min-h-64 flex-none" />;
+    return <PageContentLoading />;
   }
 
   return (

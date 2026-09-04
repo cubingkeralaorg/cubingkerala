@@ -1,5 +1,5 @@
-import LoadingSpinner from "@/components/shared/loading";
+import { RankingsFallback } from "@/components/rankings/rankings-fallback";
 
 export default function Loading() {
-  return <LoadingSpinner />;
+  return <RankingsFallback />;
 }

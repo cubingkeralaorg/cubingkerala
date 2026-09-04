@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import Loading from "@/components/shared/loading";
 import { RankingsData } from "@/components/rankings/rankings-data";
+import { RankingsFallback } from "@/components/rankings/rankings-fallback";
 
 export const revalidate = 300;
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Rankings() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<RankingsFallback />}>
       <RankingsData />
     </Suspense>
   );

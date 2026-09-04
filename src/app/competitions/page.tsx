@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import Loading from "@/components/shared/loading";
 import { CompetitionsData } from "@/components/competitions/competitions-data";
+import { CompetitionsFallback } from "@/components/competitions/competitions-fallback";
 
 export const revalidate = 300;
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Competitions() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<CompetitionsFallback />}>
       <CompetitionsData />
     </Suspense>
   );
