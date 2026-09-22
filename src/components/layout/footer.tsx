@@ -31,14 +31,11 @@ const SOCIAL_ICONS = {
 
 function FooterMeta() {
     return (
-        <p className="text-xs leading-relaxed text-muted-foreground">
-            <span className="block sm:inline">
+        <div className="flex flex-col gap-1 text-xs leading-relaxed text-muted-foreground lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+            <span>
                 &copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.
             </span>
-            <span aria-hidden="true" className="hidden px-1 text-border sm:inline">
-                &middot;
-            </span>
-            <span className="mt-1 block sm:mt-0 sm:inline">
+            <span>
                 Designed &amp; Developed with ❤️ by{" "}
                 <a
                     href="https://allenjohn.me"
@@ -49,7 +46,7 @@ function FooterMeta() {
                     Allen John
                 </a>
             </span>
-        </p>
+        </div>
     )
 }
 
