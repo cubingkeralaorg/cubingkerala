@@ -6,7 +6,7 @@ import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAVBAR_ICON_BUTTON_CLASS } from "./layout";
 
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
 
@@ -19,7 +19,7 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className={cn(NAVBAR_ICON_BUTTON_CLASS, "relative")}
+      className={cn(NAVBAR_ICON_BUTTON_CLASS, "relative", className)}
       aria-label="Toggle theme"
       type="button"
     >

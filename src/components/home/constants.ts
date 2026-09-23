@@ -20,5 +20,12 @@ export const HERO_BLOCK_GAP_CLASS = "gap-12 lg:gap-16";
 /** Gap between the unravel grid and contact card. */
 export const UNRAVEL_BLOCK_GAP_CLASS = "gap-10 lg:gap-14";
 
+/**
+ * Fixed endpoint of the unravel card's gradient — also used as the footer's
+ * background on the landing page so the green visually continues straight
+ * into the footer with no seam.
+ */
+export const UNRAVEL_GREEN_HEX = "#4fae79";
+
 /** Inner vertical padding inside each viewport section. */
 export const LANDING_SECTION_INNER_PY_CLASS = "py-8 lg:py-10";
