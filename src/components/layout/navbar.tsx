@@ -57,7 +57,7 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   return (
     <div
       className={cn(
-        "ck-landing pointer-events-auto sticky top-0 z-[10000] border-b border-border/60 text-foreground",
+        "ck-landing sticky top-0 z-[10000] border-b border-border/60 text-foreground",
         isMenuOpen ? "bg-background" : "bg-background/80 backdrop-blur-lg",
       )}
     >

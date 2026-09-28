@@ -71,7 +71,7 @@ export function MobileMenu({
   }, [pathname]);
 
   return (
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()} modal={false}>
       <SheetContent
         side="right"
         hideCloseButton
