@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogout } from "@/hooks/useLogout";
@@ -35,15 +36,28 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
   }, [isDesktopNav, isMenuOpen]);
 
   const wordmark = (
-    <Link href="/" onClick={closeMenu} className={NAVBAR_LOGO_LINK_CLASS}>
-      Cubing Kerala
+    <Link
+      href="/"
+      onClick={closeMenu}
+      className={cn(NAVBAR_LOGO_LINK_CLASS, "flex items-center gap-2")}
+    >
+      <Image
+        src="/cubingkerala_logo.svg"
+        alt="Cubing Kerala"
+        width={26}
+        height={26}
+        priority
+        unoptimized
+        className="size-6 shrink-0 lg:size-[26px]"
+      />
+      <span>Cubing Kerala</span>
     </Link>
   );
 
   return (
     <div
       className={cn(
-        "ck-landing sticky top-0 z-[10000] border-b border-border/60 text-foreground",
+        "ck-landing pointer-events-auto sticky top-0 z-[10000] border-b border-border/60 text-foreground",
         isMenuOpen ? "bg-background" : "bg-background/80 backdrop-blur-lg",
       )}
     >
@@ -74,15 +88,32 @@ export const NavbarComponent = ({ isAdmin = false }: { isAdmin?: boolean }) => {
               type="button"
               onClick={() => setIsMenuOpen((open) => !open)}
               className="relative flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
-              aria-label="Open menu"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu-panel"
             >
-              <span className="sr-only">Open navigation menu</span>
+              <span className="sr-only">
+                {isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              </span>
               <div className="relative h-[14px] w-[18px]">
-                <span className="absolute left-0 top-0 h-[2px] w-full rounded-full bg-current" />
-                <span className="absolute left-0 top-[6px] h-[2px] w-full rounded-full bg-current" />
-                <span className="absolute left-0 top-[12px] h-[2px] w-full rounded-full bg-current" />
+                <span
+                  className={cn(
+                    "absolute left-0 top-0 h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-in-out",
+                    isMenuOpen && "top-[6px] rotate-45",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute left-0 top-[6px] h-[2px] w-full rounded-full bg-current transition-opacity duration-300 ease-in-out",
+                    isMenuOpen && "opacity-0",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute left-0 top-[12px] h-[2px] w-full rounded-full bg-current transition-all duration-300 ease-in-out",
+                    isMenuOpen && "top-[6px] -rotate-45",
+                  )}
+                />
               </div>
             </button>
           </div>

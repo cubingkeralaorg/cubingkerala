@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { FaGithub, FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
 import { SOCIAL_LINKS, UNRAVEL_GREEN_HEX } from "@/components/home/constants";
@@ -64,6 +65,7 @@ interface EmailPreferencesProps {
     isUpdating: boolean
     isEditingEmail: boolean
     newEmail: string
+    isHome: boolean
     setIsEditingEmail: (value: boolean) => void
     setNewEmail: (value: string) => void
     onToggleSubscription: (consent: boolean) => void
@@ -75,6 +77,7 @@ function EmailPreferences({
     isUpdating,
     isEditingEmail,
     newEmail,
+    isHome,
     setIsEditingEmail,
     setNewEmail,
     onToggleSubscription,
@@ -84,14 +87,21 @@ function EmailPreferences({
         ? "Unsubscribe from Emails"
         : "Subscribe to Emails"
 
+    const toggleClass = cn(
+        "inline-flex h-8 items-center rounded-md px-2.5 text-sm transition-colors disabled:opacity-50",
+        isHome
+            ? "text-zinc-800 hover:bg-black/10 hover:text-zinc-950"
+            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+    )
+
     return (
         <div className="flex flex-col items-start gap-2 lg:items-end">
-            <div className="flex flex-wrap items-center gap-1">
+            <div className="-ml-2.5 flex flex-wrap items-center gap-1 lg:ml-0 lg:-mr-2.5">
                 <button
                     type="button"
                     onClick={() => onToggleSubscription(!profile.emailConsent)}
                     disabled={isUpdating}
-                    className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                    className={toggleClass}
                 >
                     {isUpdating ? "Updating..." : subscribeLabel}
                 </button>
@@ -104,7 +114,7 @@ function EmailPreferences({
                             setNewEmail(profile.email || "")
                         }}
                         disabled={isUpdating}
-                        className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                        className={toggleClass}
                     >
                         Update Email Address
                     </button>
@@ -141,7 +151,7 @@ function EmailPreferences({
                                 type="button"
                                 onClick={() => setIsEditingEmail(false)}
                                 disabled={isUpdating}
-                                className="inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                                className={toggleClass}
                             >
                                 Cancel
                             </button>
@@ -236,10 +246,19 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                                 href="/"
                                 className={cn(
                                     NAVBAR_LOGO_LINK_CLASS,
+                                    "flex items-center gap-2",
                                     isHome && "text-zinc-900 hover:text-zinc-700",
                                 )}
                             >
-                                Cubing Kerala
+                                <Image
+                                    src="/cubingkerala_logo.svg"
+                                    alt="Cubing Kerala"
+                                    width={22}
+                                    height={22}
+                                    unoptimized
+                                    className="size-[22px] shrink-0"
+                                />
+                                <span>Cubing Kerala</span>
                             </Link>
                             <nav
                                 className={cn(
@@ -268,6 +287,7 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                             isUpdating={isUpdating}
                             isEditingEmail={isEditingEmail}
                             newEmail={newEmail}
+                            isHome={isHome}
                             setIsEditingEmail={setIsEditingEmail}
                             setNewEmail={setNewEmail}
                             onToggleSubscription={handleToggleSubscription}

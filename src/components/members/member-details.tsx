@@ -30,7 +30,7 @@ export default function MemberInfoComponent({
 
   if (memberResult.isUnavailable) {
     return (
-      <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className={`ck-landing py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
         <div className="flex flex-col gap-2">
           <p className="text-sm font-medium text-muted-foreground">404</p>
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
@@ -45,8 +45,8 @@ export default function MemberInfoComponent({
   }
 
   return (
-    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
-      <div className="flex flex-col gap-12">
+    <div className={`ck-landing py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="flex flex-col gap-8 sm:gap-12">
         <MemberHeader
           name={member.name}
           role={member.role}

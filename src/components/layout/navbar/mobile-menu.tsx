@@ -3,26 +3,29 @@
 import Link from "next/link";
 import { useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { X } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { NAV_LINKS } from "@/config/navigation.config";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
-  SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ThemeSwitcher } from "./theme-switcher";
-import {
-  NAVBAR_CONTAINER_CLASS,
-  NAVBAR_ICON_BUTTON_CLASS,
-  NAVBAR_LOGO_LINK_CLASS,
-  NAVBAR_ROW_CLASS,
-} from "./layout";
+import { NAVBAR_CONTAINER_CLASS, NAVBAR_ICON_BUTTON_CLASS } from "./layout";
 import { cn } from "@/lib/utils";
+
+/** Keep in sync with NAVBAR_ROW_CLASS's `h-16` — the sheet drops in below the navbar. */
+const NAVBAR_HEIGHT_CLASS = "top-16";
+
+/**
+ * tailwindcss-animate scopes animate-in/out's default animation-duration to the
+ * `data-[state=...]` attribute selector, which out-specifies a bare `duration-*`
+ * utility. Match that scoping here so our slower duration actually wins.
+ */
+const SHEET_ANIMATION_DURATION_CLASS =
+  "data-[state=open]:duration-300 data-[state=closed]:duration-300";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -70,40 +73,28 @@ export function MobileMenu({
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
-        side="full"
+        side="right"
         hideCloseButton
         onOpenAutoFocus={(event) => event.preventDefault()}
-        className="ck-landing flex h-dvh flex-col gap-0 overflow-hidden"
+        overlayClassName={cn(NAVBAR_HEIGHT_CLASS, SHEET_ANIMATION_DURATION_CLASS)}
+        className={cn(
+          "ck-landing flex flex-col gap-0 overflow-hidden border-l-0 p-0 shadow-lg",
+          SHEET_ANIMATION_DURATION_CLASS,
+          NAVBAR_HEIGHT_CLASS,
+          "bottom-0 left-0 w-full max-w-none sm:max-w-none",
+        )}
       >
-        <SheetHeader className="space-y-0 border-b border-border p-0 text-left">
-          <div className={NAVBAR_CONTAINER_CLASS}>
-            <div className={cn(NAVBAR_ROW_CLASS, "w-full")}>
-              <SheetTitle asChild>
-                <Link
-                  href="/"
-                  onClick={onClose}
-                  className={NAVBAR_LOGO_LINK_CLASS}
-                >
-                  Cubing Kerala
-                </Link>
-              </SheetTitle>
-              <SheetDescription className="sr-only">
-                Site navigation
-              </SheetDescription>
-              <SheetClose className="flex h-10 w-10 items-center justify-center rounded-md text-foreground outline-none transition-opacity hover:opacity-70">
-                <X className="h-5 w-5" strokeWidth={1.75} />
-                <span className="sr-only">Close menu</span>
-              </SheetClose>
-            </div>
-          </div>
-        </SheetHeader>
+        <SheetTitle className="sr-only">Menu</SheetTitle>
+        <SheetDescription className="sr-only">
+          Site navigation
+        </SheetDescription>
 
         <nav
           id="mobile-menu-panel"
           aria-label="Mobile menu"
           className={cn(
             NAVBAR_CONTAINER_CLASS,
-            "flex min-h-0 flex-1 flex-col overflow-y-auto",
+            "flex min-h-0 flex-1 flex-col overflow-y-auto pt-2",
           )}
         >
           {links.map((link) => (

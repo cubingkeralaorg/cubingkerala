@@ -50,7 +50,7 @@ const CompetitionsPage = ({
   }, [pastCompetitions, searchQuery]);
 
   return (
-    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+    <div className={`ck-landing py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
       <CompetitionsHeader
         lastUpdated={lastUpdated}
         isRefreshing={isRefreshing}

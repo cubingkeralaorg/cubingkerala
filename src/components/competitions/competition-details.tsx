@@ -29,8 +29,8 @@ const CompetitionDetailsComponent = ({
     useCompetitionDetails(compInfo);
 
   return (
-    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
-      <div className="flex flex-col gap-12">
+    <div className={`ck-landing py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+      <div className="flex flex-col gap-8 sm:gap-12">
         <CompetitionHeader
           name={compInfo.name}
           startDate={compInfo.start_date}

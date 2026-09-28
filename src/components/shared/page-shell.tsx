@@ -17,14 +17,14 @@ export function PageShell({
   children?: ReactNode;
 }) {
   return (
-    <div className={`ck-landing py-10 ${NAVBAR_CONTAINER_CLASS}`}>
+    <div className={`ck-landing py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
       <div
         className={cn(
-          "mb-6 flex items-start justify-between gap-4",
+          "mb-4 flex flex-col items-start gap-4 sm:mb-6 sm:flex-row sm:justify-between",
           headerClassName,
         )}
       >
-        <div className="flex min-w-0 flex-col gap-2">
+        <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-1">
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
             {title}
           </h1>
@@ -42,9 +42,5 @@ export function PageShell({
 }
 
 export function PageContentLoading() {
-  return (
-    <div className="min-h-[calc(100dvh-16rem)]">
-      <Loading className="pointer-events-none fixed inset-x-0 bottom-0 top-16 z-10 min-h-0 flex-none" />
-    </div>
-  );
+  return <Loading className="min-h-[calc(100dvh-16rem)]" />;
 }

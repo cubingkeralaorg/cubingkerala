@@ -17,15 +17,11 @@ export function useRequests(
 ) {
   const [requestsData, setRequestsData] = useState<Request[]>(initialRequests);
   const [membersData, setMembersData] = useState<Request[]>(initialMembers);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     setRequestsData(initialRequests);
     setMembersData(initialMembers);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
   }, [initialRequests, initialMembers]);
 
   const getRoleValue = (elementId: string): string => {
@@ -104,7 +100,6 @@ export function useRequests(
   return {
     requestsData,
     membersData,
-    isLoading,
     handleApprove,
     handleUpdate,
     handleMemberDelete,

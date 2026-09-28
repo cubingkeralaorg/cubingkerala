@@ -16,8 +16,8 @@ export function CompetitionsHeader({
   isLoading,
 }: CompetitionsHeaderProps) {
   return (
-    <div className="mb-6 flex items-start justify-between gap-4">
-      <div className="flex flex-col gap-2">
+    <div className="mb-4 flex flex-col items-start gap-4 sm:mb-6 sm:flex-row sm:justify-between">
+      <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-1">
         <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
           Competitions
         </h1>
