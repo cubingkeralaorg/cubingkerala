@@ -60,12 +60,14 @@ export function MembersPageShell({
           size="sm"
           onClick={handleJoinCK}
           disabled={isJoinCkLoading}
+          className="relative"
         >
+          <span className={isJoinCkLoading ? "invisible" : undefined}>
+            Join Cubing Kerala
+          </span>
           {isJoinCkLoading ? (
-            <Loader className="animate-spin" />
-          ) : (
-            "Join Cubing Kerala"
-          )}
+            <Loader className="absolute inset-0 m-auto animate-spin" />
+          ) : null}
         </Button>
       }
     >

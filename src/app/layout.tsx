@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   title: "Cubing Kerala",
   description:
     "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
+  icons: {
+    icon: "/cubingkerala_logo.svg",
+    shortcut: "/cubingkerala_logo.svg",
+    apple: "/cubingkerala_logo.svg",
+  },
 };
 
 async function getIsAdmin() {

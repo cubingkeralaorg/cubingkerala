@@ -96,6 +96,16 @@ Treat fork `main` as a mirror only — do feature work on branches, not unique c
 
 CI uses an ephemeral Postgres service (see workflow); local DB work should use a dev/test database only.
 
+## Local dev server (don't kill the user's session)
+
+Before starting a dev server to check a change or take a screenshot:
+
+1. **Check whether one is already running first** — e.g. `lsof -ti:3000` or `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000`. If it responds, use it. Do not restart it, and do not assume you own it.
+2. **Never broadly `pkill -f "next dev"` or `lsof -ti:3000,3001 | xargs kill -9`** as a setup/cleanup step. That kills the user's own already-running dev server (including work-in-progress state, terminal output they were watching, etc.) — disruptive and unnecessary.
+3. If you do need your own instance for a one-off check, run it on a **different port** (`PORT=3999 npm run dev`) so it can't collide with or shadow a session the user already has open.
+4. Only ever stop a server **you started** in the same turn, by the specific PID you launched — never a wildcard match that could catch a pre-existing process.
+5. Prefer not spinning up a server at all when a static check (`tsc --noEmit`, `eslint`, reading the code) answers the question.
+
 ## Project context
 
 - **Stack:** Next.js (App Router), TypeScript, Tailwind, Prisma + PostgreSQL, Vitest, Playwright.

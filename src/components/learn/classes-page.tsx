@@ -8,9 +8,9 @@ export default function Learn() {
     <PageShell
       title="Learn"
       description="Beginner through advanced videos for solving and getting faster."
-      headerClassName="mb-10"
+      headerClassName="mb-6 sm:mb-10"
     >
-      <div className="flex flex-col gap-16">
+      <div className="flex flex-col gap-10 sm:gap-16">
         <BeginnerVideosSection />
         <IntermediateVideosSection />
         <AdvancedVideosSection />
