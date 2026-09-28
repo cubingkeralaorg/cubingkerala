@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition, type MouseEvent } from "react";
+import Loading from "@/components/shared/loading";
 import {
   Table,
   TableHeader,
@@ -50,13 +53,20 @@ function SectionRow({ label }: { label: string }) {
   );
 }
 
-function CompetitionRow({ competition }: { competition: Competition }) {
+function CompetitionRow({
+  competition,
+  onNavigate,
+}: {
+  competition: Competition;
+  onNavigate: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
+}) {
   const status = getDetailedCompetitionStatus(
     competition.start_date,
     competition.end_date,
     competition.has_results,
     competition.cancelled_at || null,
   );
+  const href = `/competitions/${competition.id}`;
 
   return (
     <TableRow className={DATA_GRID_ROW}>
@@ -65,7 +75,8 @@ function CompetitionRow({ competition }: { competition: Competition }) {
       </TableCell>
       <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         <Link
-          href={`/competitions/${competition.id}`}
+          href={href}
+          onClick={(event) => onNavigate(event, href)}
           className="font-medium text-foreground hover:text-primary"
         >
           {competition.name}
@@ -140,65 +151,93 @@ export function CompetitionTable({
   searchQuery = "",
 }: CompetitionTableProps) {
   const isSearch = searchQuery.trim().length > 0;
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleNavigate = (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
+    startTransition(() => {
+      router.push(href);
+    });
+  };
 
   return (
-    <Table className={DATA_GRID_TABLE}>
-      <TableHeader className="[&_tr]:border-0">
-        <TableRow className={DATA_GRID_ROW}>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[180px] md:w-[220px] whitespace-nowrap")}>
-            Date
-          </TableHead>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
-            Name
-          </TableHead>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
-            Status
-          </TableHead>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
-            Location
-          </TableHead>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "text-right whitespace-nowrap")}>
-            Events
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <SectionRow label="Upcoming Competitions" />
-        {upcoming.length > 0 ? (
-          upcoming.map((competition) => (
-            <CompetitionRow key={competition.id} competition={competition} />
-          ))
-        ) : (
+    <>
+      {isPending ? (
+        <Loading className="fixed inset-0 z-50 min-h-0 bg-background/80 backdrop-blur-sm" />
+      ) : null}
+      <Table className={DATA_GRID_TABLE}>
+        <TableHeader className="[&_tr]:border-0">
           <TableRow className={DATA_GRID_ROW}>
-            <TableCell
-              colSpan={5}
-              className={cn(DATA_GRID_CELL, "py-6 text-sm text-muted-foreground")}
-            >
-              {isSearch ? (
-                <p>No upcoming competitions match your search.</p>
-              ) : (
-                <div className="space-y-1">
-                  <p className="font-medium text-foreground">
-                    No upcoming competitions right now
-                  </p>
-                  <p>
-                    Stay tuned — new Kerala competitions will show up here when
-                    they&apos;re announced.
-                  </p>
-                </div>
-              )}
-            </TableCell>
+            <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[180px] md:w-[220px] whitespace-nowrap")}>
+              Date
+            </TableHead>
+            <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
+              Name
+            </TableHead>
+            <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
+              Status
+            </TableHead>
+            <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
+              Location
+            </TableHead>
+            <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "text-right whitespace-nowrap")}>
+              Events
+            </TableHead>
           </TableRow>
-        )}
-        {past.length > 0 ? (
-          <>
-            <SectionRow label="Past Competitions" />
-            {past.map((competition) => (
-              <CompetitionRow key={competition.id} competition={competition} />
-            ))}
-          </>
-        ) : null}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          <SectionRow label="Upcoming Competitions" />
+          {upcoming.length > 0 ? (
+            upcoming.map((competition) => (
+              <CompetitionRow
+                key={competition.id}
+                competition={competition}
+                onNavigate={handleNavigate}
+              />
+            ))
+          ) : (
+            <TableRow className={DATA_GRID_ROW}>
+              <TableCell
+                colSpan={5}
+                className={cn(DATA_GRID_CELL, "py-6 text-sm text-muted-foreground")}
+              >
+                {isSearch ? (
+                  <p>No upcoming competitions match your search.</p>
+                ) : (
+                  <div className="space-y-1">
+                    <p className="font-medium text-foreground">
+                      No upcoming competitions right now
+                    </p>
+                    <p>
+                      Stay tuned — new Kerala competitions will show up here when
+                      they&apos;re announced.
+                    </p>
+                  </div>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
+          {past.length > 0 ? (
+            <>
+              <SectionRow label="Past Competitions" />
+              {past.map((competition) => (
+                <CompetitionRow
+                  key={competition.id}
+                  competition={competition}
+                  onNavigate={handleNavigate}
+                />
+              ))}
+            </>
+          ) : null}
+        </TableBody>
+      </Table>
+    </>
   );
 }
