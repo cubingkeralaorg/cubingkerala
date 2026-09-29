@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/cubingkerala_logo.svg" alt="Cubing Kerala logo" width="96" />
+</p>
+
 <h3 align="center">Cubing Kerala</h3>
 
 <p align="center">
