@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import { vi, beforeAll, afterEach, afterAll } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import Image from 'next/image';
