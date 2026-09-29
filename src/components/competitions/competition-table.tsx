@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition, type MouseEvent } from "react";
+import { type MouseEvent } from "react";
 import Loading from "@/components/shared/loading";
+import { useInstantNavigation } from "@/hooks/useInstantNavigation";
 import {
   Table,
   TableHeader,
@@ -151,21 +151,7 @@ export function CompetitionTable({
   searchQuery = "",
 }: CompetitionTableProps) {
   const isSearch = searchQuery.trim().length > 0;
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const handleNavigate = (
-    event: MouseEvent<HTMLAnchorElement>,
-    href: string,
-  ) => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-      return;
-    }
-    event.preventDefault();
-    startTransition(() => {
-      router.push(href);
-    });
-  };
+  const { isPending, handleNavigate } = useInstantNavigation();
 
   return (
     <>

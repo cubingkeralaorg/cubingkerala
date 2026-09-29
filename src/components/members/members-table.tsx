@@ -9,13 +9,13 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { RequestInfo } from "@/types/api";
 import { capitalizeRole, getTotalMedalsFromSummary } from "@/utils/member-utils";
 import { MemberWcaSummary } from "@/types/wca";
-import { useMemo, useTransition, type MouseEvent } from "react";
+import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import Loading from "@/components/shared/loading";
+import { useInstantNavigation } from "@/hooks/useInstantNavigation";
 import {
   DATA_GRID_CELL,
   DATA_GRID_HEAD,
@@ -33,21 +33,7 @@ export function MembersTable({ members, wcaSummaries }: MembersTableProps) {
     () => new Map(Object.entries(wcaSummaries)),
     [wcaSummaries],
   );
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const handleNavigate = (
-    event: MouseEvent<HTMLAnchorElement>,
-    href: string,
-  ) => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-      return;
-    }
-    event.preventDefault();
-    startTransition(() => {
-      router.push(href);
-    });
-  };
+  const { isPending, handleNavigate } = useInstantNavigation();
 
   return (
     <>
