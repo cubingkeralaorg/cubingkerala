@@ -12,6 +12,8 @@ import Link from "next/link";
 import { CompetitorData } from "@/types/api";
 import { formatResult } from "@/utils/wca-formatters";
 import { cn } from "@/lib/utils";
+import Loading from "@/components/shared/loading";
+import { useInstantNavigation } from "@/hooks/useInstantNavigation";
 import {
   DATA_GRID_CELL,
   DATA_GRID_HEAD,
@@ -37,8 +39,13 @@ export function RankingsTable({
   selectedRound,
   getResult,
 }: RankingsTableProps) {
+  const { isPending, handleNavigate } = useInstantNavigation();
+
   return (
     <div className={DATA_GRID_WRAP}>
+      {isPending ? (
+        <Loading className="fixed inset-0 z-50 min-h-0 bg-background/80 backdrop-blur-sm" />
+      ) : null}
       <Table className={DATA_GRID_TABLE}>
         <TableHeader className="[&_tr]:border-0">
           <TableRow className={DATA_GRID_ROW}>
@@ -78,6 +85,9 @@ export function RankingsTable({
                 <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap font-medium")}>
                   <Link
                     href={`/members/${member.person.id}`}
+                    onClick={(event) =>
+                      handleNavigate(event, `/members/${member.person.id}`)
+                    }
                     className={cn(
                       "hover:text-primary",
                       isUnavailable && "text-muted-foreground",
