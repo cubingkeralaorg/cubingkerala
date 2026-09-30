@@ -12,7 +12,7 @@ import Link from "next/link";
 import { CompetitorData } from "@/types/api";
 import { formatResult } from "@/utils/wca-formatters";
 import { cn } from "@/lib/utils";
-import Loading from "@/components/shared/loading";
+import { NavigationPendingOverlay } from "@/components/shared/navigation-pending-overlay";
 import { useInstantNavigation } from "@/hooks/useInstantNavigation";
 import {
   DATA_GRID_CELL,
@@ -43,9 +43,7 @@ export function RankingsTable({
 
   return (
     <div className={DATA_GRID_WRAP}>
-      {isPending ? (
-        <Loading className="fixed inset-0 z-50 min-h-0 bg-background/80 backdrop-blur-sm" />
-      ) : null}
+      {isPending ? <NavigationPendingOverlay /> : null}
       <Table className={DATA_GRID_TABLE}>
         <TableHeader className="[&_tr]:border-0">
           <TableRow className={DATA_GRID_ROW}>

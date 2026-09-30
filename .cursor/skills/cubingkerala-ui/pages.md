@@ -17,7 +17,7 @@ Navbar wordmark: Cubing Kerala. Favicon: `src/app/icon.svg` (CK).
 
 ## Competitions `/competitions`
 
-**Files:** `src/app/competitions/page.tsx`, `src/components/competitions/*`
+**Files:** `src/app/competitions/(list)/page.tsx`, `src/components/competitions/*`
 
 Landing-aligned page: static H1, refresh, search, grid table. No motion.
 
@@ -32,7 +32,7 @@ Landing-aligned page: static H1, event/round filter, grid table. No motion.
 
 ## Members `/members`
 
-**Files:** `src/app/members/page.tsx`, `src/components/members/*`
+**Files:** `src/app/members/(list)/page.tsx`, `src/components/members/*`
 
 Landing-aligned list page: static H1, Join Cubing Kerala, search, grid table.
 No motion.
