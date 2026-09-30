@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { type MouseEvent } from "react";
-import Loading from "@/components/shared/loading";
+import { NavigationPendingOverlay } from "@/components/shared/navigation-pending-overlay";
 import { useInstantNavigation } from "@/hooks/useInstantNavigation";
 import {
   Table,
@@ -155,9 +155,7 @@ export function CompetitionTable({
 
   return (
     <>
-      {isPending ? (
-        <Loading className="fixed inset-0 z-50 min-h-0 bg-background/80 backdrop-blur-sm" />
-      ) : null}
+      {isPending ? <NavigationPendingOverlay /> : null}
       <Table className={DATA_GRID_TABLE}>
         <TableHeader className="[&_tr]:border-0">
           <TableRow className={DATA_GRID_ROW}>

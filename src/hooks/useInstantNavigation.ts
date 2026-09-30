@@ -54,5 +54,7 @@ export function useInstantNavigation() {
     });
   };
 
-  return { isPending: isPending || isNavigating, handleNavigate };
+  const showOverlay = isPending || isNavigating;
+
+  return { isPending: showOverlay, handleNavigate };
 }
