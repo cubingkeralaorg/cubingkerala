@@ -3,9 +3,8 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import { FaGithub, FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
-import { SOCIAL_LINKS, UNRAVEL_GREEN_HEX } from "@/components/home/constants";
+import { SOCIAL_LINKS } from "@/components/home/constants";
 import { ThemeSwitcher } from "./navbar/theme-switcher";
 import { NavLinks } from "./navbar/nav-links";
 import {
@@ -31,14 +30,9 @@ const SOCIAL_ICONS = {
     facebook: FaFacebook,
 } as const
 
-function FooterMeta({ isHome }: { isHome: boolean }) {
+function FooterMeta() {
     return (
-        <div
-            className={cn(
-                "flex flex-col gap-1 text-xs leading-relaxed lg:flex-row lg:items-center lg:justify-between lg:gap-4",
-                isHome ? "text-zinc-800" : "text-muted-foreground",
-            )}
-        >
+        <div className="flex flex-col gap-1 text-xs leading-relaxed text-muted-foreground lg:flex-row lg:items-center lg:justify-between lg:gap-4">
             <span>
                 &copy; {new Date().getFullYear()} Cubing Kerala. All rights reserved.
             </span>
@@ -48,10 +42,7 @@ function FooterMeta({ isHome }: { isHome: boolean }) {
                     href="https://allenjohn.me"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cn(
-                        "font-medium transition-colors",
-                        isHome ? "hover:text-zinc-950" : "hover:text-foreground",
-                    )}
+                    className="font-medium transition-colors hover:text-foreground"
                 >
                     Allen John
                 </a>
@@ -65,7 +56,6 @@ interface EmailPreferencesProps {
     isUpdating: boolean
     isEditingEmail: boolean
     newEmail: string
-    isHome: boolean
     setIsEditingEmail: (value: boolean) => void
     setNewEmail: (value: string) => void
     onToggleSubscription: (consent: boolean) => void
@@ -77,7 +67,6 @@ function EmailPreferences({
     isUpdating,
     isEditingEmail,
     newEmail,
-    isHome,
     setIsEditingEmail,
     setNewEmail,
     onToggleSubscription,
@@ -87,12 +76,8 @@ function EmailPreferences({
         ? "Unsubscribe from Emails"
         : "Subscribe to Emails"
 
-    const toggleClass = cn(
-        "inline-flex h-8 items-center rounded-md px-2.5 text-sm transition-colors disabled:opacity-50",
-        isHome
-            ? "text-zinc-800 hover:bg-black/10 hover:text-zinc-950"
-            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-    )
+    const toggleClass =
+        "inline-flex h-8 items-center rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
 
     return (
         <div className="flex flex-col items-start gap-2 lg:items-end">
@@ -163,11 +148,7 @@ function EmailPreferences({
     )
 }
 
-function FooterActions({ isHome }: { isHome: boolean }) {
-    const iconClass = isHome
-        ? "text-zinc-800 hover:bg-black/10 hover:text-zinc-950"
-        : undefined;
-
+function FooterActions() {
     return (
         <div className={cn("flex items-center", NAVBAR_LINKS_GAP_CLASS)}>
             {SOCIAL_LINKS.map((social) => {
@@ -178,7 +159,7 @@ function FooterActions({ isHome }: { isHome: boolean }) {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={cn(NAVBAR_ICON_BUTTON_CLASS, iconClass)}
+                        className={NAVBAR_ICON_BUTTON_CLASS}
                         aria-label={social.name}
                     >
                         <Icon className="size-4" />
@@ -188,19 +169,17 @@ function FooterActions({ isHome }: { isHome: boolean }) {
             <button
                 type="button"
                 onClick={handleGithubRedirect}
-                className={cn(NAVBAR_ICON_BUTTON_CLASS, iconClass)}
+                className={NAVBAR_ICON_BUTTON_CLASS}
                 aria-label="Open GitHub"
             >
                 <FaGithub className="size-4" />
             </button>
-            <ThemeSwitcher className={iconClass} />
+            <ThemeSwitcher />
         </div>
     )
 }
 
 const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
-    const pathname = usePathname();
-    const isHome = pathname === "/";
     const { isLoggedIn, ready } = useAuth();
     const { profile, updateProfile, isUpdating } = useUserProfile(isLoggedIn);
     const [isEditingEmail, setIsEditingEmail] = React.useState(false);
@@ -231,24 +210,14 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
     };
 
     return (
-        <footer
-            className={cn(
-                "ck-landing",
-                isHome ? "" : "border-t border-border/60 bg-background",
-            )}
-            style={isHome ? { backgroundColor: UNRAVEL_GREEN_HEX } : undefined}
-        >
+        <footer className="ck-landing border-t border-border/60 bg-background">
             <div className={NAVBAR_CONTAINER_CLASS}>
                 <div className="flex flex-col gap-6 py-8 lg:gap-5">
                     <div className="flex flex-col gap-5 lg:h-16 lg:flex-row lg:items-center lg:justify-between">
                         <div className={cn("flex flex-col lg:min-w-0 lg:flex-row lg:items-center", NAVBAR_BRAND_GAP_CLASS)}>
                             <Link
                                 href="/"
-                                className={cn(
-                                    NAVBAR_LOGO_LINK_CLASS,
-                                    "flex items-center gap-2",
-                                    isHome && "text-zinc-900 hover:text-zinc-700",
-                                )}
+                                className={cn(NAVBAR_LOGO_LINK_CLASS, "flex items-center gap-2")}
                             >
                                 <Image
                                     src="/cubingkerala_logo.svg"
@@ -267,18 +236,11 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                                 )}
                                 aria-label="Footer"
                             >
-                                <NavLinks
-                                    isAdmin={showAdminNav}
-                                    className={
-                                        isHome
-                                            ? "text-zinc-800 hover:bg-black/10 hover:text-zinc-950"
-                                            : ""
-                                    }
-                                />
+                                <NavLinks isAdmin={showAdminNav} />
                             </nav>
                         </div>
 
-                        <FooterActions isHome={isHome} />
+                        <FooterActions />
                     </div>
 
                     {isLoggedIn && profile?.email && (
@@ -287,7 +249,6 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                             isUpdating={isUpdating}
                             isEditingEmail={isEditingEmail}
                             newEmail={newEmail}
-                            isHome={isHome}
                             setIsEditingEmail={setIsEditingEmail}
                             setNewEmail={setNewEmail}
                             onToggleSubscription={handleToggleSubscription}
@@ -295,7 +256,7 @@ const CubingKeralaFooter = ({ isAdmin = false }: { isAdmin?: boolean }) => {
                         />
                     )}
 
-                    <FooterMeta isHome={isHome} />
+                    <FooterMeta />
                 </div>
             </div>
         </footer>
