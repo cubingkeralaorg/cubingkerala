@@ -48,7 +48,7 @@
 | **Framework** | [Next.js 15](https://nextjs.org) (App Router) |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS · shadcn/ui · Radix UI primitives |
-| **Animations** | Framer Motion (footer) |
+| **Animations** | Framer Motion (footer, landing scroll-reveal) |
 | **Database** | PostgreSQL ([Neon](https://neon.tech) serverless) via Prisma ORM |
 | **Auth** | WCA OAuth 2.0 |
 | **Data Fetching** | TanStack React Query · Axios |
