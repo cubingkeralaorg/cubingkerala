@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import { DestinationsSection } from "./destinations-section";
 import { FeaturedCompetitionCard } from "./featured-competition-card";
+import { ScrollReveal } from "./scroll-reveal";
 
 type HeroSectionProps = {
   competition: Competition | null;
@@ -21,7 +22,7 @@ export default function HeroSection({ competition, kind }: HeroSectionProps) {
       <div
         className={`container mx-auto flex w-full flex-col px-4 sm:px-6 lg:px-8 ${HERO_BLOCK_GAP_CLASS} ${LANDING_SECTION_INNER_PY_CLASS}`}
       >
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+        <ScrollReveal className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
           <div className="flex flex-col items-start gap-6">
             <div className="flex flex-col items-start gap-4">
               <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
@@ -46,9 +47,11 @@ export default function HeroSection({ competition, kind }: HeroSectionProps) {
           </div>
 
           <FeaturedCompetitionCard competition={competition} kind={kind} />
-        </div>
+        </ScrollReveal>
 
-        <DestinationsSection />
+        <ScrollReveal delay={0.1}>
+          <DestinationsSection />
+        </ScrollReveal>
       </div>
     </section>
   );

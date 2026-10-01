@@ -20,7 +20,7 @@ export function CubingKeralaUnravel() {
     <section className="flex flex-col pt-6 sm:pt-0">
       <div className={`flex flex-col rounded-t-3xl ${UNRAVEL_GRADIENT_CLASS}`}>
         <div
-          className={`container mx-auto flex w-full flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20 ${UNRAVEL_BLOCK_GAP_CLASS}`}
+          className={`container mx-auto flex w-full flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20 lg:-translate-y-10 ${UNRAVEL_BLOCK_GAP_CLASS}`}
         >
           <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
             <div className="flex flex-col items-start gap-6">
