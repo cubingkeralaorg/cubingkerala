@@ -6,16 +6,9 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { CompetitionStatusBadge } from "./status-badge";
+import { EventIcon } from "@/components/shared/event-icon";
 import { formatCompetitionDateRange } from "@/utils/date-utils";
-import { getEventName } from "@/utils/event-names";
-import "@cubing/icons";
 import type { Competition } from "@/types/competition";
 import { cn } from "@/lib/utils";
 import {
@@ -31,58 +24,35 @@ interface CompetitionTableProps {
   searchQuery?: string;
 }
 
-function SectionRow({ label }: { label: string }) {
-  return (
-    <TableRow className={DATA_GRID_ROW}>
-      <TableCell
-        colSpan={5}
-        className={cn(DATA_GRID_CELL, "text-sm font-medium text-foreground")}
-      >
-        {label}
-      </TableCell>
-    </TableRow>
-  );
-}
-
 function CompetitionRow({ competition }: { competition: Competition }) {
   const href = `/competitions/${competition.id}`;
 
   return (
     <TableRow className={DATA_GRID_ROW}>
-      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums text-muted-foreground")}>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
+        <div className="flex items-center gap-2">
+          <a href={href} className="font-medium text-foreground hover:text-primary">
+            {competition.name}
+          </a>
+          <CompetitionStatusBadge
+            startDate={competition.start_date}
+            endDate={competition.end_date}
+            hasResults={competition.has_results}
+            cancelledAt={competition.cancelled_at}
+          />
+        </div>
+      </TableCell>
+      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap tabular-nums")}>
         {formatCompetitionDateRange(competition.start_date, competition.end_date)}
-      </TableCell>
-      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
-        <a href={href} className="font-medium text-foreground hover:text-primary">
-          {competition.name}
-        </a>
-      </TableCell>
-      <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
-        <CompetitionStatusBadge
-          competitionId={competition.id}
-          startDate={competition.start_date}
-          endDate={competition.end_date}
-          hasResults={competition.has_results}
-          cancelledAt={competition.cancelled_at}
-        />
       </TableCell>
       <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         {competition.city}
       </TableCell>
       <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
         <div className="flex items-center justify-end gap-1.5">
-          <TooltipProvider>
-            {competition.event_ids.map((event: string) => (
-              <Tooltip key={`${competition.id}-${event}`}>
-                <TooltipTrigger asChild>
-                  <span className={`cubing-icon event-${event} text-base`} />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{getEventName(event)}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </TooltipProvider>
+          {competition.event_ids.map((event: string) => (
+            <EventIcon key={`${competition.id}-${event}`} eventId={event} className="text-base" />
+          ))}
         </div>
       </TableCell>
     </TableRow>
@@ -100,14 +70,11 @@ export function CompetitionTable({
     <Table className={DATA_GRID_TABLE}>
       <TableHeader className="[&_tr]:border-0">
         <TableRow className={DATA_GRID_ROW}>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[180px] md:w-[220px] whitespace-nowrap")}>
-            Date
-          </TableHead>
           <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
             Name
           </TableHead>
-          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
-            Status
+          <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "w-[180px] md:w-[220px] whitespace-nowrap")}>
+            Date
           </TableHead>
           <TableHead className={cn(DATA_GRID_CELL, DATA_GRID_HEAD, "whitespace-nowrap")}>
             Location
@@ -118,7 +85,6 @@ export function CompetitionTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        <SectionRow label="Upcoming Competitions" />
         {upcoming.length > 0 ? (
           upcoming.map((competition) => (
             <CompetitionRow key={competition.id} competition={competition} />
@@ -126,7 +92,7 @@ export function CompetitionTable({
         ) : (
           <TableRow className={DATA_GRID_ROW}>
             <TableCell
-              colSpan={5}
+              colSpan={4}
               className={cn(DATA_GRID_CELL, "py-6 text-sm text-muted-foreground")}
             >
               {isSearch ? (
@@ -145,14 +111,9 @@ export function CompetitionTable({
             </TableCell>
           </TableRow>
         )}
-        {past.length > 0 ? (
-          <>
-            <SectionRow label="Past Competitions" />
-            {past.map((competition) => (
-              <CompetitionRow key={competition.id} competition={competition} />
-            ))}
-          </>
-        ) : null}
+        {past.map((competition) => (
+          <CompetitionRow key={competition.id} competition={competition} />
+        ))}
       </TableBody>
     </Table>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState, type CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { mediaUrl } from "@/config/media";
 
 const CONFETTI_COLORS = ["#2f9e62", "#f2c94c", "#eb5757", "#2f80ed", "#bb6bd9", "#f2994a"];
 const CONFETTI_COUNT = 48;
@@ -79,7 +80,7 @@ export function AchievementBanner() {
         )}
 
         <img
-          src="/images/achievements/hari-nr.jpg"
+          src={mediaUrl("images/achievements/hari-nr.jpg")}
           alt="Hari Anjana Deepak celebrating the 3x3x3 Indian National Record"
           className="h-auto w-full max-w-xs rounded-2xl object-cover sm:max-w-sm"
         />

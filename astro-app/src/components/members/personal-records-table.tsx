@@ -1,4 +1,3 @@
-import "@cubing/icons";
 import {
   Table,
   TableHeader,
@@ -7,6 +6,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { EventIcon } from "@/components/shared/event-icon";
 import type { PersonalRecords } from "@/types/ranking";
 import { formatEventResult } from "@/utils/wca-formatters";
 import { getEventName } from "@/utils/event-names";
@@ -53,7 +53,7 @@ export function PersonalRecordsTable({ personalRecords }: PersonalRecordsTablePr
                 <TableRow key={event} className={DATA_GRID_ROW}>
                   <TableCell className={cn(DATA_GRID_CELL, "whitespace-nowrap")}>
                     <span className="inline-flex items-center gap-1.5">
-                      <span className={`cubing-icon event-${event}`} />
+                      <EventIcon eventId={event} />
                       {getEventName(event)}
                     </span>
                   </TableCell>

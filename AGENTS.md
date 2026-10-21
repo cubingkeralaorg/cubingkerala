@@ -1,123 +1,99 @@
 # Agent instructions (Cubing Kerala)
 
-This file is the default checklist for AI agents and contributors before opening or merging changes.
+Cubing Kerala is an Astro + Cloudflare Workers app, live at [cubingkerala.com](https://cubingkerala.com). All code lives under **`astro-app/`** — every command in this file runs from there, not the repo root. (The old Next.js/Prisma/Vercel version of this app has been removed; if you see a reference to it anywhere, it's stale.)
 
-## Before every commit
+## Never commit or push — give instructions instead
 
-Run the same checks as [`.github/workflows/main-branch-ci.yml`](.github/workflows/main-branch-ci.yml), in order:
+**Agents must never run `git commit`, `git push`, `git merge`, or open a PR in this
+repo, under any circumstances — even if explicitly asked to "just commit it" or "push
+this."** This is a hard block, not a default-off preference.
+
+When changes are ready: stop, and give the user two things in the chat reply —
+1. The exact commit message (ready to paste, following the style below).
+2. The exact shell commands to run themselves (`git add ...`, `git commit -m "..."`,
+   `git push ...`).
+
+Do not stage files (`git add`) or run any other state-changing git command either.
+`git status` / `git diff` for your own review are fine.
+
+Commit message style: short imperative subject line, optional body explaining *why*
+(not what — the diff shows what). Match whatever style the user's recent commits use.
+
+## Secrets and env files
+
+- Never read, open, `cat`, or paste the contents of `.env`, `.env.local`,
+  `.env.*.local`, `.dev.vars`, `.dev.vars.*`, or any file holding real credentials.
+- Use [`astro-app/.env.example`](astro-app/.env.example) to learn what variables exist
+  and their shape — it documents two separate systems: Worker secrets/bindings (read via
+  `cloudflare:workers`, local values in `astro-app/.dev.vars`) and Astro/Vite `PUBLIC_*`
+  build-time vars (read via `import.meta.env`, local values in `astro-app/.env`/`.env.local`).
+- Never commit secrets, tokens, or real credential values. Flag it to the user instead
+  of fixing it silently if you ever see one staged.
+- Tell the user to set real values via `wrangler secret put <NAME>` (Worker secrets) or
+  GitHub Actions secrets (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`,
+  `SYNC_UPSTREAM_TOKEN`) — never put them in a file that gets committed.
+
+## UI / design consistency
+
+Before building or changing anything visual — a new section, a new page, a tweak to an
+existing component — load the `ui-design-system` skill (`astro-app/.claude/skills/ui-design-system/SKILL.md`
+if the skill isn't surfaced by name). It documents the layout primitives, the shared table
+system, color tokens / dark mode wiring, button and link conventions, and the patterns
+already established across the site (hero marquee, side-by-side content sections, preview
+tables with gradient fades, tooltips, etc.). The goal is that every new component looks
+like it was built by the same hand as the existing ones — reuse the established primitive
+instead of inventing a new one-off pattern.
+
+## Verification ritual (every change)
+
+No lint/test scripts exist in `astro-app/` yet, so verification is:
 
 ```bash
-npm ci
-npm run lint
+cd astro-app
 npx tsc --noEmit
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/cubingkerala_test" npx prisma generate
-# If Postgres is running locally (see CI service config):
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/cubingkerala_test" npx prisma db push --skip-generate
-npm run test:ci
-# Optional but recommended before large UI/routing changes:
-npm run test:e2e
+npm run build
+# inspect dist/client/**/*.html (or grep) for the markup you expect to see
+rm -rf dist
 ```
 
-Do not commit until lint, typecheck, and `npm run test:ci` pass. Fix failures; do not skip steps with `--no-verify` unless the user explicitly asks.
-
-## After dependency changes
-
-1. Run the full pre-commit stack above.
-2. Prefer **patch/minor** updates; treat **major** bumps (Next.js, Tailwind, ESLint major) as separate migration tasks.
-3. If resolving Dependabot PRs, merge safe updates on `main` and close or rebase stale bot PRs rather than stacking conflicting lockfiles.
-
-## Dependabot auto-merge
-
-Workflow: [`.github/workflows/dependabot-auto-merge.yml`](.github/workflows/dependabot-auto-merge.yml). Config: [`.github/dependabot.yml`](.github/dependabot.yml).
-
-**What auto-merges:** only Dependabot PRs where every reported `update-type` is `version-update:semver-patch` (npm and GitHub Actions). Grouped PRs with any minor/major, or missing metadata, are skipped.
-
-**What never auto-merges:** semver-minor, semver-major, mixed/unknown grouped updates, draft PRs, non-Dependabot PRs. Critical package **majors** are also ignored in `dependabot.yml` so Dependabot should not open them.
-
-**What does not bypass safety:** the workflow does **not** auto-approve. It only runs `gh pr merge --auto --squash`. Merge still requires your branch protection (required checks, and reviews if you require them).
-
-**Push workflows after auto-merge:** enabling auto-merge with `GITHUB_TOKEN` means the eventual merge is performed as `github-actions[bot]`. GitHub **does not** start other `on: push` workflows for that merge (anti-recursion). So maintainer-fork sync (and post-merge Main Branch CI on `main`) will not run for those commits unless something else triggers them — see the hourly / `workflow_dispatch` catch-up on the sync workflow below. Optional: set an `AUTO_MERGE_TOKEN` (user PAT with repo access on upstream) and point the auto-merge job at it so merges are attributed to a user and `push` workflows fire normally.
-
-### GitHub settings you must enable
-
-Do these in the repo UI (or org rulesets); they are not in git:
-
-1. **Settings → General → Pull Requests → Allow auto-merge** — on.
-2. **Branch protection / ruleset for `main`:**
-   - Require a pull request before merging.
-   - Require status checks to pass: at least `Main Branch CI/CD` / `test` (lint, `tsc`, unit/integration, e2e).
-   - Do **not** allow admins or bots to bypass required checks.
-   - Prefer squash merge (matches the workflow).
-3. **Reviews:** keep required reviews if you want a human gate on minors/majors. Patch auto-merge will then wait until someone approves (workflow does not approve). To fully hands-off **patches only**, either exempt `dependabot[bot]` from required reviews or leave reviews optional and rely on required CI.
-4. Confirm Dependabot version updates are enabled for the repo.
-
-### Manual Dependabot triage
-
-- **Patch, CI green:** should auto-merge once checks (and any required review) pass.
-- **Minor:** review manually; run full verify; merge one at a time.
-- **Major / ignored majors:** dedicated migration PR; do not stack lockfile PRs.
-- **Red CI or conflicts:** fix or close/rebase; do not force-merge.
-
-## Maintainer fork sync
-
-Workflow: [`.github/workflows/sync-maintainer-fork.yml`](.github/workflows/sync-maintainer-fork.yml).
-
-On every **push to `main`** on `cubingkeralaorg/cubingkerala` (including human-merged PRs), force-pushes that commit to the configured fork’s `main`. Also runs **hourly** and via **workflow_dispatch**, because Dependabot auto-merges (via `GITHUB_TOKEN`) do not trigger `on: push` workflows — without the schedule, the fork stays “N commits behind” after patch auto-merges.
-
-### GitHub settings (upstream repo)
-
-On `cubingkeralaorg/cubingkerala` (not in git):
-
-1. **Settings → Secrets and variables → Actions → Variables**  
-   - `SYNC_FORK_REPO` = `allenjohn07/cubingkeralaorg` (or your fork `owner/name`)
-2. **Settings → Secrets and variables → Actions → Secrets**  
-   - `SYNC_FORK_TOKEN` = fine-grained PAT (or classic) with access to the fork only  
-   - Create at GitHub → Settings → Developer settings → Personal access tokens  
-   - Prefer fine-grained, repository access = fork only, permissions:  
-     - **Contents:** Read and write  
-     - **Workflows:** Read and write (required — fork sync force-pushes commits that touch `.github/workflows/*`; without this you get `refusing to allow a Personal Access Token to create or update workflow ... without workflow scope`)  
-   - Classic PAT alternative: enable both **`repo`** and **`workflow`** scopes  
-3. On the **fork**, do **not** require PR / block force-pushes on `main` for this token (or the sync push will fail). Upstream `main` protection stays as-is.
-
-If `SYNC_FORK_REPO` is unset, the job is skipped. If the token is missing, the step exits without failing the pipeline.
-
-A fork that is “N commits behind” is normal until sync succeeds — being behind does **not** cause the job to fail. A `403` / `denied to github-actions[bot]` means the PAT was not used (checkout credentials overrode it, or `SYNC_FORK_TOKEN` lacks Contents write on the fork).
-
-Treat fork `main` as a mirror only — do feature work on branches, not unique commits on fork `main`.
-
-## Security guardrails (required)
-
-| Do | Don't |
-|----|--------|
-| Use [`.env.example`](.env.example) to learn which variables exist | Read, open, or paste contents of `.env`, `.env.local`, `.env.*.local`, or any file with real credentials |
-| Tell the user to set secrets in Vercel / GitHub Actions | Commit secrets, tokens, or production `DATABASE_URL` values |
-| Use placeholder URLs in docs and CI | Run destructive commands against production databases |
-| Run `git status` / `git diff` before commits | Force-push `main` or amend pushed commits without explicit user request |
-
-CI uses an ephemeral Postgres service (see workflow); local DB work should use a dev/test database only.
+Run this after every non-trivial change, before reporting the work as done. If the
+build or typecheck fails, fix it — don't report success with a failing check.
 
 ## Local dev server (don't kill the user's session)
 
-Before starting a dev server to check a change or take a screenshot:
+Before starting a dev server to check a change:
 
-1. **Check whether one is already running first** — e.g. `lsof -ti:3000` or `curl -s -o /dev/null -w "%{http_code}" http://localhost:3000`. If it responds, use it. Do not restart it, and do not assume you own it.
-2. **Never broadly `pkill -f "next dev"` or `lsof -ti:3000,3001 | xargs kill -9`** as a setup/cleanup step. That kills the user's own already-running dev server (including work-in-progress state, terminal output they were watching, etc.) — disruptive and unnecessary.
-3. If you do need your own instance for a one-off check, run it on a **different port** (`PORT=3999 npm run dev`) so it can't collide with or shadow a session the user already has open.
-4. Only ever stop a server **you started** in the same turn, by the specific PID you launched — never a wildcard match that could catch a pre-existing process.
-5. Prefer not spinning up a server at all when a static check (`tsc --noEmit`, `eslint`, reading the code) answers the question.
+1. **Check whether one is already running first** — `lsof -ti:4321` (this project's
+   default port) or `curl -s -o /dev/null -w "%{http_code}" http://localhost:4321`. If
+   it responds, use it. Do not restart it, and do not assume you own it.
+2. **Never broadly kill dev server processes** as a setup/cleanup step — that can kill
+   the user's own already-running session (work-in-progress state, terminal output
+   they were watching).
+3. If you need your own throwaway instance, use a different port
+   (`PORT=3999 npm run dev`) and only ever stop the specific PID you started yourself.
+   `astro dev` itself refuses to start a second instance when one is already running and
+   will just point you at the existing one — treat that as "already running," not an
+   error to work around.
+4. Note: this dev server binds to the **real remote** D1 database and R2 bucket (see
+   `wrangler.jsonc`'s `"remote": true` bindings), not a local simulation — writes made
+   while testing locally land in production. Confirmed acceptable for this project's
+   traffic level, but worth remembering before bulk-testing destructive operations.
 
 ## Project context
 
-- **Stack:** Next.js (App Router), TypeScript, Tailwind, Prisma + PostgreSQL, Vitest, Playwright.
-- **Tests:** Unit/integration in `src/__tests__/` (Vitest, mocked DB). E2E in `e2e/` (Playwright, dev server).
-- **Upstream:** `cubingkeralaorg/cubingkerala` — open Dependabot PRs are tracked there.
+- **Stack:** Astro (SSR, `@astrojs/cloudflare` adapter, Workers mode) + React islands,
+  TypeScript, Tailwind CSS v4, Cloudflare D1 (Drizzle ORM), Cloudflare R2.
+- **Deploy:** GitHub Actions ([`astro-app-ci.yml`](.github/workflows/astro-app-ci.yml)) —
+  triggers on push to `main` on the fork (`allenjohn07/cubingkeralaorg`), builds,
+  applies D1 migrations, deploys via `wrangler deploy`, then mirrors the commit to
+  upstream (`cubingkeralaorg/cubingkerala`). Needs `CLOUDFLARE_API_TOKEN`,
+  `CLOUDFLARE_ACCOUNT_ID`, and `SYNC_UPSTREAM_TOKEN` set as repo secrets on the fork.
+- **Cron:** a native Cloudflare Cron Trigger (see `astro-app/src/worker.ts`'s
+  `scheduled()` export) runs the WCA member/competition sync daily — not a GitHub
+  Actions workflow.
 
 ## Git
 
 - Create commits only when the user asks.
-- Match existing commit message style (short imperative subject, optional body for “why”).
+- Match existing commit message style (short imperative subject, optional body for "why").
 - Do not push or open PRs unless asked.
-
-## Cursor rules
-
-Additional always-on guardrails live in [`.cursor/rules/`](.cursor/rules/).

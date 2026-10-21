@@ -1,8 +1,10 @@
 import { FaGithub, FaWhatsapp, FaInstagram, FaFacebook } from "react-icons/fa";
 import { SOCIAL_LINKS, GITHUB_URL } from "@/config/social";
 import { LogoLink } from "./logo-link";
+import { EmailControl } from "./email-control";
 import { NAVBAR_CONTAINER_CLASS } from "./navbar/layout";
 import { cn } from "@/lib/utils";
+import type { UserProfile } from "@/types/member";
 
 const SOCIAL_ICONS = {
   whatsapp: FaWhatsapp,
@@ -78,9 +80,13 @@ export function BuiltByLink({ className }: { className?: string }) {
 
 export const Footer = ({
   topPaddingClassName = "pt-10 sm:pt-24",
+  isLoggedIn = false,
+  initialProfile = null,
 }: {
   /** Pages that end right at the footer with their own clear bottom edge (e.g. the home page's bordered banner) need less buffer above it than a page ending in a plain table. */
   topPaddingClassName?: string;
+  isLoggedIn?: boolean;
+  initialProfile?: UserProfile | null;
 }) => {
   return (
     <footer className="bg-background">
@@ -89,7 +95,14 @@ export const Footer = ({
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <LogoLink />
 
-            <FooterSocialLinks />
+            {/* flex-wrap — EmailControl shows the full address regardless of
+                length now, so on a narrow screen with a long email the
+                social icons wrap to their own line instead of overflowing
+                the page horizontally. */}
+            <div className="flex flex-wrap items-center justify-end gap-x-1 gap-y-2">
+              <EmailControl isLoggedIn={isLoggedIn} initialProfile={initialProfile} />
+              <FooterSocialLinks />
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4">

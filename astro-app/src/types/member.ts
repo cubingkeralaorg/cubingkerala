@@ -26,3 +26,9 @@ export type MemberWcaSummary = {
   medals: Medals;
   isUnavailable?: boolean;
 };
+
+export interface UserProfile {
+  isMember: boolean;
+  email: string | null;
+  emailConsent: boolean;
+}

@@ -1,20 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
-import "@cubing/icons";
 import { Button } from "@/components/ui/button";
 import { CompetitionResults } from "./competition-results";
 import { DetailRow } from "@/components/shared/detail-row";
+import { EventIcon } from "@/components/shared/event-icon";
 import {
   formatCompetitionDateRange,
   formatRegistrationDate,
   getDetailedCompetitionStatus,
   isRegistrationClosed,
 } from "@/utils/date-utils";
-import { getEventName } from "@/utils/event-names";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { MARKDOWN_CONTENT_CLASS } from "@/components/ui/markdown-content";
 import type { Competition, CompetitionDetail as CompetitionDetailData, CompetitionResultEntry } from "@/types/competition";
-
-const INFORMATION_CLASS =
-  "text-muted-foreground md:text-base [&_p]:mb-3 [&_p:last-child]:mb-0 [&_a]:text-primary [&_a]:hover:underline";
 
 interface CompetitionDetailProps {
   competition: Competition;
@@ -23,6 +20,7 @@ interface CompetitionDetailProps {
 }
 
 export function CompetitionDetail({ competition, detail, results }: CompetitionDetailProps) {
+  const hasInformation = detail.informationHtml.trim().length > 0;
   const isClosed = isRegistrationClosed(detail.registrationClose);
   const status = getDetailedCompetitionStatus(
     competition.start_date,
@@ -42,7 +40,7 @@ export function CompetitionDetail({ competition, detail, results }: CompetitionD
         </div>
 
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="flex flex-col gap-8">
+          <div className={`flex flex-col gap-8 ${hasInformation ? "" : "lg:col-span-2"}`}>
             <div className="flex flex-col gap-3">
               <h2 className="text-lg font-semibold tracking-tight">Event details</h2>
 
@@ -65,11 +63,7 @@ export function CompetitionDetail({ competition, detail, results }: CompetitionD
                 <DetailRow label="Events" divider={false}>
                   <div className="flex flex-wrap gap-x-3 gap-y-2">
                     {competition.event_ids.map((event) => (
-                      <span
-                        key={event}
-                        title={getEventName(event)}
-                        className={`cubing-icon event-${event} text-lg`}
-                      />
+                      <EventIcon key={event} eventId={event} className="text-lg" />
                     ))}
                   </div>
                 </DetailRow>
@@ -141,10 +135,12 @@ export function CompetitionDetail({ competition, detail, results }: CompetitionD
             </div>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">Information</h2>
-            <div dangerouslySetInnerHTML={{ __html: detail.informationHtml }} className={INFORMATION_CLASS} />
-          </div>
+          {hasInformation && (
+            <div className="flex min-w-0 flex-col gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Information</h2>
+              <div dangerouslySetInnerHTML={{ __html: detail.informationHtml }} className={MARKDOWN_CONTENT_CLASS} />
+            </div>
+          )}
         </div>
 
         <CompetitionResults results={results} />

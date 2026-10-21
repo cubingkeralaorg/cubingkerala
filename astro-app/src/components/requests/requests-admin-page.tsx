@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   Table,
   TableHeader,
@@ -10,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { RoleSelect } from "./role-select";
-import { useMockAuth } from "@/hooks/useMockAuth";
+import { AddMemberForm } from "./add-member-form";
 import type { RequestInfo, RoleType } from "@/types/member";
 import { cn } from "@/lib/utils";
 import {
@@ -30,8 +31,22 @@ function sortByName(list: RequestInfo[]): RequestInfo[] {
   return [...list].sort((a, b) => a.name.localeCompare(b.name));
 }
 
+async function postJson(url: string, method: string, body?: unknown): Promise<{ ok: boolean; message?: string }> {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (res.ok) return { ok: true };
+  const data = (await res.json().catch(() => ({}))) as { message?: string };
+  return { ok: false, message: data.message ?? "Something went wrong" };
+}
+
+// No isAdmin/login-fallback check here — src/middleware.ts already redirects
+// any non-admin away from /requests entirely before this component ever
+// renders (every navigation is a full page load, so middleware re-runs
+// every time; there's no client-router path that could bypass it).
 export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsAdminPageProps) {
-  const { isAdmin, login } = useMockAuth();
   const [requests, setRequests] = useState<RequestInfo[]>(initialRequests);
   const [members, setMembers] = useState<RequestInfo[]>(initialMembers);
   // Role picked in a member row's dropdown but not yet saved — Update
@@ -43,17 +58,48 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
   const [pendingRemoval, setPendingRemoval] = useState<{ type: "request" | "member"; wcaid: string; name: string } | null>(
     null,
   );
+  // Tracks which wcaids have an API call in flight right now, so every
+  // action button (Approve/Update directly, Reject/Delete via the confirm
+  // dialog) can disable itself and can't be double-fired by rapid clicks.
+  const [busyWcaids, setBusyWcaids] = useState<Set<string>>(new Set());
 
-  const handleApprove = (wcaid: string) => {
-    const request = requests.find((entry) => entry.wcaid === wcaid);
-    if (!request) return;
-    setMembers((prev) => [...prev, request]);
-    setRequests((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
+  const withBusy = async (wcaid: string, fn: () => Promise<void>) => {
+    setBusyWcaids((prev) => new Set(prev).add(wcaid));
+    try {
+      await fn();
+    } finally {
+      setBusyWcaids((prev) => {
+        const next = new Set(prev);
+        next.delete(wcaid);
+        return next;
+      });
+    }
   };
 
-  const handleReject = (wcaid: string) => {
-    setRequests((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
-  };
+  const handleApprove = (wcaid: string) =>
+    withBusy(wcaid, async () => {
+      const request = requests.find((entry) => entry.wcaid === wcaid);
+      if (!request) return;
+      const result = await postJson("/api/approve-requests", "POST", request);
+      if (!result.ok) {
+        toast.error(result.message ?? "Failed to approve request");
+        return;
+      }
+      toast.success(`${request.name.split("(")[0]} approved`);
+      setMembers((prev) => [...prev, request]);
+      setRequests((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
+    });
+
+  const handleReject = (wcaid: string) =>
+    withBusy(wcaid, async () => {
+      const result = await postJson("/api/delete-request", "DELETE", { wcaid });
+      if (!result.ok) {
+        toast.error(result.message ?? "Failed to reject request");
+        return;
+      }
+      toast.success("Request rejected");
+      setRequests((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
+    });
 
   const handleRequestRoleChange = (wcaid: string, role: RoleType) => {
     setRequests((prev) => prev.map((entry) => (entry.wcaid === wcaid ? { ...entry, role } : entry)));
@@ -63,44 +109,49 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
     setDraftMemberRoles((prev) => ({ ...prev, [wcaid]: role }));
   };
 
-  const handleUpdateMember = (wcaid: string) => {
-    const role = draftMemberRoles[wcaid];
-    if (role === undefined) return;
-    setMembers((prev) => prev.map((entry) => (entry.wcaid === wcaid ? { ...entry, role } : entry)));
-    setDraftMemberRoles((prev) => {
-      const { [wcaid]: _removed, ...rest } = prev;
-      return rest;
+  const handleUpdateMember = (wcaid: string) =>
+    withBusy(wcaid, async () => {
+      const role = draftMemberRoles[wcaid];
+      if (role === undefined) return;
+      const member = members.find((entry) => entry.wcaid === wcaid);
+      if (!member) return;
+      const result = await postJson("/api/update-members", "POST", { ...member, role });
+      if (!result.ok) {
+        toast.error(result.message ?? "Failed to update member");
+        return;
+      }
+      toast.success(`${member.name.split("(")[0]} updated`);
+      setMembers((prev) => prev.map((entry) => (entry.wcaid === wcaid ? { ...entry, role } : entry)));
+      setDraftMemberRoles((prev) => {
+        const { [wcaid]: _removed, ...rest } = prev;
+        return rest;
+      });
     });
-  };
 
-  const handleDeleteMember = (wcaid: string) => {
-    setMembers((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
-    setDraftMemberRoles((prev) => {
-      const { [wcaid]: _removed, ...rest } = prev;
-      return rest;
+  const handleDeleteMember = (wcaid: string) =>
+    withBusy(wcaid, async () => {
+      const result = await postJson("/api/delete-member", "DELETE", { wcaid });
+      if (!result.ok) {
+        toast.error(result.message ?? "Failed to delete member");
+        return;
+      }
+      toast.success("Member deleted");
+      setMembers((prev) => prev.filter((entry) => entry.wcaid !== wcaid));
+      setDraftMemberRoles((prev) => {
+        const { [wcaid]: _removed, ...rest } = prev;
+        return rest;
+      });
     });
-  };
 
-  const confirmPendingRemoval = () => {
+  const confirmPendingRemoval = async () => {
     if (!pendingRemoval) return;
     if (pendingRemoval.type === "request") {
-      handleReject(pendingRemoval.wcaid);
+      await handleReject(pendingRemoval.wcaid);
     } else {
-      handleDeleteMember(pendingRemoval.wcaid);
+      await handleDeleteMember(pendingRemoval.wcaid);
     }
     setPendingRemoval(null);
   };
-
-  if (!isAdmin) {
-    return (
-      <div className="flex flex-col items-start gap-3 py-10">
-        <p className="text-sm text-muted-foreground md:text-base">
-          You need to be logged in as an admin to view this page.
-        </p>
-        <Button onClick={login}>Login</Button>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col gap-12">
@@ -147,12 +198,17 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
                     </TableCell>
                     <TableCell className={cn(DATA_GRID_CELL, "text-right")}>
                       <div className="flex justify-end gap-2">
-                        <Button size="sm" onClick={() => handleApprove(request.wcaid)}>
+                        <Button
+                          size="sm"
+                          disabled={busyWcaids.has(request.wcaid)}
+                          onClick={() => handleApprove(request.wcaid)}
+                        >
                           Approve
                         </Button>
                         <Button
                           size="sm"
                           variant="destructive"
+                          disabled={busyWcaids.has(request.wcaid)}
                           onClick={() =>
                             setPendingRemoval({ type: "request", wcaid: request.wcaid, name: request.name })
                           }
@@ -170,7 +226,10 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Members</h2>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <h2 className="text-lg font-semibold tracking-tight">Members</h2>
+          <AddMemberForm onAdded={() => window.location.reload()} />
+        </div>
         <div className={DATA_GRID_WRAP}>
           <Table className={DATA_GRID_TABLE}>
             <TableHeader className="[&_tr]:border-0">
@@ -221,7 +280,7 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
                           <Button
                             size="sm"
                             variant="outline"
-                            disabled={!isDirty}
+                            disabled={!isDirty || busyWcaids.has(member.wcaid)}
                             onClick={() => handleUpdateMember(member.wcaid)}
                           >
                             Update
@@ -229,6 +288,7 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
                           <Button
                             size="sm"
                             variant="destructive"
+                            disabled={busyWcaids.has(member.wcaid)}
                             onClick={() =>
                               setPendingRemoval({ type: "member", wcaid: member.wcaid, name: member.name })
                             }
@@ -260,7 +320,12 @@ export function RequestsAdminPage({ initialRequests, initialMembers }: RequestsA
                 Cancel
               </Button>
             </DialogClose>
-            <Button variant="destructive" size="sm" onClick={confirmPendingRemoval}>
+            <Button
+              variant="destructive"
+              size="sm"
+              disabled={pendingRemoval !== null && busyWcaids.has(pendingRemoval.wcaid)}
+              onClick={confirmPendingRemoval}
+            >
               {pendingRemoval?.type === "request" ? "Reject" : "Delete"}
             </Button>
           </div>

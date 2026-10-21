@@ -1,29 +1,31 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { CompetitionDetail } from "@/components/competitions/competition-detail";
-import {
-  mockUpcomingCompetitions,
-  mockPastCompetitions,
-  mockCompetitionDetails,
-  mockCompetitionResults,
-} from "@/lib/mock-data";
+import { fetchCompetition, fetchCompetitionResults } from "@/lib/wca/competitions-api";
 
-// Static for now (mock data, no DB) — every competition gets a prerendered
-// page. Swapping to a real D1 query later turns this into an SSR route
-// (`export const prerender = false`) with no change to the component below.
-export function getStaticPaths() {
-  const allCompetitions = [...mockUpcomingCompetitions, ...mockPastCompetitions];
-  return allCompetitions.map((competition) => ({
-    params: { id: competition.id },
-    props: { competition },
-  }));
+// SSR, not D1-backed — mirrors the real Next.js app, which fetches this
+// page's data live from the public WCA API on every request rather than
+// from Postgres. See src/lib/wca/competitions-api.ts for why.
+//
+// The competition and its results are two independent WCA API calls (results
+// only needs the id, not the competition fetch's output) — running them in
+// parallel instead of one after another roughly halves this page's
+// server-side latency, which was the main contributor to it feeling slow.
+const { id } = Astro.params;
+const [found, results] = id
+  ? await Promise.all([fetchCompetition(id), fetchCompetitionResults(id)])
+  : [null, []];
+
+if (!found) {
+  return Astro.redirect("/competitions");
 }
 
-const { competition } = Astro.props;
-const detail = mockCompetitionDetails[competition.id];
-const results = mockCompetitionResults[competition.id] ?? [];
+const { competition, detail } = found;
 ---
 
-<Layout title={`${competition.name} | Cubing Kerala`}>
-  <CompetitionDetail competition={competition} detail={detail} results={results} />
+<Layout
+  title={`${competition.name} | Cubing Kerala`}
+  description="Details of a competition in the Rubik's Cube community in Kerala"
+>
+  <CompetitionDetail client:load competition={competition} detail={detail} results={results} />
 </Layout>

@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useDesktopNav } from "@/hooks/useDesktopNav";
-import { useMockAuth } from "@/hooks/useMockAuth";
 import { useTheme } from "@/hooks/useTheme";
 import { NavLinks } from "./navbar/nav-links";
 import { MobileMenu } from "./navbar/mobile-menu";
@@ -9,15 +8,42 @@ import { LogoLink } from "./logo-link";
 import { NAVBAR_CONTAINER_CLASS, NAVBAR_LINKS_GAP_CLASS } from "./navbar/layout";
 import { cn } from "@/lib/utils";
 
-// currentPath still comes from Layout.astro (server-rendered, used for
-// active-link highlighting); isLoggedIn/isAdmin come from the mock-auth
-// hook instead — there's no real session yet (Phase 3), so this is the
-// only source of truth for login state until that lands.
-export const Navbar = ({ currentPath = "" }: { currentPath?: string }) => {
+// currentPath, isAdmin, AND isLoggedIn all come from Layout.astro — computed
+// server-side there by reading the (now httpOnly) userInfo cookie, the same
+// way middleware.ts does, rather than client-side. This used to read
+// isLoggedIn from a client-side cookie check instead (useAuth, since
+// removed), which only worked because userInfo wasn't httpOnly; now that it
+// is, JS can no longer see it at all, and server-computed props are strictly
+// better here anyway — correct on first paint, no flash, no "has the client
+// check run yet" bookkeeping.
+export const Navbar = ({
+  currentPath = "",
+  isAdmin = false,
+  isLoggedIn = false,
+}: {
+  currentPath?: string;
+  isAdmin?: boolean;
+  isLoggedIn?: boolean;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isDesktopNav = useDesktopNav();
-  const { isLoggedIn, isAdmin, login, logout } = useMockAuth();
   const { theme, toggleTheme } = useTheme();
+
+  const login = useCallback(() => {
+    window.location.href = "/login";
+  }, []);
+
+  // Both login and logout end in a full page navigation (the OAuth
+  // redirect, and a fresh load of "/" here) — a real SSR re-render, computed
+  // from the actual cookie state, always follows. No client-side session
+  // state needs tracking in between.
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      window.location.href = "/";
+    }
+  }, []);
 
   const closeMenu = () => setIsMenuOpen(false);
 

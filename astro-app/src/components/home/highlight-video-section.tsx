@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { mediaUrl } from "@/config/media";
 
 const EVENT_DETAILS = [
   { label: "Organizers", value: "Akshay Siva, Cubing Kerala, and Smijo P. Abraham" },
@@ -47,7 +48,7 @@ export function HighlightVideoSection() {
             instead makes the element's own box match the video exactly. */}
         <video
           ref={videoRef}
-          src="/videos/hilite_comp.mp4"
+          src={mediaUrl("videos/hilite_comp.mp4")}
           muted
           loop
           playsInline

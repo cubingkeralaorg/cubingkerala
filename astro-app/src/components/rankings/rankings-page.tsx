@@ -116,17 +116,17 @@ export default function RankingsPage({
 
   return (
     <div className={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
-      <div className="mb-4 flex flex-col gap-4 sm:mb-6">
-        <div className="flex w-full flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col items-start gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2">
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
             Rankings
           </h1>
-          <FilterComponent onFilterChange={handleFilterChange} />
+          <p className="text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
+            Showing results for {getEventName(selectedFilter.event)}{" "}
+            {selectedFilter.round}
+          </p>
         </div>
-        <p className="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
-          Showing results for {getEventName(selectedFilter.event)}{" "}
-          {selectedFilter.round}
-        </p>
+        <FilterComponent onFilterChange={handleFilterChange} />
       </div>
 
       <RankingsTable

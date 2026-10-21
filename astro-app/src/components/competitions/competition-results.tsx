@@ -1,4 +1,3 @@
-import "@cubing/icons";
 import {
   Table,
   TableHeader,
@@ -7,6 +6,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { EventIcon } from "@/components/shared/event-icon";
 import type { CompetitionResultEntry } from "@/types/competition";
 import { formatEventResult } from "@/utils/wca-formatters";
 import { getEventName } from "@/utils/event-names";
@@ -29,9 +29,12 @@ function formatTime(value: number, eventId: string, type: "single" | "average" =
 }
 
 export function CompetitionResults({ results }: CompetitionResultsProps) {
-  if (results.length === 0) return null;
+  // Podium only — the full per-competitor results list is what WCA's own
+  // site is for; this is a quick "who won" summary, not a results browser.
+  const podiumResults = results.filter((result) => result.pos <= 3);
+  if (podiumResults.length === 0) return null;
 
-  const eventIds = [...new Set(results.map((result) => result.eventId))];
+  const eventIds = [...new Set(podiumResults.map((result) => result.eventId))];
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -40,7 +43,7 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
         {eventIds.map((eventId) => (
           <div key={eventId} className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className={`cubing-icon event-${eventId}`} />
+              <EventIcon eventId={eventId} />
               <h3 className="text-lg font-semibold tracking-tight">{getEventName(eventId)}</h3>
             </div>
             <div className={DATA_GRID_WRAP}>
@@ -54,7 +57,7 @@ export function CompetitionResults({ results }: CompetitionResultsProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {results
+                  {podiumResults
                     .filter((result) => result.eventId === eventId)
                     .sort((a, b) => a.pos - b.pos)
                     .map((result) => (

@@ -5,23 +5,6 @@ interface Photo {
   alt: string;
 }
 
-const ROW_1: Photo[] = [
-  { src: "/images/competition/amrita-cube-open-2025.jpg", alt: "Amrita Cube Open 2025" },
-  { src: "/images/workshop/workshop-nit-2019.jpg", alt: "Cubing workshop at NIT, 2019" },
-  { src: "/images/misc/children-group.jpg", alt: "Young cubers at a Cubing Kerala meetup" },
-  { src: "/images/competition/mcubes-cubing-clash-2024.jpg", alt: "Mcubes Cubing Clash 2024" },
-  { src: "/images/misc/ck-members.jpg", alt: "Cubing Kerala members group photo" },
-  { src: "/images/competition/tathva-2018.jpg", alt: "Tathva 2018" },
-];
-
-const ROW_2: Photo[] = [
-  { src: "/images/misc/after-comp.jpg", alt: "After a competition" },
-  { src: "/images/misc/ck-lunch-at-house.jpg", alt: "Cubing Kerala community lunch" },
-  { src: "/images/misc/competition-img.jpg", alt: "A Cubing Kerala competition" },
-  { src: "/images/competition/amrita-newcomers-twistathon-2025.jpg", alt: "Amrita Newcomers Twistathon 2025" },
-  { src: "/images/competition/solve-n-cruise-serene-alleppey-2026.jpg", alt: "Solve N Cruise at Serene Alleppey 2026" },
-];
-
 // Content is duplicated (photos, photos) so a translateX(-50%) loop (see
 // .marquee-track in global.css) lands exactly where the second copy starts
 // — a seamless loop with no jump, no scroll container, nothing for a
@@ -51,12 +34,19 @@ function MarqueeRow({ photos, reverse, durationSeconds }: { photos: Photo[]; rev
 // Capped at the site's usual max width (same container the navbar and
 // footer use) rather than running edge-to-edge — that container is the
 // site's actual width ceiling.
-export function HeroPhotoMarquee() {
+//
+// Photos now come from the Photos table (admin-managed via /requests, see
+// photo-gallery-admin.tsx) instead of a hardcoded list — row1/row2 are
+// split server-side in index.astro by alternating insertion order, so
+// newly added photos land in whichever row keeps the two balanced.
+export function HeroPhotoMarquee({ row1, row2 }: { row1: Photo[]; row2: Photo[] }) {
+  if (row1.length === 0 && row2.length === 0) return null;
+
   return (
     <section className={`${NAVBAR_CONTAINER_CLASS} marquee-fade overflow-hidden`}>
       <div className="flex flex-col gap-3">
-        <MarqueeRow photos={ROW_1} durationSeconds={38} />
-        <MarqueeRow photos={ROW_2} durationSeconds={32} reverse />
+        {row1.length > 0 && <MarqueeRow photos={row1} durationSeconds={38} />}
+        {row2.length > 0 && <MarqueeRow photos={row2} durationSeconds={32} reverse />}
       </div>
     </section>
   );

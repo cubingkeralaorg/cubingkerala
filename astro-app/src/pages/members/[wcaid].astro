@@ -1,23 +1,31 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { MemberDetail } from "@/components/members/member-detail";
-import { mockMembers, mockWcaSummaries, mockRankingsWcaData } from "@/lib/mock-data";
+import { env } from "cloudflare:workers";
+import { getDb } from "@/db/client";
+import { getMemberByWcaid, getWcaSummaryForMembers, getRankingsWcaDataForMembers } from "@/db/queries/members";
 
-// Static for now (mock data, no DB) — every member gets a prerendered page.
-// Swapping to a real D1 query later turns this into an SSR route
-// (`export const prerender = false`) with no change to the component below.
-export function getStaticPaths() {
-  return mockMembers.map((member) => ({
-    params: { wcaid: member.wcaid },
-    props: { member },
-  }));
+// SSR — every member gets looked up per-request against D1 now, no
+// getStaticPaths/prerendered-paths list to keep in sync with real data.
+const { wcaid } = Astro.params;
+const db = getDb(env.DB);
+const member = wcaid ? await getMemberByWcaid(db, wcaid) : null;
+
+if (!member) {
+  return Astro.redirect("/members");
 }
 
-const { member } = Astro.props;
-const summary = mockWcaSummaries[member.wcaid];
-const wcaData = mockRankingsWcaData[member.wcaid];
+const [wcaSummaries, rankingsWcaData] = await Promise.all([
+  getWcaSummaryForMembers(db, [wcaid as string]),
+  getRankingsWcaDataForMembers(db, [wcaid as string]),
+]);
+const summary = wcaSummaries[wcaid as string];
+const wcaData = rankingsWcaData[wcaid as string];
 ---
 
-<Layout title={`${member.name.split("(")[0].trim()} | Cubing Kerala`}>
-  <MemberDetail member={member} summary={summary} wcaData={wcaData} />
+<Layout
+  title={`${member.name.split("(")[0].trim()} | Cubing Kerala`}
+  description="Information about a member of the Rubik's Cube community in Kerala"
+>
+  <MemberDetail client:load member={member} summary={summary} wcaData={wcaData} />
 </Layout>

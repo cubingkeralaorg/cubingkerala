@@ -31,15 +31,26 @@ export function MemberDetail({ member, summary, wcaData }: MemberDetailProps) {
   const displayName = member.name.split("(")[0].trim();
   const localName = member.name.match(/\((.*?)\)/)?.[1];
   const isUnavailable = Boolean(wcaData?.isUnavailable);
+  // WCA's own placeholder for accounts with no uploaded photo — treat the
+  // same as "no avatar" rather than rendering their generic silhouette.
+  const hasRealAvatar = member.avatarUrl && !member.avatarUrl.includes("missing_avatar_thumb");
 
   return (
     <div className={`py-6 sm:py-10 ${NAVBAR_CONTAINER_CLASS}`}>
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-[380px_minmax(0,1fr)] lg:gap-16">
         <div className="flex flex-col gap-6">
           <div className="flex items-start gap-4">
-            <div className="flex size-28 shrink-0 items-center justify-center rounded-md border border-border bg-card text-2xl font-semibold text-muted-foreground lg:size-40 lg:rounded-xl lg:text-5xl">
-              {displayName.slice(0, 1)}
-            </div>
+            {hasRealAvatar ? (
+              <img
+                src={member.avatarUrl}
+                alt={`${displayName}'s profile picture`}
+                className="size-28 shrink-0 rounded-md border border-border object-cover lg:size-40 lg:rounded-xl"
+              />
+            ) : (
+              <div className="flex size-28 shrink-0 items-center justify-center rounded-md border border-border bg-card text-2xl font-semibold text-muted-foreground lg:size-40 lg:rounded-xl lg:text-5xl">
+                {displayName.slice(0, 1)}
+              </div>
+            )}
             <div className="flex min-w-0 flex-col gap-1.5">
               <h1 className="text-2xl font-semibold tracking-tight">{displayName}</h1>
               <Badge className="w-fit px-2 py-0 text-[11px] font-medium tracking-wide">
