@@ -15,6 +15,10 @@ on:
     paths:
       - "astro-app/**"
       - ".github/workflows/astro-app-ci.yml"
+  # Lets this be re-run manually (Actions tab -> Run workflow) without
+  # needing a dummy commit that happens to touch a path the triggers above
+  # care about — an empty commit doesn't, since it changes no paths at all.
+  workflow_dispatch:
 
 permissions:
   contents: write
