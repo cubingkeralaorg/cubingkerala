@@ -1,0 +1,22 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import CompetitionsPage from "@/components/competitions/competitions-page";
+import { mockUpcomingCompetitions, mockPastCompetitions } from "@/lib/mock-data";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+
+// Stand-in for the real DB query (Phase 2).
+const upcoming = mockUpcomingCompetitions;
+const past = mockPastCompetitions;
+---
+
+<Layout title="Competitions | Cubing Kerala">
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-4 flex flex-col gap-2 sm:mb-6">
+      <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Competitions</h1>
+      <p class="text-sm text-muted-foreground md:text-base">
+        Upcoming and past competitions of the Rubik's Cube community in Kerala.
+      </p>
+    </div>
+    <CompetitionsPage client:load upcoming={upcoming} past={past} />
+  </div>
+</Layout>

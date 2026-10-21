@@ -1,0 +1,13 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import RankingsPage from "@/components/rankings/rankings-page";
+import { mockMembers, mockRankingsWcaData } from "@/lib/mock-data";
+
+// Stand-in for the real DB query (Phase 2).
+const members = mockMembers;
+const rankingsWcaData = mockRankingsWcaData;
+---
+
+<Layout title="Rankings | Cubing Kerala">
+  <RankingsPage client:load members={members} rankingsWcaData={rankingsWcaData} />
+</Layout>

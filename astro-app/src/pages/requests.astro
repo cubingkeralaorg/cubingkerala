@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { RequestsAdminPage } from "@/components/requests/requests-admin-page";
+import { mockPendingRequests, mockMembers } from "@/lib/mock-data";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+
+// Admin-only in spirit — RequestsAdminPage itself gates on the mock-auth
+// hook client-side, since there's no real session (Phase 3) to check here.
+const requests = mockPendingRequests;
+const members = mockMembers;
+---
+
+<Layout title="Requests | Cubing Kerala">
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-6 flex flex-col gap-2 sm:mb-10">
+      <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Requests</h1>
+      <p class="text-sm text-muted-foreground md:text-base">
+        Review pending membership requests and manage existing members.
+      </p>
+    </div>
+    <RequestsAdminPage client:load initialRequests={requests} initialMembers={members} />
+  </div>
+</Layout>

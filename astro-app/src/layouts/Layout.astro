@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+
+interface Props {
+  title?: string;
+  footerTopPaddingClassName?: string;
+}
+
+const { title = "Cubing Kerala", footerTopPaddingClassName } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/cubingkerala_logo.svg" />
+    <title>{title}</title>
+    {/* Runs before first paint so there's no flash of the wrong theme —
+        useTheme (client-side) stays in sync with the same localStorage key. */}
+    <script is:inline>
+      try {
+        if (localStorage.getItem("ck_theme") === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch {}
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col bg-background font-sans antialiased">
+    <Navbar client:load currentPath={currentPath} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer topPaddingClassName={footerTopPaddingClassName} />
+  </body>
+</html>

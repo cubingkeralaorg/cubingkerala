@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@1&family=Geist+Mono:wght@400&display=swap">
+<script src="./image-slot.js"></script>
+<style>body{margin:0;background:oklch(0.145 0.004 286)}a{color:oklch(0.985 0 0);text-decoration:underline;text-decoration-color:oklch(1 0 0/.3);text-underline-offset:3px}a:hover{color:oklch(0.78 0.16 160)}summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}details[open] .plus{transform:rotate(45deg)}.plus{transition:transform .2s}button{font-family:inherit}button:active{transform:scale(.97)}em.s{font-style:normal;color:oklch(0.78 0.16 160)}#car::-webkit-scrollbar{display:none}</style>
+</helmet>
+<div style="background:oklch(0.145 0.004 286);color:oklch(0.93 0 0);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh">
+
+<header style="position:sticky;top:0;z-index:50;background:oklch(0.145 0.004 286);display:grid;grid-template-columns:minmax(max-content,1fr) minmax(0,640px) minmax(max-content,1fr);align-items:center;column-gap:20px;padding:20px clamp(20px,3vw,40px)">
+  <span style="font-weight:600;font-size:14px">Cubing Kerala</span>
+  <nav style="display:flex;gap:20px;font-size:14px">
+    <a href="#competitions" style="text-decoration:none;color:oklch(0.7 0 0);transition:color .15s" style-hover="color:oklch(0.78 0.16 160)">Competitions</a>
+    <a href="#rankings" style="text-decoration:none;color:oklch(0.7 0 0);transition:color .15s" style-hover="color:oklch(0.78 0.16 160)">Rankings</a>
+    <a href="#members" style="text-decoration:none;color:oklch(0.7 0 0);transition:color .15s" style-hover="color:oklch(0.78 0.16 160)">Members</a>
+    <a href="#" style="text-decoration:none;color:oklch(0.7 0 0);transition:color .15s" style-hover="color:oklch(0.78 0.16 160)">Learn</a>
+  </nav>
+  <a href="#" style="justify-self:end;font-size:14px;font-weight:500;text-decoration:none;color:oklch(0.78 0.16 160);transition:opacity .15s" style-hover="opacity:.7">Login</a>
+  <div style="position:absolute;left:0;right:0;top:100%;height:32px;pointer-events:none;background:linear-gradient(to bottom,oklch(0.145 0.004 286),oklch(0.145 0.004 286/0))"></div>
+</header>
+
+<main style="max-width:640px;margin:0 auto;padding:0 clamp(20px,5vw,0px)">
+
+<section style="padding:64px 0 48px">
+  <h1 style="font-weight:500;font-size:clamp(40px,9vw,56px);line-height:1;letter-spacing:-0.04em;margin:0">The Rubik's Cube <em class="s">community</em> in Kerala.</h1>
+  <p style="margin:20px 0 0;font-size:18px;font-weight:500;letter-spacing:-0.01em">Home to cubers from all the districts in Kerala.</p>
+  <p style="margin:10px 0 0;color:oklch(0.7 0 0);font-size:14px">Connect with fellow cubers for discussions, competition updates, and everything happening in the community.</p>
+  <div style="margin-top:28px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <button type="button" style="background:oklch(0.78 0.16 160);color:oklch(0.145 0.004 286);border:0;border-radius:8px;padding:12px 22px;font-size:15px;font-weight:500;cursor:pointer;">Join WhatsApp ↗</button>
+  </div>
+</section>
+
+</main>
+<section style="overflow:hidden;padding:8px 0 24px">
+  <div style="display:flex;justify-content:center;align-items:center;width:max-content;min-width:100%;margin:0 auto;padding:24px 0">
+    <sc-for list="{{ hero }}" as="h" hint-placeholder-count="5">
+      <div style="flex:none;width:200px;height:{{ h.hgt }}px;margin:0 -14px;transform:translateY({{ h.y }}px) rotate({{ h.r }}deg);border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px oklch(1 0 0/.12),0 16px 40px oklch(0 0 0/.5);z-index:{{ h.z }};position:relative"><image-slot id="{{ h.id }}" shape="rect" placeholder="{{ h.ph }}" style="width:100%;height:100%"></image-slot></div>
+    </sc-for>
+  </div>
+  <p style="text-align:center;margin:8px 0 0;font-size:14px"><a href="#" style="color:oklch(0.78 0.16 160)">See more community photos →</a></p>
+</section>
+<main style="max-width:640px;margin:0 auto;padding:0 clamp(20px,5vw,0px)">
+
+
+
+
+<section id="competitions" style="padding:96px 0 0">
+  <h2 style="font-weight:500;font-size:15px;margin:0 0 6px">Upcoming competitions</h2>
+  <p style="margin:0 0 20px;color:oklch(0.7 0 0)">Each is a full day of official rounds, open to all ages.</p>
+  <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ true }}">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+    <sc-for list="{{ comps }}" as="c" hint-placeholder-count="2">
+      <div style="background:oklch(0.17 0.004 286);border-radius:16px;box-shadow:0 0 0 1px oklch(1 0 0/.08);padding:20px;display:flex;flex-direction:column;gap:14px;min-height:190px">
+        <div style="display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:oklch(0.6 0 0)"><span>{{ c.date }}</span><span>{{ c.spots }}</span></div>
+        <p style="font-weight:500;font-size:20px;line-height:1.2;letter-spacing:-0.02em;margin:0;flex:1">{{ c.name }}</p>
+        <div>
+          <p style="margin:0;font-size:13px;color:oklch(0.7 0 0)">{{ c.place }} · {{ c.events }}</p>
+          <button type="button" style="margin-top:14px;background:oklch(1 0 0/.08);color:#fff;border:0;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer">View competition →</button>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  </sc-if>
+  <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ false }}">
+    <p style="margin:0;padding:20px;border-radius:16px;box-shadow:0 0 0 1px oklch(1 0 0/.08);color:oklch(0.7 0 0)">No upcoming competitions right now. Check back soon.</p>
+  </sc-if>
+
+  <h3 style="font-weight:500;font-size:15px;margin:48px 0 12px">Past competitions</h3>
+  <div style="position:relative;max-height:210px;overflow:hidden;border-top:1px solid oklch(1 0 0/.08)">
+    <sc-for list="{{ past }}" as="c" hint-placeholder-count="5">
+      <div style="display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:14px 0;border-bottom:1px solid oklch(1 0 0/.06)">
+        <span style="font-family:'Geist Mono',monospace;font-size:12px;color:oklch(0.6 0 0)">{{ c.date }}</span>
+        <span style="font-weight:500">{{ c.name }}</span>
+        <span style="font-size:13px;color:oklch(0.6 0 0)">{{ c.place }}</span>
+      </div>
+    </sc-for>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(to bottom,transparent,oklch(0.145 0.004 286));pointer-events:none"></div>
+  </div>
+  <p style="margin:12px 0 0;font-size:14px"><a href="#" style="color:oklch(0.78 0.16 160)">View all competitions →</a></p>
+</section>
+
+<section id="rankings" style="padding:96px 0 0">
+  <h2 style="font-weight:500;font-size:15px;margin:0 0 16px">Rankings</h2>
+  <div style="display:inline-flex;gap:2px;padding:3px;background:oklch(1 0 0/.06);border-radius:12px;margin-bottom:16px">
+    <sc-for list="{{ events }}" as="e" hint-placeholder-count="4">
+      <button type="button" onClick="{{ e.pick }}" style="border:0;border-radius:9px;padding:7px 16px;font-size:13px;font-weight:500;cursor:pointer;background:{{ e.bg }};color:{{ e.fg }}">{{ e.name }}</button>
+    </sc-for>
+  </div>
+  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 56px 56px;gap:12px;padding:0 0 8px;font-size:11px;color:oklch(0.55 0 0)"><span></span><span>Cuber</span><span style="text-align:right">Single</span><span style="text-align:right">Avg</span></div>
+  <div style="position:relative;max-height:220px;overflow:hidden;border-top:1px solid oklch(1 0 0/.08);font-variant-numeric:tabular-nums">
+    <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+      <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 56px 56px;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid oklch(1 0 0/.06)">
+        <span style="font-family:'Geist Mono',monospace;font-size:12px;color:oklch(0.6 0 0)">{{ r.rank }}</span>
+        <span>{{ r.name }} <span style="color:oklch(0.55 0 0);font-size:13px">{{ r.club }}</span></span>
+        <span style="color:oklch(0.65 0 0);text-align:right">{{ r.single }}</span>
+        <span style="font-weight:600;text-align:right">{{ r.avg }}</span>
+      </div>
+    </sc-for>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(to bottom,transparent,oklch(0.145 0.004 286));pointer-events:none"></div>
+  </div>
+  <p style="margin:12px 0 0;font-size:14px"><a href="#" style="color:oklch(0.78 0.16 160)">View full rankings →</a></p>
+</section>
+
+<section id="members" style="padding:96px 0 0">
+  <h2 style="font-weight:500;font-size:15px;margin:0 0 6px">The people</h2>
+  <p style="margin:0 0 16px;color:oklch(0.7 0 0)">Organisers, judges and coaches who keep it running.</p>
+  <div style="position:relative;max-height:210px;overflow:hidden;border-top:1px solid oklch(1 0 0/.08)">
+    <sc-for list="{{ members }}" as="m" hint-placeholder-count="6">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid oklch(1 0 0/.06)">
+        <span style="font-weight:500">{{ m.name }}</span>
+        <span style="font-size:13px;color:oklch(0.6 0 0)">{{ m.role }}</span>
+      </div>
+    </sc-for>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:130px;background:linear-gradient(to bottom,transparent,oklch(0.145 0.004 286));pointer-events:none"></div>
+  </div>
+  <p style="margin:12px 0 0;font-size:14px"><a href="#" style="color:oklch(0.78 0.16 160)">View all 214 members →</a></p>
+</section>
+</main>
+<footer style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:96px clamp(20px,3vw,40px) 32px;font-size:12px;color:oklch(0.55 0 0)"><span>© 2026 Cubing Kerala. All rights reserved.</span><span>Built by Allen John</span></footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ev: '3x3', run: false, ms: 0, scramble: '' };
+  componentDidMount() {
+  }
+  gen() {
+    const f = ['U','D','R','L','F','B'], m = ['', "'", '2']; let o = [], l = '';
+    while (o.length < 20) { const x = f[Math.floor(Math.random()*6)]; if (x === l) continue; l = x; o.push(x + m[Math.floor(Math.random()*3)]); }
+    return o.join(' ');
+  }
+  toggle = () => {
+    if (this.state.run) { clearInterval(this.iv); this.setState({ run: false, scramble: this.gen() }); }
+    else { this.t0 = performance.now(); this.setState({ run: true, ms: 0 }); this.iv = setInterval(() => this.setState({ ms: performance.now() - this.t0 }), 31); }
+  };
+  renderVals() {
+    const D = {
+      '3x3': [['Mara Ilves','Kochi','4.21','5.34'],['Jonas Weiss','Kozhikode','4.48','5.51'],['Aiko Tanaka','Thrissur','4.65','5.68'],['Luca Ferrari','Kannur','4.77','5.80'],['Priya Nair','Alappuzha','4.92','5.97'],['Tomás Rey','Kollam','5.03','6.12']],
+      '2x2': [['Jonas Weiss','Kozhikode','0.93','1.48'],['Luca Ferrari','Kannur','1.02','1.55'],['Mara Ilves','Kochi','1.10','1.61'],['Tomás Rey','Kollam','1.14','1.70'],['Aiko Tanaka','Thrissur','1.19','1.74'],['Priya Nair','Alappuzha','1.25','1.82']],
+      '4x4': [['Aiko Tanaka','Thrissur','17.84','20.61'],['Mara Ilves','Kochi','18.30','21.05'],['Priya Nair','Alappuzha','18.92','21.77'],['Jonas Weiss','Kozhikode','19.40','22.18'],['Tomás Rey','Kollam','19.88','22.64'],['Luca Ferrari','Kannur','20.11','23.02']],
+      'OH': [['Luca Ferrari','Kannur','6.88','8.95'],['Priya Nair','Alappuzha','7.31','9.20'],['Mara Ilves','Kochi','7.54','9.47'],['Aiko Tanaka','Thrissur','7.80','9.88'],['Jonas Weiss','Kozhikode','8.02','10.11'],['Tomás Rey','Kollam','8.26','10.40']]
+    };
+    const { ev, run, ms, scramble } = this.state;
+    const blue = 'oklch(0.78 0.16 160)';
+    return {
+      hasUpcoming: true, noUpcoming: false,
+      past: [{date:'14 SEP 2026',name:'Onam Cube Fest',place:'Kochi'},{date:'03 AUG 2026',name:'Monsoon Open',place:'Kozhikode'},{date:'12 JUL 2026',name:'Malabar Speed Meet',place:'Kannur'},{date:'21 JUN 2026',name:'Kerala Championship',place:'Thiruvananthapuram'},{date:'17 MAY 2026',name:'Summer Cube Day',place:'Thrissur'}],
+      hero: [[-6,24,260,'Meetup',1],[4,-12,300,'Podium',2],[-3,10,340,'Workshop',3],[5,-14,300,'Judging',2],[-5,22,260,'Group photo',1]].map((h,i)=>({id:'hero-'+i,r:h[0],y:h[1],hgt:h[2],ph:h[3],z:h[4]})),
+      prev: () => document.getElementById('car').scrollBy({left:-332,behavior:'smooth'}),
+      next: () => document.getElementById('car').scrollBy({left:332,behavior:'smooth'}),
+      photos: ['Meetup','Workshop','Podium','Practice','Competition day','Group photo','Judges','Newcomers'].map((p,i)=>({id:'photo-'+i,w:320,h:400,ph:p})),
+      comps: [
+        {date:'08 NOV 2026',spots:'42 left',name:'Big n Blind Finprov 2026',place:'Alappuzha',events:'6 events'},
+        {date:'29 NOV 2026',spots:'18 left',name:'Winter Cube Day',place:'Kochi',events:'3x3, BLD, FMC'},
+        {date:'17 JAN 2027',spots:'Opens 1 Dec',name:'New Year Speed Meet',place:'Kozhikode',events:'3x3, Skewb, Sq-1'},
+        {date:'06 FEB 2027',spots:'Opens 15 Dec',name:'Kerala Cubing Cup',place:'Thrissur',events:'All 17 events'}
+      ],
+      events: Object.keys(D).map(k => ({name:k, bg: k===ev ? 'oklch(0.3 0 0)' : 'transparent', fg: k===ev ? '#fff' : 'oklch(0.65 0 0)', pick: () => this.setState({ev:k})})),
+      rows: D[ev].map((r,i) => ({rank:String(i+1).padStart(2,'0'),name:r[0],club:r[1],single:r[2],avg:r[3]})),
+      members: [['Mara Ilves','President'],['Jonas Weiss','Treasurer'],['Aiko Tanaka','Head Judge'],['Luca Ferrari','Events Lead'],['Priya Nair','Delegate'],['Tomás Rey','Coach']].map((m,i)=>({id:'member-'+i,name:m[0],role:m[1]})),
+      plans: [
+        {name:'Junior',price:'€0',per:'under 16',perks:'Practice nights, ranked results, junior-only rounds.',fg:'#fff',bg:'oklch(1 0 0/.1)',ring:'oklch(1 0 0/.08)'},
+        {name:'Member',price:'€40',per:'/ year',perks:'Reduced entry fees, official ranking, voting rights, loan timers.',fg:'oklch(0.145 0.004 286)',bg:blue,ring:blue},
+        {name:'Supporter',price:'€120',per:'/ year',perks:'Everything in Member, plus a sponsor mention and early registration.',fg:'#fff',bg:'oklch(1 0 0/.1)',ring:'oklch(1 0 0/.08)'}
+      ],
+      _faqs: [
+        {q:'Do I need to be fast to join?',a:'No. Members range from first-time solvers to national record holders. Thursday practice is built for mixing levels.'},
+        {q:'How are rankings calculated?',a:'Official results from sanctioned competitions only. Single is your best solve; average removes the best and worst of five.'},
+        {q:'Can I enter a competition without membership?',a:'Yes, at a higher entry fee. Members register first and pay less.'},
+        {q:'Do you provide cubes?',a:'Loan cubes and timers are available at every practice night and competition.'}
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

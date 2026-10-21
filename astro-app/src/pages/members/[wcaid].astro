@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { MemberDetail } from "@/components/members/member-detail";
+import { mockMembers, mockWcaSummaries, mockRankingsWcaData } from "@/lib/mock-data";
+
+// Static for now (mock data, no DB) — every member gets a prerendered page.
+// Swapping to a real D1 query later turns this into an SSR route
+// (`export const prerender = false`) with no change to the component below.
+export function getStaticPaths() {
+  return mockMembers.map((member) => ({
+    params: { wcaid: member.wcaid },
+    props: { member },
+  }));
+}
+
+const { member } = Astro.props;
+const summary = mockWcaSummaries[member.wcaid];
+const wcaData = mockRankingsWcaData[member.wcaid];
+---
+
+<Layout title={`${member.name.split("(")[0].trim()} | Cubing Kerala`}>
+  <MemberDetail member={member} summary={summary} wcaData={wcaData} />
+</Layout>

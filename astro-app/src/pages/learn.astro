@@ -1,0 +1,82 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import VideoCard from "@/components/learn/VideoCard.astro";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+
+// Trimmed to a couple of videos per section for now (full lists come back
+// once we're happy with the page). Same shape as the old app's
+// beginner/intermediate/advanced-videos.tsx data arrays.
+const sections = [
+  {
+    title: "Beginner Level",
+    videos: [
+      { id: "PW2J8IblczM", title: "Simple beginner's guide" },
+      { id: "7Ron6MN45LY", title: "10-minute beginner tutorial" },
+    ],
+    resource: { name: "CubeSkills Beginner Guide", url: "/pdf/cubeskills_beginners_guide.pdf" },
+  },
+  {
+    title: "Intermediate Level",
+    videos: [
+      { id: "__q-5MwlOiU", title: "How to turn faster" },
+      { id: "KWe4SNIMtrg", title: "Advanced finger tricks" },
+    ],
+    resource: { name: "CubeSkills OLL Guide", url: "/pdf/oll-algorithms.pdf" },
+  },
+  {
+    title: "Advanced Level",
+    videos: [
+      { id: "P9POsBAaKd0", title: "X-Cross (Cross + First Pair)" },
+      { id: "CFIQMKxJP4k", title: "COLL-U" },
+    ],
+    resource: { name: "JPerm COLL Algorithms", url: "https://jperm.net/algs/coll" },
+  },
+];
+---
+
+<Layout title="Learn | Cubing Kerala">
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-6 flex flex-col gap-2 sm:mb-10">
+      <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Learn</h1>
+      <p class="text-sm text-muted-foreground md:text-base">
+        Beginner through advanced videos for solving and getting faster.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-10 sm:gap-16">
+      {sections.map((section) => (
+        <section class="flex flex-col gap-8">
+          <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{section.title}</h2>
+
+          <div class="flex flex-col gap-4">
+            <p class="text-sm font-medium text-muted-foreground">Videos</p>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {section.videos.map((video) => (
+                <VideoCard videoId={video.id} title={video.title} />
+              ))}
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <p class="text-sm font-medium text-muted-foreground">Learning resources</p>
+            <ul class="flex flex-col gap-2 text-sm text-muted-foreground">
+              <li>
+                <a
+                  href={section.resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-primary"
+                >
+                  {section.resource.name}
+                  <span class="ml-2 text-xs text-muted-foreground">
+                    {section.resource.url.startsWith("/pdf") ? "PDF" : "Link"}
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Layout>

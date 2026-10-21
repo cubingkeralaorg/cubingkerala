@@ -1,0 +1,48 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import HeroSection from "@/components/home/hero-section";
+import { HeroPhotoMarquee } from "@/components/home/photo-strip-section";
+import { UpcomingCompetitionsSection, PastCompetitionsSection } from "@/components/home/competitions-preview-section";
+import { HighlightVideoSection } from "@/components/home/highlight-video-section";
+import { AchievementBanner } from "@/components/home/achievement-banner";
+import { RankingsPreviewSection } from "@/components/home/rankings-preview-section";
+import { MembersPreviewSection } from "@/components/home/members-preview-section";
+import { CommunityBannerSection } from "@/components/home/community-banner-section";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import {
+  mockUpcomingCompetitions,
+  mockPastCompetitions,
+  mockMembers,
+  mockRankingsWcaData,
+  mockWcaSummaries,
+} from "@/lib/mock-data";
+---
+
+<Layout title="Cubing Kerala" footerTopPaddingClassName="pt-10">
+  {/* Hero + photo marquee fill the first screen (viewport minus the 64px
+      sticky navbar), centered as one cohesive block with a fixed gap
+      between them — not justify-between, which stretched that gap to
+      absorb all the leftover space on taller screens and pushed the
+      photos too far down, away from the hero text above them. The marquee
+      is pure CSS (no client directive) — nothing to hydrate. */}
+  <div class="flex min-h-[calc(90dvh-4rem)] flex-col justify-center gap-12">
+    <HeroSection />
+    <HeroPhotoMarquee />
+  </div>
+
+  <div class="my-28">
+    <HighlightVideoSection client:load />
+  </div>
+
+  {/* Full tables now (no clipping), so they get the same wide container
+      the real /competitions, /rankings, and /members pages use. */}
+  <div class={`${NAVBAR_CONTAINER_CLASS} flex flex-col gap-28 pb-28`}>
+    <UpcomingCompetitionsSection upcoming={mockUpcomingCompetitions} />
+    <PastCompetitionsSection past={mockPastCompetitions} />
+    <AchievementBanner client:load />
+    <RankingsPreviewSection client:load members={mockMembers} rankingsWcaData={mockRankingsWcaData} />
+    <MembersPreviewSection members={mockMembers} wcaSummaries={mockWcaSummaries} />
+  </div>
+
+  <CommunityBannerSection />
+</Layout>

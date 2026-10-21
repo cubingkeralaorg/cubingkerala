@@ -1,0 +1,23 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import MembersList from "@/components/members/members-list";
+import { mockMembers, mockWcaSummaries } from "@/lib/mock-data";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+
+// Stand-in for the real DB query (Phase 2): a Drizzle call will replace this
+// one line without touching anything below.
+const members = mockMembers;
+const wcaSummaries = mockWcaSummaries;
+---
+
+<Layout title="Members | Cubing Kerala">
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-4 flex flex-col gap-2 sm:mb-6">
+      <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Members</h1>
+      <p class="text-sm text-muted-foreground md:text-base">
+        Find cubers by name or WCA ID, and see who competes from Kerala.
+      </p>
+    </div>
+    <MembersList client:load members={members} wcaSummaries={wcaSummaries} />
+  </div>
+</Layout>
