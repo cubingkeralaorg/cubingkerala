@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="public/cubingkerala_logo.svg" alt="Cubing Kerala logo" width="96" />
+  <img src="astro-app/public/cubingkerala_logo.svg" alt="Cubing Kerala logo" width="96" />
 </p>
 
 <h3 align="center">Cubing Kerala</h3>
 
 <p align="center">
-  <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/main-branch-ci.yml">
-    <img src="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/main-branch-ci.yml/badge.svg" alt="CI/CD Status" />
+  <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/astro-app-ci.yml">
+    <img src="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/astro-app-ci.yml/badge.svg" alt="CI/CD Status" />
   </a>
   <a href="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/codeql.yml">
     <img src="https://github.com/cubingkeralaorg/cubingkerala/actions/workflows/codeql.yml/badge.svg" alt="CodeQL Status" />
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.cubingkerala.org">cubingkerala.org</a> ·
+  <a href="https://cubingkerala.com">cubingkerala.com</a> ·
   <a href="https://github.com/cubingkeralaorg/cubingkerala/issues">Report a Bug</a> ·
   <a href="https://github.com/cubingkeralaorg/cubingkerala/issues">Request a Feature</a>
 </p>
@@ -29,14 +29,14 @@
 
 | Feature | Description |
 |---|---|
-| **Competitions** | Browse upcoming & past WCA competitions in Kerala, served instantly from the database |
-| **Rankings** | Live member rankings, cached intelligently for instant load |
-| **Members** | Community directory — WCA-authenticated profiles with avatars and roles |
-| **Join Request** | Submit a join request via WCA OAuth; approved by admins |
+| **Competitions** | Browse upcoming & past WCA competitions in Kerala, synced from the live WCA API |
+| **Rankings** | Member rankings by event, filterable by single/average |
+| **Members** | Community directory — WCA-authenticated profiles with avatars, roles, and personal records |
+| **Join Request** | Submit a join request via WCA OAuth; approved by admins (or added directly by WCA ID) |
+| **Photo gallery** | Admin-managed homepage photo marquee — drag-and-drop upload straight to R2 |
 | **Learn** | Resources and guides to get started with speedcubing |
-| **Contact** | Get in touch with the Cubing Kerala team |
-| **Dark / Light Mode** | Full theme support via `next-themes` with persistence |
-| **WCA Sync** | Background cron job to keep member data and competitions updated |
+| **Dark / Light Mode** | Class-based theme toggle with `localStorage` persistence, no flash on load |
+| **WCA Sync** | Cloudflare Cron Trigger keeps member data and competitions updated daily |
 | **Sitemap** | Auto-generated sitemap for SEO |
 
 ---
@@ -45,33 +45,31 @@
 
 | Category | Technology |
 |---|---|
-| **Framework** | [Next.js 15](https://nextjs.org) (App Router) |
+| **Framework** | [Astro](https://astro.build) (SSR, Workers mode) + React islands |
 | **Language** | TypeScript |
-| **Styling** | Tailwind CSS · shadcn/ui · Radix UI primitives |
-| **Animations** | Framer Motion (footer, landing scroll-reveal) |
-| **Database** | PostgreSQL ([Neon](https://neon.tech) serverless) via Prisma ORM |
+| **Styling** | Tailwind CSS v4 (CSS-first config) · Radix UI primitives |
+| **Database** | Cloudflare D1 (SQLite) via Drizzle ORM |
+| **Storage** | Cloudflare R2 (competition photos, workshop videos, PDF resources) |
 | **Auth** | WCA OAuth 2.0 |
-| **Data Fetching** | TanStack React Query · Axios |
-| **Maps** | Leaflet / React Leaflet |
-| **Icons** | Lucide React · React Icons · `@cubing/icons` · Radix Icons |
-| **Testing** | Vitest + React Testing Library (unit) · Playwright (E2E) |
-| **Deployment** | Vercel |
+| **Markdown rendering** | `marked` + `sanitize-html` (competition info fields) |
+| **Icons** | Lucide React · `@cubing/icons` · Radix Icons |
+| **Deployment** | Cloudflare Workers, via GitHub Actions |
 
 ---
 
-## 🗄 Database Models
+## 🗄 Database Tables (D1)
 
-| Model | Purpose |
+| Table | Purpose |
 |---|---|
 | `Users` | Authenticated WCA users |
 | `Members` | Approved Cubing Kerala members |
 | `Requests` | Pending join requests |
 | `Competitions` | Kerala WCA competitions synced from the WCA API |
-| `MemberWcaData` | Cached WCA competition data per member (JSON) |
-| `SystemMetadata` | Key/value store for sync cursors |
+| `MemberWcaData` | Cached WCA competitor data per member (JSON) |
+| `Photos` | Admin-managed homepage photo gallery (R2 object path + alt text) |
+| `SystemMetadata` | Key/value store for sync cursors and timestamps |
 
-> [!NOTE]
-> For more detailed information about the database setup, connection strings, and backups, see [DATABASE.md](DATABASE.md).
+Schema lives in [`astro-app/src/db/schema.ts`](astro-app/src/db/schema.ts); migrations in [`astro-app/migrations/`](astro-app/migrations/), applied via `wrangler d1 migrations apply`.
 
 ---
 
@@ -81,116 +79,81 @@
 
 - **Node.js** ≥ 18
 - **npm** (comes with Node)
-- A **PostgreSQL** database ([Neon](https://neon.tech) recommended)
+- A **Cloudflare account** with a D1 database and R2 bucket (see [`astro-app/wrangler.jsonc`](astro-app/wrangler.jsonc))
 - WCA OAuth credentials (Client ID & Secret)
+- [`wrangler`](https://developers.cloudflare.com/workers/wrangler/) (installed as a dev dependency)
 
 ### Setup
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/cubingkeralaorg/cubingkerala.git
-cd cubingkerala
+cd cubingkerala/astro-app
 
 # 2. Install dependencies
 npm install
 
-# 3. Configure environment variables
-cp .env.example .env.local
-# Fill in DATABASE_URL, WCA OAuth credentials, and app URL
-# Use only .env.local locally. Next.js loads it; `npm run db:*` loads it for Prisma.
+# 3. Configure local secrets
+cp .env.example .dev.vars
+# Fill in CLIENT_ID, CLIENT_SECRET, ADMIN_WCA_ID, ADMIN_USER_ID — see .env.example
+# for the split between Worker secrets (.dev.vars) and PUBLIC_* build vars (.env)
 
-# 4. Generate Prisma client & push schema
-npx prisma generate
-npx prisma db push
+# 4. Apply D1 migrations locally
+npx wrangler d1 migrations apply cubingkerala --local
 
 # 5. Start the dev server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:4321](http://localhost:4321) to view the app. Every command in this project runs from **`astro-app/`**, not the repo root.
 
 ### Environment Variables
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `CLIENT_ID` | WCA OAuth Client ID |
-| `CLIENT_SECRET` | WCA OAuth Client Secret |
-| `NEXT_PUBLIC_BASE_URL` | App base URL (e.g. `http://localhost:3000`) |
-| `NEXT_PUBLIC_WHATSAPP_CONTACT_URL` | WhatsApp contact link |
-| `ADMIN_USER_ID` | WCA numeric user id for `/requests` (server-only) |
-| `ADMIN_WCA_ID` | WCA ID for `/requests` (server-only) |
-| `CRON_SECRET` | Optional bearer token for the WCA sync cron |
-| `POSTGRES_URL_TEST` | Test database URL (CI/CD) |
+See [`astro-app/.env.example`](astro-app/.env.example) for the full, current list and the split between Worker secrets (`.dev.vars`, never committed) and `PUBLIC_*` build-time values (`.env`/`.env.local`). In production, Worker secrets are set via `wrangler secret put <NAME>` or `wrangler secret bulk`; `PUBLIC_*` values are set wherever the build runs (GitHub Actions).
 
 ---
 
 ## 📜 Available Scripts
 
+All run from `astro-app/`:
+
 | Command | Description |
 |---|---|
-| `npm run dev` | Start development server |
-| `npm run build` | Create production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm test` | Run unit tests (Vitest) |
-| `npm run test:watch` | Run unit tests in watch mode |
-| `npm run test:ui` | Open Vitest UI |
-| `npm run test:coverage` | Run tests with coverage report |
-| `npm run test:ci` | Run tests for CI environment |
-| `npm run e2e` | Run end-to-end tests (Playwright) |
-| `npm run test:e2e` | Alias for E2E tests |
-| `npm run e2e:ui` | Open Playwright UI |
-| `npm run e2e:debug` | Debug E2E tests |
-| `npm run e2e:report` | Show Playwright test report |
-| `npm run db:studio` | Open Prisma Studio (DB GUI) |
-| `npm run db:info` | Show database info |
-| `npm run db:check` | Check database connectivity |
-| `npm run db:backup` | Dump a database backup |
-| `npm run db:test` | Test database connection |
+| `npm run dev` | Start local dev server (binds to real remote D1/R2 — see `wrangler.jsonc`) |
+| `npm run build` | Build for production |
+| `npx tsc --noEmit` | Type-check |
+| `npx wrangler deploy` | Deploy to Cloudflare Workers |
+| `npx wrangler d1 migrations apply cubingkerala --local\|--remote` | Apply D1 schema migrations |
+| `npx drizzle-kit generate` | Generate a new migration from `src/db/schema.ts` |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                      # Routes only (pages, layouts, API)
-│   ├── api/                  # HTTP handlers
-│   ├── competitions/
-│   ├── members/
-│   ├── rankings/
-│   ├── requests/
-│   ├── learn/
-│   ├── login/                # Starts WCA OAuth
-│   └── sitemap/
-├── components/
-│   ├── home/                 # Landing sections
-│   ├── competitions/
-│   ├── members/
-│   ├── rankings/
-│   ├── requests/
-│   ├── learn/
-│   ├── layout/               # Navbar, footer, email banner
-│   ├── shared/               # Search, loading, map, popovers
-│   └── ui/                   # shadcn primitives
-├── config/                   # Nav, roles, competition constants
-├── hooks/                    # Client hooks
-├── lib/                      # Server: Prisma, caches, WCA sync
-│   ├── api/                  # Route helpers (auth, response, validation)
-│   ├── competitions/
-│   └── wca/
-├── services/                 # Browser calls to our API routes
-├── types/
-└── utils/                    # Pure helpers (dates, names, WCA formatting)
-
-e2e/                          # Playwright
-prisma/                       # Schema & migrations
-scripts/                      # Git hooks + local DB helpers
-CONTEXT.md                    # Domain glossary
+astro-app/
+├── src/
+│   ├── pages/                 # Routes (.astro) + API endpoints (pages/api/*.ts)
+│   ├── components/
+│   │   ├── home/               # Landing sections
+│   │   ├── competitions/
+│   │   ├── members/
+│   │   ├── rankings/
+│   │   ├── requests/            # Admin panel (approvals, photo gallery)
+│   │   ├── layout/               # Navbar, footer, page-loading bar
+│   │   ├── shared/                # Reused across features (e.g. EventIcon)
+│   │   └── ui/                     # Shared primitives (table, tooltip, dialog, ...)
+│   ├── db/                    # Drizzle schema + query helpers
+│   ├── lib/                   # Server: WCA sync, competitions API, auth, validation
+│   ├── config/                 # Admin check, media/social config
+│   ├── types/
+│   └── utils/                 # Pure helpers (dates, names, WCA formatting)
+├── migrations/                # Drizzle-generated D1 migrations
+├── worker.ts                  # Custom Worker entry (adds the Cron Trigger handler)
+└── wrangler.jsonc              # Cloudflare bindings, routes, cron schedule
 ```
 
-Feature files use **kebab-case**. `src/app/` stays thin: fetch data, render a feature module from `src/components/<feature>/`.
+Feature files use **kebab-case**. See [`AGENTS.md`](AGENTS.md) for the full contributor/agent checklist (secrets handling, verification steps, UI conventions).
 
 ---
 

@@ -1,0 +1,98 @@
+---
+import "../styles/global.css";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import PageLoadingBar from "@/components/layout/page-loading-bar.astro";
+import { Toaster } from "sonner";
+import { isAdminAccount } from "@/config/admin";
+import { env } from "cloudflare:workers";
+import { getDb } from "@/db/client";
+import { getMemberByWcaid } from "@/db/queries/members";
+import { getUserProfileFields } from "@/db/queries/users";
+
+interface Props {
+  title?: string;
+  description?: string;
+  footerTopPaddingClassName?: string;
+}
+
+// Ported from the old Next.js app's root layout.tsx metadata — it had a
+// description (SEO) that astro-app never carried over. Each page passes its
+// own via this prop (matching the old app's per-page `metadata.description`
+// exports); this default is the old app's root/homepage one.
+const {
+  title = "Cubing Kerala",
+  description = "Cubing Kerala is the official website for the Rubik's Cube community in Kerala, providing resources, event updates, and a platform for enthusiasts to connect.",
+  footerTopPaddingClassName,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+
+// Same cookie, same check the middleware uses for /requests — computed here
+// too so the Requests nav link (and the footer's EmailControl) can be
+// server-rendered correctly on first paint instead of popping in after
+// client-side JS runs.
+const userCookie = Astro.cookies.get("userInfo");
+let isAdmin = false;
+let isLoggedIn = false;
+let initialProfile: { isMember: boolean; email: string | null; emailConsent: boolean } | null = null;
+
+if (userCookie) {
+  try {
+    const userData = JSON.parse(userCookie.value);
+    isLoggedIn = true;
+    isAdmin = isAdminAccount(userData.me);
+
+    const wcaid = userData.me?.wca_id;
+    if (wcaid) {
+      const db = getDb(env.DB);
+      const [member, profileFields] = await Promise.all([
+        getMemberByWcaid(db, wcaid),
+        getUserProfileFields(db, wcaid),
+      ]);
+      initialProfile = {
+        isMember: !!member,
+        email: profileFields?.email ?? null,
+        emailConsent: profileFields?.emailConsent ?? false,
+      };
+    }
+  } catch {
+    isAdmin = false;
+    isLoggedIn = false;
+  }
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/cubingkerala_logo.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {/* Runs before first paint so there's no flash of the wrong theme —
+        useTheme (client-side) stays in sync with the same localStorage key. */}
+    <script is:inline>
+      try {
+        if (localStorage.getItem("ck_theme") === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch {}
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col bg-background font-sans antialiased">
+    <PageLoadingBar />
+    <Navbar client:load currentPath={currentPath} isAdmin={isAdmin} isLoggedIn={isLoggedIn} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer
+      client:load
+      topPaddingClassName={footerTopPaddingClassName}
+      isLoggedIn={isLoggedIn}
+      initialProfile={initialProfile}
+    />
+    <Toaster client:load richColors position="bottom-right" />
+  </body>
+</html>

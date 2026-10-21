@@ -1,0 +1,43 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import MembersList from "@/components/members/members-list";
+import { JoinButton } from "@/components/members/join-button";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { env } from "cloudflare:workers";
+import { getDb } from "@/db/client";
+import { getAllMembers, getWcaSummaryForMembers } from "@/db/queries/members";
+
+const db = getDb(env.DB);
+const members = await getAllMembers(db);
+const wcaSummaries = await getWcaSummaryForMembers(db, members.map((member) => member.wcaid));
+
+const userCookie = Astro.cookies.get("userInfo");
+let isLoggedIn = false;
+let isMember = false;
+if (userCookie) {
+  try {
+    const wcaid = JSON.parse(userCookie.value)?.me?.wca_id;
+    isLoggedIn = true;
+    // Already have the full members list fetched above — no need for a
+    // second DB query just to check whether the viewer is in it.
+    isMember = members.some((member) => member.wcaid === wcaid);
+  } catch {
+    isLoggedIn = false;
+  }
+}
+---
+
+<Layout title="Members | Cubing Kerala" description="Members of Rubik's Cube community in Kerala">
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-4 flex flex-col gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-col gap-2">
+        <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Members</h1>
+        <p class="text-sm text-muted-foreground md:text-base">
+          Find cubers by name or WCA ID, and see who competes from Kerala.
+        </p>
+      </div>
+      <JoinButton client:load isLoggedIn={isLoggedIn} isMember={isMember} />
+    </div>
+    <MembersList client:load members={members} wcaSummaries={wcaSummaries} />
+  </div>
+</Layout>

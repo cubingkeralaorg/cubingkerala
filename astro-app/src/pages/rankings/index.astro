@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import RankingsPage from "@/components/rankings/rankings-page";
+import { env } from "cloudflare:workers";
+import { getDb } from "@/db/client";
+import { getAllMembers, getRankingsWcaDataForMembers } from "@/db/queries/members";
+
+const db = getDb(env.DB);
+const members = await getAllMembers(db);
+const rankingsWcaData = await getRankingsWcaDataForMembers(db, members.map((member) => member.wcaid));
+---
+
+<Layout
+  title="Rankings | Cubing Kerala"
+  description="Fastest Cuber in Kerala. The rankings of members within the Rubik's Cube community in Kerala."
+>
+  <RankingsPage client:load members={members} rankingsWcaData={rankingsWcaData} />
+</Layout>

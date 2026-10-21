@@ -1,0 +1,208 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/rubik";
+@import "@fontsource/geist-mono/400.css";
+
+/* Dark mode is a manual `.dark` class toggle (useTheme), not system
+   preference — Tailwind v4's `dark:` variant defaults to a media query, so
+   it needs to be told to key off the class instead. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Only ONE element gets a non-"visible" overflow value, on one axis. html
+ * and body previously both set overflow (html: x-hidden; body: y-auto +
+ * x-hidden), which creates two competing scroll containers — a classic,
+ * well-known way for `position: sticky` to silently stop sticking, since
+ * browsers disagree on which ancestor is the "nearest scrolling container"
+ * a sticky element should stick within. The reference page sets no
+ * overflow at all (plain `body{margin:0}`); we still want horizontal
+ * overflow clipped (a couple of sections intentionally bleed wide, e.g.
+ * the photo strip), so body keeps overflow-x only — never pair it with an
+ * overflow-y declaration on body or html again.
+ */
+html {
+  min-height: 100dvh;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hero photo marquee: continuous CSS-only motion, never user-scrollable —
+     content is duplicated once in the component so translateX(-50%) lands
+     exactly where the copy repeats, making the loop seamless. */
+  .marquee-track {
+    animation: marquee-scroll linear infinite;
+  }
+
+  .marquee-track-reverse {
+    animation-direction: reverse;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  /* Fades the row's edges to transparent instead of a hard clip. */
+  .marquee-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Used by AchievementBanner's confetti burst (inline `animation` style, not
+   a Tailwind utility, since each piece needs its own randomized direction).
+   Pieces start at the container's center and fly outward to a randomized
+   (--confetti-dx, --confetti-dy) offset, spinning as they fade. */
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(
+        calc(-50% + var(--confetti-dx, 0px)),
+        calc(-50% + var(--confetti-dy, 0px))
+      )
+      scale(0.6) rotate(var(--confetti-spin, 360deg));
+  }
+}
+
+ul {
+  list-style-type: square;
+}
+
+/* Off-white light palette (default) + an opt-in dark palette toggled via a
+   `.dark` class on <html> (see useTheme) — a preview toggle, not a
+   system-preference auto-switch. */
+@layer base {
+  :root {
+    --background: 40 20% 97%;
+    --foreground: 20 10% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 10% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 10% 12%;
+    --primary: 154 55% 32%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 14% 93%;
+    --secondary-foreground: 20 10% 12%;
+    --muted: 40 14% 93%;
+    --muted-foreground: 30 6% 45%;
+    --accent: 150 30% 93%;
+    --accent-foreground: 154 55% 22%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 12% 88%;
+    --input: 40 12% 88%;
+    --ring: 154 55% 32%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 20 12% 7%;
+    --foreground: 40 20% 95%;
+    --card: 20 10% 11%;
+    --card-foreground: 40 20% 95%;
+    --popover: 20 10% 11%;
+    --popover-foreground: 40 20% 95%;
+    --primary: 154 50% 48%;
+    --primary-foreground: 20 12% 7%;
+    --secondary: 20 10% 15%;
+    --secondary-foreground: 40 20% 95%;
+    --muted: 20 10% 15%;
+    --muted-foreground: 30 8% 65%;
+    --accent: 154 30% 16%;
+    --accent-foreground: 154 50% 70%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 20 10% 20%;
+    --input: 20 10% 20%;
+    --ring: 154 50% 48%;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+  }
+}
+
+/* Tailwind v4 has no tailwind.config.ts — theme tokens are declared here and
+   Tailwind generates the matching utilities (border-border, bg-background,
+   animate-fade-in, ...) from these --color-*, --radius-*, --animate-* names.
+   `inline` means "resolve var() at build time". */
+@theme inline {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-sans: "Rubik Variable", ui-sans-serif, system-ui;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --animate-fade-in: fade-in 2s ease-out forwards;
+
+  /* v3's `container` plugin option (center: true, 2xl: 1400px) has no direct
+     v4 equivalent config; apply `mx-auto max-w-[1400px] px-4` (or similar)
+     directly on whatever wrapper used `container` before. */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}

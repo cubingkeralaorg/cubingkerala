@@ -1,0 +1,143 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import VideoCard from "@/components/learn/VideoCard.astro";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { mediaUrl } from "@/config/media";
+
+// Full content ported from the old Next.js app's beginner/intermediate/
+// advanced-videos.tsx — each level has multiple labeled video blocks (not
+// just one flat list) plus several learning resources (not just one).
+// `resource.type` (not re-derived from URL shape) is still needed since PDF
+// URLs point at R2, not a local /pdf path.
+const sections = [
+  {
+    title: "Beginner Level",
+    videoBlocks: [
+      {
+        label: "Complete tutorials",
+        videos: [
+          { id: "PW2J8IblczM", title: "Simple beginner's guide" },
+          { id: "7Ron6MN45LY", title: "10-minute beginner tutorial" },
+          { id: "1t1OL2zN0LQ", title: "In-depth beginner's guide" },
+        ],
+      },
+      {
+        label: "What's next: Beginner CFOP",
+        videos: [
+          { id: "M-vKaV2NbEo", title: "Cross" },
+          { id: "ReOZZHscIGk", title: "F2L (First Two Layers)" },
+          { id: "6PSBaxlBqRg", title: "2 Look OLL (Orientation of the Last Layer)" },
+          { id: "ZC9nwou59ow", title: "2 Look PLL (Permutation of the Last Layer)" },
+          { id: "4ULKZ1dZs04", title: "Tips to Solve the Rubik's Cube in 30 Seconds" },
+        ],
+      },
+    ],
+    resources: [
+      { name: "CubeSkills Beginner Guide", url: mediaUrl("pdf/cubeskills_beginners_guide.pdf"), type: "pdf" },
+      { name: "CubeSkills F2L Guide", url: mediaUrl("pdf/f2l.pdf"), type: "pdf" },
+      { name: "CubeSkills Last Layer Guide", url: mediaUrl("pdf/4-look-last-layer.pdf"), type: "pdf" },
+    ],
+  },
+  {
+    title: "Intermediate Level",
+    videoBlocks: [
+      {
+        label: "Tips and tricks",
+        videos: [
+          { id: "__q-5MwlOiU", title: "How to turn faster" },
+          { id: "KWe4SNIMtrg", title: "Advanced finger tricks" },
+          { id: "HDlDcRhCR0Q", title: "Cross tips" },
+        ],
+      },
+      {
+        label: "What's next: Learn more algorithms",
+        videos: [
+          { id: "BtDLfh0XZkE", title: "All F2L Cases" },
+          { id: "Q947zZRYMdg", title: "Full OLL Algorithms" },
+          { id: "QVXKNAjl_0k", title: "Full PLL Algorithms" },
+        ],
+      },
+    ],
+    resources: [
+      { name: "CubeSkills All Angle F2L Guide", url: mediaUrl("pdf/f2l-algorithms-different-slot-positions.pdf"), type: "pdf" },
+      { name: "CubeSkills OLL Guide", url: mediaUrl("pdf/oll-algorithms.pdf"), type: "pdf" },
+      { name: "CubeSkills PLL Guide", url: mediaUrl("pdf/pll-algorithms.pdf"), type: "pdf" },
+    ],
+  },
+  {
+    title: "Advanced Level",
+    videoBlocks: [
+      {
+        label: "Innovative techniques",
+        videos: [
+          { id: "P9POsBAaKd0", title: "X-Cross (Cross + First Pair)" },
+          { id: "CFIQMKxJP4k", title: "COLL-U" },
+          { id: "rVrNZWbnXTg", title: "COLL-T" },
+          { id: "U0dP8MJw-Ig", title: "COLL-L" },
+          { id: "GJ7nsaOvwbM", title: "COLL-H" },
+          { id: "YTpCBRiAuow", title: "COLL-Pi" },
+          { id: "h0cmrhwuUL4", title: "Easy ZBLL's" },
+        ],
+      },
+    ],
+    resources: [
+      { name: "JPerm COLL Algorithms", url: "https://jperm.net/algs/coll", type: "link" },
+      { name: "CubeRoot ZBLL Algorithms", url: mediaUrl("pdf/167-ZBLL.pdf"), type: "pdf" },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Learn | Cubing Kerala"
+  description="Rubik's Cube Classes in Kerala. Learn the basics of Rubik's Cube and become a Cubing Legend."
+>
+  <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
+    <div class="mb-6 flex flex-col gap-2 sm:mb-10">
+      <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Learn</h1>
+      <p class="text-sm text-muted-foreground md:text-base">
+        Beginner through advanced videos for solving and getting faster.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-10 sm:gap-16">
+      {sections.map((section) => (
+        <section class="flex flex-col gap-8">
+          <h2 class="text-2xl font-semibold tracking-tight md:text-3xl">{section.title}</h2>
+
+          {section.videoBlocks.map((block) => (
+            <div class="flex flex-col gap-4">
+              <p class="text-sm font-medium text-muted-foreground">{block.label}</p>
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {block.videos.map((video) => (
+                  <VideoCard videoId={video.id} title={video.title} />
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div class="flex flex-col gap-4">
+            <p class="text-sm font-medium text-muted-foreground">Learning resources</p>
+            <ul class="flex flex-col gap-2 text-sm text-muted-foreground">
+              {section.resources.map((resource) => (
+                <li>
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-primary"
+                  >
+                    {resource.name}
+                    <span class="ml-2 text-xs text-muted-foreground">
+                      {resource.type === "pdf" ? "PDF" : "Link"}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Layout>

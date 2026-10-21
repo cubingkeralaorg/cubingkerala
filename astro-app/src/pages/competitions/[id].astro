@@ -1,0 +1,31 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { CompetitionDetail } from "@/components/competitions/competition-detail";
+import { fetchCompetition, fetchCompetitionResults } from "@/lib/wca/competitions-api";
+
+// SSR, not D1-backed — mirrors the real Next.js app, which fetches this
+// page's data live from the public WCA API on every request rather than
+// from Postgres. See src/lib/wca/competitions-api.ts for why.
+//
+// The competition and its results are two independent WCA API calls (results
+// only needs the id, not the competition fetch's output) — running them in
+// parallel instead of one after another roughly halves this page's
+// server-side latency, which was the main contributor to it feeling slow.
+const { id } = Astro.params;
+const [found, results] = id
+  ? await Promise.all([fetchCompetition(id), fetchCompetitionResults(id)])
+  : [null, []];
+
+if (!found) {
+  return Astro.redirect("/competitions");
+}
+
+const { competition, detail } = found;
+---
+
+<Layout
+  title={`${competition.name} | Cubing Kerala`}
+  description="Details of a competition in the Rubik's Cube community in Kerala"
+>
+  <CompetitionDetail client:load competition={competition} detail={detail} results={results} />
+</Layout>

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1792554006939,
+      "tag": "0000_quiet_the_call",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792554042243,
+      "tag": "0001_conscious_liz_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792605906531,
+      "tag": "0002_happy_luke_cage",
+      "breakpoints": true
+    }
+  ]
+}

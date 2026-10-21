@@ -1,49 +1,31 @@
-# Dependencies
-node_modules/
-.pnp/
-.pnp.js
-.yarn/install-state.gz
-
-# Next.js & Build outputs
-.next/
-out/
-build/
+# build output
 dist/
+# generated types
+.astro/
 
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
+# dependencies
+node_modules/
 
-# Testing & Artifacts
-coverage/
-playwright-report/
-test-results/
-.playwright/
-bin.txt
-.last-run.json
+# local Cloudflare Workers runtime state (Miniflare D1/KV/R2/cache sim, deploy config)
+.wrangler/
 
-# Environment variables & Secrets
-.env
-.env.local
-.env*.local
-*.pem
-prisma/.env
-
-# Database
-backup*.sql
-*.backup
-*.db
-*.db-journal
-
-# Logs
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-*.log
+pnpm-debug.log*
 
-# OS files
+# environment variables
+.env
+.env.local
+.env.production
+
+# wrangler local secrets (used by `wrangler dev`, never committed)
+.dev.vars
+.dev.vars.*
+
+# macOS-specific files
 .DS_Store
-Thumbs.db
 
-# Deployment
-.vercel
+# jetbrains setting folder
+.idea/

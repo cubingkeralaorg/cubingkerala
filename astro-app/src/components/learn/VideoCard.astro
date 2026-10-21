@@ -1,0 +1,29 @@
+---
+// Plain Astro component, not React — this page has no interactivity at all,
+// so there's nothing to hydrate. Compare to members-table.tsx etc: this file
+// never needs a client:* directive because it's never mounted as an island.
+interface Props {
+  videoId: string;
+  title: string;
+}
+
+const { videoId, title } = Astro.props;
+---
+
+<div class="rounded-xl border border-border bg-card text-card-foreground shadow">
+  <div class="space-y-0 p-4 pb-3">
+    <h3 class="text-sm font-medium leading-snug">{title}</h3>
+  </div>
+  <div class="px-4 pb-4">
+    <div class="aspect-video w-full overflow-hidden rounded-md">
+      <iframe
+        class="h-full w-full"
+        src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>

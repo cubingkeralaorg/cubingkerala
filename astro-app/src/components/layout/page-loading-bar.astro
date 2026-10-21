@@ -1,0 +1,91 @@
+---
+// A slim top-of-page progress bar, shown site-wide via Layout.astro. This
+// app is a classic multi-page Astro SSR site — every internal link is a
+// full document navigation, not a client-router transition — so there's
+// normally zero visual feedback between clicking a link (e.g. into a
+// competition's detail page, which does a couple of live WCA API calls
+// server-side) and the next page's first paint. Vanilla JS, no framework:
+// this needs to run on every page, including ones with no hydrated island
+// at all, so it can't be a React component.
+---
+
+<div id="page-loading-bar" aria-hidden="true"></div>
+
+<style>
+  #page-loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--color-primary);
+    z-index: 100;
+    opacity: 0;
+    transition:
+      width 400ms ease-out,
+      opacity 150ms ease-out;
+    pointer-events: none;
+  }
+  #page-loading-bar.is-loading {
+    opacity: 1;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var bar = document.getElementById("page-loading-bar");
+    if (!bar) return;
+    var hideTimer;
+
+    function show(target) {
+      clearTimeout(hideTimer);
+      bar.classList.add("is-loading");
+      // Force a reflow so the width transition animates from the current
+      // value instead of jumping straight to `target`.
+      void bar.offsetWidth;
+      bar.style.width = target + "%";
+    }
+
+    function hide() {
+      bar.style.width = "100%";
+      hideTimer = setTimeout(function () {
+        bar.classList.remove("is-loading");
+        bar.style.width = "0%";
+      }, 200);
+    }
+
+    // Covers this page's own remaining load time (scripts/images/island
+    // hydration still in flight after the HTML itself arrived).
+    if (document.readyState !== "complete") {
+      show(80);
+      window.addEventListener("load", hide, { once: true });
+    }
+
+    // Every internal link is a full document navigation here, so the
+    // browser keeps this page (bar included) visible until the next page
+    // is ready to paint — showing the bar on click covers the whole
+    // server-render wait with no need to explicitly finish it; the next
+    // page replaces this one outright.
+    document.addEventListener("click", function (event) {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      var link = event.target instanceof Element ? event.target.closest("a") : null;
+      if (!link || !link.href) return;
+      if (link.target === "_blank" || link.hasAttribute("download")) return;
+      var url;
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname === window.location.pathname && url.search === window.location.search && !url.hash) return;
+      show(80);
+    });
+
+    // Back/forward restores from bfcache should never show a stuck bar.
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) hide();
+    });
+  })();
+</script>

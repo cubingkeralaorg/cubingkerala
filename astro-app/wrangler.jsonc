@@ -1,0 +1,36 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-10-12",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+	"name": "astro-app",
+	"main": "./src/worker.ts",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"triggers": {
+		"crons": ["0 2 * * *"]
+	},
+	"routes": [
+		{ "pattern": "cubingkerala.com", "custom_domain": true },
+		{ "pattern": "www.cubingkerala.com", "custom_domain": true }
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "cubingkerala",
+			"database_id": "9bcda918-b80a-4790-b380-219a5594bf56",
+			"remote": true
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "cubingkerala-media",
+			"remote": true
+		}
+	]
+}
