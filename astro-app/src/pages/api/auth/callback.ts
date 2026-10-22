@@ -69,7 +69,15 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
       secure: url.protocol === "https:",
     });
 
-    return redirect("/");
+    // Anonymous pages are cached in the browser's own HTTP cache for a
+    // real TTL now (see worker.ts) — without this, a page the browser
+    // cached while still logged out could keep showing the logged-out
+    // navbar/state for up to that TTL after this redirect, since the
+    // browser has no way to know the cookie just changed. This clears it
+    // at the exact moment it does.
+    const response = redirect("/");
+    response.headers.set("Clear-Site-Data", '"cache"');
+    return response;
   } catch (error) {
     console.error("Auth callback error:", error);
     return createErrorResponse("Failed to exchange code for token", 500);

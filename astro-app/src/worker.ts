@@ -37,12 +37,48 @@ import { syncCompetitions } from "./lib/competitions/sync";
 // Every page goes through Layout.astro (src/layouts/Layout.astro), which
 // reads the "userInfo" cookie to compute isLoggedIn/isAdmin — and even the
 // viewer's own email for the footer — for literally every route, not just
-// /members. The cache key is just the URL, so a logged-in render written
-// to the shared edge cache would leak that visitor's login state (and
-// email) to the next, unrelated visitor of the same URL. So caching is
-// gated on the *absence* of that cookie, not on a per-path allowlist of
-// "safe" pages — any request carrying it always bypasses the cache in
-// both directions (never read, never written), and always renders fresh.
+// /members. There are two different caches in play here, with two
+// different rules, because they have very different sharing properties:
+//
+//   1. Cloudflare's edge Cache API (`caches.default`) — SHARED across every
+//      visitor who hits the same URL. Anonymous-only: a logged-in render
+//      written here would leak that visitor's login state (and email) to
+//      the next, unrelated visitor of the same URL. (Tried keying it
+//      per-visitor instead of excluding auth entirely — see the note
+//      below; reverted, it didn't work.)
+//   2. The requesting browser's own HTTP cache — inherently private to
+//      that one visitor already, regardless of login state, the same way
+//      their cookies are. There's nothing to leak by letting a logged-in
+//      visitor's browser cache their own personalized page: nobody else's
+//      browser can ever read it. So every cacheable response gets a real
+//      browser-facing `max-age` — public+shared for anonymous (also
+//      backed by the edge cache above), `private` for authenticated
+//      (browser-only, no edge cache involved at all) — so repeat clicks
+//      from the same visitor, logged in or not, redisplay instantly with
+//      zero network request instead of re-running D1 + SSR every time.
+//
+// Caching anything personalized in the browser is only safe paired with
+// login/logout actively invalidating it the moment the cookie changes —
+// otherwise a page cached while logged in (or out) could keep showing
+// that stale state after switching. src/pages/api/auth/callback.ts and
+// .../logout.ts both send `Clear-Site-Data: "cache"` for exactly this.
+//
+// Tried (and reverted): keying the EDGE cache per-visitor by folding the
+// cookie's value into the cache key, so a logged-in visitor's repeat click
+// could hit a dedicated edge cache entry instead of just their own browser
+// cache. Cloudflare's Cache API silently failed to persist anything
+// written under that scheme — cache.put() resolved without error, but an
+// immediate self-verifying cache.match() for the identical key right after
+// still came back empty, consistently, regardless of TTL, Cache-Control
+// value (public/private, with/without s-maxage), or how the key Request
+// was constructed. Isolated it to "a real auth cookie was present on the
+// request" specifically — not the D1 queries Layout.astro does for a real
+// cookie (reproduced with no D1 work at all), not the key string (an
+// authenticated key byte-identical to a working anonymous one still
+// failed), not timing. Couldn't find the actual cause, so not shipping
+// edge-cache writes I've proven don't reliably work. The browser-cache
+// approach above sidesteps this entirely — it was only ever the shared
+// edge cache that had both the leak risk and this reliability problem.
 const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/$/,
   /^\/learn\/?$/,
@@ -53,7 +89,7 @@ const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/members\/[^/]+\/?$/,
 ];
 
-const EDGE_CACHE_FRESH_SECONDS = 60;
+const CACHE_FRESH_SECONDS = 60;
 const EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS = 300;
 
 function hasAuthCookie(request: Request): boolean {
@@ -62,18 +98,18 @@ function hasAuthCookie(request: Request): boolean {
   return cookieHeader.split(";").some((pair) => pair.trim().startsWith("userInfo="));
 }
 
-function isCacheableRequest(request: Request, url: URL): boolean {
-  return (
-    request.method === "GET" &&
-    CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname)) &&
-    !hasAuthCookie(request)
-  );
+function isCacheablePath(url: URL): boolean {
+  return CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname));
 }
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const cacheable = isCacheableRequest(request, url);
+    const cacheablePath = request.method === "GET" && isCacheablePath(url);
+    const authenticated = cacheablePath && hasAuthCookie(request);
+    // Only the anonymous case uses the shared edge cache — see the big
+    // comment above for why authenticated responses skip it entirely.
+    const useEdgeCache = cacheablePath && !authenticated;
     // `caches.default` is a Cloudflare-specific extension of the standard
     // CacheStorage interface (the global CDN cache, distinct from
     // `caches.open(name)`'s namespaced caches) — not present on the DOM
@@ -81,13 +117,16 @@ export default {
     // client-side React islands, hence the cast.
     const cache = (caches as unknown as { default: Cache }).default;
 
-    if (cacheable) {
+    if (useEdgeCache) {
       const cached = await cache.match(request);
       if (cached) return cached;
     }
 
-    // Only cache misses (the expensive path) count against the rate limit —
-    // a repeat visitor served straight from cache above never reaches here.
+    // Only requests that actually reach this point (edge cache misses,
+    // and every authenticated request — those never check the edge cache
+    // above) count against the rate limit. A repeat visitor served
+    // straight from their own browser's cache never reaches the network
+    // at all, so it never reaches here either.
     const clientIp = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const { success } = await env.RATE_LIMITER.limit({ key: clientIp });
     if (!success) {
@@ -98,32 +137,26 @@ export default {
     }
 
     const response = await handle(request, env, ctx);
-    if (!cacheable || !response.ok) return response;
+    if (!cacheablePath || !response.ok) return response;
 
     const headers = new Headers(response.headers);
     // None of the cacheable routes set cookies today, but if one ever does
     // (e.g. a new analytics cookie), it must never ride along into a
-    // response shared across every visitor via the edge cache.
+    // response reused across multiple requests via the edge cache, or
+    // persisted in the browser's own cache past this response.
     headers.delete("Set-Cookie");
-    // `s-maxage`/`stale-while-revalidate` govern OUR edge cache (above) —
-    // the actual TTL this entry lives for. `no-cache` (not `max-age`) is
-    // what's aimed at the browser: every page here reads the login cookie
-    // (Layout.astro) and can change the instant a visitor logs in or out,
-    // so the browser must never silently reuse its own local copy — it has
-    // no way to know the cookie changed between navigations. `no-cache`
-    // forces it to always revalidate with us first; without that, logging
-    // in/out only "took effect" after a hard refresh, since normal
-    // navigation was served straight from the browser's own cache.
     headers.set(
       "Cache-Control",
-      `public, no-cache, s-maxage=${EDGE_CACHE_FRESH_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
+      authenticated
+        ? `private, max-age=${CACHE_FRESH_SECONDS}`
+        : `public, max-age=${CACHE_FRESH_SECONDS}, s-maxage=${CACHE_FRESH_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
     );
     const cacheableResponse = new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
       headers,
     });
-    ctx.waitUntil(cache.put(request, cacheableResponse.clone()));
+    if (useEdgeCache) ctx.waitUntil(cache.put(request, cacheableResponse.clone()));
     return cacheableResponse;
   },
   async scheduled(_event, env, _ctx) {
