@@ -76,10 +76,28 @@ const EMPTY_MEDALS: Medals = { gold: 0, silver: 0, bronze: 0, total: 0 };
 // (isWcaCacheFresh, the after()-scheduled background sync) is intentionally
 // not ported yet; that depends on wca/sync.ts itself, which is Phase 7.
 // Until then this just reads whatever's in MemberWcaData — empty today.
+//
+// Chunked at 90 (D1 caps bound parameters per query at 100, and this
+// builds one per wcaid via IN (...) — a single unchunked query here took
+// the whole site down in production the moment the roster crossed that
+// limit, confirmed via wrangler tail's "Failed query" error against this
+// exact IN clause). Queries run in parallel and get merged below.
+const MAX_IN_CLAUSE_SIZE = 90;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
+  return chunks;
+}
+
 async function loadMemberWcaRows(db: Db, wcaIds: string[]) {
   if (wcaIds.length === 0) return new Map<string, typeof memberWcaData.$inferSelect>();
-  const rows = await db.select().from(memberWcaData).where(inArray(memberWcaData.wcaid, wcaIds));
-  return new Map(rows.map((row) => [row.wcaid, row]));
+  const batches = await Promise.all(
+    chunk(wcaIds, MAX_IN_CLAUSE_SIZE).map((batch) =>
+      db.select().from(memberWcaData).where(inArray(memberWcaData.wcaid, batch)),
+    ),
+  );
+  return new Map(batches.flat().map((row) => [row.wcaid, row]));
 }
 
 export async function getWcaSummaryForMembers(
