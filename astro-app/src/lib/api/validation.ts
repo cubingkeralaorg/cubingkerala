@@ -36,6 +36,11 @@ export const photoDeleteSchema = z.object({
   id: z.string().min(1, "Photo id is required"),
 });
 
+export const sendCompetitionEmailSchema = z.object({
+  competitionId: z.string().min(1, "Competition is required"),
+  message: z.string().trim().max(2000).optional(),
+});
+
 export async function validateRequestBody<T>(
   request: Request,
   schema: z.ZodSchema<T>,

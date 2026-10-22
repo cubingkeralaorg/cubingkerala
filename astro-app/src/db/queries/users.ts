@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, isNotNull } from "drizzle-orm";
 import { users } from "@/db/schema";
 import type { Db } from "@/db/client";
 
@@ -53,4 +53,19 @@ export async function updateUserProfile(
 ): Promise<UserProfileFields | null> {
   await db.update(users).set({ ...fields, updatedAt: new Date() }).where(eq(users.wcaid, wcaid));
   return getUserProfileFields(db, wcaid);
+}
+
+export interface ConsentedUser {
+  wcaid: string;
+  name: string;
+  email: string;
+}
+
+/** Everyone eligible for a competition announcement email — opted in, with a real address on file. */
+export async function getConsentedUsers(db: Db): Promise<ConsentedUser[]> {
+  const rows = await db
+    .select({ wcaid: users.wcaid, name: users.name, email: users.email })
+    .from(users)
+    .where(and(eq(users.emailConsent, true), isNotNull(users.email)));
+  return rows.map((row) => ({ wcaid: row.wcaid, name: row.name, email: row.email as string }));
 }

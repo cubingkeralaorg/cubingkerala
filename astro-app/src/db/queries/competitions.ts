@@ -29,6 +29,11 @@ function toCompetition(row: typeof competitions.$inferSelect): Competition {
   };
 }
 
+export async function getCompetitionById(db: Db, id: string): Promise<Competition | null> {
+  const [row] = await db.select().from(competitions).where(eq(competitions.id, id)).limit(1);
+  return row ? toCompetition(row) : null;
+}
+
 export async function getUpcomingCompetitions(db: Db): Promise<Competition[]> {
   const todayIso = getTodayIsoDate();
   const rows = await db

@@ -1,0 +1,57 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
+import { env } from "cloudflare:workers";
+import { getDb } from "@/db/client";
+import { updateUserProfile } from "@/db/queries/users";
+import { verifyUnsubscribeToken } from "@/lib/email/unsubscribe-token";
+
+// One-click, no-login unsubscribe — the whole point is that a recipient
+// shouldn't have to log into WCA OAuth just to opt out of emails. The
+// HMAC-signed token (see unsubscribe-token.ts) is what keeps this safe
+// despite being login-free: wcaid alone isn't enough, since WCA IDs are
+// already public.
+const wcaid = Astro.url.searchParams.get("wcaid");
+const token = Astro.url.searchParams.get("token");
+
+let success = false;
+if (wcaid && token) {
+  try {
+    const isValid = await verifyUnsubscribeToken(wcaid, token, env.EMAIL_UNSUBSCRIBE_SECRET);
+    if (isValid) {
+      const db = getDb(env.DB);
+      await updateUserProfile(db, wcaid, { emailConsent: false });
+      success = true;
+    }
+  } catch (error) {
+    // A malformed token (or EMAIL_UNSUBSCRIBE_SECRET not configured yet)
+    // should read as "this link isn't valid" to the visitor, not surface a
+    // raw stack trace — same no-leaking-internals discipline every API
+    // route in this app already follows.
+    console.error("unsubscribe verification error:", error);
+  }
+}
+---
+
+<Layout title="Unsubscribe | Cubing Kerala" description="Unsubscribe from Cubing Kerala competition emails">
+  <div class={`${NAVBAR_CONTAINER_CLASS} flex flex-col items-center gap-3 py-24 text-center`}>
+    {
+      success ? (
+        <>
+          <h1 class="text-2xl font-semibold tracking-tight">You're unsubscribed</h1>
+          <p class="max-w-md text-sm text-muted-foreground md:text-base">
+            You won't get any more competition emails from Cubing Kerala. You can turn them back on anytime from the
+            footer on the site.
+          </p>
+        </>
+      ) : (
+        <>
+          <h1 class="text-2xl font-semibold tracking-tight">Link not valid</h1>
+          <p class="max-w-md text-sm text-muted-foreground md:text-base">
+            This unsubscribe link is invalid or has already been used.
+          </p>
+        </>
+      )
+    }
+  </div>
+</Layout>

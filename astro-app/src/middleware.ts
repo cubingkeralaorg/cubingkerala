@@ -4,7 +4,16 @@ import { isAdminAccount } from "@/config/admin";
 // Ported from the Next.js app's src/middleware.ts. One change: `/_next` →
 // `/_astro` (Astro's own build-output path for JS/CSS, the equivalent
 // internal-assets prefix).
-const VALID_ROUTES = ["/competitions", "/rankings", "/members", "/learn", "/login", "/requests", "/sitemap"];
+const VALID_ROUTES = [
+  "/competitions",
+  "/rankings",
+  "/members",
+  "/learn",
+  "/login",
+  "/requests",
+  "/sitemap",
+  "/unsubscribe",
+];
 
 export const onRequest = defineMiddleware((context, next) => {
   const { pathname } = context.url;

@@ -2,21 +2,26 @@
 import Layout from "@/layouts/Layout.astro";
 import { RequestsAdminPage } from "@/components/requests/requests-admin-page";
 import { PhotoGalleryAdmin } from "@/components/requests/photo-gallery-admin";
+import { SendCompetitionEmail } from "@/components/requests/send-competition-email";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db/client";
 import { getAllRequests } from "@/db/queries/requests";
 import { getAllMembers } from "@/db/queries/members";
 import { getAllPhotos } from "@/db/queries/photos";
+import { getUpcomingCompetitions } from "@/db/queries/competitions";
+import { getConsentedUsers } from "@/db/queries/users";
 import { mediaUrl } from "@/config/media";
 
 // Admin-only: src/middleware.ts already redirects any non-admin away from
 // this route before it ever renders, so no auth check needed here.
 const db = getDb(env.DB);
-const [requests, members, photos] = await Promise.all([
+const [requests, members, photos, upcomingCompetitions, consentedUsers] = await Promise.all([
   getAllRequests(db),
   getAllMembers(db),
   getAllPhotos(db),
+  getUpcomingCompetitions(db),
+  getConsentedUsers(db),
 ]);
 const galleryPhotos = photos.map((p) => ({ id: p.id, url: mediaUrl(p.path), alt: p.alt }));
 ---
@@ -34,6 +39,15 @@ const galleryPhotos = photos.map((p) => ({ id: p.id, url: mediaUrl(p.path), alt:
     <div class="mt-16 flex flex-col gap-3">
       <h2 class="text-lg font-semibold tracking-tight">Homepage gallery photos</h2>
       <PhotoGalleryAdmin client:load initialPhotos={galleryPhotos} />
+    </div>
+
+    <div class="mt-16 flex flex-col gap-3">
+      <h2 class="text-lg font-semibold tracking-tight">Send competition email</h2>
+      <SendCompetitionEmail
+        client:load
+        upcomingCompetitions={upcomingCompetitions}
+        recipientCount={consentedUsers.length}
+      />
     </div>
   </div>
 </Layout>
