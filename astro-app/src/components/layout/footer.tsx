@@ -68,7 +68,7 @@ export function BuiltByLink({ className }: { className?: string }) {
           alt="Allen John"
           width={22}
           height={22}
-          className="size-[22px] dark:invert"
+          className="size-5.5 dark:invert"
         />
         {/* Name only shows where there's room to spare — the footer's wide
             desktop row, not the narrower mobile menu bar. */}
