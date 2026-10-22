@@ -112,10 +112,12 @@ if (userCookie) {
         useTheme (client-side) stays in sync with the same localStorage key. */}
     <script is:inline>
       try {
-        if (localStorage.getItem("ck_theme") === "dark") {
+        if (localStorage.getItem("ck_theme") !== "light") {
           document.documentElement.classList.add("dark");
         }
-      } catch {}
+      } catch {
+        document.documentElement.classList.add("dark");
+      }
     </script>
   </head>
   <body class="flex min-h-dvh flex-col bg-background font-sans antialiased">
