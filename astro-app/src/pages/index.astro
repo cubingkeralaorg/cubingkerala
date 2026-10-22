@@ -44,7 +44,10 @@ const photoRow1 = photos.filter((_, index) => index % 2 === 0).map((p) => ({ src
 const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src: mediaUrl(p.path), alt: p.alt }));
 ---
 
-<Layout title="Cubing Kerala" footerTopPaddingClassName="pt-10">
+<Layout
+  title="Cubing Kerala | Rubik's Cube Community & Competitions"
+  footerTopPaddingClassName="pt-10"
+>
   {/* Hero + photo marquee fill the first screen (viewport minus the 64px
       sticky navbar), centered as one cohesive block with a fixed gap
       between them — not justify-between, which stretched that gap to

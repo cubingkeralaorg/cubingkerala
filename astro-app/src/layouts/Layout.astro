@@ -28,6 +28,15 @@ const {
 
 const currentPath = Astro.url.pathname;
 
+// Canonical is always the bare (no-www) domain — middleware.ts redirects
+// www there already, this is the same canonical choice reflected in the
+// page's own <head>. Built from the path, not Astro.url directly, so a
+// request that somehow reaches here on a different host still declares
+// the one real canonical origin.
+const SITE_ORIGIN = "https://cubingkerala.com";
+const canonicalUrl = `${SITE_ORIGIN}${currentPath}`;
+const ogImageUrl = `${SITE_ORIGIN}/og-image.png`;
+
 // Same cookie, same check the middleware uses for /requests — computed here
 // too so the Requests nav link (and the footer's EmailControl) can be
 // server-rendered correctly on first paint instead of popping in after
@@ -71,6 +80,34 @@ if (userCookie) {
     <link rel="icon" type="image/svg+xml" href="/cubingkerala_logo.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cubing Kerala" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      name: "Cubing Kerala",
+      url: SITE_ORIGIN,
+      logo: `${SITE_ORIGIN}/cubingkerala_logo_email.png`,
+      description,
+      sameAs: [
+        "https://www.instagram.com/cubingkerala",
+        "https://www.facebook.com/cubingkeralaofficial",
+      ],
+    })} />
     {/* Runs before first paint so there's no flash of the wrong theme —
         useTheme (client-side) stays in sync with the same localStorage key. */}
     <script is:inline>
