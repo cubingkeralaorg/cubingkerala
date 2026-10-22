@@ -36,6 +36,16 @@
     var bar = document.getElementById("page-loading-bar");
     if (!bar) return;
     var hideTimer;
+    // Every internal link is a full document navigation (no client router),
+    // so nothing here cancels an already-dispatched request — spam-clicking
+    // nav links fires one full SSR + D1 round trip per click, all landing
+    // on the server roughly concurrently. On the Workers Free plan's fixed
+    // per-request CPU budget, that's enough on its own to trip a resource
+    // limit error, independent of how many people are involved. Once a
+    // navigation is in flight, this page is already on its way out, so
+    // further link clicks can only pile on duplicate server work for no
+    // benefit — block them at the source instead.
+    var navigating = false;
 
     function show(target) {
       clearTimeout(hideTimer);
@@ -80,12 +90,23 @@
       }
       if (url.origin !== window.location.origin) return;
       if (url.pathname === window.location.pathname && url.search === window.location.search && !url.hash) return;
+
+      if (navigating) {
+        event.preventDefault();
+        return;
+      }
+      navigating = true;
       show(80);
     });
 
-    // Back/forward restores from bfcache should never show a stuck bar.
+    // Back/forward restores from bfcache should never show a stuck bar,
+    // and should re-arm the guard above — the page is interactive again,
+    // not actually mid-navigation.
     window.addEventListener("pageshow", function (event) {
-      if (event.persisted) hide();
+      if (event.persisted) {
+        navigating = false;
+        hide();
+      }
     });
   })();
 </script>
