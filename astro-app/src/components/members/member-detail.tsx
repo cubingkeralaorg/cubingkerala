@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PersonalRecordsTable } from "./personal-records-table";
 import type { RequestInfo, MemberWcaSummary } from "@/types/member";
-import type { RankingsWcaEntry } from "@/types/ranking";
+import type { RankingsWcaEntry, WcaTeamMembership } from "@/types/ranking";
 import { capitalizeRole } from "@/utils/member-utils";
+import { getTeamName, formatDelegateStatus } from "@/utils/wca-teams";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 interface MemberDetailProps {
   member: RequestInfo;
   summary?: MemberWcaSummary;
   wcaData?: RankingsWcaEntry;
+  tags?: { delegateStatus: string | null; teams: WcaTeamMembership[] };
 }
 
 // Label stacked above value — the sidebar is a fixed-width grid column, not
@@ -27,7 +29,7 @@ function SidebarStat({ label, children }: { label: string; children: ReactNode }
   );
 }
 
-export function MemberDetail({ member, summary, wcaData }: MemberDetailProps) {
+export function MemberDetail({ member, summary, wcaData, tags }: MemberDetailProps) {
   const displayName = member.name.split("(")[0].trim();
   const localName = member.name.match(/\((.*?)\)/)?.[1];
   const isUnavailable = Boolean(wcaData?.isUnavailable);
@@ -69,6 +71,28 @@ export function MemberDetail({ member, summary, wcaData }: MemberDetailProps) {
               </Button>
             </div>
           </div>
+
+          {tags?.delegateStatus || tags?.teams.length ? (
+            <div className="flex flex-wrap gap-1.5">
+              {tags.delegateStatus && (
+                <Badge
+                  variant="secondary"
+                  className="w-fit px-2 py-0 text-[11px] font-medium tracking-wide"
+                >
+                  {formatDelegateStatus(tags.delegateStatus)}
+                </Badge>
+              )}
+              {tags.teams.map((team) => (
+                <Badge
+                  key={team.friendly_id}
+                  variant="secondary"
+                  className="w-fit px-2 py-0 text-[11px] font-medium tracking-wide"
+                >
+                  {getTeamName(team.friendly_id)}
+                </Badge>
+              ))}
+            </div>
+          ) : null}
 
           <div className="flex items-start gap-4">
             <SidebarStat label="Country">

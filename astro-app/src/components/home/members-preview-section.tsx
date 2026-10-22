@@ -2,8 +2,15 @@ import { MembersTable } from "@/components/members/members-table";
 import type { MemberWcaSummary, RequestInfo } from "@/types/member";
 import { DATA_GRID_WRAP } from "@/components/ui/data-grid";
 
-const TEAM_ROLES = new Set(["co-founder", "organiser"]);
-const PREVIEW_ROW_COUNT = 5;
+// Curated preview, not the full team list (see /members for that): every
+// co-founder, then these specific organisers, in this order.
+const FEATURED_ORGANISER_WCAIDS = ["2012CHAK01", "2015KHAN18"];
+
+// Local names are parenthesized, e.g. "Name (പേര്)" — sort on the display
+// name only, same as how it's shown elsewhere (e.g. member-detail.tsx).
+function displayName(member: RequestInfo): string {
+  return member.name.split("(")[0].trim();
+}
 
 export function MembersPreviewSection({
   members,
@@ -12,9 +19,13 @@ export function MembersPreviewSection({
   members: RequestInfo[];
   wcaSummaries: Record<string, MemberWcaSummary>;
 }) {
-  const team = members
-    .filter((member) => TEAM_ROLES.has(member.role))
-    .slice(0, PREVIEW_ROW_COUNT);
+  const coFounders = members
+    .filter((member) => member.role === "co-founder")
+    .sort((a, b) => displayName(a).localeCompare(displayName(b)));
+  const featuredOrganisers = FEATURED_ORGANISER_WCAIDS.map((wcaid) =>
+    members.find((member) => member.wcaid === wcaid),
+  ).filter((member): member is RequestInfo => member !== undefined);
+  const team = [...coFounders, ...featuredOrganisers];
 
   return (
     <section>

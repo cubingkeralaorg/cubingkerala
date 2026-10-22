@@ -17,6 +17,12 @@ export interface PersonalRecords {
   };
 }
 
+export interface WcaTeamMembership {
+  friendly_id: string;
+  leader: boolean;
+  senior_member: boolean;
+}
+
 export interface Person {
   name: string;
   wca_id: string;
@@ -27,7 +33,10 @@ export interface Person {
   country: { id: string; name: string; continentId: string; iso2: string };
   delegate_status: string | null;
   class: string;
-  teams: string[];
+  // Not actually string[] — real WCA API responses return full team
+  // membership objects (confirmed against live data), each person's name/
+  // avatar duplicated per entry. Only the fields this app actually uses.
+  teams: WcaTeamMembership[];
   id: string;
 }
 

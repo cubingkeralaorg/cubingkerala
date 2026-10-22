@@ -1,11 +1,32 @@
 import { eq } from "drizzle-orm";
 import { memberWcaData } from "@/db/schema";
 import type { Db } from "@/db/client";
-import type { CompetitorData } from "@/types/ranking";
+import type { CompetitorData, WcaTeamMembership } from "@/types/ranking";
 
 export async function getMemberWcaDataRow(db: Db, wcaid: string) {
   const [row] = await db.select().from(memberWcaData).where(eq(memberWcaData.wcaid, wcaid)).limit(1);
   return row ?? null;
+}
+
+export interface MemberTags {
+  delegateStatus: string | null;
+  teams: WcaTeamMembership[];
+}
+
+/**
+ * Delegate status and team memberships — stored already (the sync job
+ * saves the WCA API's full person object, never filtered), just not read
+ * anywhere until now. Null fields render as no badge at all, not an error.
+ */
+export async function getMemberTags(db: Db, wcaid: string): Promise<MemberTags> {
+  const row = await getMemberWcaDataRow(db, wcaid);
+  if (!row) return { delegateStatus: null, teams: [] };
+
+  const data = JSON.parse(row.data) as CompetitorData;
+  return {
+    delegateStatus: data.person?.delegate_status ?? null,
+    teams: data.person?.teams ?? [],
+  };
 }
 
 /**

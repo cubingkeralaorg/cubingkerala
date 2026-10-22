@@ -4,6 +4,7 @@ import { MemberDetail } from "@/components/members/member-detail";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db/client";
 import { getMemberByWcaid, getWcaSummaryForMembers, getRankingsWcaDataForMembers } from "@/db/queries/members";
+import { getMemberTags } from "@/db/queries/wca-data";
 
 // SSR — every member gets looked up per-request against D1 now, no
 // getStaticPaths/prerendered-paths list to keep in sync with real data.
@@ -15,9 +16,10 @@ if (!member) {
   return Astro.redirect("/members");
 }
 
-const [wcaSummaries, rankingsWcaData] = await Promise.all([
+const [wcaSummaries, rankingsWcaData, tags] = await Promise.all([
   getWcaSummaryForMembers(db, [wcaid as string]),
   getRankingsWcaDataForMembers(db, [wcaid as string]),
+  getMemberTags(db, wcaid as string),
 ]);
 const summary = wcaSummaries[wcaid as string];
 const wcaData = rankingsWcaData[wcaid as string];
@@ -27,5 +29,5 @@ const wcaData = rankingsWcaData[wcaid as string];
   title={`${member.name.split("(")[0].trim()} | Cubing Kerala`}
   description="Information about a member of the Rubik's Cube community in Kerala"
 >
-  <MemberDetail client:load member={member} summary={summary} wcaData={wcaData} />
+  <MemberDetail client:load member={member} summary={summary} wcaData={wcaData} tags={tags} />
 </Layout>
