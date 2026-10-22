@@ -90,13 +90,14 @@ export function EmailControl({ isLoggedIn, initialProfile }: EmailControlProps) 
       <button
         type="button"
         onClick={openModal}
-        className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+        aria-label={profile.email ?? "Add email"}
+        className="inline-flex size-8 shrink-0 items-center justify-center gap-1.5 rounded-md text-muted-foreground transition-colors hover:text-primary sm:w-auto sm:px-2"
       >
         <Mail className="size-3.5 shrink-0" />
         {profile.email ? (
-          <span className="whitespace-nowrap">{profile.email}</span>
+          <span className="hidden whitespace-nowrap text-xs sm:inline">{profile.email}</span>
         ) : (
-          <span>Add email</span>
+          <span className="hidden text-xs sm:inline">Add email</span>
         )}
       </button>
 

@@ -92,14 +92,12 @@ export const Footer = ({
     <footer className="bg-background">
       <div className={NAVBAR_CONTAINER_CLASS}>
         <div className={cn("flex flex-col gap-6 pb-8", topPaddingClassName)}>
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <LogoLink />
+          <div className="flex items-center justify-between gap-3">
+            <LogoLink titleClassName="hidden sm:inline" />
 
-            {/* flex-wrap — EmailControl shows the full address regardless of
-                length now, so on a narrow screen with a long email the
-                social icons wrap to their own line instead of overflowing
-                the page horizontally. */}
-            <div className="flex flex-wrap items-center justify-end gap-x-1 gap-y-2">
+            {/* Email collapses to an icon below sm (see EmailControl) so
+                this fits in one row even on narrow screens. */}
+            <div className="flex items-center gap-x-1">
               <EmailControl isLoggedIn={isLoggedIn} initialProfile={initialProfile} />
               <FooterSocialLinks />
             </div>

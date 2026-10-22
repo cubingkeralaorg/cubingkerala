@@ -76,25 +76,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Used by AchievementBanner's confetti burst (inline `animation` style, not
-   a Tailwind utility, since each piece needs its own randomized direction).
-   Pieces start at the container's center and fly outward to a randomized
-   (--confetti-dx, --confetti-dy) offset, spinning as they fade. */
-@keyframes confetti-burst {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(
-        calc(-50% + var(--confetti-dx, 0px)),
-        calc(-50% + var(--confetti-dy, 0px))
-      )
-      scale(0.6) rotate(var(--confetti-spin, 360deg));
-  }
-}
-
 ul {
   list-style-type: square;
 }
