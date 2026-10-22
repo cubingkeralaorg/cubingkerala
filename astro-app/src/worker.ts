@@ -53,7 +53,7 @@ const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/members\/[^/]+\/?$/,
 ];
 
-const EDGE_CACHE_MAX_AGE_SECONDS = 60;
+const EDGE_CACHE_FRESH_SECONDS = 60;
 const EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS = 300;
 
 function hasAuthCookie(request: Request): boolean {
@@ -105,9 +105,18 @@ export default {
     // (e.g. a new analytics cookie), it must never ride along into a
     // response shared across every visitor via the edge cache.
     headers.delete("Set-Cookie");
+    // `s-maxage`/`stale-while-revalidate` govern OUR edge cache (above) —
+    // the actual TTL this entry lives for. `no-cache` (not `max-age`) is
+    // what's aimed at the browser: every page here reads the login cookie
+    // (Layout.astro) and can change the instant a visitor logs in or out,
+    // so the browser must never silently reuse its own local copy — it has
+    // no way to know the cookie changed between navigations. `no-cache`
+    // forces it to always revalidate with us first; without that, logging
+    // in/out only "took effect" after a hard refresh, since normal
+    // navigation was served straight from the browser's own cache.
     headers.set(
       "Cache-Control",
-      `public, max-age=${EDGE_CACHE_MAX_AGE_SECONDS}, s-maxage=${EDGE_CACHE_MAX_AGE_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
+      `public, no-cache, s-maxage=${EDGE_CACHE_FRESH_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
     );
     const cacheableResponse = new Response(response.body, {
       status: response.status,
