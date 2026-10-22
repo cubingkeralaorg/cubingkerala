@@ -28,31 +28,46 @@ import { syncCompetitions } from "./lib/competitions/sync";
 // to do the expensive work (D1 queries + Astro rendering) less often.
 // Two layers, applied only to the page routes below (never to /api/* or
 // POST requests, which already set their own no-store headers):
-//   1. Cache API: a cache hit skips D1 + rendering entirely. Pages that
-//      vary by visitor (cookies, admin state) are deliberately left out —
-//      caching them would leak one visitor's personalized HTML to another.
+//   1. Cache API: a cache hit skips D1 + rendering entirely.
 //   2. Rate limiter: only guards cache *misses*, i.e. the actual expensive
 //      path. One person clicking around fast still gets cache hits after
 //      the first visit to each page; the limit only trips on sustained
 //      bursts across many distinct/uncached URLs (bots, load tests).
+//
+// Every page goes through Layout.astro (src/layouts/Layout.astro), which
+// reads the "userInfo" cookie to compute isLoggedIn/isAdmin — and even the
+// viewer's own email for the footer — for literally every route, not just
+// /members. The cache key is just the URL, so a logged-in render written
+// to the shared edge cache would leak that visitor's login state (and
+// email) to the next, unrelated visitor of the same URL. So caching is
+// gated on the *absence* of that cookie, not on a per-path allowlist of
+// "safe" pages — any request carrying it always bypasses the cache in
+// both directions (never read, never written), and always renders fresh.
 const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/$/,
   /^\/learn\/?$/,
   /^\/competitions\/?$/,
   /^\/competitions\/[^/]+\/?$/,
   /^\/rankings\/?$/,
-  // Note: /members (the index) is intentionally excluded — it reads a
-  // "userInfo" cookie to personalize the join button, so a cached response
-  // would leak one visitor's login state to the next. /members/<wcaid>
-  // profile pages have no such personalization and are safe to cache.
+  /^\/members\/?$/,
   /^\/members\/[^/]+\/?$/,
 ];
 
 const EDGE_CACHE_MAX_AGE_SECONDS = 60;
 const EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS = 300;
 
+function hasAuthCookie(request: Request): boolean {
+  const cookieHeader = request.headers.get("Cookie");
+  if (!cookieHeader) return false;
+  return cookieHeader.split(";").some((pair) => pair.trim().startsWith("userInfo="));
+}
+
 function isCacheableRequest(request: Request, url: URL): boolean {
-  return request.method === "GET" && CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname));
+  return (
+    request.method === "GET" &&
+    CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname)) &&
+    !hasAuthCookie(request)
+  );
 }
 
 export default {
