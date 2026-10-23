@@ -31,8 +31,10 @@ export function RefreshButton() {
   };
 
   return (
-    <Button type="button" variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
-      {isRefreshing ? <Loader2 className="size-4 animate-spin" /> : "Refresh"}
+    <Button type="button" variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing} className="relative">
+      {/* Label stays in layout (just hidden) so the button keeps its width while the spinner overlays it. */}
+      <span className={isRefreshing ? "invisible" : undefined}>Refresh</span>
+      {isRefreshing && <Loader2 className="absolute size-4 animate-spin" />}
     </Button>
   );
 }
