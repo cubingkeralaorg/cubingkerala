@@ -70,14 +70,21 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
     });
 
     // Anonymous pages are cached in the browser's own HTTP cache for a
-    // real TTL now (see worker.ts) — without this, a page the browser
-    // cached while still logged out could keep showing the logged-out
-    // navbar/state for up to that TTL after this redirect, since the
-    // browser has no way to know the cookie just changed. This clears it
-    // at the exact moment it does.
-    const response = redirect("/");
-    response.headers.set("Clear-Site-Data", '"cache"');
-    return response;
+    // real TTL (see worker.ts) — without something here, a page the
+    // browser cached while still logged out could keep showing the
+    // logged-out navbar/state after this redirect, since the browser has
+    // no way to know the cookie just changed and would serve its cached
+    // "/" straight from disk without even asking the server.
+    //
+    // Used to fix this with `Clear-Site-Data: "cache"`, but that's a slow,
+    // synchronous browser operation (it blocks the navigation on fully
+    // clearing site cache storage) — noticeably delayed login. A unique
+    // query param is instant and gives the same guarantee: the browser
+    // has definitely never cached this exact URL before, so it can't
+    // possibly serve a stale copy — forcing a real request that correctly
+    // sees the just-set cookie. Layout.astro strips the param from the
+    // address bar right after load, so it's invisible either way.
+    return redirect(`/?__fresh=${Date.now()}`);
   } catch (error) {
     console.error("Auth callback error:", error);
     return createErrorResponse("Failed to exchange code for token", 500);

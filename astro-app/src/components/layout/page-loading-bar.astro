@@ -1,12 +1,12 @@
 ---
-// A slim top-of-page progress bar, shown site-wide via Layout.astro. This
-// app is a classic multi-page Astro SSR site — every internal link is a
-// full document navigation, not a client-router transition — so there's
-// normally zero visual feedback between clicking a link (e.g. into a
-// competition's detail page, which does a couple of live WCA API calls
-// server-side) and the next page's first paint. Vanilla JS, no framework:
-// this needs to run on every page, including ones with no hydrated island
-// at all, so it can't be a React component.
+// A slim top-of-page progress bar, shown site-wide via Layout.astro.
+// Layout.astro's <ClientRouter /> turns internal link clicks into soft
+// navigations (fetch + swap instead of a full document reload), which is
+// instant enough most of the time that this bar is mostly invisible — it
+// exists for the slower cases (a competition detail page's live WCA API
+// calls, a cache-miss render). Vanilla JS, no framework: this needs to run
+// on every page, including ones with no hydrated island at all, so it
+// can't be a React component.
 ---
 
 <div id="page-loading-bar" aria-hidden="true"></div>
@@ -36,16 +36,6 @@
     var bar = document.getElementById("page-loading-bar");
     if (!bar) return;
     var hideTimer;
-    // Every internal link is a full document navigation (no client router),
-    // so nothing here cancels an already-dispatched request — spam-clicking
-    // nav links fires one full SSR + D1 round trip per click, all landing
-    // on the server roughly concurrently. On the Workers Free plan's fixed
-    // per-request CPU budget, that's enough on its own to trip a resource
-    // limit error, independent of how many people are involved. Once a
-    // navigation is in flight, this page is already on its way out, so
-    // further link clicks can only pile on duplicate server work for no
-    // benefit — block them at the source instead.
-    var navigating = false;
 
     function show(target) {
       clearTimeout(hideTimer);
@@ -64,49 +54,33 @@
       }, 200);
     }
 
-    // Covers this page's own remaining load time (scripts/images/island
-    // hydration still in flight after the HTML itself arrived).
+    // Covers this page's own remaining load time on the very first,
+    // real browser navigation (scripts/images/island hydration still in
+    // flight after the HTML itself arrived) — astro:page-load below
+    // covers the "now it's ready" half of this same moment.
     if (document.readyState !== "complete") {
       show(80);
-      window.addEventListener("load", hide, { once: true });
     }
 
-    // Every internal link is a full document navigation here, so the
-    // browser keeps this page (bar included) visible until the next page
-    // is ready to paint — showing the bar on click covers the whole
-    // server-render wait with no need to explicitly finish it; the next
-    // page replaces this one outright.
-    document.addEventListener("click", function (event) {
-      if (event.defaultPrevented || event.button !== 0) return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      var link = event.target instanceof Element ? event.target.closest("a") : null;
-      if (!link || !link.href) return;
-      if (link.target === "_blank" || link.hasAttribute("download")) return;
-      var url;
-      try {
-        url = new URL(link.href, window.location.href);
-      } catch {
-        return;
-      }
-      if (url.origin !== window.location.origin) return;
-      if (url.pathname === window.location.pathname && url.search === window.location.search && !url.hash) return;
-
-      if (navigating) {
-        event.preventDefault();
-        return;
-      }
-      navigating = true;
+    // <ClientRouter /> (Layout.astro) owns same-origin link clicks now —
+    // not this script. It already skips a click to the page you're
+    // already on (no-op, no reload), aborts a superseded in-flight
+    // navigation the instant a newer click supersedes it, and leaves
+    // cross-origin / download / data-astro-reload links to a normal full
+    // browser navigation this script doesn't need to touch. So this just
+    // observes the router's own lifecycle events instead of intercepting
+    // clicks itself — doing both would mean two click listeners racing to
+    // call preventDefault() on the same event.
+    document.addEventListener("astro:before-preparation", function () {
       show(80);
     });
+    document.addEventListener("astro:page-load", function () {
+      hide();
+    });
 
-    // Back/forward restores from bfcache should never show a stuck bar,
-    // and should re-arm the guard above — the page is interactive again,
-    // not actually mid-navigation.
+    // Back/forward restores from bfcache should never show a stuck bar.
     window.addEventListener("pageshow", function (event) {
-      if (event.persisted) {
-        navigating = false;
-        hide();
-      }
+      if (event.persisted) hide();
     });
   })();
 </script>

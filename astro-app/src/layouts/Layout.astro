@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import PageLoadingBar from "@/components/layout/page-loading-bar.astro";
@@ -76,6 +77,20 @@ if (userCookie) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Every internal <a> click becomes a soft navigation instead of a
+        full document reload: fetches the new page, swaps it in, re-hydrates
+        islands — no blank-page flash, no re-parsing every script/stylesheet
+        from scratch, and clicking a link to the page you're already on is
+        a no-op (Astro checks same pathname+search and skips re-fetching
+        entirely) instead of reloading. Cross-origin links, downloads, and
+        anything marked data-astro-reload fall through to a normal browser
+        navigation untouched — needed for any link whose target immediately
+        redirects off-site (e.g. to WCA's OAuth page), since this router
+        can't meaningfully soft-navigate into a cross-origin redirect.
+        src/components/layout/page-loading-bar.astro listens to this
+        router's own lifecycle events rather than intercepting clicks
+        itself, to avoid the two fighting over the same click. */}
+    <ClientRouter />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/cubingkerala_logo.svg" />
     <title>{title}</title>
@@ -118,6 +133,21 @@ if (userCookie) {
       } catch {
         document.documentElement.classList.add("dark");
       }
+    </script>
+    {/* Login/logout redirect to a "?__fresh=<timestamp>" URL (callback.ts,
+        navbar.tsx) purely to force the browser past its own HTTP cache for
+        "/" — see worker.ts's Cache-Control comments. It has no other
+        meaning, so strip it from the address bar right away rather than
+        leave a stray param a user might bookmark or share. replaceState,
+        not a real navigation — doesn't re-trigger a fetch or reload. */}
+    <script is:inline>
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("__fresh")) {
+          url.searchParams.delete("__fresh");
+          window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+        }
+      } catch {}
     </script>
   </head>
   <body class="flex min-h-dvh flex-col bg-background font-sans antialiased">

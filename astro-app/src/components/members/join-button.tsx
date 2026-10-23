@@ -19,8 +19,13 @@ export function JoinButton({ isLoggedIn, isMember }: JoinButtonProps) {
 
   if (!isLoggedIn) {
     return (
-      <Button variant="outline" size="sm" asChild>
-        <a href="/login">Login to join</a>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={() => toast.info("Log in to join Cubing Kerala — use the Login link in the navbar")}
+      >
+        Login to join
       </Button>
     );
   }
