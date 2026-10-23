@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "@fontsource-variable/rubik";
 @import "@fontsource/geist-mono/400.css";
+/* sonner injects its CSS into <head> via a runtime <style> tag at import
+   time; <ClientRouter /> drops that tag on the first soft navigation, leaving
+   toasts unstyled/invisible until a hard reload. Bundling it here keeps it. */
+@import "sonner/dist/styles.css";
 
 /* Dark mode is a manual `.dark` class toggle (useTheme), not system
    preference — Tailwind v4's `dark:` variant defaults to a media query, so
