@@ -202,17 +202,28 @@ if (userCookie) {
       isLoggedIn={isLoggedIn}
       initialProfile={initialProfile}
     />
-    {/* transition:persist: without it, this island gets torn down and
-        recreated on every single <ClientRouter /> soft navigation (like
-        every other island) — so a toast that was mid-display when the
-        visitor clicked away got abruptly cut off, and anything firing in
-        the brief gap between the old instance unmounting and a new one
-        mounting on the next page could be lost. Persisting it keeps one
-        continuously-live Toaster across every navigation, the same way a
-        real app's toast layer should behave — never interrupted, always
-        ready. (This Toaster is src/components/ui/toaster.tsx, not sonner's
-        own — it wires in this app's actual theme/colors instead of
-        sonner's hardcoded defaults; see that file for why.) */}
-    <Toaster client:load position="bottom-right" transition:persist="toaster" />
+    {/* Tried transition:persist here, to keep one continuously-live
+        Toaster across <ClientRouter /> soft navigations instead of it
+        tearing down and recreating on every page (like every other
+        island) — reverted, it broke something worse than what it fixed.
+        Astro's persist move relies on moveBefore() (Chrome 133+, a true
+        zero-detachment move) with a fallback to plain appendChild() on
+        browsers without it, which DOES detach-then-reattach the node.
+        sonner's <Toaster> keeps its own internal subscription to a
+        module-level toast store via useEffect; a real detach/reattach
+        cycle can desync that subscription from React's view of whether
+        the component is still mounted, without actually unmounting the
+        DOM. Result: toast() calls still pushed to the store, but the
+        visibly-stuck-around Toaster had silently stopped listening — so
+        clicking something that should show a toast right after a soft
+        navigation (e.g. "Login to join" on /members) did nothing, only
+        working again after a hard refresh remounted everything fresh and
+        back in sync. Letting it remount normally like every other island
+        is less elegant (an in-flight toast gets cut off if you navigate
+        away mid-display) but actually reliable, which matters more. (This
+        Toaster is src/components/ui/toaster.tsx, not sonner's own — it
+        wires in this app's actual theme/colors instead of sonner's
+        hardcoded defaults; see that file for why.) */}
+    <Toaster client:load position="bottom-right" />
   </body>
 </html>

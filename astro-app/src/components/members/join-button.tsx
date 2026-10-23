@@ -23,7 +23,7 @@ export function JoinButton({ isLoggedIn, isMember }: JoinButtonProps) {
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => toast.info("Log in to join Cubing Kerala — use the Login link in the navbar")}
+        onClick={() => toast.info("Login to join")}
       >
         Login to join
       </Button>
