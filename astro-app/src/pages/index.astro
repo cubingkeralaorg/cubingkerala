@@ -69,7 +69,7 @@ const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src
     <UpcomingCompetitionsSection client:visible upcoming={upcoming} />
     <PastCompetitionsSection client:visible past={past} />
     <AchievementBanner client:load />
-    <RankingsPreviewSection client:load members={members} rankingsWcaData={rankingsWcaData} />
+    <RankingsPreviewSection client:visible members={members} rankingsWcaData={rankingsWcaData} />
     <MembersPreviewSection members={members} wcaSummaries={wcaSummaries} />
   </div>
 

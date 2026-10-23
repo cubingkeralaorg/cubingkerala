@@ -56,7 +56,7 @@ export function FilterComponent({
 
   return (
     <div className="flex shrink-0 items-center gap-2">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger
           className={cn(TRIGGER_CLASS, eventWidthClassName, "justify-between", triggerClassName)}
           aria-label="Event"
@@ -75,7 +75,7 @@ export function FilterComponent({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger className={cn(TRIGGER_CLASS, "capitalize", triggerClassName)} aria-label="Round">
           <span>{filter.round}</span>
           <ChevronDownIcon className="size-3.5 shrink-0 text-muted-foreground" />
