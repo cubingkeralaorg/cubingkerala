@@ -50,11 +50,8 @@ body::-webkit-scrollbar {
   /* Hero photo marquee: continuous CSS-only motion, never user-scrollable —
      content is duplicated once in the component so translateX(-50%) lands
      exactly where the copy repeats, making the loop seamless. */
-  /* will-change promotes the track to its own compositor layer so the scroll
-     stays smooth on the GPU while large photos decode/paint in the main thread. */
   .marquee-track {
     animation: marquee-scroll linear infinite;
-    will-change: transform;
   }
 
   .marquee-track-reverse {

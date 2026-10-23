@@ -25,11 +25,11 @@ function MarqueeRow({ photos, reverse, durationSeconds }: { photos: Photo[]; rev
           key={`${photo.src}-${index}`}
           className="h-[160px] w-[220px] relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
         >
-          {/* Pulsing placeholder behind the photo (separate element so the
-              pulse never fades the photo itself): the <img> is transparent
+          {/* Static placeholder behind the photo (no pulse: an infinite
+              animation here showed through as a flicker on mobile): the <img> is transparent
               until its bytes arrive, so slow photos show a soft tile instead
               of a hole. */}
-          <span aria-hidden className="absolute inset-0 animate-pulse bg-muted" />
+          <span aria-hidden className="absolute inset-0 bg-muted" />
           <img
             src={photo.src}
             alt={photo.alt}
