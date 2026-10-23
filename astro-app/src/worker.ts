@@ -28,17 +28,19 @@ import { syncCompetitions } from "./lib/competitions/sync";
 // to do the expensive work (D1 queries + Astro rendering) less often.
 // Two layers, applied only to the page routes below (never to /api/* or
 // POST requests, which already set their own no-store headers):
-//   1. Cache API: a cache hit skips D1 + rendering entirely.
-//   2. Rate limiter: only guards cache *misses*, i.e. the actual expensive
-//      path. One person clicking around fast still gets cache hits after
-//      the first visit to each page; the limit only trips on sustained
-//      bursts across many distinct/uncached URLs (bots, load tests).
+//   1. Caching: a cache hit skips D1 + rendering entirely. Anonymous
+//      visitors get this on repeat clicks (edge cache + browser cache,
+//      see below); authenticated ones only get it via <ClientRouter />
+//      (Layout.astro) skipping the full-page-reload cost, not via
+//      caching — see the Cache-Control comment further down for why.
+//   2. Rate limiter: a backstop against sustained bursts across many
+//      distinct/uncached URLs (bots, load tests), independent of caching.
 //
 // Every page goes through Layout.astro (src/layouts/Layout.astro), which
 // reads the "userInfo" cookie to compute isLoggedIn/isAdmin — and even the
 // viewer's own email for the footer — for literally every route, not just
-// /members. There are two different caches in play here, with two
-// different rules, because they have very different sharing properties:
+// /members. Two different caches are in play, with two different rules,
+// because they have very different sharing properties:
 //
 //   1. Cloudflare's edge Cache API (`caches.default`) — SHARED across every
 //      visitor who hits the same URL. Anonymous-only: a logged-in render
@@ -46,39 +48,43 @@ import { syncCompetitions } from "./lib/competitions/sync";
 //      the next, unrelated visitor of the same URL. (Tried keying it
 //      per-visitor instead of excluding auth entirely — see the note
 //      below; reverted, it didn't work.)
-//   2. The requesting browser's own HTTP cache — inherently private to
-//      that one visitor already, regardless of login state, the same way
-//      their cookies are. There's nothing to leak by letting a logged-in
-//      visitor's browser cache their own personalized page: nobody else's
-//      browser can ever read it. So every cacheable response gets a real
-//      browser-facing `max-age` — public+shared for anonymous (also
-//      backed by the edge cache above), `private` for authenticated
-//      (browser-only, no edge cache involved at all) — so repeat clicks
-//      from the same visitor, logged in or not, redisplay instantly with
-//      zero network request instead of re-running D1 + SSR every time.
-//
-// Caching anything personalized in the browser is only safe paired with
-// login/logout actively invalidating it the moment the cookie changes —
-// otherwise a page cached while logged in (or out) could keep showing
-// that stale state after switching. src/pages/api/auth/callback.ts and
-// .../logout.ts both send `Clear-Site-Data: "cache"` for exactly this.
+//   2. The requesting browser's own HTTP cache. Anonymous responses get a
+//      real `max-age` here too — safe, since anonymous content never
+//      varies by visitor, so there's nothing to leak. Authenticated
+//      responses deliberately do NOT — see the big comment on the
+//      Cache-Control line below for why a real max-age there caused a
+//      real, visible bug (the navbar flickering between Login/Logout
+//      while clicking around logged in).
 //
 // Tried (and reverted): keying the EDGE cache per-visitor by folding the
 // cookie's value into the cache key, so a logged-in visitor's repeat click
-// could hit a dedicated edge cache entry instead of just their own browser
-// cache. Cloudflare's Cache API silently failed to persist anything
-// written under that scheme — cache.put() resolved without error, but an
-// immediate self-verifying cache.match() for the identical key right after
-// still came back empty, consistently, regardless of TTL, Cache-Control
-// value (public/private, with/without s-maxage), or how the key Request
-// was constructed. Isolated it to "a real auth cookie was present on the
+// could hit a dedicated edge cache entry. Cloudflare's Cache API silently
+// failed to persist anything written under that scheme — cache.put()
+// resolved without error, but an immediate self-verifying cache.match()
+// for the identical key right after still came back empty, consistently,
+// regardless of TTL, Cache-Control value, or how the key Request was
+// constructed. Isolated it to "a real auth cookie was present on the
 // request" specifically — not the D1 queries Layout.astro does for a real
 // cookie (reproduced with no D1 work at all), not the key string (an
 // authenticated key byte-identical to a working anonymous one still
 // failed), not timing. Couldn't find the actual cause, so not shipping
-// edge-cache writes I've proven don't reliably work. The browser-cache
-// approach above sidesteps this entirely — it was only ever the shared
-// edge cache that had both the leak risk and this reliability problem.
+// edge-cache writes that have been proven not to reliably work.
+//
+// Tried (and reverted): giving authenticated responses a real
+// `private, max-age=N` browser-cache TTL too, so even logged-in repeat
+// clicks would skip the network. Broke correctness instead: the browser's
+// HTTP cache is keyed purely by URL, with no concept of "this entry was
+// for a different cookie" (no Vary: Cookie here, and Vary on Cookie isn't
+// practically usable — it would vary per literal cookie value, defeating
+// caching entirely). A page cached while anonymous — normal, happens on
+// every first visit before logging in — would then get served as-is
+// after logging in, with zero server round trip, for up to that TTL:
+// Login/Logout and the admin Requests link would flicker depending on
+// which pages still had a stale pre-login entry. src/pages/api/auth/
+// callback.ts sends `Clear-Site-Data: "cache"` on login specifically to
+// invalidate any such pre-login entries (logout doesn't need this —
+// authenticated responses are never freely-reusable-cached in the first
+// place, so there's nothing stale for it to leave behind).
 const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/$/,
   /^\/learn\/?$/,
@@ -122,11 +128,11 @@ export default {
       if (cached) return cached;
     }
 
-    // Only requests that actually reach this point (edge cache misses,
-    // and every authenticated request — those never check the edge cache
-    // above) count against the rate limit. A repeat visitor served
-    // straight from their own browser's cache never reaches the network
-    // at all, so it never reaches here either.
+    // Only requests that actually reach this point count against the rate
+    // limit. An anonymous repeat visitor served straight from their own
+    // browser's cache (or the edge cache) never reaches the network at
+    // all, so it never reaches here; every authenticated request does,
+    // since those are never freely-reusable-cached (see below).
     const clientIp = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const { success } = await env.RATE_LIMITER.limit({ key: clientIp });
     if (!success) {
@@ -145,10 +151,24 @@ export default {
     // response reused across multiple requests via the edge cache, or
     // persisted in the browser's own cache past this response.
     headers.delete("Set-Cookie");
+    // Authenticated responses deliberately get NO real max-age — tried
+    // that (`private, max-age=60`) and it caused a real, confusing bug:
+    // the browser's HTTP cache is keyed purely by URL, with no concept of
+    // "this entry was for a different cookie" (no Vary: Cookie here). A
+    // page cached while anonymous — perfectly normal, happens on every
+    // first visit before logging in — would then get served as-is to the
+    // same visitor after logging in, with zero server round trip, for up
+    // to that TTL: the navbar would flip between Login/Logout and the
+    // admin Requests link would appear/disappear depending on which pages
+    // still had a stale pre-login entry. `no-cache` forces every
+    // authenticated request to revalidate with the server first — no
+    // entry is ever reused blindly — so this can't happen, at the cost of
+    // authenticated repeat-clicks no longer skipping the network (they
+    // still skip the extra cost of a full page reload, via ClientRouter).
     headers.set(
       "Cache-Control",
       authenticated
-        ? `private, max-age=${CACHE_FRESH_SECONDS}`
+        ? "no-cache"
         : `public, max-age=${CACHE_FRESH_SECONDS}, s-maxage=${CACHE_FRESH_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
     );
     const cacheableResponse = new Response(response.body, {

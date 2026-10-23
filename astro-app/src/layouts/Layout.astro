@@ -130,25 +130,48 @@ if (userCookie) {
     })} />
     {/* Runs before first paint so there's no flash of the wrong theme —
         useTheme (client-side) stays in sync with the same localStorage key.
-        data-astro-rerun: <ClientRouter />'s swap wipes every attribute on
-        <html> (including this script's own "dark" class, which only ever
-        exists as a runtime DOM mutation — it's never part of the
-        server-rendered markup) and replaces them with the new page's.
-        Without this attribute, Astro treats an inline script with
-        identical content as "already ran" and skips re-running it after a
-        swap, so the class never got reapplied — every soft navigation
-        flashed back to the light theme regardless of the visitor's actual
-        preference. This forces it to run again on every swap, not just
-        the first real page load. */}
+
+        <ClientRouter />'s swap wipes every attribute on <html> (including
+        this script's own "dark" class, which only ever exists as a
+        runtime DOM mutation — it's never part of the server-rendered
+        markup) and replaces them with the new page's. Two parts to fixing
+        that, not one:
+          1. astro:before-swap fires with the parsed-but-not-yet-applied
+             new document — setting the class there BEFORE Astro copies
+             its attributes onto the live <html> means the swap itself
+             carries the correct class, so there's no gap where the new
+             page is visible without it. This is the actual fix for the
+             flash — on mobile especially, where the gap was long enough
+             to be visibly jarring on bordered/backgrounded elements (the
+             competitions search bar, the rankings event selector).
+          2. data-astro-rerun (below) is the belt-and-suspenders fallback:
+             without it, Astro treats an inline script with identical
+             content as "already ran" and skips re-running it on a swap at
+             all. Astro's own re-run mechanism fires via runScripts(),
+             which happens AFTER the swap/paint — too late to prevent the
+             flash by itself (that's what part 1 is for), but still
+             correct as a fallback for anything part 1 missed. */}
     <script is:inline data-astro-rerun>
-      try {
-        if (localStorage.getItem("ck_theme") !== "light") {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
+      function ckApplyTheme(root) {
+        try {
+          if (localStorage.getItem("ck_theme") !== "light") {
+            root.classList.add("dark");
+          } else {
+            root.classList.remove("dark");
+          }
+        } catch {
+          root.classList.add("dark");
         }
-      } catch {
-        document.documentElement.classList.add("dark");
+      }
+      ckApplyTheme(document.documentElement);
+      // This whole script re-runs on every swap (data-astro-rerun), which
+      // would otherwise pile up a duplicate listener on every navigation —
+      // guard so it's only ever attached once.
+      if (!window.__ckThemeListenerAttached) {
+        window.__ckThemeListenerAttached = true;
+        document.addEventListener("astro:before-swap", function (event) {
+          ckApplyTheme(event.newDocument.documentElement);
+        });
       }
     </script>
     {/* Login/logout redirect to a "?__fresh=<timestamp>" URL (callback.ts,

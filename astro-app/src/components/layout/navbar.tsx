@@ -39,10 +39,13 @@ export const Navbar = ({
   // state needs tracking in between.
   //
   // The `__fresh` param forces this to be a URL the browser has definitely
-  // never cached before (anonymous "/" is cached for real now — see
-  // worker.ts), so it can't serve a stale logged-in copy instead of
-  // re-checking the cookie. Layout.astro strips it from the address bar
-  // right after load.
+  // never cached before. Not a correctness fix (authenticated pages are
+  // never freely-reusable-cached — see worker.ts — so there's no stale
+  // logged-in copy to avoid), just freshness: without it, landing back on
+  // "/" could reuse an anonymous entry from before this session that
+  // predates anything that changed while logged in (e.g. just joining as
+  // a member). Layout.astro strips the param from the address bar right
+  // after load either way.
   const logout = useCallback(async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });

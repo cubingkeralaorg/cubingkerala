@@ -70,21 +70,23 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
     });
 
     // Anonymous pages are cached in the browser's own HTTP cache for a
-    // real TTL (see worker.ts) — without something here, a page the
-    // browser cached while still logged out could keep showing the
-    // logged-out navbar/state after this redirect, since the browser has
-    // no way to know the cookie just changed and would serve its cached
-    // "/" straight from disk without even asking the server.
-    //
-    // Used to fix this with `Clear-Site-Data: "cache"`, but that's a slow,
-    // synchronous browser operation (it blocks the navigation on fully
-    // clearing site cache storage) — noticeably delayed login. A unique
-    // query param is instant and gives the same guarantee: the browser
-    // has definitely never cached this exact URL before, so it can't
-    // possibly serve a stale copy — forcing a real request that correctly
-    // sees the just-set cookie. Layout.astro strips the param from the
-    // address bar right after load, so it's invisible either way.
-    return redirect(`/?__fresh=${Date.now()}`);
+    // real TTL (see worker.ts) — without something here, ANY page the
+    // browser cached while still logged out (not just "/" — everywhere
+    // the visitor clicked before logging in) could keep showing the
+    // logged-out navbar/missing-admin-link state after this redirect,
+    // since the browser has no way to know the cookie just changed and
+    // would serve those cached pages straight from disk, no server round
+    // trip at all. That's exactly what a narrower fix (just cache-busting
+    // this one redirect's URL) missed: it covered the page landed on
+    // right after login, not whatever pages the visitor clicked to next.
+    // Clear-Site-Data wipes all of them at once; the unique query param
+    // on top is a cheap, redundant guarantee specifically for the one
+    // page this redirect lands on, independent of Clear-Site-Data's own
+    // timing. Layout.astro strips that param from the address bar right
+    // after load either way.
+    const response = redirect(`/?__fresh=${Date.now()}`);
+    response.headers.set("Clear-Site-Data", '"cache"');
+    return response;
   } catch (error) {
     console.error("Auth callback error:", error);
     return createErrorResponse("Failed to exchange code for token", 500);
