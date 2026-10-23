@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { deriveAltTextFromFilename } from "@/utils/derive-alt-text";
+import { resizeImageForUpload } from "@/utils/resize-image";
 
 interface PhotoItem {
   id: string;
@@ -87,7 +88,7 @@ export function PhotoGalleryAdmin({ initialPhotos }: PhotoGalleryAdminProps) {
     item: PendingPhoto,
   ): Promise<{ ok: true; photo: PhotoItem } | { ok: false; message: string }> => {
     const formData = new FormData();
-    formData.append("file", item.file);
+    formData.append("file", await resizeImageForUpload(item.file));
     formData.append("alt", item.alt.trim().length > 0 ? item.alt.trim() : GENERIC_ALT_FALLBACK);
     try {
       const res = await fetch("/api/admin-add-photo", { method: "POST", body: formData });

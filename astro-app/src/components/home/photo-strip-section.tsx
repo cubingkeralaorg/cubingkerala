@@ -5,6 +5,9 @@ interface Photo {
   alt: string;
 }
 
+// Tiles per row that are visible on first paint.
+const EAGER_COUNT = 4;
+
 // Content is duplicated (photos, photos) so a translateX(-50%) loop (see
 // .marquee-track in global.css) lands exactly where the second copy starts
 // — a seamless loop with no jump, no scroll container, nothing for a
@@ -20,9 +23,24 @@ function MarqueeRow({ photos, reverse, durationSeconds }: { photos: Photo[]; rev
       {track.map((photo, index) => (
         <div
           key={`${photo.src}-${index}`}
-          className="h-[160px] w-[220px] shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
+          className="h-[160px] w-[220px] relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
         >
-          <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover" />
+          {/* Pulsing placeholder behind the photo (separate element so the
+              pulse never fades the photo itself): the <img> is transparent
+              until its bytes arrive, so slow photos show a soft tile instead
+              of a hole. */}
+          <span aria-hidden className="absolute inset-0 animate-pulse bg-muted" />
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            // The first few tiles of each row are on screen at load — fetch
+            // them right away at high priority; the rest (and the duplicate
+            // copy, same URLs) can wait until they near the viewport.
+            loading={index < EAGER_COUNT ? "eager" : "lazy"}
+            fetchPriority={index < EAGER_COUNT ? "high" : "auto"}
+            decoding="async"
+            className="relative h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:hover:scale-105"
+          />
         </div>
       ))}
     </div>

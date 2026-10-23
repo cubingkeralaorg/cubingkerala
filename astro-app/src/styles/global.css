@@ -50,8 +50,11 @@ body::-webkit-scrollbar {
   /* Hero photo marquee: continuous CSS-only motion, never user-scrollable —
      content is duplicated once in the component so translateX(-50%) lands
      exactly where the copy repeats, making the loop seamless. */
+  /* will-change promotes the track to its own compositor layer so the scroll
+     stays smooth on the GPU while large photos decode/paint in the main thread. */
   .marquee-track {
     animation: marquee-scroll linear infinite;
+    will-change: transform;
   }
 
   .marquee-track-reverse {
@@ -141,6 +144,17 @@ ul {
       opacity: 1;
     }
   }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 /* Tailwind v4 has no tailwind.config.ts — theme tokens are declared here and
@@ -176,6 +190,7 @@ ul {
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
   --animate-fade-in: fade-in 2s ease-out forwards;
+  --animate-fade-up: fade-up 0.6s ease-out both;
 
   /* v3's `container` plugin option (center: true, 2xl: 1400px) has no direct
      v4 equivalent config; apply `mx-auto max-w-[1400px] px-4` (or similar)
