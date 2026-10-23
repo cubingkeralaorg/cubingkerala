@@ -4,7 +4,7 @@ import { ClientRouter } from "astro:transitions";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import PageLoadingBar from "@/components/layout/page-loading-bar.astro";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/toaster";
 import { isAdminAccount } from "@/config/admin";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db/client";
@@ -202,6 +202,17 @@ if (userCookie) {
       isLoggedIn={isLoggedIn}
       initialProfile={initialProfile}
     />
-    <Toaster client:load richColors position="bottom-right" />
+    {/* transition:persist: without it, this island gets torn down and
+        recreated on every single <ClientRouter /> soft navigation (like
+        every other island) — so a toast that was mid-display when the
+        visitor clicked away got abruptly cut off, and anything firing in
+        the brief gap between the old instance unmounting and a new one
+        mounting on the next page could be lost. Persisting it keeps one
+        continuously-live Toaster across every navigation, the same way a
+        real app's toast layer should behave — never interrupted, always
+        ready. (This Toaster is src/components/ui/toaster.tsx, not sonner's
+        own — it wires in this app's actual theme/colors instead of
+        sonner's hardcoded defaults; see that file for why.) */}
+    <Toaster client:load position="bottom-right" transition:persist="toaster" />
   </body>
 </html>
