@@ -89,8 +89,13 @@ if (userCookie) {
         can't meaningfully soft-navigate into a cross-origin redirect.
         src/components/layout/page-loading-bar.astro listens to this
         router's own lifecycle events rather than intercepting clicks
-        itself, to avoid the two fighting over the same click. */}
-    <ClientRouter />
+        itself, to avoid the two fighting over the same click.
+        fallback="swap": an instant content swap for browsers without
+        native View Transitions support, no simulated animation — paired
+        with disabling the native cross-fade itself in global.css, so
+        navigation is a plain, immediate swap everywhere rather than a
+        transition effect. */}
+    <ClientRouter fallback="swap" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/cubingkerala_logo.svg" />
     <title>{title}</title>
@@ -124,11 +129,23 @@ if (userCookie) {
       ],
     })} />
     {/* Runs before first paint so there's no flash of the wrong theme —
-        useTheme (client-side) stays in sync with the same localStorage key. */}
-    <script is:inline>
+        useTheme (client-side) stays in sync with the same localStorage key.
+        data-astro-rerun: <ClientRouter />'s swap wipes every attribute on
+        <html> (including this script's own "dark" class, which only ever
+        exists as a runtime DOM mutation — it's never part of the
+        server-rendered markup) and replaces them with the new page's.
+        Without this attribute, Astro treats an inline script with
+        identical content as "already ran" and skips re-running it after a
+        swap, so the class never got reapplied — every soft navigation
+        flashed back to the light theme regardless of the visitor's actual
+        preference. This forces it to run again on every swap, not just
+        the first real page load. */}
+    <script is:inline data-astro-rerun>
       try {
         if (localStorage.getItem("ck_theme") !== "light") {
           document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
         }
       } catch {
         document.documentElement.classList.add("dark");

@@ -187,3 +187,15 @@ ul {
     @apply bg-background text-foreground antialiased;
   }
 }
+
+/* Layout.astro's <ClientRouter /> makes internal navigation a soft swap
+   instead of a full reload (no more unnecessary re-renders), but browsers
+   with native View Transitions support still play Astro's default
+   cross-fade animation on every navigation. That's the "transition kind of
+   switch" — turning it off here makes the swap instant and plain, same as
+   fallback="swap" already does for browsers without native support. */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation: none !important;
+}
