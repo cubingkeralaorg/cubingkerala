@@ -35,7 +35,7 @@ function MarqueeRow({ photos, reverse, durationSeconds }: { photos: Photo[]; rev
         return (
           <div
             key={`${photo.src}-${index}`}
-            className="h-[160px] w-[220px] relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
+            className="h-40 w-55 relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
           >
             {/* Static placeholder behind the photo (no pulse: an infinite
                 animation here showed through as a flicker on mobile): the <img> is transparent
