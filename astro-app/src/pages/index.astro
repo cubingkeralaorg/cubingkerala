@@ -14,7 +14,7 @@ import { getDb } from "@/db/client";
 import { getUpcomingCompetitions, getPastCompetitions } from "@/db/queries/competitions";
 import { getAllMembers, getWcaSummaryForMembers, getRankingsWcaDataForMembers } from "@/db/queries/members";
 import { getAllPhotos } from "@/db/queries/photos";
-import { mediaUrl } from "@/config/media";
+import { mediaImageUrl } from "@/config/media";
 
 // D1-backed queries (Phase 4) — bindings come from `cloudflare:workers`,
 // not Astro.locals.runtime.env (removed in this @astrojs/cloudflare
@@ -40,8 +40,9 @@ const [wcaSummaries, rankingsWcaData] = await Promise.all([
 
 // Alternate by insertion order into two rows so a newly admin-added photo
 // always lands in whichever row has fewer, keeping the marquee balanced.
-const photoRow1 = photos.filter((_, index) => index % 2 === 0).map((p) => ({ src: mediaUrl(p.path), alt: p.alt }));
-const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src: mediaUrl(p.path), alt: p.alt }));
+// Tiles render at most 260px wide, so 640px covers 2x screens.
+const photoRow1 = photos.filter((_, index) => index % 2 === 0).map((p) => ({ src: mediaImageUrl(p.path, 640), alt: p.alt }));
+const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src: mediaImageUrl(p.path, 640), alt: p.alt }));
 ---
 
 <Layout

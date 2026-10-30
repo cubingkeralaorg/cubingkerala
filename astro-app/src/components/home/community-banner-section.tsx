@@ -8,7 +8,15 @@ export function CommunityBannerSection() {
   return (
     <section className={`${NAVBAR_CONTAINER_CLASS}`}>
       <div className="rounded-xl border border-border">
-        <img src="/community-banner.png" alt="The Cubing Kerala community" className="h-auto w-full rounded-lg" />
+        <img
+          src="/community-banner.webp"
+          alt="The Cubing Kerala community"
+          width={1671}
+          height={889}
+          loading="lazy"
+          decoding="async"
+          className="h-auto w-full rounded-lg"
+        />
       </div>
     </section>
   );

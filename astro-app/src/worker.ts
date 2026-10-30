@@ -108,9 +108,108 @@ function isCacheablePath(url: URL): boolean {
   return CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname));
 }
 
+// --- /media/* (R2 media served from our own domain) ---
+// Media used to load straight from the bucket's r2.dev URL, which serves
+// HTTP/1.1 only, sends no Cache-Control at all (every visit re-downloaded
+// every gallery photo), and is rate-limited by Cloudflare. Streaming the
+// object through here instead gets HTTP/2+3, a real browser cache TTL, and
+// the edge cache in front of R2. Streaming a body costs next to no CPU.
+// Handled before the rate limiter on purpose: one homepage load is ~30
+// photo requests, which would eat most of a visitor's per-minute budget.
+const MEDIA_PREFIX = "/media/";
+// A week, not `immutable`: gallery uploads get UUID keys, but older assets
+// (e.g. images/misc/*, the highlight video) have fixed names that could be
+// overwritten in place. (HEAD needs no special-casing below — the runtime
+// drops the body of a HEAD response itself.)
+const MEDIA_CACHE_CONTROL = "public, max-age=604800, stale-while-revalidate=86400";
+// `?w=<width>` on an image resizes it (and re-encodes to WebP) through the
+// Cloudflare Images binding — gallery originals are up to several MB, but
+// they're displayed as ~260px marquee tiles. Only these widths are accepted
+// so arbitrary values can't mint unlimited transformations (the free plan
+// includes 5,000 unique ones a month); anything else gets the original.
+// Must match MEDIA_IMAGE_WIDTHS in src/config/media.ts.
+const MEDIA_IMAGE_WIDTHS = new Set([640, 800]);
+
+async function serveMedia(request: Request, env: Env, ctx: ExecutionContext, url: URL): Promise<Response> {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
+  }
+  const key = decodeURIComponent(url.pathname.slice(MEDIA_PREFIX.length));
+  if (!key || key.includes("..")) return new Response("Not found", { status: 404 });
+
+  // Range requests (video seeking) bypass the edge cache — the Cache API
+  // can't store 206 responses — and go straight to R2. A HEAD just gets the
+  // full-object headers.
+  const isRange = request.method === "GET" && request.headers.has("Range");
+  const requestedWidth = Number(url.searchParams.get("w"));
+  const width = !isRange && MEDIA_IMAGE_WIDTHS.has(requestedWidth) ? requestedWidth : null;
+  const cache = (caches as unknown as { default: Cache }).default;
+  // Normalized so unrelated query strings can't bust the cache.
+  const cacheKey = new Request(`${url.origin}${url.pathname}${width ? `?w=${width}` : ""}`, { method: "GET" });
+  if (!isRange) {
+    const cached = await cache.match(cacheKey);
+    if (cached) return cached;
+  }
+
+  const object = await env.MEDIA.get(key, { range: isRange ? request.headers : undefined, onlyIf: request.headers });
+  if (!object) return new Response("Not found", { status: 404 });
+
+  const headers = new Headers();
+  object.writeHttpMetadata(headers);
+  headers.set("ETag", object.httpEtag);
+  headers.set("Cache-Control", MEDIA_CACHE_CONTROL);
+  headers.set("Accept-Ranges", "bytes");
+
+  // onlyIf matched a conditional header (If-None-Match etc.) — no body.
+  if (!("body" in object)) return new Response(null, { status: 304, headers });
+
+  // The adapter adds the IMAGES binding to the generated wrangler config
+  // (dist/server/wrangler.json) rather than wrangler.jsonc, so it isn't on
+  // the generated Env type.
+  const images = (env as Env & { IMAGES?: ImagesBinding }).IMAGES;
+  if (width && images && headers.get("Content-Type")?.startsWith("image/")) {
+    try {
+      const transformed = await images
+        .input(object.body)
+        .transform({ width, fit: "scale-down" })
+        .output({ format: "image/webp", quality: 80 });
+      const resizedHeaders = new Headers(headers);
+      resizedHeaders.set("Content-Type", "image/webp");
+      const response = new Response(transformed.response().body, { status: 200, headers: resizedHeaders });
+      ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      return response;
+    } catch (error) {
+      // Over the transformation quota, unsupported input, etc. — serve the
+      // original rather than a broken image. Its body stream was already
+      // handed to the binding, so fetch it again (uncached under this key).
+      console.error("[media] resize failed, serving original:", key, error);
+      const original = await env.MEDIA.get(key);
+      if (!original) return new Response("Not found", { status: 404 });
+      return new Response(original.body, { status: 200, headers });
+    }
+  }
+
+  if (isRange && object.range) {
+    // R2Range is a union, but the runtime fills in offset/length even for
+    // a suffix range ("bytes=-N"), leaving the other keys present-but-undefined.
+    const range = object.range as { offset?: number; length?: number; suffix?: number };
+    const offset = range.offset ?? (range.suffix !== undefined ? object.size - range.suffix : 0);
+    const length = range.length ?? object.size - offset;
+    headers.set("Content-Range", `bytes ${offset}-${offset + length - 1}/${object.size}`);
+    headers.set("Content-Length", String(length));
+    return new Response(object.body, { status: 206, headers });
+  }
+
+  headers.set("Content-Length", String(object.size));
+  const response = new Response(object.body, { status: 200, headers });
+  ctx.waitUntil(cache.put(cacheKey, response.clone()));
+  return response;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith(MEDIA_PREFIX)) return serveMedia(request, env, ctx, url);
     const cacheablePath = request.method === "GET" && isCacheablePath(url);
     const authenticated = cacheablePath && hasAuthCookie(request);
     // Only the anonymous case uses the shared edge cache — see the big

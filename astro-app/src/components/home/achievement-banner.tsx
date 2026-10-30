@@ -1,6 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { mediaUrl } from "@/config/media";
+import { mediaImageUrl } from "@/config/media";
 
 const COMPETITION_DETAILS = [
   { label: "Competition", value: "Sanskara Cube Open 2025" },
@@ -13,8 +13,13 @@ export function AchievementBanner() {
     <section className="relative flex flex-col items-center gap-8 overflow-hidden lg:flex-row lg:items-center lg:justify-center lg:gap-16">
       <div className="relative shrink-0">
         <img
-          src={mediaUrl("images/achievements/hari-nr.jpg")}
+          // Displayed at most 384px wide (max-w-sm) — 800px covers 2x screens.
+          src={mediaImageUrl("images/achievements/hari-nr.jpg", 800)}
           alt="Hari Anjana Deepak celebrating the 3x3x3 Indian National Record"
+          width={1110}
+          height={1440}
+          loading="lazy"
+          decoding="async"
           className="h-auto w-full max-w-xs rounded-2xl object-cover sm:max-w-sm"
         />
       </div>

@@ -17,12 +17,16 @@
     top: 0;
     left: 0;
     height: 3px;
-    width: 0%;
+    /* Animated via transform (not width) so it runs on the compositor
+       instead of triggering layout on every frame. */
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
     background: var(--color-primary);
     z-index: 100;
     opacity: 0;
     transition:
-      width 400ms ease-out,
+      transform 400ms ease-out,
       opacity 150ms ease-out;
     pointer-events: none;
   }
@@ -40,17 +44,17 @@
     function show(target) {
       clearTimeout(hideTimer);
       bar.classList.add("is-loading");
-      // Force a reflow so the width transition animates from the current
+      // Force a reflow so the transform transition animates from the current
       // value instead of jumping straight to `target`.
       void bar.offsetWidth;
-      bar.style.width = target + "%";
+      bar.style.transform = "scaleX(" + target / 100 + ")";
     }
 
     function hide() {
-      bar.style.width = "100%";
+      bar.style.transform = "scaleX(1)";
       hideTimer = setTimeout(function () {
         bar.classList.remove("is-loading");
-        bar.style.width = "0%";
+        bar.style.transform = "scaleX(0)";
       }, 200);
     }
 

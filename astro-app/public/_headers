@@ -1,0 +1,12 @@
+# Workers static assets headers (copied into dist/ by Astro). /_astro/* is
+# content-hashed and already gets a 1-year immutable cache from the adapter;
+# these unhashed public/ files default to max-age=0, so give them a day of
+# browser caching. Rename a file if a change to it must show up immediately.
+/community-banner.webp
+  Cache-Control: public, max-age=86400
+/cubingkerala_logo.svg
+  Cache-Control: public, max-age=86400
+/allen-logo-transparent.png
+  Cache-Control: public, max-age=86400
+/event-icons/*
+  Cache-Control: public, max-age=86400

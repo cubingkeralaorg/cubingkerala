@@ -12,7 +12,15 @@ export function LogoLink({
   titleClassName?: string;
 }) {
   return (
-    <a href="/" onClick={onClick} className={cn(NAVBAR_LOGO_LINK_CLASS, "flex items-center gap-2", className)}>
+    // aria-label keeps the link named when titleClassName hides the text
+    // (e.g. the footer's icon-only mobile layout) — the logo itself is
+    // decorative (alt=""), so without it the link has no accessible name.
+    <a
+      href="/"
+      onClick={onClick}
+      aria-label="Cubing Kerala home"
+      className={cn(NAVBAR_LOGO_LINK_CLASS, "flex items-center gap-2", className)}
+    >
       <img src="/cubingkerala_logo.svg" alt="" width={22} height={22} className="size-[22px] shrink-0" />
       <span className={titleClassName}>Cubing Kerala</span>
     </a>
