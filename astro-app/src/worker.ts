@@ -93,6 +93,7 @@ const CACHEABLE_PATTERNS: RegExp[] = [
   /^\/rankings\/?$/,
   /^\/members\/?$/,
   /^\/members\/[^/]+\/?$/,
+  /^\/llms\.txt$/,
 ];
 
 const CACHE_FRESH_SECONDS = 60;

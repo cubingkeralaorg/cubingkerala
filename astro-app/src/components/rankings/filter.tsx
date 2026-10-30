@@ -8,26 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { FilterState } from "@/types/ranking";
-import { getEventName } from "@/utils/event-names";
+import { getEventName, RANKED_EVENT_IDS } from "@/utils/event-names";
 import { cn } from "@/lib/utils";
-
-const EVENT_IDS = [
-  "222",
-  "333",
-  "444",
-  "555",
-  "666",
-  "777",
-  "333bf",
-  "333fm",
-  "333oh",
-  "skewb",
-  "pyram",
-  "minx",
-  "clock",
-  "sq1",
-  "333mbf",
-];
 
 /** Matches the outline `Button` variant — bordered, bg-background, same hover treatment. */
 const TRIGGER_CLASS =
@@ -66,7 +48,7 @@ export function FilterComponent({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="max-h-72 overflow-y-auto">
           <DropdownMenuRadioGroup value={filter.event} onValueChange={(event) => update({ event })}>
-            {EVENT_IDS.map((id) => (
+            {RANKED_EVENT_IDS.map((id) => (
               <DropdownMenuRadioItem key={id} value={id}>
                 {getEventName(id)}
               </DropdownMenuRadioItem>

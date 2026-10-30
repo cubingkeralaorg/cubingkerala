@@ -28,3 +28,26 @@ export const EVENT_NAMES: Record<string, string> = {
 export function getEventName(eventId: string): string {
   return EVENT_NAMES[eventId] || eventId;
 }
+
+/**
+ * The events the Rankings page offers, in its filter's order — shared by the
+ * filter (components/rankings/filter.tsx) and /llms.txt so both always rank
+ * the same set.
+ */
+export const RANKED_EVENT_IDS = [
+  "222",
+  "333",
+  "444",
+  "555",
+  "666",
+  "777",
+  "333bf",
+  "333fm",
+  "333oh",
+  "skewb",
+  "pyram",
+  "minx",
+  "clock",
+  "sq1",
+  "333mbf",
+];
