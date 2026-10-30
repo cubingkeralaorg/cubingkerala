@@ -29,5 +29,7 @@ const wcaData = rankingsWcaData[wcaid as string];
   title={`${member.name.split("(")[0].trim()} | Cubing Kerala`}
   description="Information about a member of the Rubik's Cube community in Kerala"
 >
-  <MemberDetail client:load member={member} summary={summary} wcaData={wcaData} tags={tags} />
+  <div data-reveal>
+    <MemberDetail client:load member={member} summary={summary} wcaData={wcaData} tags={tags} />
+  </div>
 </Layout>

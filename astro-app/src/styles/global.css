@@ -152,6 +152,20 @@ ul {
       transform: none;
     }
   }
+
+  /* Same motion as the data-reveal section reveal (below), for
+     above-the-fold content that should animate on load without waiting
+     for any JavaScript. */
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 /* Tailwind v4 has no tailwind.config.ts — theme tokens are declared here and
@@ -188,6 +202,7 @@ ul {
 
   --animate-fade-in: fade-in 2s ease-out forwards;
   --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-rise-in: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   /* v3's `container` plugin option (center: true, 2xl: 1400px) has no direct
      v4 equivalent config; apply `mx-auto max-w-[1400px] px-4` (or similar)
@@ -202,6 +217,26 @@ ul {
   body {
     @apply bg-background text-foreground antialiased;
   }
+}
+
+/* Section reveal: any element marked `data-reveal` eases in (fade + slight
+   rise + scale-up) the first time it enters the viewport — see the reveal
+   script in Layout.astro, which sets `reveal-ready` on <html> (only when
+   motion is allowed and IntersectionObserver exists, so without it content
+   is simply visible) and `data-revealed` on each element as it appears.
+   Transform/opacity only, so it never causes layout shift; once revealed
+   the transform is back to `none`, so it can't affect sticky/fixed
+   descendants. Only put `data-reveal` on markup rendered by Astro (or a
+   non-hydrated component) — never on an element a hydrated React island
+   owns, which could re-render and fight the attribute. */
+html.reveal-ready [data-reveal] {
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.reveal-ready [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
 }
 
 /* Layout.astro's <ClientRouter /> makes internal navigation a soft swap

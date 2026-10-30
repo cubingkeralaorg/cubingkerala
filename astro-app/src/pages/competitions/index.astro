@@ -24,7 +24,7 @@ const lastUpdated = lastSyncValue
   description="Upcoming and past competitions of Rubik's Cube community in Kerala"
 >
   <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
-    <div class="mb-4 flex flex-col items-start gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+    <div data-reveal class="mb-4 flex flex-col items-start gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-1">
         <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Competitions</h1>
         <p class="w-full text-sm text-muted-foreground md:text-base lg:whitespace-nowrap">
@@ -33,6 +33,8 @@ const lastUpdated = lastSyncValue
       </div>
       <RefreshButton client:load />
     </div>
-    <CompetitionsPage client:load upcoming={upcoming} past={past} />
+    <div data-reveal>
+      <CompetitionsPage client:load upcoming={upcoming} past={past} />
+    </div>
   </div>
 </Layout>

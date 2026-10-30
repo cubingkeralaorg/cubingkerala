@@ -65,31 +65,36 @@ const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src
       on either side of it — the same 112px between sections the page used
       before the dividers, just with the rule centered in it. Table sections
       get the same wide container the real /competitions, /rankings, and
-      /members pages use (the others carry their own). */}
+      /members pages use (the others carry their own). Each section eases
+      in as it scrolls into view (data-reveal, see global.css). */}
   <div class="mt-14 flex flex-col gap-14">
     <SectionDivider />
-    <HighlightVideoSection client:load />
+    <div data-reveal>
+      <HighlightVideoSection client:load />
+    </div>
     <SectionDivider />
-    <div class={NAVBAR_CONTAINER_CLASS}>
+    <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
       <UpcomingCompetitionsSection client:visible upcoming={upcoming} />
     </div>
     <SectionDivider />
-    <div class={NAVBAR_CONTAINER_CLASS}>
+    <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
       <PastCompetitionsSection client:visible past={past} />
     </div>
     <SectionDivider />
-    <div class={NAVBAR_CONTAINER_CLASS}>
+    <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
       <AchievementBanner client:load />
     </div>
     <SectionDivider />
-    <div class={NAVBAR_CONTAINER_CLASS}>
+    <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
       <RankingsPreviewSection client:visible members={members} rankingsWcaData={rankingsWcaData} />
     </div>
     <SectionDivider />
-    <div class={NAVBAR_CONTAINER_CLASS}>
+    <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
       <MembersPreviewSection members={members} wcaSummaries={wcaSummaries} />
     </div>
     <SectionDivider />
-    <CommunityBannerSection />
+    <div data-reveal>
+      <CommunityBannerSection />
+    </div>
   </div>
 </Layout>

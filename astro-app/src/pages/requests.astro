@@ -28,20 +28,22 @@ const galleryPhotos = photos.map((p) => ({ id: p.id, url: mediaUrl(p.path), alt:
 
 <Layout title="Requests | Cubing Kerala" description="Requests to join Rubik's Cube community in Kerala">
   <div class={`${NAVBAR_CONTAINER_CLASS} py-6 sm:py-10`}>
-    <div class="mb-6 flex flex-col gap-2 sm:mb-10">
+    <div data-reveal class="mb-6 flex flex-col gap-2 sm:mb-10">
       <h1 class="text-4xl font-semibold tracking-tight md:text-5xl">Requests</h1>
       <p class="text-sm text-muted-foreground md:text-base">
         Review pending membership requests and manage existing members.
       </p>
     </div>
-    <RequestsAdminPage client:load initialRequests={requests} initialMembers={members} />
+    <div data-reveal>
+      <RequestsAdminPage client:load initialRequests={requests} initialMembers={members} />
+    </div>
 
-    <div class="mt-16 flex flex-col gap-3">
+    <div data-reveal class="mt-16 flex flex-col gap-3">
       <h2 class="text-lg font-semibold tracking-tight">Homepage gallery photos</h2>
       <PhotoGalleryAdmin client:load initialPhotos={galleryPhotos} />
     </div>
 
-    <div class="mt-16 flex flex-col gap-3">
+    <div data-reveal class="mt-16 flex flex-col gap-3">
       <h2 class="text-lg font-semibold tracking-tight">Send competition email</h2>
       <SendCompetitionEmail
         client:load

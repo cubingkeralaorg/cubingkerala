@@ -61,7 +61,13 @@ export function HeroPhotoMarquee({ row1, row2 }: { row1: Photo[]; row2: Photo[] 
   if (row1.length === 0 && row2.length === 0) return null;
 
   return (
-    <section className={`${NAVBAR_CONTAINER_CLASS} marquee-fade overflow-hidden`}>
+    // Eases in with pure CSS (not data-reveal) — it's above the fold and
+    // usually the page's largest paint, so it mustn't wait on any script.
+    // Delayed so it arrives just after the hero title's own fade-up.
+    <section
+      style={{ animationDelay: "350ms" }}
+      className={`${NAVBAR_CONTAINER_CLASS} marquee-fade overflow-hidden motion-safe:animate-rise-in`}
+    >
       <div className="flex flex-col gap-3">
         {row1.length > 0 && <MarqueeRow photos={row1} durationSeconds={38} />}
         {row2.length > 0 && <MarqueeRow photos={row2} durationSeconds={32} reverse />}

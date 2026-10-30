@@ -133,6 +133,15 @@ On mobile this stacks (media first, centered); at `lg:` it goes side-by-side.
   caused real scroll-capture/jank bugs. Respect `prefers-reduced-motion`.
 - Framer Motion is installed but not currently used anywhere in the UI — don't add it
   speculatively; CSS has covered every case so far.
+- **Section entrance animations:** add `data-reveal` to a section's wrapper and
+  it eases in (fade + 16px rise + 0.98→1 scale) the first time it scrolls into
+  view; blocks entering together stagger by 80ms (`data-reveal-delay="ms"` adds
+  a base delay). Script is inline in `Layout.astro`'s `<head>`, CSS under
+  "Section reveal" in `global.css`. Put `data-reveal` only on Astro-rendered
+  markup (wrap a hydrated island in a `<div data-reveal>`), never inside a
+  React island. Above-the-fold hero content uses pure-CSS
+  `motion-safe:animate-fade-up` / `animate-rise-in` instead, so the largest paint
+  never waits on JavaScript.
 - The site-wide cursor-reveal background is `DotField`
   (`src/components/layout/dot-field.astro`, rendered once in `Layout.astro`).
   Any pointer-reactive effect should follow its pattern: plain Canvas 2D in a bundled

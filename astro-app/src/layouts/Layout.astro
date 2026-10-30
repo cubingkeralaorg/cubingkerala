@@ -190,6 +190,65 @@ if (userCookie) {
         }
       } catch {}
     </script>
+    {/* Section reveal (CSS in global.css, under "Section reveal"): eases
+        each `data-reveal` element in the first time it enters the
+        viewport. Inline in <head> so `reveal-ready` is on <html> before
+        first paint — content never flashes visible and then hides. Runs
+        once: the first page starts observing at DOMContentLoaded (not
+        waiting on the router's own script to load), and each
+        <ClientRouter /> soft navigation re-observes on astro:page-load —
+        its swap replaces <body> and wipes <html>'s classes (same as
+        ckApplyTheme above), so the class is re-added before each swap. */}
+    <script is:inline>
+      (function () {
+        if (!("IntersectionObserver" in window)) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.documentElement.classList.add("reveal-ready");
+
+        var STAGGER_MS = 80;
+        var MAX_STAGGER_STEPS = 4;
+        var observer = null;
+
+        function reveal(el, delay) {
+          if (delay) el.style.transitionDelay = delay + "ms";
+          el.setAttribute("data-revealed", "");
+        }
+
+        // Idempotent: safe to run again for the same page (DOMContentLoaded
+        // and then astro:page-load both fire on a full load).
+        function observePage() {
+          if (observer) observer.disconnect();
+          observer = new IntersectionObserver(
+            function (entries) {
+              // Elements that come into view together (e.g. everything
+              // above the fold on load) cascade in one after another.
+              var step = 0;
+              entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                var el = entry.target;
+                var baseDelay = Number(el.getAttribute("data-reveal-delay")) || 0;
+                reveal(el, baseDelay + Math.min(step, MAX_STAGGER_STEPS) * STAGGER_MS);
+                step++;
+                observer.unobserve(el);
+              });
+            },
+            // Trigger once an element's top is ~10% up from the bottom of
+            // the viewport (threshold 0, so very tall blocks like the full
+            // members list still trigger promptly).
+            { rootMargin: "0px 0px -10% 0px" },
+          );
+          document.querySelectorAll("[data-reveal]:not([data-revealed])").forEach(function (el) {
+            observer.observe(el);
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", observePage);
+        document.addEventListener("astro:page-load", observePage);
+        document.addEventListener("astro:before-swap", function (event) {
+          event.newDocument.documentElement.classList.add("reveal-ready");
+        });
+      })();
+    </script>
   </head>
   <body class="flex min-h-dvh flex-col bg-background font-sans antialiased">
     <PageLoadingBar />

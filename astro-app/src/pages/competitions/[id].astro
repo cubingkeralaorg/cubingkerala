@@ -27,5 +27,7 @@ const { competition, detail } = found;
   title={`${competition.name} | Cubing Kerala`}
   description="Details of a competition in the Rubik's Cube community in Kerala"
 >
-  <CompetitionDetail client:load competition={competition} detail={detail} results={results} />
+  <div data-reveal>
+    <CompetitionDetail client:load competition={competition} detail={detail} results={results} />
+  </div>
 </Layout>

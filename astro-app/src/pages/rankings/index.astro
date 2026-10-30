@@ -14,5 +14,7 @@ const rankingsWcaData = await getRankingsWcaDataForMembers(db, members.map((memb
   title="Rankings | Cubing Kerala"
   description="Fastest Cuber in Kerala. The rankings of members within the Rubik's Cube community in Kerala."
 >
-  <RankingsPage client:load members={members} rankingsWcaData={rankingsWcaData} />
+  <div data-reveal>
+    <RankingsPage client:load members={members} rankingsWcaData={rankingsWcaData} />
+  </div>
 </Layout>
