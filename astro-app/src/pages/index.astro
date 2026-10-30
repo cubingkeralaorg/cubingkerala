@@ -8,6 +8,7 @@ import { AchievementBanner } from "@/components/home/achievement-banner";
 import { RankingsPreviewSection } from "@/components/home/rankings-preview-section";
 import { MembersPreviewSection } from "@/components/home/members-preview-section";
 import { CommunityBannerSection } from "@/components/home/community-banner-section";
+import { SectionDivider } from "@/components/home/section-divider";
 import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 import { env } from "cloudflare:workers";
 import { getDb } from "@/db/client";
@@ -60,19 +61,35 @@ const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src
     <HeroPhotoMarquee row1={photoRow1} row2={photoRow2} />
   </div>
 
-  <div class="my-28">
+  {/* Every section below is split by a dotted SectionDivider, with gap-14
+      on either side of it — the same 112px between sections the page used
+      before the dividers, just with the rule centered in it. Table sections
+      get the same wide container the real /competitions, /rankings, and
+      /members pages use (the others carry their own). */}
+  <div class="mt-14 flex flex-col gap-14">
+    <SectionDivider />
     <HighlightVideoSection client:load />
+    <SectionDivider />
+    <div class={NAVBAR_CONTAINER_CLASS}>
+      <UpcomingCompetitionsSection client:visible upcoming={upcoming} />
+    </div>
+    <SectionDivider />
+    <div class={NAVBAR_CONTAINER_CLASS}>
+      <PastCompetitionsSection client:visible past={past} />
+    </div>
+    <SectionDivider />
+    <div class={NAVBAR_CONTAINER_CLASS}>
+      <AchievementBanner client:load />
+    </div>
+    <SectionDivider />
+    <div class={NAVBAR_CONTAINER_CLASS}>
+      <RankingsPreviewSection client:visible members={members} rankingsWcaData={rankingsWcaData} />
+    </div>
+    <SectionDivider />
+    <div class={NAVBAR_CONTAINER_CLASS}>
+      <MembersPreviewSection members={members} wcaSummaries={wcaSummaries} />
+    </div>
+    <SectionDivider />
+    <CommunityBannerSection />
   </div>
-
-  {/* Full tables now (no clipping), so they get the same wide container
-      the real /competitions, /rankings, and /members pages use. */}
-  <div class={`${NAVBAR_CONTAINER_CLASS} flex flex-col gap-28 pb-28`}>
-    <UpcomingCompetitionsSection client:visible upcoming={upcoming} />
-    <PastCompetitionsSection client:visible past={past} />
-    <AchievementBanner client:load />
-    <RankingsPreviewSection client:visible members={members} rankingsWcaData={rankingsWcaData} />
-    <MembersPreviewSection members={members} wcaSummaries={wcaSummaries} />
-  </div>
-
-  <CommunityBannerSection />
 </Layout>
