@@ -133,6 +133,13 @@ On mobile this stacks (media first, centered); at `lg:` it goes side-by-side.
   caused real scroll-capture/jank bugs. Respect `prefers-reduced-motion`.
 - Framer Motion is installed but not currently used anywhere in the UI — don't add it
   speculatively; CSS has covered every case so far.
+- The site-wide cursor-reveal background is `DotField`
+  (`src/components/layout/dot-field.astro`, rendered once in `Layout.astro`).
+  Any pointer-reactive effect should follow its pattern: plain Canvas 2D in a bundled
+  `<script>` (no React island), invisible at rest, tiny `--muted-foreground` dots
+  with a faint `--primary` tint nearest the cursor, a rAF loop that only runs while something is animating and stops when
+  idle, init/teardown on `astro:page-load`/`astro:before-swap`, and fully off
+  under reduced motion.
 
 ## Mock data
 

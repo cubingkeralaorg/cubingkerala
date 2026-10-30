@@ -1,0 +1,190 @@
+---
+// Cursor-reveal dot grid, site-wide (rendered once in Layout.astro) — a
+// minimal take on canvasui's "Force Field": an invisible grid of tiny dots
+// fixed behind every page.
+// Nothing shows at rest; dots around the cursor fade in in the muted text
+// grey, the few nearest it pick up a faint brand green (--primary, same as
+// the buttons), and everything fades back out once the cursor moves on.
+// Deliberately barely-there — it should never compete with content.
+//
+// Kept deliberately cheap (Canvas 2D, no framework, nothing to hydrate):
+//   - The canvas is position: fixed, so scrolling never redraws anything.
+//   - Each frame draws only the currently lit dots.
+//   - The rAF loop runs only while something is fading, and stops
+//     completely once everything has faded.
+//   - Mouse/pen only (touch has no hover), and off under reduced motion.
+---
+
+<canvas id="dot-field" aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 h-full w-full"></canvas>
+
+<script>
+  const CELL = 14; // grid pitch (px)
+  const DOT_RADIUS = 1; // px — smaller at this tighter pitch so the patch stays light
+  const HOVER_RADIUS = 110; // px around the cursor that lights up
+  const DECAY_SECONDS = 0.5; // energy time constant
+  // Above this energy (i.e. close to the cursor) a dot blends toward green.
+  const GREEN_THRESHOLD = 0.4;
+
+  let cleanup: (() => void) | null = null;
+
+  function init(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return () => {};
+    // Purely motion — with reduced motion there's nothing left to show.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let cols = 0;
+    let rows = 0;
+    let offsetX = 0;
+    let offsetY = 0;
+    let greyColor = "";
+    let greenColor = "";
+    // Peak opacities — lower in dark mode, where the same colours read
+    // louder against the near-black background.
+    let greyAlpha = 0.5;
+    let greenAlpha = 0.8;
+    // Per-cell energy (0..1), plus the set of lit cells so each frame only
+    // touches those.
+    let energy = new Float32Array(0);
+    const lit = new Set<number>();
+    let raf = 0;
+    let lastTime = 0;
+
+    function readTheme() {
+      const styles = getComputedStyle(document.documentElement);
+      const dark = document.documentElement.classList.contains("dark");
+      greyColor = `hsl(${styles.getPropertyValue("--muted-foreground").trim()})`;
+      greenColor = `hsl(${styles.getPropertyValue("--primary").trim()})`;
+      greyAlpha = dark ? 0.4 : 0.5;
+      greenAlpha = dark ? 0.7 : 0.8;
+    }
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      cols = Math.ceil(width / CELL) + 1;
+      rows = Math.ceil(height / CELL) + 1;
+      // Center the grid so partial cells are split evenly at the edges.
+      offsetX = (width - cols * CELL) / 2;
+      offsetY = (height - rows * CELL) / 2;
+      energy = new Float32Array(cols * rows);
+      lit.clear();
+      render();
+    }
+
+    function dot(index: number, color: string, alpha: number) {
+      const col = index % cols;
+      const row = (index - col) / cols;
+      ctx!.globalAlpha = alpha;
+      ctx!.fillStyle = color;
+      ctx!.beginPath();
+      ctx!.arc(offsetX + col * CELL + CELL / 2, offsetY + row * CELL + CELL / 2, DOT_RADIUS, 0, Math.PI * 2);
+      ctx!.fill();
+    }
+
+    function render() {
+      ctx!.setTransform(1, 0, 0, 1, 0, 0);
+      ctx!.clearRect(0, 0, canvas.width, canvas.height);
+      if (lit.size === 0) return;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (const index of lit) {
+        const e = energy[index];
+        dot(index, greyColor, e * greyAlpha);
+        // Green fades in on top of the grey for the dots nearest the cursor.
+        if (e > GREEN_THRESHOLD) {
+          dot(index, greenColor, ((e - GREEN_THRESHOLD) / (1 - GREEN_THRESHOLD)) * greenAlpha);
+        }
+      }
+      ctx!.globalAlpha = 1;
+    }
+
+    // Raises energy for every dot within HOVER_RADIUS of (x, y), stronger
+    // the closer it is.
+    function excite(x: number, y: number) {
+      const minCol = Math.max(0, Math.floor((x - HOVER_RADIUS - offsetX) / CELL));
+      const maxCol = Math.min(cols - 1, Math.floor((x + HOVER_RADIUS - offsetX) / CELL));
+      const minRow = Math.max(0, Math.floor((y - HOVER_RADIUS - offsetY) / CELL));
+      const maxRow = Math.min(rows - 1, Math.floor((y + HOVER_RADIUS - offsetY) / CELL));
+      for (let row = minRow; row <= maxRow; row++) {
+        for (let col = minCol; col <= maxCol; col++) {
+          const cx = offsetX + col * CELL + CELL / 2;
+          const cy = offsetY + row * CELL + CELL / 2;
+          const distance = Math.hypot(cx - x, cy - y);
+          if (distance >= HOVER_RADIUS) continue;
+          const value = 1 - distance / HOVER_RADIUS;
+          const index = row * cols + col;
+          if (value > energy[index]) energy[index] = value;
+          lit.add(index);
+        }
+      }
+    }
+
+    function frame(time: number) {
+      const dt = Math.min((time - (lastTime || time)) / 1000, 1 / 30);
+      lastTime = time;
+
+      const decay = Math.exp(-dt / DECAY_SECONDS);
+      for (const index of lit) {
+        energy[index] *= decay;
+        if (energy[index] < 0.02) {
+          energy[index] = 0;
+          lit.delete(index);
+        }
+      }
+
+      render();
+
+      // Idle stop: nothing lit → no more frames until the next pointer
+      // move wakes the loop.
+      if (lit.size > 0) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        raf = 0;
+        lastTime = 0;
+      }
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      excite(event.clientX, event.clientY);
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+
+    readTheme();
+    resize();
+    window.addEventListener("resize", resize);
+    // Theme toggle flips `.dark` on <html> (see useTheme) — pick up the new
+    // colours for the next lit dots.
+    const themeObserver = new MutationObserver(readTheme);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onPointerMove);
+      themeObserver.disconnect();
+    };
+  }
+
+  // Bundled module scripts run once, not per <ClientRouter /> soft
+  // navigation, while the <body> (and this canvas with it) is swapped on
+  // every one — so re-attach to the new canvas on each page load, and tear
+  // down before each swap so listeners never pile up.
+  document.addEventListener("astro:page-load", () => {
+    cleanup?.();
+    cleanup = null;
+    const canvas = document.getElementById("dot-field");
+    if (canvas instanceof HTMLCanvasElement) cleanup = init(canvas);
+  });
+  document.addEventListener("astro:before-swap", () => {
+    cleanup?.();
+    cleanup = null;
+  });
+</script>
