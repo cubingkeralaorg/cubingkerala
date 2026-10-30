@@ -15,7 +15,7 @@ import { getDb } from "@/db/client";
 import { getUpcomingCompetitions, getPastCompetitions } from "@/db/queries/competitions";
 import { getAllMembers, getWcaSummaryForMembers, getRankingsWcaDataForMembers } from "@/db/queries/members";
 import { getAllPhotos } from "@/db/queries/photos";
-import { mediaImageUrl } from "@/config/media";
+import { mediaImageUrl, mediaImageSrcSet } from "@/config/media";
 
 // D1-backed queries (Phase 4) — bindings come from `cloudflare:workers`,
 // not Astro.locals.runtime.env (removed in this @astrojs/cloudflare
@@ -41,9 +41,14 @@ const [wcaSummaries, rankingsWcaData] = await Promise.all([
 
 // Alternate by insertion order into two rows so a newly admin-added photo
 // always lands in whichever row has fewer, keeping the marquee balanced.
-// Tiles render at most 260px wide, so 640px covers 2x screens.
-const photoRow1 = photos.filter((_, index) => index % 2 === 0).map((p) => ({ src: mediaImageUrl(p.path, 640), alt: p.alt }));
-const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src: mediaImageUrl(p.path, 640), alt: p.alt }));
+// Tiles render 220–260px wide: 320w for 1x screens, 640w for 2x.
+const toTile = (p: (typeof photos)[number]) => ({
+  src: mediaImageUrl(p.path, 640),
+  srcSet: mediaImageSrcSet(p.path, [320, 640]),
+  alt: p.alt,
+});
+const photoRow1 = photos.filter((_, index) => index % 2 === 0).map(toTile);
+const photoRow2 = photos.filter((_, index) => index % 2 === 1).map(toTile);
 ---
 
 <Layout
@@ -70,7 +75,7 @@ const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src
   <div class="mt-14 flex flex-col gap-14">
     <SectionDivider />
     <div data-reveal>
-      <HighlightVideoSection client:load />
+      <HighlightVideoSection client:visible />
     </div>
     <SectionDivider />
     <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
@@ -82,7 +87,7 @@ const photoRow2 = photos.filter((_, index) => index % 2 === 1).map((p) => ({ src
     </div>
     <SectionDivider />
     <div data-reveal class={NAVBAR_CONTAINER_CLASS}>
-      <AchievementBanner client:load />
+      <AchievementBanner />
     </div>
     <SectionDivider />
     <div data-reveal class={NAVBAR_CONTAINER_CLASS}>

@@ -1,12 +1,20 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useDesktopNav } from "@/hooks/useDesktopNav";
 import { useTheme } from "@/hooks/useTheme";
 import { NavLinks } from "./navbar/nav-links";
-import { MobileMenu } from "./navbar/mobile-menu";
 import { LogoLink } from "./logo-link";
 import { NAVBAR_CONTAINER_CLASS, NAVBAR_LINKS_GAP_CLASS } from "./navbar/layout";
 import { cn } from "@/lib/utils";
+
+// The mobile menu (and the Radix dialog code under it, ~15KB across three
+// chunks) is split out of the navbar's bundle: it's only ever needed below
+// `lg`, and only once tapped, so it no longer sits in every page's
+// critical JS chain. It's prefetched once the browser is idle (and again on
+// first touch of the button, in case idle hasn't come yet), so the first
+// open is still instant.
+const loadMobileMenu = () => import("./navbar/mobile-menu");
+const MobileMenu = lazy(() => loadMobileMenu().then((module) => ({ default: module.MobileMenu })));
 
 // currentPath, isAdmin, AND isLoggedIn all come from Layout.astro — computed
 // server-side there by reading the (now httpOnly) userInfo cookie, the same
@@ -26,6 +34,8 @@ export const Navbar = ({
   isLoggedIn?: boolean;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Mounted on first open and kept mounted after, so closing still animates.
+  const [hasOpenedMenu, setHasOpenedMenu] = useState(false);
   const isDesktopNav = useDesktopNav();
   const { theme, toggleTheme } = useTheme();
 
@@ -62,6 +72,19 @@ export const Navbar = ({
     }
   }, [isDesktopNav, isMenuOpen]);
 
+  // Warm the mobile menu chunk once the page has settled (mobile only —
+  // desktop never shows the menu button).
+  useEffect(() => {
+    if (isDesktopNav) return;
+    const prefetch = () => void loadMobileMenu();
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(prefetch, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = setTimeout(prefetch, 2000);
+    return () => clearTimeout(id);
+  }, [isDesktopNav]);
+
   return (
     <div className="relative sticky top-0 z-[10000] bg-background text-foreground">
       {/* Logo/login edges follow the same wide container as the footer (and
@@ -94,7 +117,11 @@ export const Navbar = ({
 
             <button
               type="button"
-              onClick={() => setIsMenuOpen((open) => !open)}
+              onPointerDown={loadMobileMenu}
+              onClick={() => {
+                setHasOpenedMenu(true);
+                setIsMenuOpen((open) => !open);
+              }}
               className="relative flex h-10 w-10 cursor-pointer items-center justify-center text-foreground lg:hidden"
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
@@ -150,17 +177,21 @@ export const Navbar = ({
         className="pointer-events-none absolute inset-x-0 top-full h-8 bg-gradient-to-b from-background to-transparent"
       />
 
-      <MobileMenu
-        isOpen={isMenuOpen}
-        isAdmin={isAdmin}
-        isLoggedIn={isLoggedIn}
-        onLogin={login}
-        onLogout={logout}
-        onClose={closeMenu}
-        currentPath={currentPath}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
+      {hasOpenedMenu && (
+        <Suspense fallback={null}>
+          <MobileMenu
+            isOpen={isMenuOpen}
+            isAdmin={isAdmin}
+            isLoggedIn={isLoggedIn}
+            onLogin={login}
+            onLogout={logout}
+            onClose={closeMenu}
+            currentPath={currentPath}
+            theme={theme}
+            onToggleTheme={toggleTheme}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };

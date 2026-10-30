@@ -258,8 +258,11 @@ if (userCookie) {
     <main class="flex-1">
       <slot />
     </main>
+    {/* client:idle, not :load — it's at the bottom of every page, so its
+        JS can wait for the browser to go idle instead of competing with
+        the first screen's. */}
     <Footer
-      client:load
+      client:idle
       topPaddingClassName={footerTopPaddingClassName}
       isLoggedIn={isLoggedIn}
       initialProfile={initialProfile}

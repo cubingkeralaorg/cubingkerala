@@ -2,11 +2,16 @@ import { NAVBAR_CONTAINER_CLASS } from "@/components/layout/navbar/layout";
 
 interface Photo {
   src: string;
+  /** Optional resized variants (see mediaImageSrcSet) — tiles are 220–260px wide. */
+  srcSet?: string;
   alt: string;
 }
 
-// Tiles per row that are visible on first paint.
-const EAGER_COUNT = 4;
+// Tiles per row that can be visible on first paint (a 1400px row fits ~6).
+const EAGER_COUNT = 6;
+// Of those, how many get fetchpriority="high" — a couple, not all twelve,
+// so they don't all compete with each other for the first bytes.
+const HIGH_PRIORITY_COUNT = 2;
 
 // Content is duplicated (photos, photos) so a translateX(-50%) loop (see
 // .marquee-track in global.css) lands exactly where the second copy starts
@@ -20,29 +25,40 @@ function MarqueeRow({ photos, reverse, durationSeconds }: { photos: Photo[]; rev
       className={reverse ? "marquee-track marquee-track-reverse flex w-max gap-3" : "marquee-track flex w-max gap-3"}
       style={{ animationDuration: `${durationSeconds}s` }}
     >
-      {track.map((photo, index) => (
-        <div
-          key={`${photo.src}-${index}`}
-          className="h-[160px] w-[220px] relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
-        >
-          {/* Static placeholder behind the photo (no pulse: an infinite
-              animation here showed through as a flicker on mobile): the <img> is transparent
-              until its bytes arrive, so slow photos show a soft tile instead
-              of a hole. */}
-          <span aria-hidden className="absolute inset-0 bg-muted" />
-          <img
-            src={photo.src}
-            alt={photo.alt}
-            // The first few tiles of each row are on screen at load — fetch
-            // them right away at high priority; the rest (and the duplicate
-            // copy, same URLs) can wait until they near the viewport.
-            loading={index < EAGER_COUNT ? "eager" : "lazy"}
-            fetchPriority={index < EAGER_COUNT ? "high" : "auto"}
-            decoding="async"
-            className="relative h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:hover:scale-105"
-          />
-        </div>
-      ))}
+      {track.map((photo, index) => {
+        // Position within one copy of the photos. The reverse row's
+        // animation starts at translateX(-50%) — i.e. showing the *second*
+        // copy — so eagerness must follow the photo, not the raw index, or
+        // its on-screen tiles at load would be the lazy ones (they were:
+        // Lighthouse's LCP image was a lazy second-copy tile).
+        const position = index % photos.length;
+        return (
+          <div
+            key={`${photo.src}-${index}`}
+            className="h-[160px] w-[220px] relative shrink-0 overflow-hidden rounded-2xl sm:h-[190px] sm:w-[260px]"
+          >
+            {/* Static placeholder behind the photo (no pulse: an infinite
+                animation here showed through as a flicker on mobile): the <img> is transparent
+                until its bytes arrive, so slow photos show a soft tile instead
+                of a hole. */}
+            <span aria-hidden className="absolute inset-0 bg-muted" />
+            <img
+              src={photo.src}
+              srcSet={photo.srcSet || undefined}
+              sizes="(min-width: 640px) 260px, 220px"
+              alt={photo.alt}
+              // The first few tiles of each row are on screen at load — fetch
+              // them right away; the rest can wait until they near the
+              // viewport. Both copies of a photo share one URL, so the
+              // duplicate is a cache hit either way.
+              loading={position < EAGER_COUNT ? "eager" : "lazy"}
+              fetchPriority={position < HIGH_PRIORITY_COUNT ? "high" : "auto"}
+              decoding="async"
+              className="relative h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:hover:scale-105"
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }

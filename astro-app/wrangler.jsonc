@@ -8,6 +8,13 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	// Exposes this deploy's version id to the Worker — src/worker.ts folds it
+	// into the page edge-cache key so a new deploy never serves HTML cached
+	// by the previous one (which would reference /_astro/* chunks that no
+	// longer exist).
+	"version_metadata": {
+		"binding": "CF_VERSION_METADATA"
+	},
 	"observability": {
 		"enabled": true
 	},

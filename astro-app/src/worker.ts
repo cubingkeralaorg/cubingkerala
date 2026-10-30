@@ -96,7 +96,15 @@ const CACHEABLE_PATTERNS: RegExp[] = [
 ];
 
 const CACHE_FRESH_SECONDS = 60;
-const EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS = 300;
+// How long an anonymous page stays in the edge cache at all. Past
+// CACHE_FRESH_SECONDS it's "stale": still served instantly, but the request
+// also re-renders it in the background (see the fetch handler below).
+// Cloudflare's Cache API doesn't implement stale-while-revalidate itself —
+// a 60s s-maxage meant the first visitor after every idle minute paid the
+// full D1 + render cost (~500ms TTFB vs ~100ms for a hit) — so it's done by
+// hand, using EDGE_CACHE_STORED_AT_HEADER to know an entry's age.
+const EDGE_CACHE_MAX_STALE_SECONDS = 86400;
+const EDGE_CACHE_STORED_AT_HEADER = "X-CK-Cached-At";
 
 function hasAuthCookie(request: Request): boolean {
   const cookieHeader = request.headers.get("Cookie");
@@ -108,6 +116,18 @@ function isCacheablePath(url: URL): boolean {
   return CACHEABLE_PATTERNS.some((pattern) => pattern.test(url.pathname));
 }
 
+// Edge cache key for an anonymous page: its URL plus this deploy's version
+// id (wrangler.jsonc's version_metadata binding), so entries from a
+// previous deploy are simply never matched — they'd reference /_astro/*
+// chunks the new deploy no longer has. A plain GET Request, so nothing
+// from the visitor's request headers leaks into the key.
+function pageCacheKey(url: URL, env: Env): Request {
+  const versionId = (env as Env & { CF_VERSION_METADATA?: { id: string } }).CF_VERSION_METADATA?.id ?? "dev";
+  const keyUrl = new URL(url);
+  keyUrl.searchParams.set("__deploy", versionId);
+  return new Request(keyUrl.toString(), { method: "GET" });
+}
+
 // --- /media/* (R2 media served from our own domain) ---
 // Media used to load straight from the bucket's r2.dev URL, which serves
 // HTTP/1.1 only, sends no Cache-Control at all (every visit re-downloaded
@@ -117,18 +137,21 @@ function isCacheablePath(url: URL): boolean {
 // Handled before the rate limiter on purpose: one homepage load is ~30
 // photo requests, which would eat most of a visitor's per-minute budget.
 const MEDIA_PREFIX = "/media/";
-// A week, not `immutable`: gallery uploads get UUID keys, but older assets
+// Gallery uploads get a fresh UUID key each time (admin-add-photo.ts) and
+// are never overwritten, so they're safe to cache forever. Older assets
 // (e.g. images/misc/*, the highlight video) have fixed names that could be
-// overwritten in place. (HEAD needs no special-casing below — the runtime
-// drops the body of a HEAD response itself.)
-const MEDIA_CACHE_CONTROL = "public, max-age=604800, stale-while-revalidate=86400";
+// overwritten in place, so they get 30 days instead of `immutable`. (HEAD
+// needs no special-casing below — the runtime drops a HEAD body itself.)
+const MEDIA_IMMUTABLE_PREFIX = "images/gallery/";
+const MEDIA_CACHE_CONTROL_IMMUTABLE = "public, max-age=31536000, immutable";
+const MEDIA_CACHE_CONTROL = "public, max-age=2592000, stale-while-revalidate=86400";
 // `?w=<width>` on an image resizes it (and re-encodes to WebP) through the
 // Cloudflare Images binding — gallery originals are up to several MB, but
 // they're displayed as ~260px marquee tiles. Only these widths are accepted
 // so arbitrary values can't mint unlimited transformations (the free plan
 // includes 5,000 unique ones a month); anything else gets the original.
 // Must match MEDIA_IMAGE_WIDTHS in src/config/media.ts.
-const MEDIA_IMAGE_WIDTHS = new Set([640, 800]);
+const MEDIA_IMAGE_WIDTHS = new Set([320, 640, 800]);
 
 async function serveMedia(request: Request, env: Env, ctx: ExecutionContext, url: URL): Promise<Response> {
   if (request.method !== "GET" && request.method !== "HEAD") {
@@ -157,7 +180,10 @@ async function serveMedia(request: Request, env: Env, ctx: ExecutionContext, url
   const headers = new Headers();
   object.writeHttpMetadata(headers);
   headers.set("ETag", object.httpEtag);
-  headers.set("Cache-Control", MEDIA_CACHE_CONTROL);
+  headers.set(
+    "Cache-Control",
+    key.startsWith(MEDIA_IMMUTABLE_PREFIX) ? MEDIA_CACHE_CONTROL_IMMUTABLE : MEDIA_CACHE_CONTROL,
+  );
   headers.set("Accept-Ranges", "bytes");
 
   // onlyIf matched a conditional header (If-None-Match etc.) — no body.
@@ -172,7 +198,7 @@ async function serveMedia(request: Request, env: Env, ctx: ExecutionContext, url
       const transformed = await images
         .input(object.body)
         .transform({ width, fit: "scale-down" })
-        .output({ format: "image/webp", quality: 80 });
+        .output({ format: "image/webp", quality: 72 });
       const resizedHeaders = new Headers(headers);
       resizedHeaders.set("Content-Type", "image/webp");
       const response = new Response(transformed.response().body, { status: 200, headers: resizedHeaders });
@@ -222,9 +248,22 @@ export default {
     // client-side React islands, hence the cast.
     const cache = (caches as unknown as { default: Cache }).default;
 
-    if (useEdgeCache) {
-      const cached = await cache.match(request);
-      if (cached) return cached;
+    const cacheKey = useEdgeCache ? pageCacheKey(url, env) : null;
+    if (cacheKey) {
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        // Stale (past CACHE_FRESH_SECONDS): still answer instantly, and
+        // refresh the entry in the background for the next visitor.
+        const storedAt = Number(cached.headers.get(EDGE_CACHE_STORED_AT_HEADER)) || 0;
+        if (Date.now() - storedAt > CACHE_FRESH_SECONDS * 1000) {
+          ctx.waitUntil(
+            renderCacheable(new Request(request.url, { method: "GET" }), env, ctx, false).then((fresh) =>
+              fresh.ok ? cache.put(cacheKey, fresh) : undefined,
+            ),
+          );
+        }
+        return cached;
+      }
     }
 
     // Only requests that actually reach this point count against the rate
@@ -241,10 +280,36 @@ export default {
       });
     }
 
-    const response = await handle(request, env, ctx);
-    if (!cacheablePath || !response.ok) return response;
+    if (!cacheablePath) return handle(request, env, ctx);
+    const response = await renderCacheable(request, env, ctx, authenticated);
+    if (cacheKey && response.ok) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    return response;
+  },
+  async scheduled(_event, env, _ctx) {
+    const db = getDb(env.DB);
+    const wcaIds = await getAllMemberWcaIds(db);
 
-    const headers = new Headers(response.headers);
+    console.log(`[Cron] Triggered WCA Sync for ${wcaIds.length} members`);
+    await syncMemberWcaData(db, wcaIds, { timeBudgetMs: 50_000, rotateOffset: true });
+
+    console.log("[Cron] Triggered Competitions Sync");
+    await syncCompetitions(db);
+  },
+} satisfies ExportedHandler<Env>;
+
+// Renders a cacheable page route through Astro and sets its caching
+// headers. Shared by the normal request path and the background
+// stale-while-revalidate refresh above.
+async function renderCacheable(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+  authenticated: boolean,
+): Promise<Response> {
+  const response = await handle(request, env, ctx);
+  if (!response.ok) return response;
+
+  const headers = new Headers(response.headers);
     // None of the cacheable routes set cookies today, but if one ever does
     // (e.g. a new analytics cookie), it must never ride along into a
     // response reused across multiple requests via the edge cache, or
@@ -264,28 +329,18 @@ export default {
     // entry is ever reused blindly — so this can't happen, at the cost of
     // authenticated repeat-clicks no longer skipping the network (they
     // still skip the extra cost of a full page reload, via ClientRouter).
+    // s-maxage is what the edge Cache API keys its own expiry off — the
+    // long stale window — while max-age keeps the browser's copy short.
     headers.set(
       "Cache-Control",
       authenticated
         ? "no-cache"
-        : `public, max-age=${CACHE_FRESH_SECONDS}, s-maxage=${CACHE_FRESH_SECONDS}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE_SECONDS}`,
+        : `public, max-age=${CACHE_FRESH_SECONDS}, s-maxage=${EDGE_CACHE_MAX_STALE_SECONDS}`,
     );
-    const cacheableResponse = new Response(response.body, {
+    if (!authenticated) headers.set(EDGE_CACHE_STORED_AT_HEADER, String(Date.now()));
+    return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
       headers,
     });
-    if (useEdgeCache) ctx.waitUntil(cache.put(request, cacheableResponse.clone()));
-    return cacheableResponse;
-  },
-  async scheduled(_event, env, _ctx) {
-    const db = getDb(env.DB);
-    const wcaIds = await getAllMemberWcaIds(db);
-
-    console.log(`[Cron] Triggered WCA Sync for ${wcaIds.length} members`);
-    await syncMemberWcaData(db, wcaIds, { timeBudgetMs: 50_000, rotateOffset: true });
-
-    console.log("[Cron] Triggered Competitions Sync");
-    await syncCompetitions(db);
-  },
-} satisfies ExportedHandler<Env>;
+}

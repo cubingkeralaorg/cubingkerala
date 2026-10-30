@@ -12,7 +12,7 @@ export function mediaUrl(path: string): string {
 
 // Widths the /media route will resize images to (see MEDIA_IMAGE_WIDTHS in
 // src/worker.ts — keep the two in sync).
-export type MediaImageWidth = 640 | 800;
+export type MediaImageWidth = 320 | 640 | 800;
 
 /**
  * Like mediaUrl(), but asks the /media route for a resized WebP copy of the
@@ -23,4 +23,15 @@ export type MediaImageWidth = 640 | 800;
 export function mediaImageUrl(path: string, width: MediaImageWidth): string {
   const url = mediaUrl(path);
   return MEDIA_BASE_URL === "/media" ? `${url}?w=${width}` : url;
+}
+
+/**
+ * A `srcset` offering each given width of the image, for the browser to pick
+ * from via `sizes` — so a 1x screen downloads the small copy and only a 2x
+ * screen pays for the large one. Empty when an external
+ * PUBLIC_MEDIA_BASE_URL can't resize (callers fall back to plain `src`).
+ */
+export function mediaImageSrcSet(path: string, widths: MediaImageWidth[]): string {
+  if (MEDIA_BASE_URL !== "/media") return "";
+  return widths.map((width) => `${mediaImageUrl(path, width)} ${width}w`).join(", ");
 }
