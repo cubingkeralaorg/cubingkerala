@@ -39,18 +39,41 @@ type SyncResult =
   | { status: "no_changes"; count: 0 }
   | { status: "no_kerala_comps_found"; count: 0 };
 
+const PER_PAGE = 100;
+// Safety cap on pagination — India currently has ~810 competitions (9 pages
+// at PER_PAGE=100). This leaves headroom for growth without looping forever
+// if the WCA API ever misbehaves.
+const MAX_PAGES = 20;
+
+/**
+ * India has far more than 100 competitions total, so a single page isn't
+ * enough to guarantee every Kerala competition is seen — the WCA API sorts
+ * by start_date, and a Kerala competition can land on any page depending on
+ * how many other Indian competitions share its date range. Page through
+ * until a short page (fewer than PER_PAGE results) signals the end.
+ */
+async function fetchAllIndiaCompetitions(base: string): Promise<WcaCompetitionListEntry[]> {
+  const all: WcaCompetitionListEntry[] = [];
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const pageData = (await fetchJsonWithTimeout(`${base}&page=${page}`)) as WcaCompetitionListEntry[];
+    all.push(...pageData);
+    console.log(`Fetched ${pageData.length} competitions from WCA API (page ${page})`);
+    if (pageData.length < PER_PAGE) break;
+  }
+  return all;
+}
+
 /**
  * Ported from the Next.js app's src/lib/competitions/sync.ts — same
- * deliberate choices: only page 1 (usually enough to catch newly announced
- * Kerala competitions), city-contains-"kerala" filter, only upsert rows
- * whose critical fields actually changed.
+ * deliberate choices: city-contains-"kerala" filter, only upsert rows whose
+ * critical fields actually changed.
  */
 export async function syncCompetitions(db: Db): Promise<SyncResult> {
-  console.log("Syncing with WCA API (1 page only)...");
-  const base = "https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=100";
+  console.log("Syncing with WCA API...");
+  const base = `https://www.worldcubeassociation.org/api/v0/competitions?country_iso2=IN&per_page=${PER_PAGE}`;
 
-  const allWcaCompetitions = (await fetchJsonWithTimeout(`${base}&page=1`)) as WcaCompetitionListEntry[];
-  console.log(`Fetched ${allWcaCompetitions.length} competitions from WCA API (Page 1)`);
+  const allWcaCompetitions = await fetchAllIndiaCompetitions(base);
+  console.log(`Fetched ${allWcaCompetitions.length} total competitions from WCA API`);
 
   const keralaCompetitions = allWcaCompetitions.filter((c) => c.city?.toLowerCase().includes("kerala"));
   console.log(`Found ${keralaCompetitions.length} Kerala competitions in WCA fetch`);
